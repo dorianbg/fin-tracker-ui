@@ -294,6 +294,13 @@ def main():
             min_date_possible = get_min_date_all()
 
         with col1:
+            selected_lookback = st.selectbox(
+                label="Lookback period (overrides date range)",
+                options=[None] + time_strings,
+                index=4,
+            )
+
+        with col2:
             start_date: datetime.date = st.date_input(
                 "Select start date",
                 value=min_date_possible,
@@ -301,17 +308,13 @@ def main():
                 max_value=datetime.today(),
                 format="DD/MM/YYYY",
             )
-        with col2:
+        with col3:
             end_date: datetime.date = st.date_input(
                 "Select end date",
                 value=datetime.today(),
                 min_value=min_date_possible,
                 max_value=datetime.today(),
                 format="DD/MM/YYYY",
-            )
-        with col3:
-            selected_lookback = st.selectbox(
-                label="Lookback override", options=time_strings, index=3
             )
 
         if selected_lookback is not None:
@@ -352,8 +355,8 @@ def main():
                         {
                             "ticker": inst,
                             "Description": desc,
-                            "Start price": f"{first_price:.2f}",
-                            "End price": f"{last_price:.2f}",
+                            "Start price": f"£{first_price:.2f}",
+                            "End price": f"£{last_price:.2f}",
                             "Change": f"{price_chg_pct:.2f}%",
                             "Time span": f"{months_delta} months",
                             "CAGR": f"{cagr * 100:.2f}%",
@@ -361,6 +364,9 @@ def main():
                             "End date": {max_dt.isoformat()},
                         }
                     )
+                st.write(
+                    f"Performance comparison from {start_date.date()} to {end_date.date()} "
+                )
                 st.dataframe(data=pd.DataFrame(data), hide_index=True)
 
 
