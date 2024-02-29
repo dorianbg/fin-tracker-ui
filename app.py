@@ -21,12 +21,11 @@ map_name_to_type: dict = {
     "Apartments for rent": "rentals_flats",
     "Houses for sale": "sales_houses",
 }
+time_strings = ["1W", "1M", "3M", "6M", "9M", "1Y", "18M", "2Y", "3Y", "5Y", "10Y"]
 
 st.set_page_config(
     page_icon="🏠", page_title="Financial instrument tracker", layout="wide"
 )
-# List of tuples containing string representations and corresponding timedelta values
-time_strings = ["1W", "1M", "3M", "6M", "9M", "1Y", "18M", "2Y", "3Y", "5Y", "10Y"]
 
 
 def icon(emoji: str):
