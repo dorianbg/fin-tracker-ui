@@ -370,6 +370,14 @@ def main():
 
 
 st.title("Fin tracker")
+st.write(
+    "Disclaimer: this is a non-commercial project and data is purely source from Yahoo! finance API and exclusively intended for personal use only."
+    "There are often data quality issues with smaller UCITS ETFs so sometimes the data in tables will be missing or obviously wrong."
+)
+st.write(
+    "Note that the performance includes dividends (Accumulating ETFs are preferred where possible) and standardised to GBP (some ETFs are GBP hedged).\n"
+    "You could completely change the selection of instruments on the project that feeds data to this dashboard, source code is: https://github.com/dorianbg/fin-tracker/"
+)
 st.markdown(
     """
         <style>
