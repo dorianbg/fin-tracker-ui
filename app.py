@@ -1,3 +1,4 @@
+import time
 from datetime import datetime
 
 import altair as alt
@@ -11,6 +12,11 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import rgb2hex, colorConverter
 from dateutil.relativedelta import relativedelta
 
+import platform
+
+if platform.system() == "Darwin":
+    di.run()
+    time.sleep(0.5)
 
 charts_width: int = 800
 duckdb_file: str = ":memory:"
@@ -72,6 +78,7 @@ def get_distinct_instruments():
 
 def gen_where_clause_prices(
     instruments: list[str],
+    fund_types: list[str],
     start_date: datetime.date,
     end_date: datetime.date,
 ) -> str:
@@ -83,6 +90,9 @@ def gen_where_clause_prices(
     if instruments:
         where_str = "','".join(instruments)
         where_clause.append(f"ticker in ('{where_str}') ")
+    if fund_types:
+        where_str = "','".join(fund_types)
+        where_clause.append(f"fund_type in ('{where_str}') ")
     where_clause_str = ""
     if len(where_clause) > 0:
         where_clause_str = f"where {' and '.join(where_clause)}"
@@ -102,11 +112,13 @@ def get_data(
     start_date: datetime.date = None,
     end_date: datetime.date = None,
     instruments: list[str] = None,
+    fund_types: list[str] = None,
 ) -> pd.DataFrame:
     if instruments is not None:
         instruments = [x.split("/")[0] for x in instruments]
     where_clause_str = gen_where_clause_prices(
         instruments,
+        fund_types,
         start_date,
         end_date,
     )
@@ -115,7 +127,7 @@ def get_data(
             {','.join(cols)},  
         from {table}
         {where_clause_str} 
-        order by "ticker" asc, "date" asc
+        order by {"ticker" if table == di.px_tbl else "fund_type"} asc, "date" asc
     """
     res = get_conn().execute(query).df()
     if table == di.px_tbl:
@@ -130,6 +142,12 @@ def get_data(
 def get_min_date_all() -> tuple[datetime.date, datetime.date]:
     query = f"select min(date) as min_date from {di.px_tbl}"
     return get_conn().execute(query).fetchall()[0][0]
+
+
+@cache_data
+def get_fund_types() -> list[str]:
+    query = f"select distinct fund_type from {di.perf_tbl}"
+    return [x[0] for x in get_conn().execute(query).fetchall()]
 
 
 def calculate_annual_cagr(total_percent_change: float, num_months: float):
@@ -252,7 +270,10 @@ def apply_gradient(column):
         min_value = column.min()
         max_value = column.max()
         norm = plt.Normalize(min_value, max_value)
-        bg_color = plt.cm.RdYlGn(norm(column.values))
+        if column.name in di.cols_vol:
+            bg_color = plt.cm.bwr(norm(column.values))
+        else:
+            bg_color = plt.cm.RdYlGn(norm(column.values))
         text_color = [adjust_text_color(colorConverter.to_rgb(bg)) for bg in bg_color]
         return [
             "background-color: {}; color: {}".format(rgb2hex(bg), tc)
@@ -266,6 +287,12 @@ def main():
     tab1, tab2 = st.tabs(["Performance table", "Performance chart"])
 
     with tab1:
+        selected_fund_types = st.multiselect(
+            label="Lookback period (overrides date range)",
+            options=get_fund_types(),
+            default=get_fund_types(),
+        )
+
         with st.container():
             df: pd.DataFrame = get_data(
                 table=di.perf_tbl,
@@ -273,12 +300,15 @@ def main():
                 start_date=None,
                 end_date=None,
                 instruments=None,
+                fund_types=selected_fund_types,
             )
             df["date"] = df["date"].dt.date
             # Apply background_gradient to each numeric column
             styled_df = df.style.apply(apply_gradient)
             # format numeric columns
-            styled_df = styled_df.format(subset=di.cols_perf_num, formatter="{:.2f}%")
+            styled_df = styled_df.format(
+                subset=di.cols_perf_num + di.cols_vol, formatter="{:.2f}%"
+            )
             styled_df = styled_df.format(
                 subset=di.cols_perf_z_score, formatter="{:.2f}"
             )
@@ -371,11 +401,11 @@ def main():
 
 st.title("Fin tracker")
 st.write(
-    "Disclaimer: this is a non-commercial project and data is purely source from Yahoo! finance API and exclusively intended for personal use only."
+    "Disclaimer: this is a non-commercial project and data is purely source from Yahoo! finance API and exclusively intended for personal use only.  \n"
     "There are often data quality issues with smaller UCITS ETFs so sometimes the data in tables will be missing or obviously wrong."
 )
 st.write(
-    "Note that the performance includes dividends (Accumulating ETFs are preferred where possible) and standardised to GBP (some ETFs are GBP hedged).\n"
+    "Note that the performance includes dividends (Accumulating ETFs are preferred where possible) and standardised to GBP (some ETFs are GBP hedged).  \n"
     "You could completely change the selection of instruments on the project that feeds data to this dashboard, source code is: https://github.com/dorianbg/fin-tracker/"
 )
 st.markdown(

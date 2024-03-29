@@ -1,4 +1,5 @@
 import os
+import shutil
 
 import duckdb
 
@@ -15,8 +16,9 @@ add_encrypt_key = f"PRAGMA add_parquet_key('key256', '{encrypt_key}');"
 encrypt_conf = "{footer_key: 'key256'}"
 
 cols_prices = ["ticker", "ticker_full", "price", "date", "description"]
-cols_perf_desc = ["date", "ticker", "description"]
+cols_perf_desc = ["date", "ticker", "description", "fund_type"]
 cols_perf_z_score = ["z_1d"]
+cols_vol = ["vol_1d", "vol_1y"]
 cols_perf_num = [
     "r_1d",
     "r_1w",
@@ -28,12 +30,14 @@ cols_perf_num = [
     "r_2y",
     "r_3y",
     "r_5y",
-    "px_20_dma",
+    "px_21_dma",
+    "px_63_dma",
     "px_252_dma",
 ]
-cols_perf = cols_perf_desc + cols_perf_z_score + cols_perf_num
+cols_perf = cols_perf_desc + cols_perf_z_score + cols_vol + cols_perf_num
 
-if __name__ == "__main__":
+
+def run():
     prices_query = f"""
         select 
             {','.join(cols_prices)}
@@ -43,7 +47,7 @@ if __name__ == "__main__":
         SELECT
             {','.join(cols_perf)}
         FROM latest_performance
-        ORDER BY tckr
+        ORDER BY ticker
     """
     export_to_parquet_query = (
         lambda query, output: f"COPY ({query}) TO '{output}' (ENCRYPTION_CONFIG {encrypt_conf});"
@@ -51,6 +55,9 @@ if __name__ == "__main__":
     export_to_parquet_unencrypted_query = (
         lambda query, output: f"COPY ( SELECT * FROM ({query}) LIMIT 10) TO '{output}' ;"
     )
+    if os.path.exists(data_dir):
+        shutil.rmtree(data_dir)
+        os.makedirs(data_dir)
 
     with duckdb.connect(database=duckdb_file, read_only=False) as conn:
         conn.execute(add_encrypt_key)
@@ -70,3 +77,7 @@ if __name__ == "__main__":
                 output=perf_pq_file.replace(".parquet", "_unencrypted.parquet"),
             )
         ),
+
+
+if __name__ == "__main__":
+    run()
