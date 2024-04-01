@@ -16,7 +16,7 @@ import platform
 
 if platform.system() == "Darwin":
     di.run()
-    time.sleep(0.5)
+    time.sleep(1)
 
 charts_width: int = 800
 duckdb_file: str = ":memory:"
@@ -73,6 +73,15 @@ def get_distinct_instruments():
             f"select distinct (ticker || '/' || description) as ticker_desc  from {di.px_tbl}"
         )
         .df()["ticker_desc"]
+    )
+
+
+@st.cache_data
+def get_distinct_fund_types():
+    return list(
+        get_conn()
+        .execute(f"select distinct fund_type from {di.px_tbl}")
+        .df()["fund_type"]
     )
 
 
@@ -256,6 +265,8 @@ def deduct_datetime_interval(base_datetime, interval):
         return base_datetime - relativedelta(months=interval_value)
     elif interval_unit == "Y":
         return base_datetime - relativedelta(years=interval_value)
+    else:
+        raise ValueError("Wrong input")
 
 
 # Function to adjust text color based on background color luminance
@@ -270,7 +281,7 @@ def apply_gradient(column):
         min_value = column.min()
         max_value = column.max()
         norm = plt.Normalize(min_value, max_value)
-        if column.name in di.cols_vol:
+        if column.name in di.perf_vol_cols:
             bg_color = plt.cm.bwr(norm(column.values))
         else:
             bg_color = plt.cm.RdYlGn(norm(column.values))
@@ -296,7 +307,7 @@ def main():
         with st.container():
             df: pd.DataFrame = get_data(
                 table=di.perf_tbl,
-                cols=di.cols_perf,
+                cols=di.perf_cols,
                 start_date=None,
                 end_date=None,
                 instruments=None,
@@ -307,10 +318,10 @@ def main():
             styled_df = df.style.apply(apply_gradient)
             # format numeric columns
             styled_df = styled_df.format(
-                subset=di.cols_perf_num + di.cols_vol, formatter="{:.2f}%"
+                subset=di.perf_num_cols + di.perf_vol_cols, formatter="{:.2f}%"
             )
             styled_df = styled_df.format(
-                subset=di.cols_perf_z_score, formatter="{:.2f}"
+                subset=di.perf_z_score_cols, formatter="{:.2f}"
             )
             st.dataframe(data=styled_df, hide_index=True, height=550)
 
@@ -347,22 +358,28 @@ def main():
             )
 
         if selected_lookback is not None:
-            end_date = datetime.today()
+            end_date = datetime.today().date()
             start_date = deduct_datetime_interval(end_date, selected_lookback)
 
         with st.container():
             selected_inst: list[str] = st.multiselect(
-                label="Instrument",
-                options=get_distinct_instruments(),
+                label="Instrument", options=get_distinct_instruments(), default=None
             )
+            selected_fund_types: list[str] = st.multiselect(
+                label="Asset class", options=get_distinct_fund_types(), default=None
+            )
+
             df: pd.DataFrame = get_data(
                 table=di.px_tbl,
-                cols=di.cols_prices,
+                cols=di.px_cols,
                 start_date=start_date,
                 end_date=end_date,
                 instruments=None if len(selected_inst) == 0 else selected_inst,
+                fund_types=(
+                    None if len(selected_fund_types) == 0 else selected_fund_types
+                ),
             )
-            if len(selected_inst) > 0:
+            if len(selected_inst) > 0 or len(selected_fund_types) > 0:
                 st.altair_chart(
                     plot_prices_instrument(df),
                     use_container_width=True,
@@ -384,19 +401,24 @@ def main():
                         {
                             "ticker": inst,
                             "Description": desc,
-                            "Start price": f"£{first_price:.2f}",
-                            "End price": f"£{last_price:.2f}",
-                            "Change": f"{price_chg_pct:.2f}%",
+                            "Start price": first_price,
+                            "End price": last_price,
+                            "Change": price_chg_pct,
                             "Time span": f"{months_delta} months",
-                            "CAGR": f"{cagr * 100:.2f}%",
+                            "CAGR": cagr * 100,
                             "Start date": {min_dt.isoformat()},
                             "End date": {max_dt.isoformat()},
                         }
                     )
-                st.write(
-                    f"Performance comparison from {start_date.date()} to {end_date.date()} "
+                st.write(f"Performance comparison from {start_date} to {end_date} ")
+                styled_df_perf = pd.DataFrame(data)
+                styled_df_perf = styled_df_perf.style.format(
+                    subset=["Start price", "End price"], formatter="£{:.2f}"
                 )
-                st.dataframe(data=pd.DataFrame(data), hide_index=True)
+                styled_df_perf = styled_df_perf.format(
+                    subset=["Change", "CAGR"], formatter="{:.2f}%"
+                )
+                st.dataframe(data=styled_df_perf, hide_index=True)
 
 
 st.title("Fin tracker")

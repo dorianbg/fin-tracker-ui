@@ -7,19 +7,22 @@ data_dir = "data"
 if not os.path.exists(data_dir):
     os.makedirs(data_dir)
 duckdb_file = os.path.join(os.path.dirname(__file__), "../fin-tracker", f"duckdb.db")
-px_tbl = "prices"
-px_pq_file = os.path.join(data_dir, f"{px_tbl}.parquet")
-perf_tbl = "performance"
-perf_pq_file = os.path.join(data_dir, f"{perf_tbl}.parquet")
+
 encrypt_key = os.environ["PARQUET_ENCRYPTION_KEY"]
 add_encrypt_key = f"PRAGMA add_parquet_key('key256', '{encrypt_key}');"
 encrypt_conf = "{footer_key: 'key256'}"
 
-cols_prices = ["ticker", "ticker_full", "price", "date", "description"]
-cols_perf_desc = ["date", "ticker", "description", "fund_type"]
-cols_perf_z_score = ["z_1d"]
-cols_vol = ["vol_1d", "vol_1y"]
-cols_perf_num = [
+px_tbl = "prices"
+px_pq_file = os.path.join(data_dir, f"{px_tbl}.parquet")
+px_cols = ["ticker", "ticker_full", "price", "date", "description", "fund_type"]
+px_src_tbl_name = "total_return"
+
+perf_tbl = "performance"
+perf_pq_file = os.path.join(data_dir, f"{perf_tbl}.parquet")
+perf_desc_cols = ["date", "ticker", "description", "fund_type"]
+perf_z_score_cols = ["z_1d"]
+perf_vol_cols = ["vol_1d", "vol_1y"]
+perf_num_cols = [
     "r_1d",
     "r_1w",
     "r_2w",
@@ -34,19 +37,20 @@ cols_perf_num = [
     "px_63_dma",
     "px_252_dma",
 ]
-cols_perf = cols_perf_desc + cols_perf_z_score + cols_vol + cols_perf_num
+perf_cols = perf_desc_cols + perf_z_score_cols + perf_vol_cols + perf_num_cols
+perf_src_table_name = "latest_performance"
 
 
 def run():
     prices_query = f"""
         select 
-            {','.join(cols_prices)}
-        from total_return
+            {','.join(px_cols)}
+        from {px_src_tbl_name}
     """
     performance_query = f"""
         SELECT
-            {','.join(cols_perf)}
-        FROM latest_performance
+            {','.join(perf_cols)}
+        FROM {perf_src_table_name}
         ORDER BY ticker
     """
     export_to_parquet_query = (
