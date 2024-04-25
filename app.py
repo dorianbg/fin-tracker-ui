@@ -14,10 +14,6 @@ from dateutil.relativedelta import relativedelta
 
 import platform
 
-if platform.system() == "Darwin":
-    di.run()
-    time.sleep(1)
-
 charts_width: int = 800
 duckdb_file: str = ":memory:"
 cols_perf: list[str] = ["date", "num_ads", "price", "type"]
@@ -32,6 +28,11 @@ time_strings = ["1W", "1M", "3M", "6M", "9M", "1Y", "18M", "2Y", "3Y", "5Y", "10
 st.set_page_config(
     page_icon="🏠", page_title="Financial instrument tracker", layout="wide"
 )
+
+if platform.system() == "Darwin":
+    with st.spinner("Processing"):
+        di.run()
+        time.sleep(0.05)
 
 
 def icon(emoji: str):

@@ -1,5 +1,6 @@
 import os
 import shutil
+import time
 
 import duckdb
 
@@ -61,7 +62,11 @@ def run():
     )
     if os.path.exists(data_dir):
         shutil.rmtree(data_dir)
-        os.makedirs(data_dir)
+
+    while os.path.exists(data_dir):
+        time.sleep(0.05)
+
+    os.makedirs(data_dir)
 
     with duckdb.connect(database=duckdb_file, read_only=False) as conn:
         conn.execute(add_encrypt_key)
