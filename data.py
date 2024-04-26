@@ -83,7 +83,6 @@ def get_variation(values: pd.Series) -> np.float64:
     return round(100 * (current - base) / base, 2) if base else 0
 
 
-@st.cache_data
 def get_data(
     table: str,
     start_date: datetime.date = None,
@@ -96,9 +95,9 @@ def get_data(
     if instruments is not None:
         instruments = [x.split("/")[0] for x in instruments]
     if table == di.px_tbl:
-        cols = di.px_cols
+        _cols = di.px_cols
     elif table == di.perf_tbl:
-        cols = (
+        _cols = (
             di.perf_desc_cols
             + di.perf_z_score_cols
             + di.perf_vol_cols
@@ -118,12 +117,12 @@ def get_data(
     )
     query = f"""
         select 
-            {','.join(cols)},  
+            {','.join(_cols)},  
         from {table}
         {where_clause_str} 
         order by {"ticker" if table == di.px_tbl else "fund_type"} asc, "date" asc
     """
-    res = get_conn().execute(query).df()
+    res = get_data_duck(query)
     # we use price changes instead of prices
     if table == di.px_tbl:
         variations = (
@@ -131,6 +130,13 @@ def get_data(
         )
         res = res.assign(price_chg=variations.droplevel(0))
 
+    return res
+
+
+@st.cache_data
+def get_data_duck(query):
+    print(query)
+    res = get_conn().execute(query).df()
     return res
 
 

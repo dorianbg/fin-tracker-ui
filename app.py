@@ -153,17 +153,16 @@ def main():
             options=get_fund_types(),
             default=get_fund_types(),
         )
+        returns_opt = "Returns"
+        sharpe_opt = "Sharpe ratios"
 
-        perf_col1, perf_col2, *other = st.columns(4)
-        with perf_col1:
-            vol_adjust = st.checkbox(
-                label="Volatility adjust (Sharpe ratio)", value=False
-            )
-        if vol_adjust:
-            with perf_col2:
-                hide_returns = st.checkbox(label="Show only Sharpe ratios", value=False)
-        else:
-            hide_returns = False
+        opts = st.multiselect(
+            label="Performance metrics",
+            options=[returns_opt, sharpe_opt],
+            default=[returns_opt],
+        )
+        hide_returns = returns_opt not in opts
+        vol_adjust = sharpe_opt in opts
 
         with st.container():
             df: pd.DataFrame = get_data(
@@ -243,8 +242,8 @@ def style_performance_table(df, vol_adjusted, hide_returns):
     # Apply background_gradient to each numeric column
     styled_df = df.style.apply(apply_gradient)
     # format numeric columns
-    percent_cols = di.perf_vol_cols + di.perf_mavg_cols
-    two_decimal_cols = di.perf_z_score_cols
+    percent_cols = [] + di.perf_vol_cols + di.perf_mavg_cols
+    two_decimal_cols = [] + di.perf_z_score_cols
     perf_cols = di.get_perf_cols(
         hide_returns=hide_returns, show_vol_adjusted=vol_adjusted, styling=True
     )
