@@ -4,18 +4,25 @@ from datetime import datetime
 import altair as alt
 import pandas as pd
 import streamlit as st
-import duckdb
+
+import data
 import duckdb_importer as di
-from streamlit import cache_data
-import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import rgb2hex, colorConverter
 from dateutil.relativedelta import relativedelta
 
 import platform
 
+from data import (
+    get_distinct_instruments,
+    get_distinct_fund_types,
+    get_data,
+    get_min_date_all,
+    get_fund_types,
+    create_perf_table,
+)
+
 charts_width: int = 800
-duckdb_file: str = ":memory:"
 cols_perf: list[str] = ["date", "num_ads", "price", "type"]
 cols_prices: list[str] = ["ticker"]
 map_name_to_type: dict = {
@@ -32,7 +39,7 @@ st.set_page_config(
 if platform.system() == "Darwin":
     with st.spinner("Processing"):
         di.run()
-        time.sleep(0.05)
+        time.sleep(0.5)
 
 
 def icon(emoji: str):
@@ -40,164 +47,6 @@ def icon(emoji: str):
     st.write(
         f'<span style="font-size: 78px; line-height: 1">{emoji}</span>',
         unsafe_allow_html=True,
-    )
-
-
-_conn: duckdb.DuckDBPyConnection = None
-
-
-def init_conn(file_name: str) -> duckdb.DuckDBPyConnection:
-    global _conn
-    _conn = duckdb.connect(database=file_name)
-    _load_pq = (
-        lambda tbl, file, enc: f"CREATE TEMP TABLE {tbl} AS SELECT * FROM read_parquet('{file}', encryption_config = {enc})"
-    )
-    _conn.execute(f"{di.add_encrypt_key}")
-    _conn.execute(_load_pq(di.px_tbl, di.px_pq_file, di.encrypt_conf))
-    _conn.execute(_load_pq(di.perf_tbl, di.perf_pq_file, di.encrypt_conf))
-    return _conn
-
-
-def get_conn() -> duckdb.DuckDBPyConnection:
-    global _conn, duckdb_file
-    if _conn is not None:
-        return _conn
-    else:
-        return init_conn(duckdb_file)
-
-
-@st.cache_data
-def get_distinct_instruments():
-    return list(
-        get_conn()
-        .execute(
-            f"select distinct (ticker || '/' || description) as ticker_desc  from {di.px_tbl}"
-        )
-        .df()["ticker_desc"]
-    )
-
-
-@st.cache_data
-def get_distinct_fund_types():
-    return list(
-        get_conn()
-        .execute(f"select distinct fund_type from {di.px_tbl}")
-        .df()["fund_type"]
-    )
-
-
-def gen_where_clause_prices(
-    instruments: list[str],
-    fund_types: list[str],
-    start_date: datetime.date,
-    end_date: datetime.date,
-) -> str:
-    where_clause = []
-    if start_date:
-        where_clause.append(f"date >= '{start_date.isoformat()}'")
-    if end_date:
-        where_clause.append(f"date <= '{end_date.isoformat()}'")
-    if instruments:
-        where_str = "','".join(instruments)
-        where_clause.append(f"ticker in ('{where_str}') ")
-    if fund_types:
-        where_str = "','".join(fund_types)
-        where_clause.append(f"fund_type in ('{where_str}') ")
-    where_clause_str = ""
-    if len(where_clause) > 0:
-        where_clause_str = f"where {' and '.join(where_clause)}"
-    return where_clause_str
-
-
-def get_variation(values: pd.Series) -> np.float64:
-    base = values.iloc[0]  # first element in window iteration
-    current = values.iloc[-1]  # last element in window iteration
-    return round(100 * (current - base) / base, 2) if base else 0
-
-
-@st.cache_data
-def get_data(
-    table,
-    cols,
-    start_date: datetime.date = None,
-    end_date: datetime.date = None,
-    instruments: list[str] = None,
-    fund_types: list[str] = None,
-) -> pd.DataFrame:
-    if instruments is not None:
-        instruments = [x.split("/")[0] for x in instruments]
-    where_clause_str = gen_where_clause_prices(
-        instruments,
-        fund_types,
-        start_date,
-        end_date,
-    )
-    query = f"""
-        select 
-            {','.join(cols)},  
-        from {table}
-        {where_clause_str} 
-        order by {"ticker" if table == di.px_tbl else "fund_type"} asc, "date" asc
-    """
-    res = get_conn().execute(query).df()
-    if table == di.px_tbl:
-        variations = (
-            res.groupby("ticker")["price"].expanding(min_periods=2).apply(get_variation)
-        )
-        res = res.assign(price_chg=variations.droplevel(0))
-    return res
-
-
-@cache_data
-def get_min_date_all() -> tuple[datetime.date, datetime.date]:
-    query = f"select min(date) as min_date from {di.px_tbl}"
-    return get_conn().execute(query).fetchall()[0][0]
-
-
-@cache_data
-def get_fund_types() -> list[str]:
-    query = f"select distinct fund_type from {di.perf_tbl}"
-    return [x[0] for x in get_conn().execute(query).fetchall()]
-
-
-def calculate_annual_cagr(total_percent_change: float, num_months: float):
-    # Convert total percent change to a monthly CAGR
-    monthly_cagr = (
-        ((1 + total_percent_change / 100) ** (1 / num_months)) - 1
-        if num_months > 0
-        else 0
-    )
-    # Calculate annual CAGR
-    annual_cagr = (1 + monthly_cagr) ** 12 - 1
-    return annual_cagr
-
-
-def get_percent_change(df: pd.DataFrame, col_name: str):
-    first_value = df[col_name].iloc[0]
-    last_value = df[col_name].iloc[-1]
-    percent_change = ((last_value - first_value) / first_value) * 100
-    return percent_change, first_value, last_value
-
-
-@st.cache_data
-def extract_metrics(df: pd.DataFrame, date_col: str = "date", price_col: str = "price"):
-    price_chg_pct, first_price, last_price = get_percent_change(df, price_col)
-    min_dt: datetime.date = df[date_col].min().date()
-    max_dt: datetime.date = df[date_col].max().date()
-    months_delta: float = (
-        max_dt.year * 12 + max_dt.month - (min_dt.year * 12 + min_dt.month)
-    )
-    cagr: float = calculate_annual_cagr(
-        total_percent_change=price_chg_pct, num_months=months_delta
-    )
-    return (
-        cagr,
-        min_dt,
-        max_dt,
-        months_delta,
-        price_chg_pct,
-        first_price,
-        last_price,
     )
 
 
@@ -305,25 +154,25 @@ def main():
             default=get_fund_types(),
         )
 
+        perf_col1, perf_col2, *other = st.columns(4)
+        with perf_col1:
+            vol_adjust = st.checkbox(
+                label="Volatility adjust (Sharpe ratio)", value=False
+            )
+        if vol_adjust:
+            with perf_col2:
+                hide_returns = st.checkbox(label="Show only Sharpe ratios", value=False)
+        else:
+            hide_returns = False
+
         with st.container():
             df: pd.DataFrame = get_data(
                 table=di.perf_tbl,
-                cols=di.perf_cols,
-                start_date=None,
-                end_date=None,
-                instruments=None,
                 fund_types=selected_fund_types,
+                vol_adjust=vol_adjust,
+                hide_returns=hide_returns,
             )
-            df["date"] = df["date"].dt.date
-            # Apply background_gradient to each numeric column
-            styled_df = df.style.apply(apply_gradient)
-            # format numeric columns
-            styled_df = styled_df.format(
-                subset=di.perf_num_cols + di.perf_vol_cols, formatter="{:.2f}%"
-            )
-            styled_df = styled_df.format(
-                subset=di.perf_z_score_cols, formatter="{:.2f}"
-            )
+            styled_df = style_performance_table(df, vol_adjust, hide_returns)
             st.dataframe(data=styled_df, hide_index=True, height=550)
 
     with tab2:
@@ -372,7 +221,6 @@ def main():
 
             df: pd.DataFrame = get_data(
                 table=di.px_tbl,
-                cols=di.px_cols,
                 start_date=start_date,
                 end_date=end_date,
                 instruments=None if len(selected_inst) == 0 else selected_inst,
@@ -385,41 +233,30 @@ def main():
                     plot_prices_instrument(df),
                     use_container_width=True,
                 )
-                data: list = []
-                for inst in df["ticker"].unique():
-                    sub_df: pd.DataFrame = df[df["ticker"] == inst]
-                    desc = sub_df.iloc[0]["description"]
-                    (
-                        cagr,
-                        min_dt,
-                        max_dt,
-                        months_delta,
-                        price_chg_pct,
-                        first_price,
-                        last_price,
-                    ) = extract_metrics(sub_df, "date", "price")
-                    data.append(
-                        {
-                            "ticker": inst,
-                            "Description": desc,
-                            "Start price": first_price,
-                            "End price": last_price,
-                            "Change": price_chg_pct,
-                            "Time span": f"{months_delta} months",
-                            "CAGR": cagr * 100,
-                            "Start date": {min_dt.isoformat()},
-                            "End date": {max_dt.isoformat()},
-                        }
-                    )
+                df_perf = create_perf_table(df)
                 st.write(f"Performance comparison from {start_date} to {end_date} ")
-                styled_df_perf = pd.DataFrame(data)
-                styled_df_perf = styled_df_perf.style.format(
-                    subset=["Start price", "End price"], formatter="£{:.2f}"
-                )
-                styled_df_perf = styled_df_perf.format(
-                    subset=["Change", "CAGR"], formatter="{:.2f}%"
-                )
-                st.dataframe(data=styled_df_perf, hide_index=True)
+                st.dataframe(data=df_perf, hide_index=True)
+
+
+def style_performance_table(df, vol_adjusted, hide_returns):
+    df["date"] = df["date"].dt.date
+    # Apply background_gradient to each numeric column
+    styled_df = df.style.apply(apply_gradient)
+    # format numeric columns
+    percent_cols = di.perf_vol_cols + di.perf_mavg_cols
+    two_decimal_cols = di.perf_z_score_cols
+    perf_cols = di.get_perf_cols(
+        hide_returns=hide_returns, show_vol_adjusted=vol_adjusted, styling=True
+    )
+    if vol_adjusted and hide_returns:
+        two_decimal_cols += perf_cols
+    else:
+        percent_cols += [p for p in perf_cols if data.sharpe_col_suffix not in p]
+        two_decimal_cols += [p for p in perf_cols if data.sharpe_col_suffix in p]
+
+    styled_df = styled_df.format(subset=percent_cols, formatter="{:.2f}%")
+    styled_df = styled_df.format(subset=two_decimal_cols, formatter="{:.2f}")
+    return styled_df
 
 
 st.title("Fin tracker")

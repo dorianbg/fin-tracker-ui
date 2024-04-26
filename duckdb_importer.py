@@ -4,6 +4,8 @@ import time
 
 import duckdb
 
+import data
+
 data_dir = "data"
 if not os.path.exists(data_dir):
     os.makedirs(data_dir)
@@ -22,8 +24,9 @@ perf_tbl = "performance"
 perf_pq_file = os.path.join(data_dir, f"{perf_tbl}.parquet")
 perf_desc_cols = ["date", "ticker", "description", "fund_type"]
 perf_z_score_cols = ["z_1d"]
-perf_vol_cols = ["vol_1d", "vol_1y"]
-perf_num_cols = [
+vol_1y_col = "vol_1y"
+perf_vol_cols = ["vol_1d", vol_1y_col]
+perf_returns_cols = [
     "r_1d",
     "r_1w",
     "r_2w",
@@ -34,11 +37,34 @@ perf_num_cols = [
     "r_2y",
     "r_3y",
     "r_5y",
+]
+
+
+def get_perf_cols(hide_returns, show_vol_adjusted, styling):
+    _cols = []
+    for col in perf_returns_cols:
+        if not hide_returns:
+            _cols.append(col)
+        if show_vol_adjusted:
+            c2 = col
+            select_prefix = "" if styling else f"{c2}/{vol_1y_col} as "
+            res = f"{select_prefix}{c2}{data.sharpe_col_suffix}"
+            _cols.append(res)
+    return _cols
+
+
+perf_mavg_cols = [
     "px_21_dma",
     "px_63_dma",
     "px_252_dma",
 ]
-perf_cols = perf_desc_cols + perf_z_score_cols + perf_vol_cols + perf_num_cols
+perf_cols = (
+    perf_desc_cols
+    + perf_z_score_cols
+    + perf_vol_cols
+    + perf_returns_cols
+    + perf_mavg_cols
+)
 perf_src_table_name = "latest_performance"
 
 
