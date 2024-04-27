@@ -275,7 +275,7 @@ top_col1, top_col2 = st.columns([4, 1])
 with top_col1:
     st.write(
         "Disclaimer: this is a non-commercial project and data is purely source from Yahoo! finance API and exclusively intended for personal use only.  \n"
-        "There are often data quality issues with smaller UCITS ETFs so sometimes the data in tables will be missing or obviously wrong."
+        "Data quality issues with smaller UCITS ETFs are common in which case the data in tables will be missing or obviously wrong."
     )
 with top_col2:
     with st.popover("Things to note"):
