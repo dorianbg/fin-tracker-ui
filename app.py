@@ -23,6 +23,7 @@ from data import (
 )
 
 charts_width: int = 800
+table_height: int = 600
 cols_perf: list[str] = ["date", "num_ads", "price", "type"]
 cols_prices: list[str] = ["ticker"]
 map_name_to_type: dict = {
@@ -153,26 +154,36 @@ def main():
             options=get_fund_types(),
             default=get_fund_types(),
         )
-        returns_opt = "Returns"
-        sharpe_opt = "Sharpe ratios"
 
-        opts = st.multiselect(
-            label="Performance metrics",
-            options=[returns_opt, sharpe_opt],
-            default=[returns_opt],
-        )
-        hide_returns = returns_opt not in opts
-        vol_adjust = sharpe_opt in opts
+        col1, col2 = st.columns([2, 7])
+
+        with col1:
+            with st.container():
+                vol_adjust = st.toggle(label="Show Sharpe ratio", value=True)
+                show_returns = st.toggle(label="Show Gross return", value=True)
+
+        with col2:
+            returns_cols = st.multiselect(
+                label="Returns",
+                options=di.selectable_returns,
+                default=di.default_selected_returns,
+            )
 
         with st.container():
             df: pd.DataFrame = get_data(
                 table=di.perf_tbl,
                 fund_types=selected_fund_types,
                 vol_adjust=vol_adjust,
-                hide_returns=hide_returns,
+                show_returns=show_returns,
+                returns_cols=returns_cols,
             )
-            styled_df = style_performance_table(df, vol_adjust, hide_returns)
-            st.dataframe(data=styled_df, hide_index=True, height=550)
+            styled_df = style_performance_table(
+                df,
+                vol_adjust=vol_adjust,
+                show_returns=show_returns,
+                returns_cols=returns_cols,
+            )
+            st.dataframe(data=styled_df, hide_index=True, height=table_height)
 
     with tab2:
         col1, col2, col3 = st.columns(3)
@@ -237,7 +248,7 @@ def main():
                 st.dataframe(data=df_perf, hide_index=True)
 
 
-def style_performance_table(df, vol_adjusted, hide_returns):
+def style_performance_table(df, vol_adjust, show_returns, returns_cols):
     df["date"] = df["date"].dt.date
     # Apply background_gradient to each numeric column
     styled_df = df.style.apply(apply_gradient)
@@ -245,9 +256,9 @@ def style_performance_table(df, vol_adjusted, hide_returns):
     percent_cols = [] + di.perf_vol_cols + di.perf_mavg_cols
     two_decimal_cols = [] + di.perf_z_score_cols
     perf_cols = di.get_perf_cols(
-        hide_returns=hide_returns, show_vol_adjusted=vol_adjusted, styling=True
+        show_returns=show_returns, vol_adjust=vol_adjust, returns_cols=returns_cols
     )
-    if vol_adjusted and hide_returns:
+    if vol_adjust and not show_returns:
         two_decimal_cols += perf_cols
     else:
         percent_cols += [p for p in perf_cols if data.sharpe_col_suffix not in p]
@@ -259,14 +270,21 @@ def style_performance_table(df, vol_adjusted, hide_returns):
 
 
 st.title("Fin tracker")
-st.write(
-    "Disclaimer: this is a non-commercial project and data is purely source from Yahoo! finance API and exclusively intended for personal use only.  \n"
-    "There are often data quality issues with smaller UCITS ETFs so sometimes the data in tables will be missing or obviously wrong."
-)
-st.write(
-    "Note that the performance includes dividends (Accumulating ETFs are preferred where possible) and standardised to GBP (some ETFs are GBP hedged).  \n"
-    "You could completely change the selection of instruments on the project that feeds data to this dashboard, source code is: https://github.com/dorianbg/fin-tracker/"
-)
+
+top_col1, top_col2 = st.columns([4, 1])
+with top_col1:
+    st.write(
+        "Disclaimer: this is a non-commercial project and data is purely source from Yahoo! finance API and exclusively intended for personal use only.  \n"
+        "There are often data quality issues with smaller UCITS ETFs so sometimes the data in tables will be missing or obviously wrong."
+    )
+with top_col2:
+    with st.popover("Things to note"):
+        st.markdown(
+            "1) Performance includes dividends (Accumulating ETFs are preferred where possible) and is standardised to GBP (some ETFs are GBP hedged).   \n"
+            "2) UK cash rate is taken as risk free rate for Sharpe ratio   \n"
+            "3) You can change the selection of instruments on the project that feeds data to this dashboard, source code is: https://github.com/dorianbg/fin-tracker/"
+        )
+
 st.markdown(
     """
         <style>

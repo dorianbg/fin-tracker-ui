@@ -83,6 +83,7 @@ def get_variation(values: pd.Series) -> np.float64:
     return round(100 * (current - base) / base, 2) if base else 0
 
 
+@st.cache_data
 def get_data(
     table: str,
     start_date: datetime.date = None,
@@ -90,7 +91,8 @@ def get_data(
     instruments: list[str] = None,
     fund_types: list[str] = None,
     vol_adjust: bool = False,
-    hide_returns: bool = False,
+    show_returns: bool = True,
+    returns_cols: list[str] = None,
 ):
     if instruments is not None:
         instruments = [x.split("/")[0] for x in instruments]
@@ -102,7 +104,9 @@ def get_data(
             + di.perf_z_score_cols
             + di.perf_vol_cols
             + di.get_perf_cols(
-                hide_returns=hide_returns, show_vol_adjusted=vol_adjust, styling=False
+                show_returns=show_returns,
+                vol_adjust=vol_adjust,
+                returns_cols=returns_cols,
             )
             + di.perf_mavg_cols
         )
@@ -122,7 +126,7 @@ def get_data(
         {where_clause_str} 
         order by {"ticker" if table == di.px_tbl else "fund_type"} asc, "date" asc
     """
-    res = get_data_duck(query)
+    res = get_conn().execute(query).df()
     # we use price changes instead of prices
     if table == di.px_tbl:
         variations = (
@@ -130,13 +134,6 @@ def get_data(
         )
         res = res.assign(price_chg=variations.droplevel(0))
 
-    return res
-
-
-@st.cache_data
-def get_data_duck(query):
-    print(query)
-    res = get_conn().execute(query).df()
     return res
 
 
@@ -153,7 +150,7 @@ def get_fund_types() -> list[str]:
 
 
 def calculate_annual_cagr(total_percent_change: float, num_months: float):
-    # Convert total percent change to a monthly CAGR
+    # Convert total percent change to annual CAGR
     monthly_cagr = (
         ((1 + total_percent_change / 100) ** (1 / num_months)) - 1
         if num_months > 0

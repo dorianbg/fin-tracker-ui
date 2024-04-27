@@ -38,18 +38,37 @@ perf_returns_cols = [
     "r_3y",
     "r_5y",
 ]
+perf_sharpe_cols = [
+    "r_1d_s",
+    "r_1w_s",
+    "r_2w_s",
+    "r_1mo_s",
+    "r_3mo_s",
+    "r_6mo_s",
+    "r_1y_s",
+    "r_2y_s",
+    "r_3y_s",
+    "r_5y_s",
+]
+selectable_returns = ["1d", "1w", "2w", "1mo", "3mo", "6mo", "1y", "2y", "3y", "5y"]
+default_selected_returns = ["1d", "1w", "2w", "1mo", "3mo", "6mo", "1y", "3y", "5y"]
 
 
-def get_perf_cols(hide_returns, show_vol_adjusted, styling):
+def check_if_in_return_cols(col, returns_cols):
+    return any([True for x in returns_cols if x in col])
+
+
+def get_perf_cols(show_returns, vol_adjust, returns_cols):
     _cols = []
-    for col in perf_returns_cols:
-        if not hide_returns:
-            _cols.append(col)
-        if show_vol_adjusted:
-            c2 = col
-            select_prefix = "" if styling else f"{c2}/{vol_1y_col} as "
-            res = f"{select_prefix}{c2}{data.sharpe_col_suffix}"
-            _cols.append(res)
+    for i in range(len(perf_returns_cols)):
+        if show_returns:
+            col = perf_returns_cols[i]
+            if check_if_in_return_cols(col, returns_cols):
+                _cols.append(col)
+        if vol_adjust:
+            col = perf_sharpe_cols[i]
+            if check_if_in_return_cols(col, returns_cols):
+                _cols.append(col)
     return _cols
 
 
@@ -63,6 +82,7 @@ perf_cols = (
     + perf_z_score_cols
     + perf_vol_cols
     + perf_returns_cols
+    + perf_sharpe_cols
     + perf_mavg_cols
 )
 perf_src_table_name = "latest_performance"
