@@ -60,21 +60,35 @@ def gen_where_clause_prices(
     start_date: datetime.date,
     end_date: datetime.date,
 ) -> str:
-    where_clause = []
+    date_clause = get_date_clause(start_date, end_date)
+    sub_clause = get_where_subclause(instruments, fund_types)
+    if len(date_clause) or len(sub_clause):
+        return f"where {' and '.join(filter(len, [date_clause,sub_clause]))}"
+    return ""
+
+
+def get_date_clause(start_date, end_date):
+    date_clause = ""
     if start_date:
-        where_clause.append(f"date >= '{start_date.isoformat()}'")
+        date_clause += f"date >= '{start_date.isoformat()}'"
     if end_date:
-        where_clause.append(f"date <= '{end_date.isoformat()}'")
+        delim = " and " if date_clause else ""
+        date_clause += f"{delim}date <= '{end_date.isoformat()}'"
+    return date_clause
+
+
+def get_where_subclause(instruments, fund_types):
+    sub_clause = ""
     if instruments:
         where_str = "','".join(instruments)
-        where_clause.append(f"ticker in ('{where_str}') ")
+        sub_clause += f"ticker in ('{where_str}') "
     if fund_types:
         where_str = "','".join(fund_types)
-        where_clause.append(f"fund_type in ('{where_str}') ")
-    where_clause_str = ""
-    if len(where_clause) > 0:
-        where_clause_str = f"where {' and '.join(where_clause)}"
-    return where_clause_str
+        delim = " or " if len(sub_clause) else ""
+        sub_clause += f"{delim}fund_type in ('{where_str}') "
+    if len(sub_clause):
+        sub_clause = f"({sub_clause})"
+    return sub_clause
 
 
 def get_variation(values: pd.Series) -> np.float64:

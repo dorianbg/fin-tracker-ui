@@ -4,7 +4,7 @@ from datetime import datetime
 import altair as alt
 import pandas as pd
 import streamlit as st
-
+import math
 import data
 import duckdb_importer as di
 import matplotlib.pyplot as plt
@@ -150,12 +150,12 @@ def main():
 
     with tab1:
         selected_fund_types = st.multiselect(
-            label="Lookback period (overrides date range)",
+            label="Fund types",
             options=get_fund_types(),
             default=get_fund_types(),
         )
 
-        col1, col2 = st.columns([2, 7])
+        col1, col2, col3 = st.columns([2, 2, 7])
 
         with col1:
             with st.container():
@@ -163,11 +163,37 @@ def main():
                 show_returns = st.toggle(label="Show Gross return", value=True)
 
         with col2:
+            with st.container():
+                sort_sharpe = st.toggle(label="Custom sort on Sharpe", value=False)
+                sort_returns = st.toggle(label="Custom sort on Returns", value=False)
+                if sort_sharpe and sort_returns:
+                    st.warning("Cannot enable custom sorting on both")
+        with col3:
             returns_cols = st.multiselect(
                 label="Returns",
                 options=di.selectable_returns,
                 default=di.default_selected_returns,
             )
+
+        custom_weights = []
+        if sort_sharpe or sort_returns:
+            weight_cols = st.columns(len(di.selectable_returns))
+            for i, weight_col in enumerate(weight_cols):
+                with weight_col:
+                    custom_weights.append(
+                        st.number_input(
+                            f"Weight for {di.selectable_returns[i]}",
+                            value=0,
+                        )
+                    )
+            if (
+                len(custom_weights)
+                and sum(custom_weights) > 0
+                and sum(custom_weights) != 100
+            ):
+                st.warning(
+                    f"Custom weights must add up to 100% - current is {sum(custom_weights)}%"
+                )
 
         with st.container():
             df: pd.DataFrame = get_data(
@@ -177,6 +203,34 @@ def main():
                 show_returns=show_returns,
                 returns_cols=returns_cols,
             )
+            if (
+                (sort_sharpe or sort_returns)
+                and sum(custom_weights) == 100
+                and filter(lambda x: x >= 1, custom_weights)
+            ):
+                total_w = sum(custom_weights)
+                custom_weights_normalised = [x / total_w for x in custom_weights]
+                columns_sort = (
+                    di.perf_sharpe_cols if sort_sharpe else di.perf_returns_cols
+                )
+                suffix = "_weighted_rank"
+                final_col = "weighted_rank"
+                for column in columns_sort:
+                    if column in df.columns:
+                        df[column + suffix] = df[column].rank(na_option="keep")
+                for index, row in df.iterrows():
+                    weighted_rank = 0
+                    for column, weight in zip(columns_sort, custom_weights_normalised):
+                        if column in df.columns:
+                            rank = row[column + suffix]
+                            if not math.isnan(rank):
+                                weighted_rank += rank * weight
+                    df.at[index, final_col] = weighted_rank
+
+                df = df.drop(
+                    columns=[col for col in df.columns if col.endswith(suffix)]
+                )
+                df = df.sort_values(final_col, inplace=False)
             styled_df = style_performance_table(
                 df,
                 vol_adjust=vol_adjust,
@@ -222,12 +276,15 @@ def main():
             start_date = deduct_datetime_interval(end_date, selected_lookback)
 
         with st.container():
-            selected_inst: list[str] = st.multiselect(
-                label="Instrument", options=get_distinct_instruments(), default=None
-            )
-            selected_fund_types: list[str] = st.multiselect(
-                label="Asset class", options=get_distinct_fund_types(), default=None
-            )
+            col1, col2 = st.columns(2)
+            with col1:
+                selected_inst: list[str] = st.multiselect(
+                    label="Instrument", options=get_distinct_instruments(), default=None
+                )
+            with col2:
+                selected_fund_types: list[str] = st.multiselect(
+                    label="Asset class", options=get_distinct_fund_types(), default=None
+                )
 
             df: pd.DataFrame = get_data(
                 table=di.px_tbl,
