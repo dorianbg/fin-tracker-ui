@@ -1,5 +1,5 @@
 import time
-from datetime import datetime
+import datetime
 
 import altair as alt
 import pandas as pd
@@ -23,7 +23,7 @@ from data import (
 )
 
 charts_width: int = 800
-table_height: int = 600
+table_height: int = 400
 cols_perf: list[str] = ["date", "num_ads", "price", "type"]
 cols_prices: list[str] = ["ticker"]
 map_name_to_type: dict = {
@@ -67,7 +67,7 @@ def plot_prices_instrument(
             alt.Chart(df)
             .mark_line(point=True)
             .encode(
-                x=alt.X(x_col, axis=alt.Axis(title="Date")),
+                x=alt.X(x_col, axis=alt.Axis(title="Date", format='%b %Y')),
                 y=alt.Y(y_col, axis=alt.Axis(title="Price change (%)")).scale(
                     zero=False
                 ),
@@ -213,31 +213,30 @@ def main():
                 columns_sort = (
                     di.perf_sharpe_cols if sort_sharpe else di.perf_returns_cols
                 )
-                suffix = "_weighted_rank"
-                final_col = "weighted_rank"
-                for column in columns_sort:
-                    if column in df.columns:
-                        df[column + suffix] = df[column].rank(na_option="keep")
-                for index, row in df.iterrows():
-                    weighted_rank = 0
-                    for column, weight in zip(columns_sort, custom_weights_normalised):
-                        if column in df.columns:
-                            rank = row[column + suffix]
-                            if not math.isnan(rank):
-                                weighted_rank += rank * weight
-                    df.at[index, final_col] = weighted_rank
-
-                df = df.drop(
-                    columns=[col for col in df.columns if col.endswith(suffix)]
-                )
-                df = df.sort_values(final_col, inplace=False)
+                df = custom_sort_df_cols(columns_sort, custom_weights_normalised, df)
             styled_df = style_performance_table(
                 df,
                 vol_adjust=vol_adjust,
                 show_returns=show_returns,
                 returns_cols=returns_cols,
             )
-            st.dataframe(data=styled_df, hide_index=True, height=table_height)
+            event = st.dataframe(
+                data=styled_df,
+                hide_index=True,
+                height=table_height,
+                use_container_width=True,
+                on_select="rerun",
+                selection_mode="multi-row",
+            )
+            if event:
+                st.text("Price performance")
+                filtered_df = df.iloc[event.selection.rows]
+
+                plot_performance(start_date=datetime.date.today() - datetime.timedelta(days=3*365),
+                                 end_date=datetime.date.today(),
+                                 selected_inst=list(filtered_df["ticker"].unique()),
+                                 selected_fund_types=[],
+                                 show_df=True)
 
     with tab2:
         col1, col2, col3 = st.columns(3)
@@ -259,20 +258,20 @@ def main():
                 "Select start date",
                 value=min_date_possible,
                 min_value=min_date_possible,
-                max_value=datetime.today(),
+                max_value=datetime.date.today(),
                 format="DD/MM/YYYY",
             )
         with col3:
             end_date: datetime.date = st.date_input(
                 "Select end date",
-                value=datetime.today(),
+                value=datetime.date.today(),
                 min_value=min_date_possible,
-                max_value=datetime.today(),
+                max_value=datetime.date.today(),
                 format="DD/MM/YYYY",
             )
 
         if selected_lookback is not None:
-            end_date = datetime.today().date()
+            end_date = datetime.date.today()
             start_date = deduct_datetime_interval(end_date, selected_lookback)
 
         with st.container():
@@ -286,23 +285,49 @@ def main():
                     label="Asset class", options=get_distinct_fund_types(), default=None
                 )
 
-            df: pd.DataFrame = get_data(
-                table=di.px_tbl,
-                start_date=start_date,
-                end_date=end_date,
-                instruments=None if len(selected_inst) == 0 else selected_inst,
-                fund_types=(
-                    None if len(selected_fund_types) == 0 else selected_fund_types
-                ),
-            )
-            if len(selected_inst) > 0 or len(selected_fund_types) > 0:
-                st.altair_chart(
-                    plot_prices_instrument(df),
-                    use_container_width=True,
-                )
-                df_perf = create_perf_table(df)
-                st.write(f"Performance comparison from {start_date} to {end_date} ")
-                st.dataframe(data=df_perf, hide_index=True)
+            plot_performance(start_date, end_date, selected_inst, selected_fund_types, show_df=True)
+
+
+def custom_sort_df_cols(columns_sort, custom_weights_normalised, df):
+    suffix = "_weighted_rank"
+    final_col = "weighted_rank"
+    for column in columns_sort:
+        if column in df.columns:
+            df[column + suffix] = df[column].rank(na_option="keep")
+    for index, row in df.iterrows():
+        weighted_rank = 0
+        for column, weight in zip(columns_sort, custom_weights_normalised):
+            if column in df.columns:
+                rank = row[column + suffix]
+                if not math.isnan(rank):
+                    weighted_rank += rank * weight
+        df.at[index, final_col] = weighted_rank
+    df = df.drop(
+        columns=[col for col in df.columns if col.endswith(suffix)]
+    )
+    df = df.sort_values(final_col, inplace=False)
+    return df
+
+
+def plot_performance(start_date, end_date, selected_inst, selected_fund_types, show_df = False):
+    df: pd.DataFrame = get_data(
+        table=di.px_tbl,
+        start_date=start_date,
+        end_date=end_date,
+        instruments=None if len(selected_inst) == 0 else selected_inst,
+        fund_types=(
+            None if len(selected_fund_types) == 0 else selected_fund_types
+        ),
+    )
+    if len(selected_inst) > 0 or len(selected_fund_types) > 0:
+        st.altair_chart(
+            plot_prices_instrument(df),
+            use_container_width=True,
+        )
+        if show_df:
+            df_perf = create_perf_table(df)
+            st.write(f"Performance comparison from {start_date} to {end_date} ")
+            st.dataframe(data=df_perf, hide_index=True)
 
 
 def style_performance_table(df, vol_adjust, show_returns, returns_cols):

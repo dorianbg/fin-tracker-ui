@@ -15,11 +15,12 @@ encrypt_key = os.environ["PARQUET_ENCRYPTION_KEY"]
 add_encrypt_key = f"PRAGMA add_parquet_key('key256', '{encrypt_key}');"
 encrypt_conf = "{footer_key: 'key256'}"
 
+px_src_tbl_name = "total_return"
 px_tbl = "prices"
 px_pq_file = os.path.join(data_dir, f"{px_tbl}.parquet")
 px_cols = ["ticker", "ticker_full", "price", "date", "description", "fund_type"]
-px_src_tbl_name = "total_return"
 
+perf_src_table_name = "latest_performance_sharpe"
 perf_tbl = "performance"
 perf_pq_file = os.path.join(data_dir, f"{perf_tbl}.parquet")
 perf_desc_cols = ["date", "ticker", "description", "fund_type"]
@@ -85,7 +86,6 @@ perf_cols = (
     + perf_sharpe_cols
     + perf_mavg_cols
 )
-perf_src_table_name = "latest_performance"
 
 
 def run():

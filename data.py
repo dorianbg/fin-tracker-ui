@@ -152,7 +152,7 @@ def get_data(
 
 
 @cache_data
-def get_min_date_all() -> tuple[datetime.date, datetime.date]:
+def get_min_date_all() -> datetime.date:
     query = f"select min(date) as min_date from {di.px_tbl}"
     return get_conn().execute(query).fetchall()[0][0]
 
