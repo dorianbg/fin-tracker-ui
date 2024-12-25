@@ -1,18 +1,18 @@
-import time
 import datetime
+import platform
+import time
 
 import altair as alt
+import math
+import matplotlib.pyplot as plt
 import pandas as pd
 import streamlit as st
-import math
+from matplotlib.colors import rgb2hex, colorConverter
+
 import data
 import duckdb_importer as di
-import matplotlib.pyplot as plt
-from matplotlib.colors import rgb2hex, colorConverter
-from dateutil.relativedelta import relativedelta
-
-import platform
-
+from app.utils import deduct_datetime_interval
+from config import charts_width, table_height, time_strings
 from data import (
     get_distinct_instruments,
     get_distinct_fund_types,
@@ -20,18 +20,9 @@ from data import (
     get_min_date_all,
     get_fund_types,
     create_perf_table,
+    create_query,
+    get_variation,
 )
-
-charts_width: int = 800
-table_height: int = 400
-cols_perf: list[str] = ["date", "num_ads", "price", "type"]
-cols_prices: list[str] = ["ticker"]
-map_name_to_type: dict = {
-    "Apartments for sale": "sales_flats",
-    "Apartments for rent": "rentals_flats",
-    "Houses for sale": "sales_houses",
-}
-time_strings = ["1W", "1M", "3M", "6M", "9M", "1Y", "18M", "2Y", "3Y", "5Y", "10Y"]
 
 st.set_page_config(
     page_icon="🏠", page_title="Financial instrument tracker", layout="wide"
@@ -40,34 +31,24 @@ st.set_page_config(
 if platform.system() == "Darwin":
     with st.spinner("Processing"):
         di.run()
-        time.sleep(0.5)
-
-
-def icon(emoji: str):
-    """Shows an emoji as a Notion-style page icon."""
-    st.write(
-        f'<span style="font-size: 78px; line-height: 1">{emoji}</span>',
-        unsafe_allow_html=True,
-    )
+        time.sleep(1)
 
 
 def plot_prices_instrument(
     df: pd.DataFrame, x_col="date", y_col="price_chg", group_col="ticker"
 ):
     brush = alt.selection_interval(encodings=["x"], empty=True)
-
     hover = alt.selection_point(
         fields=[x_col],
         nearest=True,
         on="mouseover",
     )
-
     lines = (
         (
             alt.Chart(df)
             .mark_line(point=True)
             .encode(
-                x=alt.X(x_col, axis=alt.Axis(title="Date", format='%b %Y')),
+                x=alt.X(x_col, axis=alt.Axis(title="Date", format="%b %Y")),
                 y=alt.Y(y_col, axis=alt.Axis(title="Price change (%)")).scale(
                     zero=False
                 ),
@@ -101,23 +82,6 @@ def plot_prices_instrument(
 
     chart = lines + points + tooltips
     return chart
-
-
-# Function to deduct datetime representations of time intervals from a given datetime
-def deduct_datetime_interval(base_datetime, interval):
-    if not interval:  # Skip empty strings
-        return None
-
-    interval_value = int(interval[:-1])
-    interval_unit = interval[-1]
-    if interval_unit == "W":
-        return base_datetime - relativedelta(weeks=interval_value)
-    elif interval_unit == "M":
-        return base_datetime - relativedelta(months=interval_value)
-    elif interval_unit == "Y":
-        return base_datetime - relativedelta(years=interval_value)
-    else:
-        raise ValueError("Wrong input")
 
 
 # Function to adjust text color based on background color luminance
@@ -196,12 +160,15 @@ def main():
                 )
 
         with st.container():
-            df: pd.DataFrame = get_data(
+            query = create_query(
                 table=di.perf_tbl,
                 fund_types=selected_fund_types,
                 vol_adjust=vol_adjust,
                 show_returns=show_returns,
                 returns_cols=returns_cols,
+            )
+            df: pd.DataFrame = get_data(
+                query=query,
             )
             if (
                 (sort_sharpe or sort_returns)
@@ -232,11 +199,13 @@ def main():
                 st.text("Price performance")
                 filtered_df = df.iloc[event.selection.rows]
 
-                plot_performance(start_date=datetime.date.today() - datetime.timedelta(days=3*365),
-                                 end_date=datetime.date.today(),
-                                 selected_inst=list(filtered_df["ticker"].unique()),
-                                 selected_fund_types=[],
-                                 show_df=True)
+                plot_performance(
+                    start_date=datetime.date.today() - datetime.timedelta(days=3 * 365),
+                    end_date=datetime.date.today(),
+                    selected_inst=list(filtered_df["ticker"].unique()),
+                    selected_fund_types=[],
+                    show_df=True,
+                )
 
     with tab2:
         col1, col2, col3 = st.columns(3)
@@ -285,7 +254,9 @@ def main():
                     label="Asset class", options=get_distinct_fund_types(), default=None
                 )
 
-            plot_performance(start_date, end_date, selected_inst, selected_fund_types, show_df=True)
+            plot_performance(
+                start_date, end_date, selected_inst, selected_fund_types, show_df=True
+            )
 
 
 def custom_sort_df_cols(columns_sort, custom_weights_normalised, df):
@@ -302,23 +273,27 @@ def custom_sort_df_cols(columns_sort, custom_weights_normalised, df):
                 if not math.isnan(rank):
                     weighted_rank += rank * weight
         df.at[index, final_col] = weighted_rank
-    df = df.drop(
-        columns=[col for col in df.columns if col.endswith(suffix)]
-    )
+    df = df.drop(columns=[col for col in df.columns if col.endswith(suffix)])
     df = df.sort_values(final_col, inplace=False)
     return df
 
 
-def plot_performance(start_date, end_date, selected_inst, selected_fund_types, show_df = False):
-    df: pd.DataFrame = get_data(
+def plot_performance(
+    start_date, end_date, selected_inst, selected_fund_types, show_df=False
+):
+    query = create_query(
         table=di.px_tbl,
         start_date=start_date,
         end_date=end_date,
         instruments=None if len(selected_inst) == 0 else selected_inst,
-        fund_types=(
-            None if len(selected_fund_types) == 0 else selected_fund_types
-        ),
+        fund_types=(None if len(selected_fund_types) == 0 else selected_fund_types),
     )
+    df: pd.DataFrame = get_data(query=query)
+    variations = (
+        df.groupby("ticker")["price"].expanding(min_periods=2).apply(get_variation)
+    )
+    df = df.assign(price_chg=variations.droplevel(0))
+
     if len(selected_inst) > 0 or len(selected_fund_types) > 0:
         st.altair_chart(
             plot_prices_instrument(df),

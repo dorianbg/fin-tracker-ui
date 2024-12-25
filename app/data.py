@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 
 import duckdb
@@ -17,9 +18,10 @@ sharpe_col_suffix = "_s"
 def init_conn(file_name: str) -> duckdb.DuckDBPyConnection:
     global _conn
     _conn = duckdb.connect(database=file_name)
-    _load_pq = (
-        lambda tbl, file, enc: f"CREATE TEMP TABLE {tbl} AS SELECT * FROM read_parquet('{file}', encryption_config = {enc})"
-    )
+
+    def _load_pq(tbl, file, enc):
+        return f"CREATE TEMP TABLE {tbl} AS SELECT * FROM read_parquet('{file}', encryption_config = {enc})"
+
     _conn.execute(f"{di.add_encrypt_key}")
     _conn.execute(_load_pq(di.px_tbl, di.px_pq_file, di.encrypt_conf))
     _conn.execute(_load_pq(di.perf_tbl, di.perf_pq_file, di.encrypt_conf))
@@ -63,7 +65,7 @@ def gen_where_clause_prices(
     date_clause = get_date_clause(start_date, end_date)
     sub_clause = get_where_subclause(instruments, fund_types)
     if len(date_clause) or len(sub_clause):
-        return f"where {' and '.join(filter(len, [date_clause,sub_clause]))}"
+        return f"where {' and '.join(filter(len, [date_clause, sub_clause]))}"
     return ""
 
 
@@ -97,8 +99,7 @@ def get_variation(values: pd.Series) -> np.float64:
     return round(100 * (current - base) / base, 2) if base else 0
 
 
-@st.cache_data
-def get_data(
+def create_query(
     table: str,
     start_date: datetime.date = None,
     end_date: datetime.date = None,
@@ -107,25 +108,24 @@ def get_data(
     vol_adjust: bool = False,
     show_returns: bool = True,
     returns_cols: list[str] = None,
+    cols: list[str] = None,
 ):
     if instruments is not None:
         instruments = [x.split("/")[0] for x in instruments]
     if table == di.px_tbl:
-        _cols = di.px_cols
+        cols = di.px_cols
     elif table == di.perf_tbl:
-        _cols = (
+        cols = (
             di.perf_desc_cols
             + di.perf_z_score_cols
             + di.perf_vol_cols
+            + di.perf_mavg_cols
             + di.get_perf_cols(
                 show_returns=show_returns,
                 vol_adjust=vol_adjust,
                 returns_cols=returns_cols,
             )
-            + di.perf_mavg_cols
         )
-    else:
-        raise ValueError("Unsupported table name")
 
     where_clause_str = gen_where_clause_prices(
         instruments,
@@ -134,21 +134,19 @@ def get_data(
         end_date,
     )
     query = f"""
-        select 
-            {','.join(_cols)},  
-        from {table}
-        {where_clause_str} 
-        order by {"ticker" if table == di.px_tbl else "fund_type"} asc, "date" asc
-    """
-    res = get_conn().execute(query).df()
-    # we use price changes instead of prices
-    if table == di.px_tbl:
-        variations = (
-            res.groupby("ticker")["price"].expanding(min_periods=2).apply(get_variation)
-        )
-        res = res.assign(price_chg=variations.droplevel(0))
+            select 
+                {','.join(cols)},  
+            from {table}
+            {where_clause_str} 
+            order by {"ticker" if table == di.px_tbl else "fund_type"} asc, "date" asc
+        """
+    logging.info(query)
+    return query
 
-    return res
+
+@st.cache_data
+def get_data(query: str):
+    return get_conn().execute(query).df()
 
 
 @cache_data

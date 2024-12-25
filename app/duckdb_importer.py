@@ -4,12 +4,10 @@ import time
 
 import duckdb
 
-import data
-
 data_dir = "data"
 if not os.path.exists(data_dir):
     os.makedirs(data_dir)
-duckdb_file = os.path.join(os.path.dirname(__file__), "../fin-tracker", f"duckdb.db")
+duckdb_file = os.path.join(os.path.dirname(__file__), "../fin-tracker", "duckdb.db")
 
 encrypt_key = os.environ["PARQUET_ENCRYPTION_KEY"]
 add_encrypt_key = f"PRAGMA add_parquet_key('key256', '{encrypt_key}');"
@@ -18,12 +16,19 @@ encrypt_conf = "{footer_key: 'key256'}"
 px_src_tbl_name = "total_return"
 px_tbl = "prices"
 px_pq_file = os.path.join(data_dir, f"{px_tbl}.parquet")
-px_cols = ["ticker", "ticker_full", "price", "date", "description", "fund_type"]
+px_cols = [
+    "ticker",
+    "ticker_full",
+    "price",
+    "date::date as date",
+    "description",
+    "fund_type",
+]
 
 perf_src_table_name = "latest_performance_sharpe"
 perf_tbl = "performance"
 perf_pq_file = os.path.join(data_dir, f"{perf_tbl}.parquet")
-perf_desc_cols = ["date", "ticker", "description", "fund_type"]
+perf_desc_cols = ["date::date as date", "ticker", "description", "fund_type"]
 perf_z_score_cols = ["z_1d"]
 vol_1y_col = "vol_1y"
 perf_vol_cols = ["vol_1d", vol_1y_col]
@@ -74,17 +79,18 @@ def get_perf_cols(show_returns, vol_adjust, returns_cols):
 
 
 perf_mavg_cols = [
-    "px_21_dma",
-    "px_63_dma",
-    "px_252_dma",
+    "ma_21",
+    "ma_63",
+    "ma_126",
+    "ma_252",
 ]
 perf_cols = (
     perf_desc_cols
     + perf_z_score_cols
     + perf_vol_cols
+    + perf_mavg_cols
     + perf_returns_cols
     + perf_sharpe_cols
-    + perf_mavg_cols
 )
 
 
@@ -101,10 +107,12 @@ def run():
         ORDER BY ticker
     """
     export_to_parquet_query = (
-        lambda query, output: f"COPY ({query}) TO '{output}' (ENCRYPTION_CONFIG {encrypt_conf});"
+        lambda query,
+        output: f"COPY ({query}) TO '{output}' (ENCRYPTION_CONFIG {encrypt_conf});"
     )
     export_to_parquet_unencrypted_query = (
-        lambda query, output: f"COPY ( SELECT * FROM ({query}) LIMIT 10) TO '{output}' ;"
+        lambda query,
+        output: f"COPY ( SELECT * FROM ({query}) LIMIT 10) TO '{output}' ;"
     )
     if os.path.exists(data_dir):
         shutil.rmtree(data_dir)
@@ -117,21 +125,25 @@ def run():
     with duckdb.connect(database=duckdb_file, read_only=False) as conn:
         conn.execute(add_encrypt_key)
         conn.execute(export_to_parquet_query(query=prices_query, output=px_pq_file))
-        conn.execute(
-            export_to_parquet_unencrypted_query(
-                query=prices_query,
-                output=px_pq_file.replace(".parquet", "_unencrypted.parquet"),
-            )
-        ),
+        (
+            conn.execute(
+                export_to_parquet_unencrypted_query(
+                    query=prices_query,
+                    output=px_pq_file.replace(".parquet", "_unencrypted.parquet"),
+                )
+            ),
+        )
         conn.execute(
             export_to_parquet_query(query=performance_query, output=perf_pq_file)
         )
-        conn.execute(
-            export_to_parquet_unencrypted_query(
-                query=performance_query,
-                output=perf_pq_file.replace(".parquet", "_unencrypted.parquet"),
-            )
-        ),
+        (
+            conn.execute(
+                export_to_parquet_unencrypted_query(
+                    query=performance_query,
+                    output=perf_pq_file.replace(".parquet", "_unencrypted.parquet"),
+                )
+            ),
+        )
 
 
 if __name__ == "__main__":
