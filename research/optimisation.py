@@ -3,7 +3,7 @@ import datetime
 import duckdb
 import pandas as pd
 
-from data import create_query
+from app.data import create_query
 from duckdb_importer import duckdb_file
 
 

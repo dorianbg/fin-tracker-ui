@@ -5,7 +5,7 @@ import datetime
 import numpy as np
 
 import duckdb_importer as di
-from data import get_data
+from app.data import get_data
 
 
 def returns_from_prices(prices, log_returns=False):

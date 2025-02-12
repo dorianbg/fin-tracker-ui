@@ -11,6 +11,8 @@ import duckdb_importer as di
 
 duckdb_file: str = ":memory:"
 _conn: duckdb.DuckDBPyConnection = None
+
+# Constants for Sharpe ratio calculation
 risk_free_rate = 0.05
 sharpe_col_suffix = "_s"
 
@@ -61,11 +63,20 @@ def gen_where_clause_prices(
     fund_types: list[str],
     start_date: datetime.date,
     end_date: datetime.date,
+    table: str,
+    get_perf_hist: bool = False,
 ) -> str:
     date_clause = get_date_clause(start_date, end_date)
     sub_clause = get_where_subclause(instruments, fund_types)
-    if len(date_clause) or len(sub_clause):
-        return f"where {' and '.join(filter(len, [date_clause, sub_clause]))}"
+    rown_filter = (
+        " rown = 1 " if (table == di.perf_tbl and get_perf_hist is False) else ""
+    )
+
+    if len(date_clause) or len(sub_clause) or len(rown_filter):
+        return (
+            f"where {' and '.join(filter(len, [date_clause, sub_clause, rown_filter]))}"
+        )
+
     return ""
 
 
@@ -109,15 +120,16 @@ def create_query(
     show_returns: bool = True,
     returns_cols: list[str] = None,
     cols: list[str] = None,
+    get_perf_hist: bool = False,
 ):
     if instruments is not None:
         instruments = [x.split("/")[0] for x in instruments]
+
     if table == di.px_tbl:
         cols = di.px_cols
     elif table == di.perf_tbl:
         cols = (
-            di.perf_desc_cols
-            + di.perf_z_score_cols
+            di.perf_desc_cols_start
             + di.perf_vol_cols
             + di.perf_mavg_cols
             + di.get_perf_cols(
@@ -125,17 +137,15 @@ def create_query(
                 vol_adjust=vol_adjust,
                 returns_cols=returns_cols,
             )
+            + di.perf_desc_cols_end
         )
 
     where_clause_str = gen_where_clause_prices(
-        instruments,
-        fund_types,
-        start_date,
-        end_date,
+        instruments, fund_types, start_date, end_date, table, get_perf_hist
     )
     query = f"""
             select 
-                {','.join(cols)},  
+                {",".join(cols)},  
             from {table}
             {where_clause_str} 
             order by {"ticker" if table == di.px_tbl else "fund_type"} asc, "date" asc
@@ -145,8 +155,11 @@ def create_query(
 
 
 @st.cache_data
-def get_data(query: str):
-    return get_conn().execute(query).df()
+def get_data(query: str, replace_inf=True):
+    df = get_conn().execute(query).df()
+    if replace_inf:
+        df = df.replace([np.inf, -np.inf], np.nan, inplace=False)
+    return df
 
 
 @cache_data

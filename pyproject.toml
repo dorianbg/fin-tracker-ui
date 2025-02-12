@@ -6,23 +6,31 @@ authors = ["Dorian Beganovic"]
 package-mode = false
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.13,!=3.9.7"
-streamlit = "1.36.0"
-duckdb = "^1.0"
+python = ">=3.12,<3.13"
+streamlit = "^1.42.0"
+duckdb = "^1.2"
 matplotlib = "^3.8.3"
+skfolio = "^0.3.1"
+
+# these are OK tools but much harder to install then skfolio
+#[tool.poetry.group.portfolioopt.dependencies]
+#riskparityportfolio = "^0.5.1"
+#tqdm = "^4.66.4"
+#jax = {extras = ["cpu"], version = "^0.4.26"}
+#quadprog = "^0.1.12"
+#
+#[tool.poetry.group.riskbudget.dependencies]
+#pyrb = {git = "https://github.com/jcrichard/pyrb"}
+
 
 # testing for portfolio optimisation
 #scikit-learn = "^1.4.2"
 #cmake = "^3.28.3"
-#tqdm = "^4.66.4"
-#jax = {extras = ["cpu"], version = "^0.4.26"}
-#quadprog = "^0.1.12"
-#pyrb = {git = "https://github.com/jcrichard/pyrb"}
-#riskparityportfolio = "^0.5.1"
+riskfolio-lib = "^6.3.1"
 
 [tool.poetry.group.dev.dependencies]
 watchdog = "^4.0.0"
-black = "^24.2.0"
+ruff = "*"
 
 [build-system]
 requires = ["poetry-core", "cmake"]
