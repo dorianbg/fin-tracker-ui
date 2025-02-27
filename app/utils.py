@@ -171,6 +171,7 @@ def plot_performance(
     df = prices_df.assign(price_chg=variations.droplevel(0))
 
     if len(selected_inst) > 0 or len(selected_fund_types) > 0:
+        st.text("Price performance")
         st.altair_chart(
             plot_timeseries_data(
                 df,

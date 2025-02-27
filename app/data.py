@@ -148,7 +148,7 @@ def create_query(
                 {",".join(cols)},  
             from {table}
             {where_clause_str} 
-            order by {"ticker" if table == di.px_tbl else "fund_type"} asc, "date" asc
+            order by "description" asc, "date" asc
         """
     logging.info(query)
     return query

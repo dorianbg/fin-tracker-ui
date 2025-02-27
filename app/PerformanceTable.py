@@ -6,10 +6,8 @@ import pandas as pd
 import streamlit as st
 
 import duckdb_importer as di
-from app.config import table_height
 from app.data import (
     get_data,
-    get_fund_types,
     create_query,
 )
 from app.utils import (
@@ -18,6 +16,7 @@ from app.utils import (
     plot_performance,
     filter_dataframe,
 )
+from config import table_height
 
 st.set_page_config(
     page_icon="🏠",
@@ -61,19 +60,19 @@ st.markdown(
                .block-container {
                     padding-top: 3rem;
                     padding-bottom: 1rem;
-                    padding-left: 5rem;
-                    padding-right: 5rem;
+                    padding-left: 2rem;
+                    padding-right: 2rem;
                 }
         </style>
         """,
     unsafe_allow_html=True,
 )
 
-selected_fund_types = st.multiselect(
-    label="Fund types",
-    options=get_fund_types(),
-    default=get_fund_types(),
-)
+# selected_fund_types = st.multiselect(
+#     label="Fund types",
+#     options=get_fund_types(),
+#     default=get_fund_types(),
+# )
 
 col1, col2, col3 = st.columns([2, 2, 7])
 
@@ -112,28 +111,24 @@ if sort_sharpe or sort_returns:
         )
 
 with st.container():
-    modify = st.checkbox("Add filters")
     df: pd.DataFrame = get_data(
         query=create_query(
             table=di.perf_tbl,
-            fund_types=selected_fund_types,
             vol_adjust=vol_adjust,
             show_returns=show_returns,
             returns_cols=returns_cols,
         ),
     )
-    if modify:
-        df = filter_dataframe(df, modify=True)
-    else:
-        if (
-            (sort_sharpe or sort_returns)
-            and sum(custom_weights) == 100
-            and filter(lambda x: x >= 1, custom_weights)
-        ):
-            total_w = sum(custom_weights)
-            custom_weights_normalised = [x / total_w for x in custom_weights]
-            columns_sort = di.perf_sharpe_cols if sort_sharpe else di.perf_returns_cols
-            df = custom_sort_df_cols(columns_sort, custom_weights_normalised, df)
+    df = filter_dataframe(df, modify=True)
+    if (
+        (sort_sharpe or sort_returns)
+        and sum(custom_weights) == 100
+        and filter(lambda x: x >= 1, custom_weights)
+    ):
+        total_w = sum(custom_weights)
+        custom_weights_normalised = [x / total_w for x in custom_weights]
+        columns_sort = di.perf_sharpe_cols if sort_sharpe else di.perf_returns_cols
+        df = custom_sort_df_cols(columns_sort, custom_weights_normalised, df)
     styled_df = style_performance_table(
         df,
         vol_adjust=vol_adjust,
@@ -149,7 +144,6 @@ with st.container():
         selection_mode="multi-row",
     )
     if event:
-        st.text("Price performance")
         filtered_df = df.iloc[event.selection.rows]
 
         plot_performance(
