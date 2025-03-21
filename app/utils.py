@@ -177,7 +177,7 @@ def plot_performance(
                 df,
                 y_col="price_chg",
                 y_axis_title="Price change (%)",
-                group_col="ticker",
+                group_col="description",
             ),
             use_container_width=True,
         )
@@ -191,7 +191,7 @@ def plot_performance(
                 perf_df_hist,
                 y_col="vol_1mo",
                 y_axis_title="Vol (1mo)",
-                group_col="ticker",
+                group_col="description",
             ),
             use_container_width=True,
         )
@@ -201,7 +201,7 @@ def plot_performance(
                 perf_df_hist,
                 y_col="vol_1y",
                 y_axis_title="Vol (1y)",
-                group_col="ticker",
+                group_col="description",
             ),
             use_container_width=True,
         )
