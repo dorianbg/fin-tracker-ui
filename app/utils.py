@@ -183,8 +183,8 @@ def plot_performance(
         )
         if show_df:
             st.write(f"Performance comparison from {start_date} to {end_date} ")
-
             st.dataframe(data=create_perf_table(prices_df), hide_index=True)
+
         st.write(f"Rolling 1 month lookback volatility {start_date} to {end_date} ")
         st.altair_chart(
             plot_timeseries_data(
