@@ -6,6 +6,7 @@ import numpy as np
 
 import duckdb_importer as di
 from app.data import get_data
+from data import create_query
 
 
 def returns_from_prices(prices, log_returns=False):
@@ -49,10 +50,12 @@ target_volatility = 0.12
 # Load historical closing prices for the ETFs
 today = datetime.date.today()
 prices = get_data(
-    table=di.px_tbl,
-    start_date=today - datetime.timedelta(days=720),
-    end_date=today,
-    instruments=list(tickers.keys()),
+    create_query(
+        table=di.px_tbl,
+        start_date=today - datetime.timedelta(days=720),
+        end_date=today,
+        instruments=list(tickers.keys()),
+    )
 )
 prices["date"] = prices["date"].dt.date
 print(len(prices))

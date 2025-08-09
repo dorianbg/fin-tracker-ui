@@ -17,6 +17,7 @@ from app.utils import (
     filter_dataframe,
 )
 from config import table_height
+from utils import correlation_matrix
 
 st.set_page_config(
     page_icon="🏠",
@@ -68,13 +69,8 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# selected_fund_types = st.multiselect(
-#     label="Fund types",
-#     options=get_fund_types(),
-#     default=get_fund_types(),
-# )
 
-col1, col2, col3 = st.columns([2, 2, 7])
+col1, col2, col3, col4 = st.columns([2, 2, 4, 4])
 
 with col1:
     with st.container():
@@ -92,6 +88,13 @@ with col3:
         label="Returns",
         options=di.selectable_returns,
         default=di.default_selected_returns,
+    )
+with col4:
+    # New Instrument Category filter added above existing column widgets
+    instrument_categories = st.multiselect(
+        "Instrument Category",
+        options=["eq", "bonds", "commod", "cash"],
+        default=["eq", "commod"],
     )
 
 custom_weights = []
@@ -117,6 +120,7 @@ with st.container():
             vol_adjust=vol_adjust,
             show_returns=show_returns,
             returns_cols=returns_cols,
+            fund_types=instrument_categories,
         ),
     )
     df = filter_dataframe(df, modify=True)
@@ -143,13 +147,30 @@ with st.container():
         on_select="rerun",
         selection_mode="multi-row",
     )
-    if event:
+    if event and event.selection and event.selection.rows:
         filtered_df = df.iloc[event.selection.rows]
-
-        plot_performance(
-            start_date=datetime.date.today() - datetime.timedelta(days=3 * 365),
-            end_date=datetime.date.today(),
-            selected_inst=list(filtered_df["ticker"].unique()),
-            selected_fund_types=[],
-            show_df=True,
+        # New date range filter for Price Performance after row selection
+        selected_dates = st.date_input(
+            "Select date range for Price Performance",
+            value=[
+                datetime.date.today() - datetime.timedelta(days=5 * 365),
+                datetime.date.today(),
+            ],
+            min_value=datetime.date.today() - datetime.timedelta(days=5 * 365),
+            max_value=datetime.date.today() + datetime.timedelta(days=1),
+            key="date_range_perf",
         )
+        if (
+            selected_dates
+            and len(selected_dates) > 1
+            and selected_dates[0]
+            and selected_dates[1]
+        ):
+            plot_performance(
+                start_date=selected_dates[0],
+                end_date=selected_dates[1],
+                selected_inst=list(filtered_df["ticker"].unique()),
+                selected_fund_types=instrument_categories,
+                show_df=True,
+            )
+        correlation_matrix(assets=list(filtered_df["ticker"].unique()))

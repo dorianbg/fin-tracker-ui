@@ -91,17 +91,17 @@ def get_date_clause(start_date, end_date):
 
 
 def get_where_subclause(instruments, fund_types):
-    sub_clause = ""
+    sub_clause_parts = []
     if instruments:
         where_str = "','".join(instruments)
-        sub_clause += f"ticker in ('{where_str}') "
+        sub_clause_parts.append(f"ticker in ('{where_str}')")
     if fund_types:
-        where_str = "','".join(fund_types)
-        delim = " or " if len(sub_clause) else ""
-        sub_clause += f"{delim}fund_type in ('{where_str}') "
-    if len(sub_clause):
-        sub_clause = f"({sub_clause})"
-    return sub_clause
+        # Build regex pattern to match fund_type values that start with any of the provided prefixes
+        regex_pattern = "^(" + "|".join(fund_types) + ")"
+        sub_clause_parts.append(f"regexp_matches(fund_type, '{regex_pattern}')")
+    if sub_clause_parts:
+        return "(" + " and ".join(sub_clause_parts) + ")"
+    return ""
 
 
 def get_variation(values: pd.Series) -> np.float64:
@@ -145,7 +145,7 @@ def create_query(
     )
     query = f"""
             select 
-                {",".join(cols)},  
+                {",".join(cols)}
             from {table}
             {where_clause_str} 
             order by "description" asc, "date" asc
@@ -157,6 +157,8 @@ def create_query(
 @st.cache_data
 def get_data(query: str, replace_inf=True):
     df = get_conn().execute(query).df()
+    if "date" in df.columns:
+        df["date"] = pd.to_datetime(df["date"], format="%Y-%m-%d")
     if replace_inf:
         df = df.replace([np.inf, -np.inf], np.nan, inplace=False)
     return df

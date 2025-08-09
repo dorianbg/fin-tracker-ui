@@ -1,8 +1,11 @@
 import math
+from datetime import date, timedelta
 
 import altair as alt
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
+import plotly.express as px
 import streamlit as st
 from dateutil.relativedelta import relativedelta
 from matplotlib.colors import rgb2hex, colorConverter
@@ -247,10 +250,21 @@ def filter_dataframe(df: pd.DataFrame, modify: bool) -> pd.DataFrame:
     # Try to convert datetimes into a standard format (datetime, no timezone)
     for col in df.columns:
         if is_object_dtype(df[col]):
+            # First try explicit ISO format
             try:
-                df[col] = pd.to_datetime(df[col])
-            except Exception:
+                df[col] = pd.to_datetime(df[col], format="%Y-%m-%d")
+                continue
+            except ValueError:
                 pass
+
+            # Then try common date formats
+            date_formats = ["%d-%m-%Y", "%m/%d/%Y", "%Y/%m/%d"]
+            for date_format in date_formats:
+                try:
+                    df[col] = pd.to_datetime(df[col], format=date_format)
+                    break
+                except ValueError:
+                    continue
 
         if is_datetime64_any_dtype(df[col]):
             df[col] = df[col].dt.tz_localize(None)
@@ -300,4 +314,91 @@ def filter_dataframe(df: pd.DataFrame, modify: bool) -> pd.DataFrame:
                 if user_text_input:
                     df = df[df[column].astype(str).str.contains(user_text_input)]
 
+    return df
+
+
+def returns_from_prices(prices, log_returns=False):
+    """
+    Calculate the returns given prices.
+
+    :param prices: adjusted (daily) closing prices of the asset, each row is a
+                   date and each column is a ticker/id.
+    :type prices: pd.DataFrame
+    :param log_returns: whether to compute using log returns
+    :type log_returns: bool, defaults to False
+    :return: (daily) returns
+    :rtype: pd.DataFrame
+    """
+    if log_returns:
+        returns = np.log(1 + prices.pct_change()).dropna(how="all")
+    else:
+        returns = prices.pct_change().dropna(how="all")
+    return returns
+
+
+def get_holdings_perf(assets, start_date, end_date):
+    prices = get_data(
+        create_query(
+            table=di.px_tbl,
+            start_date=start_date,
+            end_date=end_date,
+            instruments=assets,
+        )
+    )
+    prices["date"] = prices["date"].dt.date
+    prices = prices.drop_duplicates(["date", "ticker"])
+    prices = prices.pivot(index="date", columns="ticker", values="price")
+    return returns_from_prices(prices)
+
+
+def correlation_matrix(assets):
+    if len(assets) == 0 or len(assets) > 15:
+        return
+    # Generate correlation matrix
+    st.header("Asset Correlation Matrix")
+    corr_matrix_lookback = st.number_input(
+        "Correlation Matrix Lookback period (days)",
+        min_value=1,
+        max_value=365,
+        step=5,
+        value=60,
+    )
+    corr_matrix_end_date = st.date_input(
+        label="Correlation Matrix Lookback End date", value=date.today()
+    )
+    try:
+        # Fetch prices for all assets in the portfolio
+        corr_matrix_start_date = date.today() - timedelta(days=corr_matrix_lookback)
+
+        perf: pd.DataFrame = get_holdings_perf(
+            assets=assets,
+            start_date=corr_matrix_start_date,
+            end_date=corr_matrix_end_date,
+        )
+        corr = perf.corr()
+        fig2 = px.imshow(
+            corr.to_numpy(),
+            x=list(corr.columns),
+            y=list(corr.columns),
+            contrast_rescaling="minmax",
+            text_auto=".2f",
+            color_continuous_scale="RdYlGn",  # Use RdYlGn color scale
+            # zmin=-1,  # Minimum value for color scale
+            # zmax=1,  # Maximum value for color scale
+            labels=dict(x="Asset", y="Asset", color="Correlation"),  # Axis labels
+        )
+        # Move x-axis labels to the top
+        fig2.update_xaxes(side="top")
+
+        st.plotly_chart(fig2)
+
+    except Exception as e:
+        st.error(f"Error generating correlation matrix: {e}")
+
+
+@st.cache_data
+def get_tickers_w_desc():
+    df: pd.DataFrame = get_data(
+        query=f"select distinct ticker || ' - ' || description as asset from {di.perf_tbl}"
+    )["asset"].values.tolist()
     return df
