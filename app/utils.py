@@ -10,15 +10,15 @@ import streamlit as st
 from dateutil.relativedelta import relativedelta
 from matplotlib.colors import rgb2hex, colorConverter
 from pandas.api.types import (
-    is_categorical_dtype,
     is_datetime64_any_dtype,
     is_numeric_dtype,
     is_object_dtype,
 )
 
+import config
 import duckdb_importer as di
-from app.config import charts_width
-from app.data import (
+from config import charts_width
+from data import (
     sharpe_col_suffix,
     create_query,
     get_data,
@@ -182,7 +182,6 @@ def plot_performance(
                 y_axis_title="Price change (%)",
                 group_col="description",
             ),
-            use_container_width=True,
         )
         if show_df:
             st.write(f"Performance comparison from {start_date} to {end_date} ")
@@ -196,7 +195,6 @@ def plot_performance(
                 y_axis_title="Vol (1mo)",
                 group_col="description",
             ),
-            use_container_width=True,
         )
         st.write(f"Rolling 1 year lookback volatility {start_date} to {end_date} ")
         st.altair_chart(
@@ -206,7 +204,6 @@ def plot_performance(
                 y_axis_title="Vol (1y)",
                 group_col="description",
             ),
-            use_container_width=True,
         )
 
 
@@ -276,7 +273,10 @@ def filter_dataframe(df: pd.DataFrame, modify: bool) -> pd.DataFrame:
         for column in to_filter_columns:
             left, right = st.columns((1, 20))
             # Treat columns with < 10 unique values as categorical
-            if is_categorical_dtype(df[column]) or df[column].nunique() < 10:
+            if (
+                isinstance(df[column].dtype, pd.CategoricalDtype)
+                or df[column].nunique() < 10
+            ):
                 user_cat_input = right.multiselect(
                     f"Values for {column}",
                     df[column].unique(),
@@ -352,7 +352,7 @@ def get_holdings_perf(assets, start_date, end_date):
 
 
 def correlation_matrix(assets):
-    if len(assets) == 0 or len(assets) > 15:
+    if len(assets) == 0 or len(assets) > config.MAX_CORRELATION_ASSETS:
         return
     # Generate correlation matrix
     st.header("Asset Correlation Matrix")
@@ -361,7 +361,7 @@ def correlation_matrix(assets):
         min_value=1,
         max_value=365,
         step=5,
-        value=60,
+        value=config.CORRELATION_LOOKBACK_DEFAULT,
     )
     corr_matrix_end_date = st.date_input(
         label="Correlation Matrix Lookback End date", value=date.today()

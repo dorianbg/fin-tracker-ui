@@ -4,7 +4,7 @@ set -e
 
 cd "${0%/*}"
 
-poetry run python app/duckdb_importer.py;
+uv run python app/duckdb_importer.py;
 
 git add data;
 

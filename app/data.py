@@ -7,13 +7,14 @@ import pandas as pd
 import streamlit as st
 from streamlit import cache_data
 
+import config
 import duckdb_importer as di
 
 duckdb_file: str = ":memory:"
 _conn: duckdb.DuckDBPyConnection = None
 
 # Constants for Sharpe ratio calculation
-risk_free_rate = 0.05
+risk_free_rate = config.RISK_FREE_RATE
 sharpe_col_suffix = "_s"
 
 

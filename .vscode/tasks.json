@@ -1,0 +1,14 @@
+{
+    "command": "python -m streamlit run app.py",
+    "label": "streamlit",
+    "type": "shell",
+    "problemMatcher": ["$python"],
+    "group": {
+        "kind": "build",
+        "isDefault": true
+    },
+    "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+    }
+}

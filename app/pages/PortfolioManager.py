@@ -1,74 +1,69 @@
 import sqlite3
+from contextlib import contextmanager
 
 import matplotlib.pyplot as plt
 import pandas as pd
 import streamlit as st
 
+import config
 from utils import correlation_matrix, get_tickers_w_desc
 
 db_name = "portfolio.db"
 
 
+@contextmanager
+def get_db():
+    conn = sqlite3.connect(db_name)
+    try:
+        yield conn
+    finally:
+        conn.close()
+
+
 # Initialize SQLite database
 def init_db():
-    conn = sqlite3.connect(db_name)
-    c = conn.cursor()
-    c.execute("""
-        CREATE TABLE IF NOT EXISTS holdings (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            broker TEXT NOT NULL,
-            asset TEXT NOT NULL,
-            amount REAL NOT NULL
-        )
-    """)
-    conn.commit()
-    conn.close()
+    with get_db() as conn:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS holdings (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                broker TEXT NOT NULL,
+                asset TEXT NOT NULL,
+                amount REAL NOT NULL
+            )
+        """)
+        conn.commit()
 
 
 init_db()
 
 
-# Function to fetch all holdings from the database
 def fetch_holdings():
-    conn = sqlite3.connect(db_name)
-    c = conn.cursor()
-    c.execute("SELECT id, broker, asset, amount FROM holdings")
-    data = c.fetchall()
-    conn.close()
-    return data
+    with get_db() as conn:
+        return conn.execute("SELECT id, broker, asset, amount FROM holdings").fetchall()
 
 
-# Function to add a holding
 def add_holding(broker, asset, amount):
-    conn = sqlite3.connect(db_name)
-    c = conn.cursor()
-    c.execute(
-        "INSERT INTO holdings (broker, asset, amount) VALUES (?, ?, ?)",
-        (broker, asset, amount),
-    )
-    conn.commit()
-    conn.close()
+    with get_db() as conn:
+        conn.execute(
+            "INSERT INTO holdings (broker, asset, amount) VALUES (?, ?, ?)",
+            (broker, asset, amount),
+        )
+        conn.commit()
 
 
-# Function to update a holding
 def update_holding(id, broker, asset, amount):
-    conn = sqlite3.connect(db_name)
-    c = conn.cursor()
-    c.execute(
-        "UPDATE holdings SET broker=?, asset=?, amount=? WHERE id=?",
-        (broker, asset, amount, id),
-    )
-    conn.commit()
-    conn.close()
+    with get_db() as conn:
+        conn.execute(
+            "UPDATE holdings SET broker=?, asset=?, amount=? WHERE id=?",
+            (broker, asset, amount, id),
+        )
+        conn.commit()
 
 
-# Function to delete a holding
 def delete_holding(id):
-    conn = sqlite3.connect(db_name)
-    c = conn.cursor()
-    c.execute("DELETE FROM holdings WHERE id=?", (id,))
-    conn.commit()
-    conn.close()
+    with get_db() as conn:
+        conn.execute("DELETE FROM holdings WHERE id=?", (id,))
+        conn.commit()
 
 
 # Streamlit app
@@ -76,10 +71,7 @@ st.title("Portfolio Manager")
 
 # Sidebar for adding/editing holdings
 st.sidebar.header("Add/Edit Holdings")
-broker = st.sidebar.selectbox(
-    "Broker Name", options=["Fidelity", "HL", "IBKR", "Other"]
-)
-
+broker = st.sidebar.selectbox("Broker Name", options=config.BROKER_OPTIONS)
 
 asset = st.sidebar.selectbox("Asset", options=get_tickers_w_desc())
 amount = st.sidebar.number_input("Investment Amount (£)", min_value=1.0)
@@ -136,22 +128,10 @@ if holdings:
             holdings_df = pd.DataFrame(
                 fetch_holdings(), columns=["ID", "Broker", "Asset", "Amount"]
             )
-            edited_df.data = holdings_df.drop(columns=["ID"])
 
         if edited_rows or added_rows or deleted_rows:
             st.success("Holdings updated successfully!")
 
-    # Check for changes in the edited DataFrame
-    if not edited_df.equals(holdings_df):
-        # Update or delete holdings based on changes
-        for index, row in edited_df.iterrows():
-            if index < len(holdings):
-                # Update existing holdings
-                update_holding(index + 1, row["Broker"], row["Asset"], row["Amount"])
-            else:
-                # Add new holdings
-                add_holding(row["Broker"], row["Asset"], row["Amount"])
-        st.success("Holdings updated successfully!")
 else:
     st.info("No holdings added yet. Use the sidebar to add assets.")
 

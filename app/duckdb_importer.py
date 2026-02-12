@@ -34,7 +34,7 @@ perf_pq_file = os.path.join(data_dir, f"{perf_tbl}.parquet")
 perf_desc_cols_start = ["date::date as date", "description"]
 perf_rownames_cols = ["rown"]
 perf_desc_cols_end = ["ticker", "fund_type"]
-perf_z_score_cols = ["z_1d"]
+perf_z_score_cols = ["z_1d", "z_1w", "z_2w", "z_1mo"]
 perf_vol_cols = [vol_1mo_col, vol_1y_col]  # "vol_1d",
 perf_returns_cols = [
     "r_1d",
@@ -89,6 +89,8 @@ perf_mavg_cols = [
     "ma_63",
     "ma_126",
     "ma_252",
+    "drawdown_52w",
+    "drawdown_3y",
 ]
 perf_cols = (
     perf_desc_cols_start

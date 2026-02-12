@@ -1,0 +1,2 @@
+select * from property_cro.analytics_sales_flats_analysis.mv_inventory_location_sales_flats
+

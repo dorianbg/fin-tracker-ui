@@ -3,7 +3,7 @@ from typing import Optional
 
 import streamlit as st
 
-from app.utils import (
+from utils import (
     plot_performance,
     deduct_datetime_interval,
 )

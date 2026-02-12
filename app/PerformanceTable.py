@@ -6,11 +6,11 @@ import pandas as pd
 import streamlit as st
 
 import duckdb_importer as di
-from app.data import (
+from data import (
     get_data,
     create_query,
 )
-from app.utils import (
+from utils import (
     custom_sort_df_cols,
     style_performance_table,
     plot_performance,
@@ -143,7 +143,6 @@ with st.container():
         data=styled_df,
         hide_index=True,
         height=table_height,
-        use_container_width=True,
         on_select="rerun",
         selection_mode="multi-row",
     )
