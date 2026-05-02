@@ -506,13 +506,14 @@ def render():
         top_picks.index.name = "Rank"
 
         # Display columns
-        cols = ["ticker", "description", "fund_type", "Price (90d)", "ret"]
+        cols = ["ticker", "description", "fund_type", "Price (90d)", "Price (1y)", "ret"]
         if "ann_vol" in top_picks.columns:
             cols.append("ann_vol")
         if "sharpe" in top_picks.columns:
             cols.append("sharpe")
 
         add_sparkline_column(top_picks)
+        add_sparkline_column(top_picks, col_name="Price (1y)", days=365)
 
         fmt = {"ret": "{:+.2f}%", "ann_vol": "{:.2f}%", "sharpe": "{:.2f}"}
 
@@ -521,6 +522,9 @@ def render():
             column_config={
                 "Price (90d)": st.column_config.LineChartColumn(
                     "Price (90d)", width="small"
+                ),
+                "Price (1y)": st.column_config.LineChartColumn(
+                    "Price (1y)", width="small"
                 ),
                 "description": st.column_config.TextColumn(
                     "description", width="medium"

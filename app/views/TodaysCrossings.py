@@ -10,6 +10,19 @@ import plotly.express as px
 from data import load_latest_perf, add_sparkline_column
 
 
+def _add_sparkline_columns(df: pd.DataFrame) -> pd.DataFrame:
+    add_sparkline_column(df)
+    add_sparkline_column(df, col_name="Price (1y)", days=365)
+    return df
+
+
+def _sparkline_config() -> dict:
+    return {
+        "Price (90d)": st.column_config.LineChartColumn("Price (90d)", width="small"),
+        "Price (1y)": st.column_config.LineChartColumn("Price (1y)", width="small"),
+    }
+
+
 def render():
     st.title("🚨 Today's Crossings")
     st.markdown(
@@ -24,8 +37,8 @@ def render():
         st.stop()
 
     # Split into today (rown=1) and yesterday (rown=2)
-    today = raw[raw["rown"] == 1].copy().set_index("ticker")
-    yesterday = raw[raw["rown"] == 2].copy().set_index("ticker")
+    today = raw[raw["rown"] == 1].copy().drop_duplicates("ticker").set_index("ticker")
+    yesterday = raw[raw["rown"] == 2].copy().drop_duplicates("ticker").set_index("ticker")
 
     # only keep instruments that have both days
     common = today.index.intersection(yesterday.index)
@@ -73,7 +86,7 @@ def render():
                 ]
             ].copy()
             display["ticker"] = display.index
-            add_sparkline_column(display)
+            _add_sparkline_columns(display)
 
             # Reorder to include Price (90d)
             display = display[
@@ -86,6 +99,7 @@ def render():
                     "drawdown_52w",
                     "prev_drawdown",
                     "Price (90d)",
+                    "Price (1y)",
                     "ticker",
                 ]
             ]
@@ -99,6 +113,7 @@ def render():
                 "Drawdown Today",
                 "Drawdown Yesterday",
                 "Price (90d)",
+                "Price (1y)",
                 "ticker",
             ]
             st.dataframe(
@@ -113,9 +128,7 @@ def render():
                     formatter="{:+.2f}%",
                 ),
                 column_config={
-                    "Price (90d)": st.column_config.LineChartColumn(
-                        "Price (90d)", width="small"
-                    ),
+                    **_sparkline_config(),
                     "Instrument": st.column_config.TextColumn(
                         "Instrument", width="medium"
                     ),
@@ -152,7 +165,7 @@ def render():
                 ["description", "fund_type", "r_1d", "r_1w", "drawdown_52w"]
             ].copy()
             display_near["ticker"] = display_near.index
-            add_sparkline_column(display_near)
+            _add_sparkline_columns(display_near)
 
             # Reorder
             display_near = display_near[
@@ -163,6 +176,7 @@ def render():
                     "r_1w",
                     "drawdown_52w",
                     "Price (90d)",
+                    "Price (1y)",
                     "ticker",
                 ]
             ]
@@ -174,6 +188,7 @@ def render():
                 "1W Return",
                 "Drawdown",
                 "Price (90d)",
+                "Price (1y)",
                 "ticker",
             ]
             st.dataframe(
@@ -182,9 +197,7 @@ def render():
                     formatter="{:+.2f}%",
                 ),
                 column_config={
-                    "Price (90d)": st.column_config.LineChartColumn(
-                        "Price (90d)", width="small"
-                    ),
+                    **_sparkline_config(),
                     "Instrument": st.column_config.TextColumn(
                         "Instrument", width="medium"
                     ),
@@ -253,7 +266,7 @@ def render():
         if crossover_events:
             cross_df = pd.DataFrame(crossover_events)
             cross_df["ticker"] = cross_df["Ticker"]
-            add_sparkline_column(cross_df)
+            _add_sparkline_columns(cross_df)
 
             st.markdown(f"**{len(cross_df)}** crossover event(s) detected.")
 
@@ -274,15 +287,14 @@ def render():
                                 "Yesterday",
                                 "1D Return",
                                 "Price (90d)",
+                                "Price (1y)",
                             ]
                         ].style.format(
                             subset=["Today", "Yesterday", "1D Return"],
                             formatter="{:+.2f}%",
                         ),
                         column_config={
-                            "Price (90d)": st.column_config.LineChartColumn(
-                                "Price (90d)", width="small"
-                            ),
+                            **_sparkline_config(),
                             "Instrument": st.column_config.TextColumn(
                                 "Instrument", width="medium"
                             ),
@@ -314,15 +326,14 @@ def render():
                                 "Yesterday",
                                 "1D Return",
                                 "Price (90d)",
+                                "Price (1y)",
                             ]
                         ].style.format(
                             subset=["Today", "Yesterday", "1D Return"],
                             formatter="{:+.2f}%",
                         ),
                         column_config={
-                            "Price (90d)": st.column_config.LineChartColumn(
-                                "Price (90d)", width="small"
-                            ),
+                            **_sparkline_config(),
                             "Instrument": st.column_config.TextColumn(
                                 "Instrument", width="medium"
                             ),
@@ -373,7 +384,7 @@ def render():
         if z_events:
             z_df = pd.DataFrame(z_events).sort_values("Z-Score", ascending=False)
             z_df["ticker"] = z_df["Ticker"]
-            add_sparkline_column(z_df)
+            _add_sparkline_columns(z_df)
 
             st.markdown(
                 f"**{len(z_df)}** unusual move(s) detected (z ≥ {z_threshold})."
@@ -387,6 +398,7 @@ def render():
                         "1D Return",
                         "1W Return",
                         "Price (90d)",
+                        "Price (1y)",
                     ]
                 ]
                 .style.format(
@@ -398,9 +410,7 @@ def render():
                     formatter="{:+.2f}%",
                 ),
                 column_config={
-                    "Price (90d)": st.column_config.LineChartColumn(
-                        "Price (90d)", width="small"
-                    ),
+                    **_sparkline_config(),
                     "Instrument": st.column_config.TextColumn(
                         "Instrument", width="medium"
                     ),

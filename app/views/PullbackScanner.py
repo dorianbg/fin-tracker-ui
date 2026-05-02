@@ -13,11 +13,23 @@ import plotly.express as px
 
 import config
 import duckdb_importer as di
-from data import get_conn, fund_type_sidebar, filter_by_fund_type
+from data import add_sparkline_column, get_conn, fund_type_sidebar, filter_by_fund_type
+
+
+def _sparkline_config():
+    return {
+        "Price (90d)": st.column_config.LineChartColumn("Price (90d)", width="small"),
+        "Price (1y)": st.column_config.LineChartColumn("Price (1y)", width="small"),
+    }
+
+
+def _add_sparkline_columns(df: pd.DataFrame) -> pd.DataFrame:
+    add_sparkline_column(df)
+    add_sparkline_column(df, col_name="Price (1y)", days=365)
+    return df
 
 
 def render():
-
     st.title("🎯 Pullback Scanner")
     st.markdown(
         "Find **pullback opportunities** in uptrending instruments and "
@@ -64,6 +76,23 @@ def render():
             help=f"How far below the {pullback_ma_label} MA the price must be (0 = any pullback below MA)",
         )
 
+        pullback_mode = st.radio(
+            "Pullback mode",
+            options=["Best only", "All matches"],
+            index=0,
+            help="Best only focuses on clean trend pullbacks with controlled drawdown and early bounce signs.",
+            key="pullback_mode",
+        )
+
+        top_pullbacks_n = st.slider(
+            "Top pullbacks to show",
+            min_value=10,
+            max_value=50,
+            value=20,
+            step=5,
+            key="pullback_top_n",
+        )
+
         min_uptrend_strength = st.slider(
             "Min 252-day MA position (%)",
             min_value=-5,
@@ -75,11 +104,30 @@ def render():
 
         require_intermediate_ok = st.checkbox(
             "Require above 126-day MA",
-            value=False,
+            value=True,
             help="Extra filter: intermediate trend (126-day) must still be intact",
         )
 
-        fund_type_filter = fund_type_sidebar(default=["eq", "stock"], key="pullback_fund_types")
+        max_quality_drawdown = st.slider(
+            "Best-only max 52W drawdown (%)",
+            min_value=-50,
+            max_value=-5,
+            value=-20,
+            step=5,
+            help="Best-only filter: avoid candidates that are too far below their 52-week high.",
+            key="pullback_max_quality_drawdown",
+        )
+
+        require_bounce = st.checkbox(
+            "Best-only require bounce",
+            value=True,
+            help="Require positive 1D or 1W return so the pullback is starting to stabilize.",
+            key="pullback_require_bounce",
+        )
+
+        fund_type_filter = fund_type_sidebar(
+            default=["eq", "stock"], key="pullback_fund_types"
+        )
 
         st.markdown("---")
         st.subheader("Recovery Settings")
@@ -112,7 +160,6 @@ def render():
             help="How much worse than benchmark to qualify as underperformer",
         )
 
-
     with content_col:
 
         @st.cache_data(ttl=300)
@@ -133,7 +180,6 @@ def render():
             """
             return get_conn().execute(query).df()
 
-
         _all_data = load_all_latest()
 
         if _all_data.empty:
@@ -143,7 +189,6 @@ def render():
         # ── filter by fund type ──
         df = filter_by_fund_type(_all_data, fund_type_filter)
 
-
         # ═══════════════════════════════════════════
         # Section 1: Pullback Candidates
         # ═══════════════════════════════════════════
@@ -151,6 +196,10 @@ def render():
         st.markdown(
             f"Instruments **above 252-day MA** by ≥{min_uptrend_strength}% and "
             f"**pulling back** below {pullback_ma_label} MA by ≤{pullback_depth}%."
+        )
+        st.caption(
+            "Best-only mode ranks clean pullbacks by trend strength, controlled drawdown, and early bounce signs. "
+            "It requires the 126-day trend to be intact, filters out deep 52-week drawdowns, and shows only the top-ranked candidates."
         )
 
         # strong uptrend: above 252-day MA
@@ -168,20 +217,62 @@ def render():
                 "No instruments match current filters. Try relaxing the thresholds in the sidebar."
             )
         else:
-            # sort by deepest pullback — biggest opportunity first
-            pullbacks = pullbacks.sort_values(pullback_ma_col, ascending=True).reset_index(
-                drop=True
+            # Quality score favors strong long/intermediate trends, a controlled pullback,
+            # and early bounce signs while penalizing deep drawdowns/breakdowns.
+            pullbacks["bounce_signal"] = pullbacks["r_1w"] > 0
+            pullbacks["bounce_or_stabilizing"] = (pullbacks["r_1d"] > 0) | (
+                pullbacks["r_1w"] > 0
+            )
+            pullbacks["trend_score"] = pullbacks["ma_252"].clip(lower=0) + pullbacks[
+                "ma_126"
+            ].clip(lower=0)
+            pullbacks["pullback_depth_score"] = (-pullbacks[pullback_ma_col]).clip(
+                lower=0, upper=15
+            )
+            pullbacks["bounce_score"] = (
+                pullbacks["bounce_or_stabilizing"].astype(int) * 10
+            )
+            pullbacks["drawdown_penalty"] = (-pullbacks["drawdown_52w"] - 20).clip(
+                lower=0
+            )
+            pullbacks["breakdown_penalty"] = (-pullbacks["ma_63"] - 5).clip(lower=0) + (
+                -pullbacks["ma_126"]
+            ).clip(lower=0)
+            pullbacks["pullback_score"] = pullbacks["ma_252"] * (
+                -pullbacks[pullback_ma_col]
+            )
+            pullbacks["quality_score"] = (
+                pullbacks["trend_score"]
+                + pullbacks["pullback_depth_score"]
+                + pullbacks["bounce_score"]
+                - pullbacks["drawdown_penalty"]
+                - pullbacks["breakdown_penalty"]
             )
 
-            # pullback quality score
-            pullbacks["pullback_score"] = pullbacks["ma_252"] * (-pullbacks[pullback_ma_col])
-            # bonus: if 1-week return is positive, the bounce may already be starting
-            pullbacks["bounce_signal"] = pullbacks["r_1w"] > 0
+            if pullback_mode == "Best only":
+                pullbacks = pullbacks[
+                    (pullbacks["ma_126"] > 0)
+                    & (pullbacks["drawdown_52w"] >= max_quality_drawdown)
+                ].copy()
+                if require_bounce:
+                    pullbacks = pullbacks[pullbacks["bounce_or_stabilizing"]].copy()
+                pullbacks = pullbacks.sort_values(
+                    "quality_score", ascending=False
+                ).head(top_pullbacks_n)
+            else:
+                # sort by deepest pullback — biggest opportunity first
+                pullbacks = pullbacks.sort_values(pullback_ma_col, ascending=True).head(
+                    top_pullbacks_n
+                )
+
+            pullbacks = pullbacks.reset_index(drop=True)
 
             st.markdown(f"**{len(pullbacks)} candidates found**")
 
             display_cols = [
                 "description",
+                "Price (90d)",
+                "Price (1y)",
                 "ticker",
                 "fund_type",
                 pullback_ma_col,
@@ -192,9 +283,11 @@ def render():
                 "r_1w",
                 "r_1mo",
                 "r_3mo",
+                "quality_score",
                 "pullback_score",
                 "bounce_signal",
             ]
+            _add_sparkline_columns(pullbacks)
             # deduplicate in case pullback_ma_col is already one of the fixed cols
             display_cols = list(dict.fromkeys(display_cols))
 
@@ -217,9 +310,10 @@ def render():
                     ],
                     formatter="{:+.2f}%",
                 )
-                .format(subset=["pullback_score"], formatter="{:.1f}"),
+                .format(subset=["quality_score", "pullback_score"], formatter="{:.1f}"),
                 hide_index=True,
                 height=450,
+                column_config=_sparkline_config(),
             )
 
             # Scatter: uptrend strength vs pullback depth
@@ -248,31 +342,32 @@ def render():
             fig.update_layout(height=500)
             st.plotly_chart(fig, use_container_width=True)
 
-            # Top ranked by pullback score
+            # Top ranked by pullback quality score
             st.subheader("🏆 Top Pullback Candidates")
             st.markdown(
-                "Ranked by **pullback score** = (uptrend strength) × (pullback depth). "
-                "Bounce signal = positive 1-week return."
+                "Ranked by **quality score** = trend strength + controlled pullback depth + bounce signal "
+                "minus drawdown/breakdown penalties."
             )
 
-            top = pullbacks.sort_values("pullback_score", ascending=False).head(15)
+            top = pullbacks.sort_values("quality_score", ascending=False).head(15)
             fig_bar = px.bar(
                 top,
-                x="pullback_score",
+                x="quality_score",
                 y="description",
                 orientation="h",
                 color="bounce_signal",
                 color_discrete_map={True: "#2ecc71", False: "#e67e22"},
                 labels={
-                    "pullback_score": "Pullback Score",
+                    "quality_score": "Quality Score",
                     "description": "",
                     "bounce_signal": "1W bounce?",
                 },
-                title="Top 15 — Pullback Score",
+                title="Top 15 — Quality Pullback Score",
             )
-            fig_bar.update_layout(yaxis=dict(autorange="reversed"), height=450, showlegend=True)
+            fig_bar.update_layout(
+                yaxis=dict(autorange="reversed"), height=450, showlegend=True
+            )
             st.plotly_chart(fig_bar, use_container_width=True)
-
 
         # ═══════════════════════════════════════════
         # Section 2: Trend Reversal Candidates
@@ -295,6 +390,8 @@ def render():
             cols = [
                 "ticker",
                 "description",
+                "Price (90d)",
+                "Price (1y)",
                 "price",
                 "r_1w",
                 "ma_21",
@@ -302,6 +399,7 @@ def render():
                 "ma_252",
                 "vol_1y",
             ]
+            _add_sparkline_columns(df_reversal)
             # ensure cols exist
             cols = [c for c in cols if c in df_reversal.columns]
 
@@ -319,6 +417,7 @@ def render():
                 ),
                 use_container_width=True,
                 height=300,
+                column_config=_sparkline_config(),
             )
         else:
             st.info(
@@ -327,54 +426,86 @@ def render():
 
         st.markdown("---")
 
-        st.header("⚠️ Downside Reversal / Risk Warnings")
+        st.header("🎯 Short Target Monitor")
         st.markdown("""
-        Instruments still **above** their 252-day moving average (long-term trend intact) 
-        but now trading **below** their 21-day and 63-day moving averages. These are bearish watch / risk-warning candidates.
+        Bearish watchlist for instruments where the **long-term trend has not fully broken yet**
+        but short/intermediate momentum is rolling over. These are not automatic shorts; they are
+        candidates to monitor for failed bounces, stop-loss review, hedging, or short setups.
         """)
+        st.caption(
+            "Setup: price remains above the 252-day average, but is below both the 21-day and 63-day averages. "
+            "Priority score rewards weaker short-term structure, negative weekly momentum, and higher volatility."
+        )
 
         downside_mask = (df["ma_252"] > 0) & (df["ma_21"] < 0) & (df["ma_63"] < 0)
         df_downside = df[downside_mask].copy()
 
         if not df_downside.empty:
-            df_downside = df_downside.sort_values("ma_21", ascending=True)
+            df_downside["trend_buffer"] = df_downside["ma_252"]
+            df_downside["short_breakdown"] = (-df_downside["ma_21"]).clip(lower=0) + (
+                -df_downside["ma_63"]
+            ).clip(lower=0)
+            df_downside["momentum_penalty"] = (-df_downside["r_1w"]).clip(lower=0)
+            df_downside["short_priority_score"] = (
+                df_downside["short_breakdown"]
+                + df_downside["momentum_penalty"]
+                + df_downside["vol_1y"].fillna(0) / 10
+                - df_downside["trend_buffer"].clip(lower=0) / 4
+            )
+            df_downside["monitor_reason"] = "Short MAs broken"
+            df_downside.loc[df_downside["r_1w"] < 0, "monitor_reason"] = (
+                "Short MAs broken + negative 1W"
+            )
+            df_downside = df_downside.sort_values(
+                "short_priority_score", ascending=False
+            )
 
             cols = [
                 "ticker",
                 "description",
+                "Price (90d)",
+                "Price (1y)",
                 "price",
                 "r_1w",
+                "r_1mo",
                 "ma_21",
                 "ma_63",
                 "ma_126",
                 "ma_252",
+                "drawdown_52w",
                 "vol_1y",
+                "short_priority_score",
+                "monitor_reason",
             ]
+            _add_sparkline_columns(df_downside)
             cols = [c for c in cols if c in df_downside.columns]
 
             st.dataframe(
                 df_downside[cols].style.format(
                     {
                         "r_1w": "{:+.2f}%",
+                        "r_1mo": "{:+.2f}%",
                         "ma_21": "{:+.2f}%",
                         "ma_63": "{:+.2f}%",
                         "ma_126": "{:+.2f}%",
                         "ma_252": "{:+.2f}%",
+                        "drawdown_52w": "{:+.2f}%",
                         "vol_1y": "{:.2f}%",
+                        "short_priority_score": "{:.1f}",
                     },
                     na_rep="-",
                     precision=2,
                 ),
                 use_container_width=True,
                 height=300,
+                column_config=_sparkline_config(),
             )
         else:
             st.info(
-                "No instruments found matching downside reversal criteria (Above 252MA, Below 21MA & 63MA)."
+                "No short target monitor candidates found (Above 252MA, Below 21MA & 63MA)."
             )
 
         st.markdown("---")
-
 
         # ═══════════════════════════════════════════
         # Section 3: Underperformers Now Recovering
@@ -384,7 +515,9 @@ def render():
         long_col = RETURN_COL_MAP[long_lookback]
         short_col = RETURN_COL_MAP[short_lookback]
 
-        benchmark_row = _all_data[_all_data["ticker"] == benchmark_ticker]
+        benchmark_row = _all_data[
+            _all_data["ticker"] == benchmark_ticker
+        ].drop_duplicates("ticker")
         if benchmark_row.empty:
             st.error(f"Benchmark ticker '{benchmark_ticker}' not found.")
             st.stop()
@@ -408,9 +541,26 @@ def render():
             "Long excess uses the same benchmark-relative calculation over the underperformance period."
         )
 
-        recovery = df[df["ticker"] != benchmark_ticker][
-            ["description", "ticker", "fund_type", long_col, short_col]
-        ].copy()
+        recovery_cols = list(
+            dict.fromkeys(
+                [
+                    "description",
+                    "ticker",
+                    "fund_type",
+                    long_col,
+                    short_col,
+                    "r_1d",
+                    "r_1w",
+                    "r_1mo",
+                    "ma_21",
+                    "ma_63",
+                    "ma_126",
+                    "ma_252",
+                    "drawdown_52w",
+                ]
+            )
+        )
+        recovery = df[df["ticker"] != benchmark_ticker][recovery_cols].copy()
         recovery["excess_long"] = recovery[long_col] - benchmark_r_long
         recovery["excess_short"] = recovery[short_col] - benchmark_r_short
         underperformers = (
@@ -432,7 +582,9 @@ def render():
                 & (underperformers["excess_short"] >= -underperf_threshold),
                 "action",
             ] = "Early stabilization"
-            underperformers.loc[underperformers["excess_short"] > 0, "action"] = "Buy/watch"
+            underperformers.loc[underperformers["excess_short"] > 0, "action"] = (
+                "Buy/watch"
+            )
             underperformers["action_rank"] = underperformers["action"].map(
                 {"Buy/watch": 0, "Early stabilization": 1, "Avoid for now": 2}
             )
@@ -443,6 +595,8 @@ def render():
             display_cols_r = [
                 "action",
                 "description",
+                "Price (90d)",
+                "Price (1y)",
                 "ticker",
                 long_col,
                 short_col,
@@ -450,6 +604,7 @@ def render():
                 "excess_short",
                 "recovering",
             ]
+            _add_sparkline_columns(action_watchlist)
             st.dataframe(
                 action_watchlist[display_cols_r]
                 .rename(
@@ -471,8 +626,81 @@ def render():
                 ),
                 hide_index=True,
                 height=450,
+                column_config=_sparkline_config(),
             )
 
+            st.markdown("---")
+            st.header("🚀 Laggard Breakout Candidates")
+            st.markdown(
+                "Long-term underperformers that are now showing short-term relative strength "
+                "and reclaiming key moving averages. This replaces the separate Laggard Breakout tab."
+            )
+            laggard_breakouts = underperformers[
+                (underperformers["excess_short"] > 0)
+                & (underperformers["ma_21"] > 0)
+                & (underperformers["ma_63"] > 0)
+            ].copy()
+
+            if laggard_breakouts.empty:
+                st.info(
+                    "No confirmed laggard breakouts right now. Showing closest laggards by short-term relative strength."
+                )
+                laggard_breakouts = (
+                    underperformers.sort_values("excess_short", ascending=False)
+                    .head(15)
+                    .copy()
+                )
+
+            laggard_breakouts["breakout_score"] = (
+                -laggard_breakouts["excess_long"]
+            ) * laggard_breakouts["excess_short"].clip(lower=0)
+            laggard_breakouts = laggard_breakouts.sort_values(
+                ["breakout_score", "excess_short"], ascending=False
+            ).head(20)
+
+            laggard_cols = [
+                "description",
+                "Price (90d)",
+                "Price (1y)",
+                "ticker",
+                "fund_type",
+                long_col,
+                short_col,
+                "excess_long",
+                "excess_short",
+                "ma_21",
+                "ma_63",
+                "ma_252",
+                "drawdown_52w",
+                "breakout_score",
+            ]
+            _add_sparkline_columns(laggard_breakouts)
+            st.dataframe(
+                laggard_breakouts[laggard_cols]
+                .rename(
+                    columns={
+                        "excess_long": f"Long excess vs benchmark ({long_lookback})",
+                        "excess_short": f"Short excess vs benchmark ({short_lookback})",
+                    }
+                )
+                .style.format(
+                    subset=[
+                        long_col,
+                        short_col,
+                        f"Long excess vs benchmark ({long_lookback})",
+                        f"Short excess vs benchmark ({short_lookback})",
+                        "ma_21",
+                        "ma_63",
+                        "ma_252",
+                        "drawdown_52w",
+                    ],
+                    formatter="{:+.2f}%",
+                )
+                .format(subset=["breakout_score"], formatter="{:.1f}"),
+                hide_index=True,
+                height=400,
+                column_config=_sparkline_config(),
+            )
 
         # ═══════════════════════════════════════════
         # Section 3: Recovery Score Ranking
@@ -494,14 +722,16 @@ def render():
                     "Showing the **closest to recovery** instead."
                 )
                 ranked = (
-                    underperformers.sort_values("excess_short", ascending=False).head(15).copy()
+                    underperformers.sort_values("excess_short", ascending=False)
+                    .head(15)
+                    .copy()
                 )
                 ranked["recovery_score"] = (-ranked["excess_long"]) * (
                     1 + ranked["excess_short"]
                 )
-                ranked = ranked.sort_values("recovery_score", ascending=False).reset_index(
-                    drop=True
-                )
+                ranked = ranked.sort_values(
+                    "recovery_score", ascending=False
+                ).reset_index(drop=True)
                 ranked.index = ranked.index + 1
                 ranked.index.name = "Rank"
 
@@ -521,6 +751,21 @@ def render():
                         "excess_short": f"Short excess vs benchmark ({short_lookback})",
                     }
                 )
+                add_sparkline_column(display_ranked)
+                add_sparkline_column(display_ranked, col_name="Price (1y)", days=365)
+                display_ranked = display_ranked[
+                    [
+                        "description",
+                        "Price (90d)",
+                        "Price (1y)",
+                        "ticker",
+                        long_col,
+                        short_col,
+                        f"Long excess vs benchmark ({long_lookback})",
+                        f"Short excess vs benchmark ({short_lookback})",
+                        "recovery_score",
+                    ]
+                ]
                 st.dataframe(
                     display_ranked.style.format(
                         subset=[
@@ -532,12 +777,15 @@ def render():
                         formatter="{:+.2f}%",
                     ).format(subset=["recovery_score"], formatter="{:.1f}"),
                     height=400,
+                    column_config=_sparkline_config(),
                 )
             else:
-                ranked["recovery_score"] = (-ranked["excess_long"]) * ranked["excess_short"]
-                ranked = ranked.sort_values("recovery_score", ascending=False).reset_index(
-                    drop=True
-                )
+                ranked["recovery_score"] = (-ranked["excess_long"]) * ranked[
+                    "excess_short"
+                ]
+                ranked = ranked.sort_values(
+                    "recovery_score", ascending=False
+                ).reset_index(drop=True)
                 ranked.index = ranked.index + 1
                 ranked.index.name = "Rank"
 
@@ -557,6 +805,21 @@ def render():
                         "excess_short": f"Short excess vs benchmark ({short_lookback})",
                     }
                 )
+                add_sparkline_column(display_ranked)
+                add_sparkline_column(display_ranked, col_name="Price (1y)", days=365)
+                display_ranked = display_ranked[
+                    [
+                        "description",
+                        "Price (90d)",
+                        "Price (1y)",
+                        "ticker",
+                        long_col,
+                        short_col,
+                        f"Long excess vs benchmark ({long_lookback})",
+                        f"Short excess vs benchmark ({short_lookback})",
+                        "recovery_score",
+                    ]
+                ]
                 st.dataframe(
                     display_ranked.style.format(
                         subset=[
@@ -568,6 +831,7 @@ def render():
                         formatter="{:+.2f}%",
                     ).format(subset=["recovery_score"], formatter="{:.1f}"),
                     height=400,
+                    column_config=_sparkline_config(),
                 )
 
                 top_n = ranked.head(15)

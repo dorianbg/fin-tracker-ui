@@ -6,7 +6,7 @@ across multiple return periods to see which factors are currently leading/laggin
 import streamlit as st
 import plotly.express as px
 
-from data import load_latest_perf
+from data import add_sparkline_column, load_latest_perf
 from duckdb_importer import RETURN_LABELS, RETURN_PERIODS
 
 
@@ -70,15 +70,27 @@ def render():
             "Each row is a factor ETF, columns are return periods. Colour: green = positive, red = negative."
         )
 
-        heatmap_data = df.set_index("description")[periods].copy()
-        heatmap_data.columns = labels
+        heatmap_data = df[["description", "ticker", *periods]].copy()
+        add_sparkline_column(heatmap_data)
+        add_sparkline_column(heatmap_data, col_name="Price (1y)", days=365)
+        heatmap_data = heatmap_data.set_index("description")
+        heatmap_data = heatmap_data[["Price (90d)", "Price (1y)", *periods]]
+        heatmap_data.columns = ["Price (90d)", "Price (1y)", *labels]
         default_sort = "1Y" if "1Y" in labels else labels[-2]
         heatmap_data = heatmap_data.sort_values(default_sort, ascending=False)
 
         st.dataframe(
-            heatmap_data.style.format("{:+.2f}%").background_gradient(
-                cmap="RdYlGn", axis=None, vmin=-20, vmax=20
+            heatmap_data.style.format("{:+.2f}%", subset=labels).background_gradient(
+                cmap="RdYlGn", axis=None, vmin=-20, vmax=20, subset=labels
             ),
+            column_config={
+                "Price (90d)": st.column_config.LineChartColumn(
+                    "Price (90d)", width="small"
+                ),
+                "Price (1y)": st.column_config.LineChartColumn(
+                    "Price (1y)", width="small"
+                ),
+            },
             height=max(300, len(heatmap_data) * 35 + 38),
             use_container_width=True,
         )

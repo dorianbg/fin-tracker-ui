@@ -24,6 +24,7 @@ if _app_dir not in sys.path:
 
 from allocator import buckets, holdings, instruments, valuation
 from allocator.data_sources import fetch_all_fred
+from data import add_sparkline_column
 
 
 def render():
@@ -220,8 +221,22 @@ def render():
                 }
             )
         val_df = pd.DataFrame(val_data)
+        val_df["ticker"] = val_df["ETF"]
+        add_sparkline_column(val_df)
+        add_sparkline_column(val_df, col_name="Price (1y)", days=365)
         st.dataframe(
-            val_df.style.format(
+            val_df[
+                [
+                    "Region",
+                    "ETF",
+                    "Price (90d)",
+                    "Price (1y)",
+                    "Price",
+                    "MA200",
+                    "Price/MA200",
+                    "Tilt",
+                ]
+            ].style.format(
                 {
                     "Price": "{:.2f}",
                     "MA200": "{:.2f}",
@@ -229,6 +244,14 @@ def render():
                     "Tilt": "{:.2f}",
                 }
             ).background_gradient(subset=["Tilt"], cmap="RdYlGn", vmin=0.5, vmax=1.5),
+            column_config={
+                "Price (90d)": st.column_config.LineChartColumn(
+                    "Price (90d)", width="small"
+                ),
+                "Price (1y)": st.column_config.LineChartColumn(
+                    "Price (1y)", width="small"
+                ),
+            },
             use_container_width=True,
             hide_index=True,
         )
