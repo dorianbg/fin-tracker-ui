@@ -6,7 +6,7 @@
 - Why: Same-day execution can overstate signal quality, and absolute returns are less useful without comparison to `DEFAULT_BENCHMARK`.
 - How: Included benchmark price history in backtest data, shifted entries from signal date to next ticker trading row, added `Signal Date`, `Benchmark Return`, `Relative Return`, and an `Avg rel` summary metric.
 - Verified: `uv run python -m py_compile app/PerformanceTable.py`; `uv run ruff check --select E9,F63,F7,F82 app/PerformanceTable.py`.
-- Commit: Uncommitted
+- Commit: ab9c23865f0ffa6388ee1462233c3301bae93a2d
 
 ## 2026-05-02 00:00 - Add Nuclear And Uranium Theme Universe
 
