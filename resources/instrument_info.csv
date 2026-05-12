@@ -1,0 +1,405 @@
+ticker,description,currency,fund_type,url,sector
+EURGBP=X,EUR to GBP,GBP,currency,,FX
+GBP=X,USD to GBP,GBP,currency,,FX
+VWRP.L,FTSE All-World UCITS ETF Accumulating,GBP,eq,,Equity - Global
+CSP1.L,Core S&P 500,GBP,eq,https://www.fidelity.co.uk/factsheet-data/factsheet/GB00B5VRGY09-ishares-us-equity-index-fund-d-acc/growth-chart,Equity - US Large Cap
+IWM,Russell 2000,USD,eq,https://www.fidelity.co.uk/factsheet-data/factsheet/GB0004483094-abrdn-nrth-amrc-sml-mid-cap-eqt-inst-acc/growth-chart,Equity - US Small Cap
+QQQ,Nasdaq 100,USD,eq,,Equity - US Large Cap
+DIA,Dow Jones Industrial Average,USD,eq,,Equity - US Large Cap
+EWSP.L,S&P 500 Equal Weight,GBP,eq,,Equity - US Large Cap
+LOWV.L,SPDR® S&P® 500 Low Volatility,GBP,eq,,Factor - Low Vol
+MDY,S&P MidCap 400,USD,eq,,Equity - US Mid Cap
+CSCA.L,Canada,GBP,eq,,Equity - Canada
+EWG,MSCI Germany,USD,eq,,Equity - Europe
+FEZ,SPDR EURO Stoxx50,USD,eq,,Equity - Europe
+VUKG.L,FTSE 100 Acc,GBP,eq,,Equity - UK
+ISFD.L,Core FTSE 100 USD Hedged Acc,USD,eq,,Equity - UK
+IMEA.L,iShares Core MSCI Europe,EUR,eq,,Equity - Europe
+EUMD.L,MSCI Europe Mid Cap EUR Acc,EUR,eq,,Equity - Europe
+DJSC.L,EU Small Cap,EUR,eq,,Equity - Europe
+VMIG.L,FTSE 250,GBP,eq,,Equity - UK
+EWJ,Japan,USD,eq,,Equity - Japan
+IJPH.L,Japan - GBPH,GBP,eq,,Equity - Japan
+SCJ,Japan Small cap,USD,eq,,Equity - Japan
+VDPG.L,Asia Pacific ex Japan USD Acc,GBP,eq,,Equity - Asia Pacific
+EWA,MSCI Australia,USD,eq,,Equity - Asia Pacific
+EWY,South Korea,USD,eq,,Equity - Asia Pacific
+INDA,MSCI India,USD,eq,,Equity - India
+FXI,China Large Cap,USD,eq,,Equity - China
+HSTC.L,HSBC Hang Seng Tech,USD,eq,,Equity - China
+EWZ,MSCI Brazil,USD,eq,,Equity - LatAm
+EWW,Mexico,USD,eq,,Equity - LatAm
+ILF,Latin America 40,USD,eq,,Equity - LatAm
+EEM,Emerging Mkts,USD,eq,,Equity - EM
+EXCS.L,EM ex-China USD Acc,GBP,eq,,Equity - EM
+EEMS,MSCI EM Small-Cap,USD,eq,,Equity - EM
+IEDY.L,EM Dividend,USD,eq,,Equity - EM
+WLDS.L,World Small Cap USD Acc,GBP,eq,,Equity - Global
+ITKY.L,Turkey,GBP,eq,,Equity - EM
+CEC.PA,Eastern Europe,EUR,eq,,Equity - EM
+GDX,VanEck Gold Miners,USD,eq,,Sector - Mining
+PICK,MSCI Global Metals & Mining Producers,USD,eq,,Sector - Mining
+BNKS.L,US banks,USD,eq,,Sector - Financials
+DPYG.L,Dev. Markets Property - GBPH,GBP,eq,,Sector - Real Estate
+IASP.SW,Asia Property,USD,eq,,Sector - Real Estate
+IUKP.L,UK Property,GBP,eq,,Sector - Real Estate
+EMB,JPM EM USD Bond,USD,bonds,,Bond - EM
+LEMB,JPM EM Local Ccy Bond,USD,bonds,,Bond - EM
+IB01.L,$ Treasury Bond 0-1yr,USD,bonds,,Bond - US Treasury
+CSH2.L,£ Overnight Return,GBP,bonds,,Bond - Cash
+HYG,High Yield Core,USD,bonds-corp,,Bond - High Yield
+AGG,Core US Aggregate Bond,USD,bonds,,Bond - US Aggregate
+IEF,7-10 Treasury,USD,bonds,,Bond - US Treasury
+IDTG.L,$ Treasury Bond 20+yr - GBPH,GBP,bonds,,Bond - US Treasury
+GLTL.L,SPDR BBG 15+ Year Gilt,GBP,bonds,,Bond - UK Gilt
+IBGL.AS,€ Govt Bond 15-30yr,EUR,bonds,,Bond - Euro Govt
+ITPG.L,$ TIPS - GBPH,GBP,bonds,,Bond - TIPS
+STIP,0-5 Year TIPS Bond,USD,bonds,,Bond - TIPS
+INXG.L,£ Index-Linked Gilts,GBP,bonds,,Bond - UK Gilt
+LTPZ,PIMCO 15+ Year US TIPS,USD,bonds,,Bond - TIPS
+GLD,SPDR Gold Shares,USD,eq,,Commodity - Gold
+GSG,S&P GSCI Commodity-Indexed Trust,USD,eq,,Commodity - Broad
+^VIX,CBOE Volatility Index,USD,volatility,,Volatility
+JEDI.L,VanEck Space Innovators,USD,eq,,Thematic - Space
+AGED.L,iShares Ageing Population,USD,eq,,Thematic - Demographics
+SMH.L,VanEck Semiconductor,USD,eq,,Thematic - Semiconductors
+WENS.L,iShares MSCI World Energy,USD,eq,,Sector - Energy
+DOCG.L,L&G Healthcare Tech (Nano),GBP,eq,,Thematic - Healthcare
+ECAR.L,iShares Electric Vehicles & Driving,GBP,eq,,Thematic - EV
+PLAY.L,iShares Digital Entertainment,GBP,eq,,Thematic - Entertainment
+IUCS.L,iShares S&P 500 Cons Staples,GBP,eq,,Sector - Consumer Staples
+DGIT.L,iShares Digitalisation,USD,eq,,Thematic - Digital
+SNSG.L,Global X Internet of Things,GBP,eq,,Thematic - IoT
+HEAL.L,iShares Healthcare Innovation,USD,eq,,Thematic - Healthcare
+INRG.L,iShares Global Clean Energy,GBP,eq,,Thematic - Clean Energy
+IH2O.L,iShares Global Water,USD,eq,,Thematic - Water
+HTWG.L,L&G Hydrogen Economy,GBP,eq,,Thematic - Hydrogen
+URNG.L,Global X Uranium,GBP,eq,,Thematic - Uranium
+ECOG.L,L&G Ecommerce Logistics,GBP,eq,,Thematic - Ecommerce
+EBIG.L,Global X E-commerce,GBP,eq,,Thematic - Ecommerce
+LUXG.L,Amundi S&P Global Luxury,USD,eq,,Sector - Luxury
+SPAG.L,iShares Agribusiness,GBP,eq,,Sector - Agriculture
+KROG.L,Global X AgTech & Food Innovation,GBP,eq,,Thematic - AgTech
+IHCU.L,iShares S&P 500 Health Care Sector,GBP,eq,,Sector - Healthcare
+ESIH.L,iShares MSCI Europe Health Care Sector,EUR,eq,,Sector - Healthcare
+ICSU.L,iShares S&P 500 Consumer Staples,GBP,eq,,Sector - Consumer Staples
+IUFS.L,iShares S&P 500 Financials Sector,USD,eq,,Sector - Financials
+IUIS.L,iShares S&P 500 Industrials Sector,USD,eq,,Sector - Industrials
+IUES.L,iShares S&P 500 Energy Sector,USD,eq,,Sector - Energy
+IUIT.L,iShares S&P 500 Info Technology Sector,USD,eq,,Sector - Technology
+IUCD.L,iShares S&P 500 Consumer Discretionary,USD,eq,,Sector - Consumer Discretionary
+IUMS.L,iShares S&P 500 Materials Sector,USD,eq,,Sector - Materials
+IUSU.L,iShares S&P 500 Utilities Sector,USD,eq,,Sector - Utilities
+XRES.L,Invesco S&P 500 Real Estate Sector,USD,eq,,Sector - Real Estate
+ESIF.L,iShares MSCI Europe Financials Sector,EUR,eq,,Sector - Financials
+ESIE.L,iShares MSCI Europe Energy Sector,EUR,eq,,Sector - Energy
+ESIN.L,iShares MSCI Europe Industrials Sector,EUR,eq,,Sector - Industrials
+ESIT.L,iShares MSCI Europe IT Sector,EUR,eq,,Sector - Technology
+ESIC.L,iShares MSCI Europe Consumer Discretionary,EUR,eq,,Sector - Consumer Discretionary
+IWVL.L,iShares Edge MSCI World Value Factor,USD,eq,,Factor - Value
+IUVL.L,iShares Edge MSCI USA Value Factor,USD,eq,,Factor - Value
+IEVL.L,iShares Edge MSCI Europe Value Factor,EUR,eq,,Factor - Value
+IWQU.L,iShares Edge MSCI World Quality Factor,USD,eq,,Factor - Quality
+IUQA.L,iShares Edge MSCI USA Quality Factor,USD,eq,,Factor - Quality
+IWMO.L,iShares Edge MSCI World Momentum Factor,USD,eq,,Factor - Momentum
+IUMF.L,iShares Edge MSCI USA Momentum Factor,USD,eq,,Factor - Momentum
+MVOL.L,iShares Edge MSCI World Min Volatility,USD,eq,,Factor - Low Vol
+IEFS.L,iShares Edge MSCI Europe Size Factor,EUR,eq,,Factor - Size
+IFSW.L,iShares World Equity Multi-Factor,USD,eq,,Factor - Multi
+R1GB.L,iShares Russell 1000 Growth,USD,eq,,Factor - Growth
+USDV.L,SPDR S&P US Dividend Aristocrats,USD,eq,,Factor - Dividend
+UKDV.L,SPDR S&P UK Dividend Aristocrats,GBP,eq,,Factor - Dividend
+WQDS.L,iShares MSCI World Quality Dividend,USD,eq,,Factor - Dividend
+IDVY.L,iShares Euro Dividend,EUR,eq,,Factor - Dividend
+XZDW.L,Xtrackers MSCI World High Dividend Yield,USD,eq,,Factor - Dividend
+IUSP.L,iShares US Property Yield,USD,eq,,Sector - Real Estate
+SMGB.L,iShares MSCI USA Small Cap,GBP,eq,,Equity - US Small Cap
+TIP,Tips Bond,USD,bonds-il,,Bond - TIPS
+SOXX,iShares Semiconductor ETF,USD,eq,,Thematic - Semiconductors
+XME,SPDR S&P Metals & Mining ETF,USD,eq,,Sector - Mining
+EWT,MSCI Taiwan,USD,eq,,Equity - Taiwan
+XLB,Materials Select Sector SPDR Fund,USD,eq,,Sector - Materials
+AGIX,KraneShares Artificial Intelligence & Technology ETF,USD,eq,,Thematic - AI
+FNDE,Schwab Fundamental Emerging Markets Large Company ETF,USD,eq,,Equity - EM
+EWM,MSCI Malaysia,USD,eq,,Equity - Asia Pacific
+DVYE,iShares Emerging Markets Dividend ETF,USD,eq,,Equity - EM
+EFG,iShares MSCI EAFE Growth ETF,USD,eq,,Equity - Developed Markets
+XOP,SPDR S&P Oil & Gas Exploration & Production ETF,USD,eq,,Sector - Energy
+VGK,Vanguard FTSE Europe ETF,USD,eq,,Equity - Europe
+WTAI,WisdomTree Artificial Intelligence and Innovation Fund,USD,eq,,Thematic - AI
+EFV,iShares MSCI EAFE Value ETF,USD,eq,,Equity - Developed Markets
+VEA,Vanguard FTSE Developed Markets ETF,USD,eq,,Equity - Developed Markets
+EEMV,iShares MSCI Emerging Markets Min Vol Factor ETF,USD,eq,,Factor - Low Vol
+IXUS,iShares Core MSCI Total International Stock ETF,USD,eq,,Equity - Global
+XLY,Consumer Discretionary Select Sector SPDR Fund,USD,eq,,Sector - Consumer Discretionary
+KWEB,KraneShares CSI China Internet ETF,USD,eq,,Equity - China
+VNQ,Vanguard Real Estate ETF,USD,eq,,Sector - Real Estate
+EWQ,MSCI France,USD,eq,,Equity - Europe
+VPL,Vanguard FTSE Pacific ETF,USD,eq,,Equity - Asia Pacific
+XLU,Utilities Select Sector SPDR Fund,USD,eq,,Sector - Utilities
+XLI,Industrial Select Sector SPDR Fund,USD,eq,,Sector - Industrials
+XHB,SPDR S&P Homebuilders ETF,USD,eq,,Sector - Homebuilders
+IJR,iShares Core S&P Small-Cap ETF,USD,eq,,Equity - US Small Cap
+RSP,Invesco S&P 500 Equal Weight ETF,USD,eq,,Equity - US Large Cap
+IYT,iShares Transportation Average ETF,USD,eq,,Sector - Transport
+XLE,Energy Select Sector SPDR Fund,USD,eq,,Sector - Energy
+XLF,Financial Select Sector SPDR Fund,USD,eq,,Sector - Financials
+KRE,SPDR S&P Regional Banking ETF,USD,eq,,Sector - Financials
+USMV,iShares MSCI USA Min Vol Factor ETF,USD,eq,,Factor - Low Vol
+XLV,Health Care Select Sector SPDR Fund,USD,eq,,Sector - Healthcare
+XLP,Consumer Staples Select Sector SPDR Fund,USD,eq,,Sector - Consumer Staples
+XBI,SPDR S&P Biotech ETF,USD,eq,,Sector - Biotech
+IGV,iShares Expanded Tech-Software Sector ETF,USD,eq,,Sector - Software
+CIBR,First Trust NASDAQ Cybersecurity ETF,USD,eq,,Thematic - Cybersecurity
+CSPX.L,iShares Core S&P 500 UCITS ETF USD Acc,USD,eq,,Equity - US Large Cap
+IWDA.L,iShares Core MSCI World UCITS ETF USD Acc,USD,eq,,Equity - Global
+EIMI.L,iShares Core MSCI EM IMI UCITS ETF,USD,eq,,Equity - EM
+IJPA.L,iShares MSCI Japan UCITS ETF,USD,eq,,Equity - Japan
+VEUR.L,Vanguard FTSE Developed Europe UCITS ETF,GBP,eq,,Equity - Europe
+PHGP.L,WisdomTree Physical Gold GBP,GBP,commod,,Commodity - Gold
+PHSP.L,WisdomTree Physical Silver GBP,GBP,commod,,Commodity - Silver
+SGLN.L,iShares Physical Gold ETC,GBP,commod,,Commodity - Gold
+IGIL.L,iShares Global Inflation Linked Govt Bond UCITS ETF,USD,bonds-il,,Bond - Global Linkers
+IAU,iShares Gold Trust,USD,commod,,Commodity - Gold
+SLV,iShares Silver Trust,USD,commod,,Commodity - Silver
+SIL,Global X Silver Miners ETF,USD,eq,,Sector - Mining
+PDBC,Invesco Optimum Yield Diversified Commodity Strategy No K-1 ETF,USD,commod,,Commodity - Broad
+IGF,iShares Global Infrastructure ETF,USD,eq,,Sector - Infrastructure
+TLT,iShares 20+ Year Treasury Bond ETF,USD,bonds,,Bond - US Treasury
+ISF.L,iShares Core FTSE 100 UCITS ETF,GBP,eq,,Equity - UK
+SEML.L,iShares J.P. Morgan EM Local Govt Bond UCITS ETF,USD,bonds,,Bond - EM
+EMLC,VanEck JPM EM Local Currency Bond ETF,USD,bonds,,Bond - EM
+NLR,VanEck Uranium+Nuclear Energy ETF,USD,eq,,Thematic - Nuclear - Uranium+Nuclear ETFs
+URA,Global X Uranium ETF,USD,eq,,Thematic - Nuclear - Uranium+Nuclear ETFs
+URNM,Sprott Uranium Miners ETF,USD,eq,,Thematic - Nuclear - Uranium+Nuclear ETFs
+NUKZ,Range Nuclear Renaissance Index ETF,USD,eq,,Thematic - Nuclear - Uranium+Nuclear ETFs
+ICLN,iShares Global Clean Energy ETF,USD,eq,,Thematic - Clean Energy
+XLC,Communication Services Select Sector SPDR Fund,USD,eq,,Sector - Communication Services
+VOX,Vanguard Communication Services ETF,USD,eq,,Sector - Communication Services
+VGT,Vanguard Information Technology ETF,USD,eq,,Sector - Technology
+ITA,iShares U.S. Aerospace & Defense ETF,USD,eq,,Sector - Defence
+PAVE,Global X U.S. Infrastructure Development ETF,USD,eq,,Sector - Infrastructure
+KIE,SPDR S&P Insurance ETF,USD,eq,,Sector - Financials
+ITB,iShares U.S. Home Construction ETF,USD,eq,,Sector - Homebuilders
+JETS,U.S. Global Jets ETF,USD,eq,,Sector - Airlines
+BOTZ,Global X Robotics & Artificial Intelligence ETF,USD,eq,,Thematic - Robotics
+SKYY,First Trust Cloud Computing ETF,USD,eq,,Thematic - Cloud
+FINX,Global X FinTech ETF,USD,eq,,Thematic - Fintech
+TAN,Invesco Solar ETF,USD,eq,,Thematic - Solar
+FAN,First Trust Global Wind Energy ETF,USD,eq,,Thematic - Wind
+QCLN,First Trust NASDAQ Clean Edge Green Energy ETF,USD,eq,,Thematic - Clean Energy
+LIT,Global X Lithium & Battery Tech ETF,USD,eq,,Thematic - Battery
+COPX,Global X Copper Miners ETF,USD,eq,,Sector - Mining
+REMX,VanEck Rare Earth/Strategic Metals ETF,USD,eq,,Sector - Mining
+ESPO,VanEck Video Gaming and eSports ETF,USD,eq,,Thematic - Gaming
+AIQ,Global X Artificial Intelligence & Technology ETF,USD,eq,,Thematic - AI
+IBB,iShares Biotechnology ETF,USD,eq,,Thematic - Biotech
+IHI,iShares U.S. Medical Devices ETF,USD,eq,,Thematic - Healthcare
+GNOM,Global X Genomics & Biotechnology ETF,USD,eq,,Thematic - Genomics
+MOO,VanEck Agribusiness ETF,USD,eq,,Sector - Agriculture
+WOOD,iShares Global Timber & Forestry ETF,USD,eq,,Sector - Timber
+
+
+NVDA,NVIDIA,USD,stock,,Thematic - AI
+PLTR,Palantir Technologies,USD,stock,,Thematic - AI
+AI,C3.ai,USD,stock,,Thematic - AI
+AAPL,Apple,USD,stock,,Sector - Technology
+MSFT,Microsoft,USD,stock,,Sector - Technology
+GOOGL,Alphabet Class A,USD,stock,,Sector - Communication Services
+META,Meta Platforms,USD,stock,,Sector - Communication Services
+AMZN,Amazon,USD,stock,,Sector - Consumer Discretionary
+BABA,Alibaba ADR,USD,stock,,Equity - China
+TCEHY,Tencent ADR,USD,stock,,Equity - China
+CRWD,CrowdStrike,USD,stock,,Thematic - Cybersecurity
+PANW,Palo Alto Networks,USD,stock,,Thematic - Cybersecurity
+ZS,Zscaler,USD,stock,,Thematic - Cybersecurity
+FTNT,Fortinet,USD,stock,,Thematic - Cybersecurity
+NET,Cloudflare,USD,stock,,Thematic - Cybersecurity
+DDOG,Datadog,USD,stock,,Thematic - Cloud
+SNOW,Snowflake,USD,stock,,Thematic - Cloud
+MDB,MongoDB,USD,stock,,Thematic - Cloud
+TSM,Taiwan Semiconductor ADR,USD,stock,,Thematic - Semiconductors
+AVGO,Broadcom,USD,stock,,Thematic - Semiconductors
+AMD,Advanced Micro Devices,USD,stock,,Thematic - Semiconductors
+ASML,ASML Holding,USD,stock,,Thematic - Semiconductors
+INTC,Intel,USD,stock,,Thematic - Semiconductors
+MU,Micron Technology,USD,stock,,Thematic - Semiconductors
+AMAT,Applied Materials,USD,stock,,Thematic - Semiconductors
+LRCX,Lam Research,USD,stock,,Thematic - Semiconductors
+QCOM,Qualcomm,USD,stock,,Thematic - Semiconductors
+ARM,Arm Holdings,USD,stock,,Thematic - Semiconductors
+ORCL,Oracle,USD,stock,,Sector - Software
+CRM,Salesforce,USD,stock,,Sector - Software
+ADBE,Adobe,USD,stock,,Sector - Software
+NOW,ServiceNow,USD,stock,,Sector - Software
+SAP,SAP SE ADR,USD,stock,,Sector - Software
+TSLA,Tesla,USD,stock,,Thematic - EV
+BYDDY,BYD ADR,USD,stock,,Thematic - EV
+NIO,NIO,USD,stock,,Thematic - EV
+RIVN,Rivian Automotive,USD,stock,,Thematic - EV
+ALB,Albemarle,USD,stock,,Thematic - Battery
+SQM,Sociedad Quimica y Minera,USD,stock,,Thematic - Battery
+ISRG,Intuitive Surgical,USD,stock,,Thematic - Robotics
+ABB,ABB ADR,USD,stock,,Thematic - Robotics
+REGN,Regeneron Pharmaceuticals,USD,stock,,Thematic - Biotech
+VRTX,Vertex Pharmaceuticals,USD,stock,,Thematic - Biotech
+MRNA,Moderna,USD,stock,,Thematic - Biotech
+GILD,Gilead Sciences,USD,stock,,Thematic - Biotech
+AMGN,Amgen,USD,stock,,Thematic - Biotech
+BIIB,Biogen,USD,stock,,Thematic - Biotech
+ILMN,Illumina,USD,stock,,Thematic - Genomics
+CRSP,CRISPR Therapeutics,USD,stock,,Thematic - Genomics
+NTLA,Intellia Therapeutics,USD,stock,,Thematic - Genomics
+BEAM,Beam Therapeutics,USD,stock,,Thematic - Genomics
+MDT,Medtronic,USD,stock,,Thematic - Healthcare
+SYK,Stryker,USD,stock,,Thematic - Healthcare
+BSX,Boston Scientific,USD,stock,,Thematic - Healthcare
+EW,Edwards Lifesciences,USD,stock,,Thematic - Healthcare
+ABT,Abbott Laboratories,USD,stock,,Thematic - Healthcare
+JNJ,Johnson & Johnson,USD,stock,,Sector - Healthcare
+LLY,Eli Lilly,USD,stock,,Sector - Healthcare
+PFE,Pfizer,USD,stock,,Sector - Healthcare
+MRK,Merck,USD,stock,,Sector - Healthcare
+ABBV,AbbVie,USD,stock,,Sector - Healthcare
+NVO,Novo Nordisk ADR,USD,stock,,Sector - Healthcare
+NOVN.SW,Novartis,CHF,stock,,Sector - Healthcare
+ROG.SW,Roche,CHF,stock,,Sector - Healthcare
+AZN.L,AstraZeneca,GBP,stock,,Sector - Healthcare
+V,Visa,USD,stock,,Thematic - Fintech
+MA,Mastercard,USD,stock,,Thematic - Fintech
+PYPL,PayPal,USD,stock,,Thematic - Fintech
+SQ,Block,USD,stock,,Thematic - Fintech
+ADYEN.AS,Adyen,EUR,stock,,Thematic - Fintech
+SOFI,SoFi Technologies,USD,stock,,Thematic - Fintech
+TTWO,Take-Two Interactive,USD,stock,,Thematic - Gaming
+EA,Electronic Arts,USD,stock,,Thematic - Gaming
+RBLX,Roblox,USD,stock,,Thematic - Gaming
+7974.T,Nintendo,JPY,stock,,Thematic - Gaming
+NFLX,Netflix,USD,stock,,Thematic - Entertainment
+DIS,Walt Disney,USD,stock,,Sector - Communication Services
+FSLR,First Solar,USD,stock,,Thematic - Solar
+ENPH,Enphase Energy,USD,stock,,Thematic - Solar
+SEDG,SolarEdge Technologies,USD,stock,,Thematic - Solar
+VWS.CO,Vestas Wind Systems,DKK,stock,,Thematic - Wind
+ORSTED.CO,Ørsted,DKK,stock,,Thematic - Wind
+NEE,NextEra Energy,USD,stock,,Thematic - Clean Energy
+PLUG,Plug Power,USD,stock,,Thematic - Hydrogen
+BE,Bloom Energy,USD,stock,,Thematic - Hydrogen
+XE,X-energy,USD,stock,,Thematic - Nuclear - Small Modular & Micro Reactors
+GEV,GE Vernova,USD,stock,,Thematic - Nuclear - Small Modular & Micro Reactors
+OKLO,Oklo,USD,stock,,Thematic - Nuclear - Small Modular & Micro Reactors
+SMR,NuScale Power,USD,stock,,Thematic - Nuclear - Small Modular & Micro Reactors
+NNE,NANO Nuclear Energy,USD,stock,,Thematic - Nuclear - Small Modular & Micro Reactors
+RYCEF,Rolls-Royce Holdings OTC,USD,stock,,Thematic - Nuclear - Small Modular & Micro Reactors
+BWXT,BWX Technologies,USD,stock,,Thematic - Nuclear - Small Modular & Micro Reactors
+LEU,Centrus Energy,USD,stock,,Thematic - Nuclear - Uranium Enrichers
+ASPI,ASP Isotopes,USD,stock,,Thematic - Nuclear - Uranium Enrichers
+LTBR,Lightbridge,USD,stock,,Thematic - Nuclear - Nuclear Fuel Technology
+CCJ,Cameco,USD,stock,,Thematic - Nuclear - Uranium Producers
+DNN,Denison Mines,USD,stock,,Thematic - Nuclear - Developers
+UEC,Uranium Energy,USD,stock,,Thematic - Nuclear - Uranium Producers
+URG,Ur-Energy,USD,stock,,Thematic - Nuclear - Uranium Producers
+EU,enCore Energy,USD,stock,,Thematic - Nuclear - Uranium Producers
+UUUU,Energy Fuels,USD,stock,,Thematic - Nuclear - Developers
+NXE,NexGen Energy,USD,stock,,Thematic - Nuclear - Developers
+ISOU,IsoEnergy,USD,stock,,Thematic - Nuclear - Developers
+CW,Curtiss-Wright,USD,stock,,Thematic - Nuclear - Services and Equipment
+MIR,Mirion Technologies,USD,stock,,Thematic - Nuclear - Services and Equipment
+FLR,Fluor,USD,stock,,Thematic - Nuclear - Services and Equipment
+BEPC,Brookfield Renewable,USD,stock,,Thematic - Nuclear - Services and Equipment
+CEG,Constellation Energy,USD,stock,,Thematic - Nuclear - Power Producers
+VST,Vistra,USD,stock,,Thematic - Nuclear - Power Producers
+TLN,Talen Energy,USD,stock,,Thematic - Nuclear - Power Producers
+PEG,Public Service Enterprise Group,USD,stock,,Thematic - Nuclear - Power Producers
+FCX,Freeport-McMoRan,USD,stock,,Sector - Mining
+SCCO,Southern Copper,USD,stock,,Sector - Mining
+BHP,BHP Group ADR,USD,stock,,Thematic - Nuclear - Uranium Producers
+RIO,Rio Tinto ADR,USD,stock,,Sector - Mining
+ANTO.L,Antofagasta,GBP,stock,,Sector - Mining
+GLEN.L,Glencore,GBP,stock,,Sector - Mining
+NEM,Newmont,USD,stock,,Sector - Mining
+GOLD,Barrick Gold,USD,stock,,Sector - Mining
+AEM,Agnico Eagle Mines,USD,stock,,Sector - Mining
+FNV,Franco-Nevada,USD,stock,,Sector - Mining
+XOM,Exxon Mobil,USD,stock,,Sector - Energy
+CVX,Chevron,USD,stock,,Sector - Energy
+SHEL.L,Shell,GBP,stock,,Sector - Energy
+BP.L,BP,GBP,stock,,Sector - Energy
+TTE,TotalEnergies ADR,USD,stock,,Sector - Energy
+EQNR,Equinor ADR,USD,stock,,Sector - Energy
+COP,ConocoPhillips,USD,stock,,Sector - Energy
+OXY,Occidental Petroleum,USD,stock,,Sector - Energy
+JPM,JPMorgan Chase,USD,stock,,Sector - Financials
+BAC,Bank of America,USD,stock,,Sector - Financials
+WFC,Wells Fargo,USD,stock,,Sector - Financials
+C,Citigroup,USD,stock,,Sector - Financials
+GS,Goldman Sachs,USD,stock,,Sector - Financials
+MS,Morgan Stanley,USD,stock,,Sector - Financials
+HSBA.L,HSBC Holdings,GBP,stock,,Sector - Financials
+BARC.L,Barclays,GBP,stock,,Sector - Financials
+BRK-B,Berkshire Hathaway B,USD,stock,,Sector - Financials
+AIG,American International Group,USD,stock,,Sector - Financials
+PLD,Prologis,USD,stock,,Sector - Real Estate
+AMT,American Tower,USD,stock,,Sector - Real Estate
+EQIX,Equinix,USD,stock,,Sector - Real Estate
+DLR,Digital Realty Trust,USD,stock,,Sector - Real Estate
+LMT,Lockheed Martin,USD,stock,,Sector - Defence
+RTX,RTX Corporation,USD,stock,,Sector - Defence
+NOC,Northrop Grumman,USD,stock,,Sector - Defence
+GD,General Dynamics,USD,stock,,Sector - Defence
+BA,Boeing,USD,stock,,Sector - Defence
+BA.L,BAE Systems,GBP,stock,,Sector - Defence
+RHM.DE,Rheinmetall,EUR,stock,,Sector - Defence
+AIR.PA,Airbus,EUR,stock,,Sector - Defence
+PG,Procter & Gamble,USD,stock,,Sector - Consumer Staples
+KO,Coca-Cola,USD,stock,,Sector - Consumer Staples
+PEP,PepsiCo,USD,stock,,Sector - Consumer Staples
+COST,Costco Wholesale,USD,stock,,Sector - Consumer Staples
+WMT,Walmart,USD,stock,,Sector - Consumer Staples
+ULVR.L,Unilever,GBP,stock,,Sector - Consumer Staples
+NESN.SW,Nestle,CHF,stock,,Sector - Consumer Staples
+HD,Home Depot,USD,stock,,Sector - Consumer Discretionary
+NKE,Nike,USD,stock,,Sector - Consumer Discretionary
+MCD,McDonald's,USD,stock,,Sector - Consumer Discretionary
+SBUX,Starbucks,USD,stock,,Sector - Consumer Discretionary
+LOW,Lowe's,USD,stock,,Sector - Consumer Discretionary
+MC.PA,LVMH,EUR,stock,,Sector - Luxury
+RMS.PA,Hermes International,EUR,stock,,Sector - Luxury
+KER.PA,Kering,EUR,stock,,Sector - Luxury
+CFR.SW,Compagnie Financiere Richemont,CHF,stock,,Sector - Luxury
+CAT,Caterpillar,USD,stock,,Sector - Industrials
+HON,Honeywell,USD,stock,,Sector - Industrials
+GE,GE Aerospace,USD,stock,,Sector - Industrials
+MMM,3M,USD,stock,,Sector - Industrials
+ETN,Eaton,USD,stock,,Sector - Industrials
+DE,Deere,USD,stock,,Sector - Agriculture
+ADM,Archer-Daniels-Midland,USD,stock,,Sector - Agriculture
+NTR,Nutrien,USD,stock,,Sector - Agriculture
+MOS,Mosaic,USD,stock,,Sector - Agriculture
+LIN,Linde,USD,stock,,Sector - Materials
+APD,Air Products & Chemicals,USD,stock,,Sector - Materials
+SHW,Sherwin-Williams,USD,stock,,Sector - Materials
+DUK,Duke Energy,USD,stock,,Sector - Utilities
+SO,Southern Company,USD,stock,,Sector - Utilities
+UPS,United Parcel Service,USD,stock,,Sector - Transport
+FDX,FedEx,USD,stock,,Sector - Transport
+DAL,Delta Air Lines,USD,stock,,Sector - Airlines
+UAL,United Airlines,USD,stock,,Sector - Airlines
+DHI,D.R. Horton,USD,stock,,Sector - Homebuilders
+LEN,Lennar,USD,stock,,Sector - Homebuilders
+NVR,NVR,USD,stock,,Sector - Homebuilders
+T,AT&T,USD,stock,,Sector - Communication Services
+VZ,Verizon Communications,USD,stock,,Sector - Communication Services
+CMCSA,Comcast,USD,stock,,Sector - Communication Services
+TMUS,T-Mobile US,USD,stock,,Sector - Communication Services
+XYL,Xylem,USD,stock,,Thematic - Water
+AWK,American Water Works,USD,stock,,Thematic - Water
+VIE.PA,Veolia Environnement,EUR,stock,,Thematic - Water
+MELI,MercadoLibre,USD,stock,,Thematic - Ecommerce
+SHOP,Shopify,USD,stock,,Thematic - Ecommerce
+SE,Sea Limited,USD,stock,,Thematic - Ecommerce
+ETSY,Etsy,USD,stock,,Thematic - Ecommerce
+JD,JD.com ADR,USD,stock,,Thematic - Ecommerce
+PDD,PDD Holdings,USD,stock,,Thematic - Ecommerce
+RKLB,Rocket Lab,USD,stock,,Thematic - Space
+ASTS,AST SpaceMobile,USD,stock,,Thematic - Space

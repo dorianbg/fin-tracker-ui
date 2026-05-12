@@ -1,6 +1,70 @@
 # Tasks
 
+## 2026-05-12 00:00 - Improve Trade Simulation Validity
+
+- Goal: Reduce lookahead bias in Today trade simulation and compare simulated trades against the dashboard benchmark.
+- Scope: `app/PerformanceTable.py`, plus tracking updates.
+- Assumptions: Historical signal rows should remain same-day signals, but simulated execution should use the next available ticker trading row; benchmark-relative return should use `DEFAULT_BENCHMARK` prices over the simulated entry/exit window.
+- Alignment: Continued from `HANDOFF.md`; this was the next listed improvement after the investable Today decision columns already present in the working tree.
+- Plan: Include benchmark prices in the historical backtest dataset, shift simulated entries to the next available trading day, add benchmark and relative return fields, and surface average relative return plus recent-trade columns.
+- Test-first approach: No UI tests exist; use compile and syntax-critical ruff checks.
+- Verify: `uv run python -m py_compile app/PerformanceTable.py`; `uv run ruff check --select E9,F63,F7,F82 app/PerformanceTable.py`.
+- Status: completed.
+
+## 2026-05-02 00:00 - Add Nuclear And Uranium Theme Universe
+
+- Goal: Add the requested uranium/nuclear ETFs and stocks to the instrument universe with clear nuclear sub-theme labels.
+- Scope: `resources/instrument_info.csv`, plus tracking updates.
+- Assumptions: Use the existing `sector` column as the theme label; preserve one row per ticker; update existing uranium rows rather than duplicating them.
+- Alignment: User provided the ticker list and theme buckets; no extra clarification needed.
+- Plan: Add missing tickers, update existing uranium ETF/stock theme labels, validate requested ticker coverage and duplicate tickers.
+- Test-first approach: CSV/data change; use a Python CSV validation check rather than UI tests.
+- Verify: `uv run python - <<'PY' ...` confirmed all requested tickers are present and no duplicate tickers exist.
+- Status: completed.
+
+## 2026-05-02 00:00 - Make Today Decisions Investable
+
+- Goal: Convert Today from vague watchlist labels into an explicit decision queue.
+- Scope: `app/PerformanceTable.py`, plus tracking updates.
+- Assumptions: Preserve underlying signal names for filtering/backtest compatibility, but add decision-specific entry, invalidation, exit, review, and edge columns for human actionability.
+- Alignment: Continued from `HANDOFF.md`; user had pushed back that the Today table was not actionable and asked for investment criteria.
+- Plan: Add decision state mapping for each signal type, use confirmation conditions to distinguish buy candidates from wait/avoid/risk states, and update Today metrics/filter wording.
+- Test-first approach: No UI tests exist; use compile and syntax-critical ruff checks.
+- Verify: `uv run python -m py_compile app/PerformanceTable.py`; `uv run ruff check --select E9,F63,F7,F82 app/PerformanceTable.py`.
+- Status: completed.
+
+## 2026-05-02 - Batch yfinance Pipeline Downloads
+
+- Goal: make the price pipeline pull from yfinance faster.
+- Scope: `pipeline/executor.py` historical price fetch path only. Preserve existing DuckDB insert, dividend backup, and per-ticker raw file behavior.
+- Assumptions: a single batched `yf.download()` over all missing jobs is preferable to one `Ticker.history()` request per ticker plus a 3-second sleep per job.
+- Plan: download all missing ticker ranges in one request, split results back by job, reuse existing `execute_job()` handling, compile, and run a no-fetch smoke check if the DuckDB lock allows it.
+- Verify: `uv run python -m py_compile pipeline/executor.py` passes. `uv run python -m pipeline.executor --skip_data_fetch` was attempted but DuckDB was locked by another running Python process.
+- Status: completed locally, uncommitted.
+
 Track intended work for this project. Add newest entries at the top.
+
+## 2026-05-02 00:00 - Replace Fixed Horizon Signal Backtest
+
+- Goal: Make Today backtesting more investable by replacing fixed-horizon forward returns with trigger-based trade simulation.
+- Scope: `app/PerformanceTable.py`, plus tracking updates.
+- Assumptions: Simulate long-entry signals first (`Buy Watch`, `Breakout Watch`, `Capitulation Watch`); keep `Trim` and `Short Monitor` as risk/exit signals for now.
+- Alignment: User rejected fixed 21-day exits and asked for more complicated/state-based exits.
+- Plan: Enter on historical signal days, skip overlapping trades per ticker, exit on failed bounce, MA63 trend stop, profit protection, no-bounce confirmation, hard drawdown stop, or max-hold cap.
+- Test-first approach: No UI tests exist; use compile and syntax-critical ruff checks.
+- Verify: `uv run python -m py_compile app/PerformanceTable.py`; `uv run ruff check --select E9,F63,F7,F82 app/PerformanceTable.py`.
+- Status: completed.
+
+## 2026-05-02 00:00 - Today Signal Backtest
+
+- Goal: Start automating the Today workflow by validating signal rules historically before building portfolio automation.
+- Scope: `app/PerformanceTable.py`, plus tracking updates.
+- Assumptions: Start with signal backtests rather than capital allocation; use forward price returns over fixed holding periods as first-pass validation.
+- Alignment: User chose option 3: both signal backtest and portfolio automation eventually, starting with signal backtest.
+- Plan: Factor Today signal construction into reusable candidates, load historical perf rows and prices, compute 5/10/21/63 trading-day forward returns, and render summary stats plus recent historical samples.
+- Test-first approach: No UI tests exist; use compile and syntax-critical ruff checks.
+- Verify: `uv run python -m py_compile app/PerformanceTable.py`; `uv run ruff check --select E9,F63,F7,F82 app/PerformanceTable.py`.
+- Status: completed.
 
 ## 2026-05-01 00:00 - Apply Sparklines Across Dashboard Tables
 

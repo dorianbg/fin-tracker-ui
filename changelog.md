@@ -1,6 +1,54 @@
 # Changelog
 
+## 2026-05-12 00:00 - Improve Today Trade Simulation Validity
+
+- Changed: Updated the Today trade simulation to enter on the next available trading day after a signal and to report benchmark-relative returns.
+- Why: Same-day execution can overstate signal quality, and absolute returns are less useful without comparison to `DEFAULT_BENCHMARK`.
+- How: Included benchmark price history in backtest data, shifted entries from signal date to next ticker trading row, added `Signal Date`, `Benchmark Return`, `Relative Return`, and an `Avg rel` summary metric.
+- Verified: `uv run python -m py_compile app/PerformanceTable.py`; `uv run ruff check --select E9,F63,F7,F82 app/PerformanceTable.py`.
+- Commit: Uncommitted
+
+## 2026-05-02 00:00 - Add Nuclear And Uranium Theme Universe
+
+- Changed: Added/updated the requested uranium and nuclear ETFs/stocks in `resources/instrument_info.csv` with nuclear sub-theme labels.
+- Why: Uranium and nuclear energy are being tracked as a national-security-oriented investment theme.
+- How: Added missing tickers, updated existing `NLR`, `URA`, `URNM`, `CCJ`, `DNN`, `UEC`, and `BHP` theme labels, and used one row per ticker.
+- Verified: Python CSV validation confirmed all requested tickers are present and there are no duplicate tickers.
+- Follow-up: Some symbols such as `XE`, `ISOU`, and `RYCEF` may need ticker-source validation during the next pipeline fetch if Yahoo Finance does not support those exact symbols.
+
+## 2026-05-02 00:00 - Make Today Decisions Investable
+
+- Changed: Added explicit `Decision`, `Entry Rule`, `Invalidation`, `Exit Plan`, `Review Trigger`, and `Backtest Edge` columns to the Today action list.
+- Why: The prior `Watch` labels were screening buckets, not investment criteria.
+- How: Preserved underlying signal names for filtering/backtests, but mapped signals into action states such as `Buy Candidate`, `Wait For Reclaim`, `Avoid Until Bounce`, `Trim Candidate`, and `Risk Review` based on confirmation and risk conditions.
+- Verified: `uv run python -m py_compile app/PerformanceTable.py`; `uv run ruff check --select E9,F63,F7,F82 app/PerformanceTable.py`.
+- Follow-up: Use simulation results to calculate a real `Backtest Edge` value instead of static explanatory text.
+
+## 2026-05-02 - Batch yfinance Pipeline Downloads
+
+- Changed: the pipeline now batches missing ticker history into one `yf.download()` call and splits the result back per ticker/job before the existing insert/backup flow.
+- Why: the old path created one `yf.Ticker(...).history()` request per ticker and slept 3 seconds after every ticker, making data pulls unnecessarily slow.
+- How: added `download_jobs()` and `_normalize_yfinance_df()`, passed pre-downloaded per-ticker data into `execute_job()`, and kept the single-ticker fallback for direct use.
+- Verified: `uv run python -m py_compile pipeline/executor.py` passes. A no-fetch pipeline smoke run could not complete because `duckdb.db` is currently locked by another Python process.
+- Commit: Uncommitted
+
 Track meaningful changes made in this project. Add newest entries at the top.
+
+## 2026-05-02 00:00 - Replace Fixed Horizon Signal Backtest
+
+- Changed: Replaced the Today fixed-forward-return signal backtest with a trigger-based trade simulation for long-entry signals.
+- Why: Fixed holding periods are too crude for investable decisions; exits should depend on trend failure, bounce failure, profit protection, and drawdown stops.
+- How: Added `simulate_signal_trades()` to enter historical signal days, avoid overlapping trades per ticker, and exit on state-based rules with explicit exit reasons.
+- Verified: `uv run python -m py_compile app/PerformanceTable.py`; `uv run ruff check --select E9,F63,F7,F82 app/PerformanceTable.py`.
+- Follow-up: Add benchmark-relative trade results, parameter presets per signal, and portfolio-level sizing once the signal-level simulation looks sensible.
+
+## 2026-05-02 00:00 - Add Today Signal Backtest
+
+- Changed: Added a `Signal Backtest` section to the Today tab for historical validation of Today action-list rules.
+- Why: The action list should become more automated and evidence-based before any portfolio automation is added.
+- How: Factored Today signal construction into `build_signal_candidates()`, loaded historical performance rows plus prices, computed 5/10/21/63 trading-day forward returns, and displayed win rate/return stats with recent historical samples.
+- Verified: `uv run python -m py_compile app/PerformanceTable.py`; `uv run ruff check --select E9,F63,F7,F82 app/PerformanceTable.py`.
+- Follow-up: Use the backtest results to weight/rank Today candidates by empirical signal edge, then consider portfolio-level automation.
 
 ## 2026-05-01 00:00 - Apply Sparklines Across Dashboard Tables
 

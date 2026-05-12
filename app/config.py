@@ -11,12 +11,37 @@ MAX_CORRELATION_ASSETS = 15
 
 # Benchmark tickers (display_name -> ticker)
 BENCHMARKS = {
+    "FTSE All-World (VWRP)": "VWRP",
     "S&P 500 (CSP1)": "CSP1",
-    "MSCI USA (CUSS)": "CUSS",
     "MSCI Europe (IMEA)": "IMEA",
     "Emerging Markets (EEM)": "EEM",
 }
-DEFAULT_BENCHMARK = "CSP1"
+DEFAULT_BENCHMARK = "VWRP"
 
 # Portfolio manager
 BROKER_OPTIONS = ["Fidelity", "HL", "IBKR", "Other"]
+
+# Fund type filter (shared across dashboard pages)
+FUND_TYPE_OPTIONS = [
+    "eq",
+    "stock",
+    "eq-reit",
+    "commod",
+    "bonds",
+    "bonds-em",
+    "bonds-corp",
+    "bonds-il",
+    "bonds-cash",
+]
+
+FUND_TYPE_DISPLAY_NAMES = {
+    "eq": "Equity (ETFs)",
+    "stock": "Stocks",
+    "eq-reit": "Real Estate",
+    "commod": "Commodities",
+    "bonds": "Bonds",
+    "bonds-em": "EM Bonds",
+    "bonds-corp": "Corp Bonds",
+    "bonds-il": "IL Bonds",
+    "bonds-cash": "Cash",
+}

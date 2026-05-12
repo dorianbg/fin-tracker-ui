@@ -7,7 +7,7 @@ import duckdb
 data_dir = "data"
 if not os.path.exists(data_dir):
     os.makedirs(data_dir)
-duckdb_file = os.path.join(os.path.dirname(__file__), "../../fin-tracker", "duckdb.db")
+duckdb_file = os.path.join(os.path.dirname(__file__), "..", "duckdb.db")
 
 encrypt_key = os.environ["PARQUET_ENCRYPTION_KEY"]
 add_encrypt_key = f"PRAGMA add_parquet_key('key256', '{encrypt_key}');"
@@ -31,7 +31,7 @@ px_cols = [
 perf_src_table_name = "latest_performance_sharpe"
 perf_tbl = "performance"
 perf_pq_file = os.path.join(data_dir, f"{perf_tbl}.parquet")
-perf_desc_cols_start = ["date::date as date", "description"]
+perf_desc_cols_start = ["date::date as date", "description", "price"]
 perf_rownames_cols = ["rown"]
 perf_desc_cols_end = ["ticker", "fund_type"]
 perf_z_score_cols = ["z_1d", "z_1w", "z_2w", "z_1mo"]
@@ -63,6 +63,22 @@ perf_sharpe_cols = [
 selectable_returns = ["1d", "1w", "2w", "1mo", "3mo", "6mo", "1y", "2y", "3y", "5y"]
 default_selected_returns = ["1d", "1w", "2w", "1mo", "3mo", "6mo", "1y", "3y", "5y"]
 
+# Canonical label → column mapping (pages should import this instead of redefining)
+RETURN_COL_MAP = {
+    "1D": "r_1d",
+    "1W": "r_1w",
+    "2W": "r_2w",
+    "1M": "r_1mo",
+    "3M": "r_3mo",
+    "6M": "r_6mo",
+    "1Y": "r_1y",
+    "2Y": "r_2y",
+    "3Y": "r_3y",
+    "5Y": "r_5y",
+}
+RETURN_LABELS = list(RETURN_COL_MAP.keys())  # ["1D", "1W", "2W", ...]
+RETURN_PERIODS = list(RETURN_COL_MAP.values())  # ["r_1d", "r_1w", "r_2w", ...]
+
 
 def check_if_in_return_cols(col, returns_cols):
     if returns_cols is None:
@@ -91,6 +107,9 @@ perf_mavg_cols = [
     "ma_252",
     "drawdown_52w",
     "drawdown_3y",
+    "range_pos_52w",
+    "range_pos_104w",
+    "range_pos_156w",
 ]
 perf_cols = (
     perf_desc_cols_start

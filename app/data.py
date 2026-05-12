@@ -177,6 +177,63 @@ def get_fund_types() -> list[str]:
     return [x[0] for x in get_conn().execute(query).fetchall()]
 
 
+# ── Shared loaders (used by most dashboard pages) ──
+
+_STANDARD_PERF_COLS = (
+    di.perf_desc_cols_start
+    + di.perf_z_score_cols
+    + di.perf_vol_cols
+    + di.perf_mavg_cols
+    + di.perf_returns_cols
+    + di.perf_desc_cols_end
+    + di.perf_rownames_cols
+)
+
+
+@st.cache_data(ttl=300)
+def load_latest_perf(tickers: tuple = None, max_rown: int = 1) -> pd.DataFrame:
+    """Load performance rows from the perf table.
+
+    Args:
+        tickers: Optional *tuple* of tickers to filter (must be hashable for cache).
+        max_rown: Keep rows where ``rown <= max_rown`` (1 = latest only).
+    """
+    where_parts = [f"rown <= {max_rown}"]
+    if tickers:
+        tickers_str = "','".join(tickers)
+        where_parts.append(f"ticker IN ('{tickers_str}')")
+    query = f"""
+        SELECT {",".join(_STANDARD_PERF_COLS)}
+        FROM {di.perf_tbl}
+        WHERE {" AND ".join(where_parts)}
+        ORDER BY description ASC
+    """
+    df = get_conn().execute(query).df()
+    if "date" in df.columns:
+        df["date"] = pd.to_datetime(df["date"], format="%Y-%m-%d")
+    df = df.replace([np.inf, -np.inf], np.nan)
+    return df
+
+
+@st.cache_data(ttl=300)
+def load_prices(tickers: tuple = None) -> pd.DataFrame:
+    """Load price history for all or specific tickers."""
+    where = ""
+    if tickers:
+        tickers_str = "','".join(tickers)
+        where = f"WHERE ticker IN ('{tickers_str}')"
+    query = f"""
+        SELECT ticker, date, price, description, fund_type
+        FROM {di.px_tbl}
+        {where}
+        ORDER BY date ASC
+    """
+    df = get_conn().execute(query).df()
+    if "date" in df.columns:
+        df["date"] = pd.to_datetime(df["date"], format="%Y-%m-%d")
+    return df
+
+
 def calculate_annual_cagr(total_percent_change: float, num_months: float):
     # Convert total percent change to annual CAGR
     monthly_cagr = (
@@ -254,3 +311,70 @@ def create_perf_table(df):
     )
 
     return styled_df_perf
+
+
+# ── Shared sidebar / filter helpers ──
+
+
+def fund_type_sidebar(default: list[str] | None = None, key: str | None = None) -> list[str]:
+    """Render the fund-type multiselect inline and return the selection."""
+    if default is None:
+        default = ["eq"]
+    return st.multiselect(
+        "Fund types",
+        options=config.FUND_TYPE_OPTIONS,
+        default=default,
+        key=key,
+    )
+
+
+def filter_by_fund_type(df: pd.DataFrame, fund_types: list[str]) -> pd.DataFrame:
+    """Filter a DataFrame by fund_type using prefix matching. Returns a copy."""
+    if fund_types:
+        pattern = "^(" + "|".join(fund_types) + ")"
+        return df[df["fund_type"].str.match(pattern)].copy()
+    return df.copy()
+
+
+@cache_data(ttl=300)
+def get_sparkline_data(tickers: tuple, days: int = 90) -> dict:
+    """Return {ticker: [price_list]} for the last `days` trading days.
+
+    The price lists are normalised to start at 100 so sparklines are
+    comparable across instruments with different price levels.
+    """
+    if not tickers:
+        return {}
+    tickers_str = "','".join(tickers)
+    query = f"""
+        SELECT ticker, date, price
+        FROM {di.px_tbl}
+        WHERE ticker IN ('{tickers_str}')
+        ORDER BY date ASC
+    """
+    df = get_conn().execute(query).df()
+    if df.empty:
+        return {}
+
+    result = {}
+    for ticker, group in df.groupby("ticker"):
+        tail = group.tail(days)["price"].dropna().tolist()
+        if tail:
+            base = tail[0] if tail[0] != 0 else 1
+            result[ticker] = [round(p / base * 100, 2) for p in tail]
+    return result
+
+
+def add_sparkline_column(
+    df: pd.DataFrame,
+    col_name: str = "Price (90d)",
+    days: int = 90,
+) -> pd.DataFrame:
+    """Enrich a DataFrame with a sparkline column containing normalised price lists."""
+    tickers = tuple(df["ticker"].unique())
+    sparklines = get_sparkline_data(tickers, days=days)
+    # Use [] for missing tickers so pyarrow encodes this as list<float64>, not string
+    df[col_name] = df["ticker"].map(sparklines).apply(
+        lambda x: x if isinstance(x, list) else []
+    )
+    return df

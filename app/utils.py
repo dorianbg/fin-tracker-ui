@@ -27,6 +27,51 @@ from data import (
 )
 
 
+# ── Shared heatmap helpers ──
+
+
+def robust_color_range(
+    values: np.ndarray, floor: float = 10.0, cap: float = 50.0
+) -> float:
+    """Symmetric color range from data, filtering NaN/Inf.
+
+    Uses 75th percentile of absolute values, clamped to [floor, cap]."""
+    flat = values.flatten()
+    finite = flat[np.isfinite(flat)]
+    if len(finite) == 0:
+        return 20.0
+    q = float(pd.Series(np.abs(finite)).quantile(0.75))
+    return min(max(q, floor), cap)
+
+
+def make_performance_heatmap(
+    data: pd.DataFrame,
+    height_per_row: int = 28,
+    floor: float = 10.0,
+    cap: float = 50.0,
+    color_label: str = "Return %",
+    text_format: str = ".1f",
+    color_scale: str = "RdYlGn",
+):
+    """Create a diverging heatmap with robust symmetric color scaling."""
+    for col in data.columns:
+        data[col] = pd.to_numeric(data[col], errors="coerce")
+    scale = robust_color_range(data.values, floor, cap)
+    fig = px.imshow(
+        data,
+        text_auto=text_format,
+        aspect="auto",
+        color_continuous_scale=color_scale,
+        zmin=-scale,
+        zmax=scale,
+    )
+    fig.update_layout(
+        height=max(300, len(data) * height_per_row + 100),
+        coloraxis_colorbar_title=color_label,
+    )
+    return fig
+
+
 # Function to deduct datetime representations of time intervals from a given datetime
 def deduct_datetime_interval(base_datetime, interval):
     if not interval:  # Skip empty strings

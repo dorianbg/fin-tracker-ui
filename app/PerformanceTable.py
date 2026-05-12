@@ -10,6 +10,7 @@ import streamlit as st
 import duckdb_importer as di
 from data import (
     get_data,
+    get_conn,
     create_query,
     add_sparkline_column,
 )
@@ -66,7 +67,16 @@ def run_import_one_off():
 run_import_one_off()
 
 
-def build_action_list(df: pd.DataFrame) -> pd.DataFrame:
+ACTION_PRIORITY = {
+    "Buy Watch": 1,
+    "Breakout Watch": 2,
+    "Trim Watch": 3,
+    "Short Monitor": 4,
+    "Capitulation Watch": 5,
+}
+
+
+def build_signal_candidates(df: pd.DataFrame) -> pd.DataFrame:
     required = {"description", "ticker", "r_1d", "r_1w", "r_1mo", "vol_1mo", "vol_1y"}
     trend_cols = {"ma_21", "ma_63", "ma_126", "ma_252", "drawdown_52w"}
     if df.empty or not required.issubset(df.columns) or not trend_cols.issubset(df.columns):
@@ -185,17 +195,70 @@ def build_action_list(df: pd.DataFrame) -> pd.DataFrame:
         return pd.DataFrame()
 
     action_df = pd.concat(actions, ignore_index=True)
-    action_priority = {
-        "Buy Watch": 1,
-        "Breakout Watch": 2,
-        "Trim Watch": 3,
-        "Short Monitor": 4,
-        "Capitulation Watch": 5,
-    }
-    action_df["action_priority"] = action_df["Action"].map(action_priority)
+    action_df["action_priority"] = action_df["Action"].map(ACTION_PRIORITY)
     action_df = action_df.sort_values(
         ["action_priority", "Score"], ascending=[True, False]
     )
+    return action_df
+
+
+def build_action_list(df: pd.DataFrame) -> pd.DataFrame:
+    action_df = build_signal_candidates(df)
+    if action_df.empty:
+        return pd.DataFrame()
+
+    action_df["Decision"] = action_df["Action"]
+    action_df["Entry Rule"] = ""
+    action_df["Invalidation"] = ""
+    action_df["Exit Plan"] = ""
+    action_df["Review Trigger"] = ""
+    action_df["Backtest Edge"] = ""
+
+    buy_mask = action_df["Action"] == "Buy Watch"
+    buy_confirmed = buy_mask & (action_df["r_1d"] > 0) & (action_df["r_1w"] > 0) & (action_df["ma_63"] > -3)
+    action_df.loc[buy_mask, "Decision"] = "Wait For Reclaim"
+    action_df.loc[buy_confirmed, "Decision"] = "Buy Candidate"
+    action_df.loc[buy_mask, "Entry Rule"] = "Buy only after bounce holds and MA63 remains intact"
+    action_df.loc[buy_mask, "Invalidation"] = "MA63 < -3 or drawdown <= -25"
+    action_df.loc[buy_mask, "Exit Plan"] = "Failed bounce timeout, MA63 stop, hard drawdown stop"
+    action_df.loc[buy_mask, "Review Trigger"] = "Recheck if MA21 is not reclaimed within 10 trading days"
+    action_df.loc[buy_mask, "Backtest Edge"] = "Simulated as long entry below"
+
+    breakout_mask = action_df["Action"] == "Breakout Watch"
+    breakout_confirmed = breakout_mask & (action_df["ma_21"] > 0) & (action_df["ma_63"] > 0)
+    action_df.loc[breakout_mask, "Decision"] = "Wait For Confirmation"
+    action_df.loc[breakout_confirmed, "Decision"] = "Buy Candidate"
+    action_df.loc[breakout_mask, "Entry Rule"] = "Buy only while MA21 and MA63 stay positive"
+    action_df.loc[breakout_mask, "Invalidation"] = "MA63 < -3 or failed upside follow-through"
+    action_df.loc[breakout_mask, "Exit Plan"] = "MA63 trend stop or profit protection after MA21 loss"
+    action_df.loc[breakout_mask, "Review Trigger"] = "Recheck on MA21 loss after an 8%+ move"
+    action_df.loc[breakout_mask, "Backtest Edge"] = "Simulated as long entry below"
+
+    capitulation_mask = action_df["Action"] == "Capitulation Watch"
+    capitulation_bounce = capitulation_mask & ((action_df["r_1d"] > 0) | (action_df["r_1w"] > 0))
+    action_df.loc[capitulation_mask, "Decision"] = "Avoid Until Bounce"
+    action_df.loc[capitulation_bounce, "Decision"] = "Speculative Bounce Candidate"
+    action_df.loc[capitulation_mask, "Entry Rule"] = "Buy only after positive 1D/1W bounce confirmation"
+    action_df.loc[capitulation_mask, "Invalidation"] = "No bounce after timeout or drawdown <= -25"
+    action_df.loc[capitulation_mask, "Exit Plan"] = "Quick no-bounce exit or hard drawdown stop"
+    action_df.loc[capitulation_mask, "Review Trigger"] = "Treat as tactical until MA21 recovers"
+    action_df.loc[capitulation_mask, "Backtest Edge"] = "Simulated as long entry below"
+
+    trim_mask = action_df["Action"] == "Trim Watch"
+    action_df.loc[trim_mask, "Decision"] = "Trim Candidate"
+    action_df.loc[trim_mask, "Entry Rule"] = "Do not add; review existing position size"
+    action_df.loc[trim_mask, "Invalidation"] = "Relative strength recovers vs benchmark"
+    action_df.loc[trim_mask, "Exit Plan"] = "Trim if weakness persists or MA63 is lost"
+    action_df.loc[trim_mask, "Review Trigger"] = "Check 1W/1M relative strength vs benchmark"
+    action_df.loc[trim_mask, "Backtest Edge"] = "Risk overlay, not long-entry simulated"
+
+    short_mask = action_df["Action"] == "Short Monitor"
+    action_df.loc[short_mask, "Decision"] = "Risk Review"
+    action_df.loc[short_mask, "Entry Rule"] = "Do not add longs while MA21 and MA63 are broken"
+    action_df.loc[short_mask, "Invalidation"] = "MA21/MA63 recovery"
+    action_df.loc[short_mask, "Exit Plan"] = "Reduce/hedge if breakdown extends below MA126"
+    action_df.loc[short_mask, "Review Trigger"] = "Watch failed bounces and stop-loss levels"
+    action_df.loc[short_mask, "Backtest Edge"] = "Risk overlay, not long-entry simulated"
 
     output_cols = {
         "description": "Instrument",
@@ -210,14 +273,31 @@ def build_action_list(df: pd.DataFrame) -> pd.DataFrame:
         "drawdown_52w": "Drawdown",
         "vol_ratio": "Vol Ratio",
     }
-    action_df = action_df[["Action", *output_cols.keys(), "Why", "Score"]].rename(
-        columns=output_cols
-    )
+    action_df = action_df[
+        [
+            "Decision",
+            "Action",
+            *output_cols.keys(),
+            "Entry Rule",
+            "Invalidation",
+            "Exit Plan",
+            "Review Trigger",
+            "Backtest Edge",
+            "Why",
+            "Score",
+        ]
+    ].rename(columns=output_cols)
     return action_df[
         [
+            "Decision",
             "Action",
             "Instrument",
             "Ticker",
+            "Entry Rule",
+            "Invalidation",
+            "Exit Plan",
+            "Review Trigger",
+            "Backtest Edge",
             "Why",
             "Score",
             "1D",
@@ -244,7 +324,7 @@ def render_today_action_list(df: pd.DataFrame):
         st.info("No action-list candidates for the current Performance filters.")
         return
 
-    counts = action_df["Action"].value_counts()
+    counts = action_df["Decision"].value_counts()
     metric_cols = st.columns(len(counts))
     for metric_col, (action, count) in zip(metric_cols, counts.items(), strict=False):
         with metric_col:
@@ -254,7 +334,7 @@ def render_today_action_list(df: pd.DataFrame):
     action_options = list(action_df["Action"].drop_duplicates())
     with control_col1:
         selected_actions = st.multiselect(
-            "Action filter",
+            "Signal filter",
             options=action_options,
             default=action_options,
         )
@@ -299,6 +379,297 @@ def render_today_action_list(df: pd.DataFrame):
     )
 
 
+@st.cache_data(ttl=300)
+def load_signal_backtest_data(fund_types: tuple[str, ...], years: int) -> pd.DataFrame:
+    start_date = datetime.date.today() - datetime.timedelta(days=365 * years)
+    perf_df = get_data(
+        query=create_query(
+            table=di.perf_tbl,
+            start_date=start_date,
+            vol_adjust=False,
+            show_returns=True,
+            returns_cols=di.selectable_returns,
+            fund_types=list(fund_types),
+            get_perf_hist=True,
+        ),
+    )
+    if perf_df.empty:
+        return pd.DataFrame()
+
+    tickers = tuple(sorted({*perf_df["ticker"].dropna().unique(), DEFAULT_BENCHMARK}))
+    if not tickers:
+        return pd.DataFrame()
+
+    tickers_str = "','".join(tickers)
+    price_df = get_conn().execute(
+        f"""
+        SELECT ticker, date, price
+        FROM {di.px_tbl}
+        WHERE ticker IN ('{tickers_str}')
+          AND date >= '{start_date.isoformat()}'
+        ORDER BY ticker, date
+        """
+    ).df()
+    if price_df.empty:
+        return pd.DataFrame()
+
+    price_df["date"] = pd.to_datetime(price_df["date"], format="%Y-%m-%d")
+    return perf_df.merge(
+        price_df,
+        on=["ticker", "date"],
+        how="left",
+    )
+
+
+def simulate_signal_trades(
+    hist_df: pd.DataFrame,
+    signal_name: str,
+    max_hold_days: int,
+    failed_bounce_days: int,
+) -> pd.DataFrame:
+    signal_df = build_signal_candidates(hist_df)
+    if signal_df.empty:
+        return pd.DataFrame()
+
+    signal_df = signal_df[signal_df["Action"] == signal_name].copy()
+    if signal_df.empty:
+        return pd.DataFrame()
+
+    entries = signal_df.sort_values(["date", "Score"], ascending=[True, False])
+    data_by_ticker = {
+        ticker: group.sort_values("date").reset_index(drop=True)
+        for ticker, group in hist_df.dropna(subset=["price"]).groupby("ticker")
+    }
+    benchmark_df = data_by_ticker.get(DEFAULT_BENCHMARK)
+    open_until_by_ticker = {}
+    trades = []
+
+    def benchmark_return(entry_date, exit_date) -> float:
+        if benchmark_df is None or benchmark_df.empty:
+            return np.nan
+        bm_entry = benchmark_df[benchmark_df["date"] >= entry_date].head(1)
+        bm_exit = benchmark_df[benchmark_df["date"] >= exit_date].head(1)
+        if bm_entry.empty or bm_exit.empty:
+            return np.nan
+        bm_entry_price = bm_entry.iloc[0]["price"]
+        bm_exit_price = bm_exit.iloc[0]["price"]
+        if pd.isna(bm_entry_price) or pd.isna(bm_exit_price) or bm_entry_price <= 0:
+            return np.nan
+        return (bm_exit_price / bm_entry_price - 1) * 100
+
+    for entry in entries.itertuples(index=False):
+        ticker = entry.ticker
+        entry_date = entry.date
+        if ticker not in data_by_ticker:
+            continue
+        if ticker in open_until_by_ticker and entry_date <= open_until_by_ticker[ticker]:
+            continue
+
+        ticker_df = data_by_ticker[ticker]
+        entry_matches = ticker_df.index[ticker_df["date"] == entry_date].tolist()
+        if not entry_matches:
+            continue
+        signal_idx = entry_matches[0]
+        entry_idx = signal_idx + 1
+        if entry_idx >= len(ticker_df):
+            continue
+        entry_row = ticker_df.iloc[entry_idx]
+        entry_price = entry_row["price"]
+        if pd.isna(entry_price) or entry_price <= 0:
+            continue
+
+        exit_row = None
+        exit_reason = "Max hold"
+        for hold_days, (_, row) in enumerate(
+            ticker_df.iloc[entry_idx + 1 : entry_idx + max_hold_days + 1].iterrows(),
+            start=1,
+        ):
+            current_return = (row["price"] / entry_price - 1) * 100
+            if row["drawdown_52w"] <= -25:
+                exit_row = row
+                exit_reason = "Hard drawdown stop"
+                break
+            if signal_name == "Buy Watch" and hold_days >= failed_bounce_days and row["ma_21"] < 0:
+                exit_row = row
+                exit_reason = "Failed bounce"
+                break
+            if signal_name in {"Buy Watch", "Breakout Watch"} and row["ma_63"] < -3:
+                exit_row = row
+                exit_reason = "MA63 trend stop"
+                break
+            if signal_name == "Breakout Watch" and current_return > 8 and row["ma_21"] < 0:
+                exit_row = row
+                exit_reason = "Profit protection"
+                break
+            if signal_name == "Capitulation Watch" and hold_days >= failed_bounce_days and row["r_1w"] <= 0:
+                exit_row = row
+                exit_reason = "No bounce confirmation"
+                break
+            exit_row = row
+
+        if exit_row is None or pd.isna(exit_row["price"]):
+            continue
+
+        trade_return = (exit_row["price"] / entry_price - 1) * 100
+        bm_return = benchmark_return(entry_row["date"], exit_row["date"])
+        trades.append(
+            {
+                "Signal": signal_name,
+                "Signal Date": entry_date,
+                "Entry Date": entry_row["date"],
+                "Exit Date": exit_row["date"],
+                "Ticker": ticker,
+                "Instrument": entry.description,
+                "Entry Price": entry_price,
+                "Exit Price": exit_row["price"],
+                "Return": trade_return,
+                "Benchmark Return": bm_return,
+                "Relative Return": trade_return - bm_return if not pd.isna(bm_return) else np.nan,
+                "Hold Days": (exit_row["date"] - entry_row["date"]).days,
+                "Exit Reason": exit_reason,
+                "Entry Score": entry.Score,
+            }
+        )
+        open_until_by_ticker[ticker] = exit_row["date"]
+
+    return pd.DataFrame(trades)
+
+
+def render_signal_backtest(fund_types: list[str]):
+    st.markdown("---")
+    st.header("Trade Simulation Backtest")
+    st.caption(
+        "Simulates historical signal entries with trigger-based exits. Max hold is only a safety cap, not the main exit rule."
+    )
+
+    entry_signals = ["Buy Watch", "Breakout Watch", "Capitulation Watch"]
+    control_col1, control_col2, control_col3, control_col4 = st.columns([2, 1, 1, 1])
+    with control_col1:
+        selected_signal = st.selectbox(
+            "Signal",
+            options=entry_signals,
+            key="today_backtest_signal",
+        )
+    with control_col2:
+        failed_bounce_days = st.selectbox(
+            "Bounce timeout",
+            options=[5, 10, 15, 21],
+            index=1,
+            format_func=lambda days: f"{days} trading days",
+            key="today_backtest_failed_bounce_days",
+        )
+    with control_col3:
+        max_hold_days = st.selectbox(
+            "Max hold cap",
+            options=[63, 126, 252],
+            index=1,
+            format_func=lambda days: f"{days} trading days",
+            key="today_backtest_max_hold_days",
+        )
+    with control_col4:
+        years = st.selectbox(
+            "History",
+            options=[1, 2, 3, 5],
+            index=2,
+            format_func=lambda y: f"{y}y",
+            key="today_backtest_years",
+        )
+
+    hist_df = load_signal_backtest_data(tuple(fund_types), years)
+    trades = simulate_signal_trades(
+        hist_df,
+        selected_signal,
+        max_hold_days=max_hold_days,
+        failed_bounce_days=failed_bounce_days,
+    )
+    if trades.empty:
+        st.info("No completed historical trades found for this signal and universe.")
+        return
+
+    metric_values = {
+        "Trades": len(trades),
+        "Win rate": (trades["Return"] > 0).mean() * 100,
+        "Avg return": trades["Return"].mean(),
+        "Avg rel": trades["Relative Return"].mean(),
+        "Median return": trades["Return"].median(),
+        "Avg hold": trades["Hold Days"].mean(),
+        "Worst": trades["Return"].min(),
+    }
+    metric_cols = st.columns(len(metric_values))
+    for metric_col, (label, value) in zip(metric_cols, metric_values.items(), strict=False):
+        with metric_col:
+            if label == "Trades":
+                st.metric(label, int(value))
+            elif label == "Avg hold":
+                st.metric(label, f"{value:.0f}d")
+            else:
+                st.metric(label, f"{value:+.2f}%")
+
+    reason_counts = trades["Exit Reason"].value_counts().reset_index()
+    reason_counts.columns = ["Exit Reason", "Count"]
+    fig_reasons = px.bar(
+        reason_counts,
+        x="Count",
+        y="Exit Reason",
+        orientation="h",
+        title="Exit Reasons",
+    )
+    fig_reasons.update_layout(height=max(250, len(reason_counts) * 45))
+    st.plotly_chart(fig_reasons, use_container_width=True)
+
+    recent = trades.sort_values("Entry Date", ascending=False).head(50).copy()
+    recent["ticker"] = recent["Ticker"]
+    add_sparkline_column(recent)
+    add_sparkline_column(recent, col_name="Price (1y)", days=365)
+    cols = [
+        "Signal Date",
+        "Entry Date",
+        "Exit Date",
+        "Instrument",
+        "Price (90d)",
+        "Price (1y)",
+        "Ticker",
+        "Entry Score",
+        "Return",
+        "Benchmark Return",
+        "Relative Return",
+        "Hold Days",
+        "Exit Reason",
+    ]
+    cols = [c for c in cols if c in recent.columns]
+    numeric_cols = [
+        c
+        for c in cols
+        if c
+        not in {
+            "Signal Date",
+            "Entry Date",
+            "Exit Date",
+            "Instrument",
+            "Ticker",
+            "Price (90d)",
+            "Price (1y)",
+            "Exit Reason",
+        }
+    ]
+    st.dataframe(
+        recent[cols].style.format(subset=numeric_cols, formatter="{:+.2f}"),
+        hide_index=True,
+        height=450,
+        column_config={
+            "Price (90d)": st.column_config.LineChartColumn("Price (90d)", width="small"),
+            "Price (1y)": st.column_config.LineChartColumn("Price (1y)", width="small"),
+            "Return": st.column_config.NumberColumn("Return", format="%.2f%%", width="small"),
+            "Benchmark Return": st.column_config.NumberColumn(
+                "Benchmark Return", format="%.2f%%", width="small"
+            ),
+            "Relative Return": st.column_config.NumberColumn(
+                "Relative Return", format="%.2f%%", width="small"
+            ),
+        },
+    )
+
+
 def render_today_tab():
     with st.expander("Universe", expanded=False):
         instrument_categories = st.multiselect(
@@ -318,6 +689,7 @@ def render_today_tab():
         ),
     )
     render_today_action_list(df)
+    render_signal_backtest(instrument_categories)
 
 
 def render_action_screens(df: pd.DataFrame):
