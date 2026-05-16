@@ -1,0 +1,101 @@
+ticker,name,ccy,listing,domicile,country,sector,yfinance_symbol,ibkr_symbol,ibkr_primary_exchange,ibkr_currency
+III,3i,GBP,LSE_GBP,UK,UK,Financial services,III.L,III,LSE,GBP
+ADM,Admiral Group,GBP,LSE_GBP,UK,UK,Insurance,ADM.L,ADM,LSE,GBP
+AAF,Airtel Africa,GBP,LSE_GBP,UK,UK,Telecommunications services,AAF.L,AAF,LSE,GBP
+ALW,Alliance Witan,GBP,LSE_GBP,UK,UK,Investment Trusts,ALW.L,ALW,LSE,GBP
+AAL,Anglo American plc,GBP,LSE_GBP,UK,UK,Mining,AAL.L,AAL,LSE,GBP
+ANTO,Antofagasta plc,GBP,LSE_GBP,UK,UK,Mining,ANTO.L,ANTO,LSE,GBP
+ABF,Associated British Foods,GBP,LSE_GBP,UK,UK,Food & tobacco,ABF.L,ABF,LSE,GBP
+AZN,AstraZeneca,GBP,LSE_GBP,UK,UK,Pharmaceuticals & biotechnology,AZN.L,AZN,LSE,GBP
+AUTO,Autotrader Group,GBP,LSE_GBP,UK,UK,Media,AUTO.L,AUTO,LSE,GBP
+AV,Aviva,GBP,LSE_GBP,UK,UK,Life insurance,AV.L,AV,LSE,GBP
+BAB,Babcock International,GBP,LSE_GBP,UK,UK,Aerospace & defence,BAB.L,BAB,LSE,GBP
+BA,BAE Systems,GBP,LSE_GBP,UK,UK,Aerospace & defence,BA.L,BA,LSE,GBP
+BARC,Barclays,GBP,LSE_GBP,UK,UK,Banks,BARC.L,BARC,LSE,GBP
+BTRW,Barratt Redrow,GBP,LSE_GBP,UK,UK,Household goods & home construction,BTRW.L,BTRW,LSE,GBP
+BEZ,Beazley,GBP,LSE_GBP,UK,UK,Insurance,BEZ.L,BEZ,LSE,GBP
+BKG,Berkeley Group Holdings,GBP,LSE_GBP,UK,UK,Household goods & home construction,BKG.L,BKG,LSE,GBP
+BP,BP,GBP,LSE_GBP,UK,UK,Oil & gas producers,BP.L,BP,LSE,GBP
+BATS,British American Tobacco,GBP,LSE_GBP,UK,UK,Tobacco,BATS.L,BATS,LSE,GBP
+BLND,British Land,GBP,LSE_GBP,UK,UK,Real estate,BLND.L,BLND,LSE,GBP
+BT.A,BT Group,GBP,LSE_GBP,UK,UK,Telecommunications services,BT-A.L,BT.A,LSE,GBP
+BNZL,Bunzl,GBP,LSE_GBP,UK,UK,Support services,BNZL.L,BNZL,LSE,GBP
+BRBY,Burberry Group,GBP,LSE_GBP,UK,UK,Personal goods,BRBY.L,BRBY,LSE,GBP
+CNA,Centrica,GBP,LSE_GBP,UK,UK,Multiline utilities,CNA.L,CNA,LSE,GBP
+CCEP,Coca-Cola Europacific Partners,GBP,LSE_GBP,UK,UK,Beverages,CCEP.L,CCEP,LSE,GBP
+CCH,Coca-Cola HBC,GBP,LSE_GBP,UK,UK,Beverages,CCH.L,CCH,LSE,GBP
+CPG,Compass Group,GBP,LSE_GBP,UK,UK,Support services,CPG.L,CPG,LSE,GBP
+CTEC,Convatec,GBP,LSE_GBP,UK,UK,Health care equipment & supplies,CTEC.L,CTEC,LSE,GBP
+CRDA,Croda International,GBP,LSE_GBP,UK,UK,Chemicals,CRDA.L,CRDA,LSE,GBP
+DCC,DCC plc,GBP,LSE_GBP,UK,UK,Support services,DCC.L,DCC,LSE,GBP
+DGE,Diageo,GBP,LSE_GBP,UK,UK,Beverages,DGE.L,DGE,LSE,GBP
+DPLM,Diploma,GBP,LSE_GBP,UK,UK,Industrial Support services,DPLM.L,DPLM,LSE,GBP
+EDV,Endeavour Mining,GBP,LSE_GBP,UK,UK,Mining,EDV.L,EDV,LSE,GBP
+ENT,Entain,GBP,LSE_GBP,UK,UK,Travel & leisure,ENT.L,ENT,LSE,GBP
+EXPN,Experian,GBP,LSE_GBP,UK,UK,Support services,EXPN.L,EXPN,LSE,GBP
+FCIT,F & C Investment Trust,GBP,LSE_GBP,UK,UK,Collective investments,FCIT.L,FCIT,LSE,GBP
+FRES,Fresnillo plc,GBP,LSE_GBP,UK,UK,Mining,FRES.L,FRES,LSE,GBP
+GAW,Games Workshop,GBP,LSE_GBP,UK,UK,Leisure Goods,GAW.L,GAW,LSE,GBP
+GLEN,Glencore,GBP,LSE_GBP,UK,UK,Mining,GLEN.L,GLEN,LSE,GBP
+GSK,GSK plc,GBP,LSE_GBP,UK,UK,Pharmaceuticals & biotechnology,GSK.L,GSK,LSE,GBP
+HLN,Haleon,GBP,LSE_GBP,UK,UK,Pharmaceuticals & biotechnology,HLN.L,HLN,LSE,GBP
+HLMA,Halma plc,GBP,LSE_GBP,UK,UK,Electronic equipment & parts,HLMA.L,HLMA,LSE,GBP
+HSX,Hiscox,GBP,LSE_GBP,UK,UK,Non-life Insurance,HSX.L,HSX,LSE,GBP
+HWDN,Howdens Joinery,GBP,LSE_GBP,UK,UK,Homebuilding & construction supplies,HWDN.L,HWDN,LSE,GBP
+HSBA,HSBC,GBP,LSE_GBP,UK,UK,Banks,HSBA.L,HSBA,LSE,GBP
+ICG,ICG,GBP,LSE_GBP,UK,UK,Financial services,ICG.L,ICG,LSE,GBP
+IGG,IG Group,GBP,LSE_GBP,UK,UK,Financial services,IGG.L,IGG,LSE,GBP
+IHG,IHG Hotels & Resorts,GBP,LSE_GBP,UK,UK,Travel & leisure,IHG.L,IHG,LSE,GBP
+IMI,IMI,GBP,LSE_GBP,UK,UK,Industrial engineering,IMI.L,IMI,LSE,GBP
+IMB,Imperial Brands,GBP,LSE_GBP,UK,UK,Tobacco,IMB.L,IMB,LSE,GBP
+INF,Informa,GBP,LSE_GBP,UK,UK,Media,INF.L,INF,LSE,GBP
+IAG,International Airlines Group,GBP,LSE_GBP,UK,UK,Travel & leisure,IAG.L,IAG,LSE,GBP
+ITRK,Intertek,GBP,LSE_GBP,UK,UK,Support services,ITRK.L,ITRK,LSE,GBP
+JD,JD Sports,GBP,LSE_GBP,UK,UK,General retailers,JD.L,JD,LSE,GBP
+BGEO,Lion Finance Group,GBP,LSE_GBP,UK,UK,Banking Services,BGEO.L,BGEO,LSE,GBP
+KGF,Kingfisher plc,GBP,LSE_GBP,UK,UK,Retailers,KGF.L,KGF,LSE,GBP
+LAND,Land Securities,GBP,LSE_GBP,UK,UK,Real estate investment trusts,LAND.L,LAND,LSE,GBP
+LGEN,Legal & General,GBP,LSE_GBP,UK,UK,Life insurance,LGEN.L,LGEN,LSE,GBP
+LLOY,Lloyds Banking Group,GBP,LSE_GBP,UK,UK,Banks,LLOY.L,LLOY,LSE,GBP
+LMP,LondonMetric Property,GBP,LSE_GBP,UK,UK,Real Estate Investment Trusts,LMP.L,LMP,LSE,GBP
+LSEG,London Stock Exchange Group,GBP,LSE_GBP,UK,UK,Financial services,LSEG.L,LSEG,LSE,GBP
+MNG,M&G,GBP,LSE_GBP,UK,UK,Financial services,MNG.L,MNG,LSE,GBP
+MKS,Marks & Spencer,GBP,LSE_GBP,UK,UK,Food & drug retailing,MKS.L,MKS,LSE,GBP
+MRO,Melrose Industries,GBP,LSE_GBP,UK,UK,Aerospace & defence,MRO.L,MRO,LSE,GBP
+MTLN,Metlen Energy & Metals,GBP,LSE_GBP,UK,UK,Multiline utilities,MTLN.L,METLEN,LSE,GBP
+MNDI,Mondi,GBP,LSE_GBP,UK,UK,Containers & packaging,MNDI.L,MNDI,LSE,GBP
+NG,National Grid plc,GBP,LSE_GBP,UK,UK,Multiline utilities,NG.L,NG,LSE,GBP
+NWG,NatWest Group,GBP,LSE_GBP,UK,UK,Banks,NWG.L,NWG,LSE,GBP
+NXT,Next plc,GBP,LSE_GBP,UK,UK,General retailers,NXT.L,NXT,LSE,GBP
+PSON,Pearson plc,GBP,LSE_GBP,UK,UK,Media,PSON.L,PSON,LSE,GBP
+PSH,Pershing Square Holdings,USD,LSE_USD,GG,GG,Financial services,PSH.L,PSH,LSE,USD
+PSN,Persimmon,GBP,LSE_GBP,UK,UK,Household goods & home construction,PSN.L,PSN,LSE,GBP
+PCT,Polar Capital Technology Trust,GBP,LSE_GBP,UK,UK,Investment trusts,PCT.L,PCT,LSE,GBP
+PRU,Prudential plc,GBP,LSE_GBP,UK,UK,Life insurance,PRU.L,PRU,LSE,GBP
+RKT,Reckitt,GBP,LSE_GBP,UK,UK,Household goods & home construction,RKT.L,RKT,LSE,GBP
+REL,RELX,GBP,LSE_GBP,UK,UK,Media,REL.L,REL,LSE,GBP
+RTO,Rentokil Initial,GBP,LSE_GBP,UK,UK,Support services,RTO.L,RTO,LSE,GBP
+RMV,Rightmove,GBP,LSE_GBP,UK,UK,Media,RMV.L,RMV,LSE,GBP
+RIO,Rio Tinto,GBP,LSE_GBP,UK,UK,Mining,RIO.L,RIO,LSE,GBP
+RR,Rolls-Royce Holdings,GBP,LSE_GBP,UK,UK,Aerospace & defence,RR.L,RR,LSE,GBP
+SGE,Sage Group,GBP,LSE_GBP,UK,UK,Software & computer services,SGE.L,SGE,LSE,GBP
+SBRY,Sainsbury's,GBP,LSE_GBP,UK,UK,Food & drug retailing,SBRY.L,SBRY,LSE,GBP
+SDR,Schroders,GBP,LSE_GBP,UK,UK,Financial services,SDR.L,SDR,LSE,GBP
+SMT,Scottish Mortgage Investment Trust,GBP,LSE_GBP,UK,UK,Collective investments,SMT.L,SMT,LSE,GBP
+SGRO,Segro,GBP,LSE_GBP,UK,UK,Real estate investment trusts,SGRO.L,SGRO,LSE,GBP
+SVT,Severn Trent,GBP,LSE_GBP,UK,UK,Multiline utilities,SVT.L,SVT,LSE,GBP
+SHEL,Shell plc,GBP,LSE_GBP,UK,UK,Oil & gas producers,SHEL.L,SHEL,LSE,GBP
+SMIN,Smiths Group,GBP,LSE_GBP,UK,UK,General industrials,SMIN.L,SMIN,LSE,GBP
+SN,Smith & Nephew,GBP,LSE_GBP,UK,UK,Health care equipment & supplies,SN.L,SN,LSE,GBP
+SPX,Spirax Group,GBP,LSE_GBP,UK,UK,Industrial engineering,SPX.L,SPX,LSE,GBP
+SSE,SSE plc,GBP,LSE_GBP,UK,UK,Electrical utilities & independent power producers,SSE.L,SSE,LSE,GBP
+STAN,Standard Chartered,GBP,LSE_GBP,UK,UK,Banks,STAN.L,STAN,LSE,GBP
+SDLF,Standard Life,GBP,LSE_GBP,UK,UK,Life insurance,SDLF.L,SDLF,LSE,GBP
+STJ,St. James's Place,GBP,LSE_GBP,UK,UK,Financial services,STJ.L,STJ,LSE,GBP
+TSCO,Tesco,GBP,LSE_GBP,UK,UK,Food & drug retailing,TSCO.L,TSCO,LSE,GBP
+BBOX,Tritax Big Box REIT,GBP,LSE_GBP,UK,UK,Real Estate Investment Trusts,BBOX.L,BBOX,LSE,GBP
+ULVR,Unilever,GBP,LSE_GBP,UK,UK,Personal goods,ULVR.L,ULVR,LSE,GBP
+UU,United Utilities,GBP,LSE_GBP,UK,UK,Multiline utilities,UU.L,UU,LSE,GBP
+VOD,Vodafone Group,GBP,LSE_GBP,UK,UK,Mobile telecommunications,VOD.L,VOD,LSE,GBP
+WEIR,Weir Group,GBP,LSE_GBP,UK,UK,Industrial goods and services,WEIR.L,WEIR,LSE,GBP
+WTB,Whitbread,GBP,LSE_GBP,UK,UK,Retail hospitality,WTB.L,WTB,LSE,GBP

@@ -156,7 +156,7 @@ def render():
             labels=dict(color="Avg Return %"),
         )
         fig_theme.update_layout(height=max(450, len(theme_avg) * 32))
-        st.plotly_chart(fig_theme, use_container_width=True)
+        st.plotly_chart(fig_theme, width="stretch")
 
         # ═══════════════════════════════════════════
         # Section 2: Theme Comparison Bar Chart
@@ -188,7 +188,7 @@ def render():
             showlegend=False,
         )
         fig_bar.add_vline(x=0, line_dash="solid", line_color="grey", opacity=0.5)
-        st.plotly_chart(fig_bar, use_container_width=True)
+        st.plotly_chart(fig_bar, width="stretch")
 
         # ═══════════════════════════════════════════
         # Section 3: Individual ETF Breakdown
@@ -217,7 +217,7 @@ def render():
             labels=dict(color="Return %"),
         )
         fig_etf.update_layout(height=max(400, len(etf_heatmap) * 25))
-        st.plotly_chart(fig_etf, use_container_width=True)
+        st.plotly_chart(fig_etf, width="stretch")
 
         # table view with MA and vol data
         st.subheader("Detailed View")
@@ -301,4 +301,4 @@ def render():
             title="Average MA Position by Theme",
         )
         fig_ma.update_layout(height=max(450, len(theme_ma) * 32))
-        st.plotly_chart(fig_ma, use_container_width=True)
+        st.plotly_chart(fig_ma, width="stretch")

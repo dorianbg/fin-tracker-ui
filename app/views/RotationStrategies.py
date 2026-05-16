@@ -587,7 +587,7 @@ def render():
                         zmax=1,
                         title=f"Correlation Matrix ({lookback_label} Lookback)",
                     )
-                    st.plotly_chart(fig_corr, use_container_width=True)
+                    st.plotly_chart(fig_corr, width="stretch")
                 else:
                     st.warning("Insufficient data for correlation.")
             else:
@@ -606,7 +606,7 @@ def render():
         fig_picks.update_layout(
             yaxis=dict(autorange="reversed"), height=max(300, top_n * 40)
         )
-        st.plotly_chart(fig_picks, use_container_width=True)
+        st.plotly_chart(fig_picks, width="stretch")
 
         # ── Backtest Engine ──
         st.header("📅 Backtest Performance")
@@ -847,7 +847,7 @@ def render():
             fig_curve.update_layout(
                 hovermode="x unified", title=f"3-Year Backtest vs {benchmark_ticker}"
             )
-            st.plotly_chart(fig_curve, use_container_width=True)
+            st.plotly_chart(fig_curve, width="stretch")
 
             tot = (strat_vals[-1] / 100 - 1) * 100
             bm = (bench_vals[-1] / 100 - 1) * 100
@@ -866,7 +866,7 @@ def render():
                 st.dataframe(
                     df_hist.style.format({"Rebalance Date": "{:%Y-%m-%d}"}),
                     hide_index=True,
-                    use_container_width=True,
+                    width="stretch",
                     height=400,
                 )
             else:
@@ -897,7 +897,7 @@ def render():
                             "Return": "{:+.2f}%",
                         }
                     ),
-                    use_container_width=True,
+                    width="stretch",
                 )
 
             closed = log_df[log_df["Status"] == "Closed"]
@@ -921,6 +921,6 @@ def render():
                             "Return": "{:+.2f}%",
                         }
                     ),
-                    use_container_width=True,
+                    width="stretch",
                     height=300,
                 )

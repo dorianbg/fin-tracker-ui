@@ -1,12 +1,12 @@
 [project]
-name = "fin-tracker-ui"
+name = "fin-tracker"
 version = "0.1.0"
-description = ""
+description = "Financial instrument tracker — data pipeline + Streamlit dashboard"
 authors = [{ name = "Dorian Beganovic" }]
 requires-python = ">=3.12,<3.13"
 dependencies = [
-    "streamlit",
-    "duckdb",
+    # UI
+    "streamlit>=1.57.0",
     "matplotlib",
     "skfolio",
     "riskfolio-lib>=6.3.1,<7",
@@ -17,13 +17,25 @@ dependencies = [
     "opencv-python>=4.12.0.88",
     "pillow>=11.3.0",
     "camelot-py",
+    "polars>=1.38.1",
+    # Pipeline
+    "yfinance>=0.2.31,<0.3",
+    "sqlalchemy>=2.0.25,<3",
+    "psycopg2-binary>=2.9.9,<3",
+    "pypdf2>=3.0.1,<4",
+    # Shared
+    "duckdb",
+    "pandas>=3.0.0,<4",
+    "numpy",
     "fear-and-greed>=0.4",
+    "ib-insync>=0.9.86,<0.10",
 ]
 
 [dependency-groups]
 dev = [
     "watchdog>=4.0.0,<5",
     "ruff",
+    "pytest>=9.0.3",
 ]
 
 [tool.uv]

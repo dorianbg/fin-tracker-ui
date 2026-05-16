@@ -340,7 +340,7 @@ def render():
             fig.update_traces(textposition="top center")
             fig.add_hline(y=0, line_dash="dash", line_color="grey", opacity=0.3)
             fig.update_layout(height=500)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
 
             # Top ranked by pullback quality score
             st.subheader("🏆 Top Pullback Candidates")
@@ -367,7 +367,7 @@ def render():
             fig_bar.update_layout(
                 yaxis=dict(autorange="reversed"), height=450, showlegend=True
             )
-            st.plotly_chart(fig_bar, use_container_width=True)
+            st.plotly_chart(fig_bar, width="stretch")
 
         # ═══════════════════════════════════════════
         # Section 2: Trend Reversal Candidates
@@ -415,7 +415,7 @@ def render():
                     na_rep="-",
                     precision=2,
                 ),
-                use_container_width=True,
+                width="stretch",
                 height=300,
                 column_config=_sparkline_config(),
             )
@@ -496,7 +496,7 @@ def render():
                     na_rep="-",
                     precision=2,
                 ),
-                use_container_width=True,
+                width="stretch",
                 height=300,
                 column_config=_sparkline_config(),
             )
@@ -848,6 +848,6 @@ def render():
                 fig_rank.update_layout(
                     yaxis=dict(autorange="reversed"), height=450, showlegend=False
                 )
-                st.plotly_chart(fig_rank, use_container_width=True)
+                st.plotly_chart(fig_rank, width="stretch")
         else:
             st.info("No underperforming instruments to rank.")

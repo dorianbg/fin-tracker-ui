@@ -116,7 +116,7 @@ def render():
     )
     fig_ft.update_layout(height=300, showlegend=False)
     fig_ft.update_traces(textposition="outside")
-    st.plotly_chart(fig_ft, use_container_width=True)
+    st.plotly_chart(fig_ft, width="stretch")
 
     # Market breadth: % above each MA
     ma_cols = {"21d": "ma_21", "63d": "ma_63", "126d": "ma_126", "252d": "ma_252"}
@@ -185,7 +185,7 @@ def render():
                     )
                     st.plotly_chart(
                         fig_gain,
-                        use_container_width=True,
+                        width="stretch",
                         key=f"daily_movers_{tab_name}_gainers",
                     )
 
@@ -207,7 +207,7 @@ def render():
                     )
                     st.plotly_chart(
                         fig_lose,
-                        use_container_width=True,
+                        width="stretch",
                         key=f"daily_movers_{tab_name}_losers",
                     )
 

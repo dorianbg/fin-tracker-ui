@@ -143,7 +143,7 @@ def render():
                     yaxis_title="%",
                     margin=dict(t=30, b=30),
                 )
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, width="stretch")
 
                 # Drawdown budget meter
                 actual_dd_budget_used = 0.0
@@ -252,7 +252,7 @@ def render():
                     "Price (1y)", width="small"
                 ),
             },
-            use_container_width=True,
+            width="stretch",
             hide_index=True,
         )
 
@@ -281,7 +281,7 @@ def render():
         )
         st.dataframe(
             trigger_df.style.format({"Target weight": "{:.0%}"}),
-            use_container_width=True,
+            width="stretch",
             hide_index=True,
         )
 
@@ -319,7 +319,7 @@ def render():
                                 "drift_bps": "{:+.0f}",
                             }
                         ),
-                        use_container_width=True,
+                        width="stretch",
                     )
                 else:
                     st.success(f"{bkt.name}: all positions within tolerance.")
@@ -345,7 +345,7 @@ def render():
         log = holdings.load_deployment_log()
         if not log.empty:
             st.subheader("Deployment History")
-            st.dataframe(log, use_container_width=True, hide_index=True)
+            st.dataframe(log, width="stretch", hide_index=True)
         else:
             st.caption("No deployment tranches recorded yet.")
 
@@ -412,7 +412,7 @@ def render():
                 yaxis_tickformat=".0%",
                 height=350,
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
 
         # ── Section 5: Tax / Wrapper Warnings ───────────────────────────────
         st.header("5. Tax & Wrapper Warnings")
@@ -422,7 +422,7 @@ def render():
             if violations:
                 st.warning(f"{len(violations)} wrapper violation(s) detected:")
                 st.dataframe(
-                    pd.DataFrame(violations), use_container_width=True, hide_index=True
+                    pd.DataFrame(violations), width="stretch", hide_index=True
                 )
             else:
                 st.success("No wrapper violations.")

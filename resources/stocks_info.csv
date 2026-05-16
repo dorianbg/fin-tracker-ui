@@ -1,0 +1,933 @@
+MMM,3M,USD,stock,,Industrials
+AOS,A. O. Smith,USD,stock,,Industrials
+ABT,Abbott Laboratories,USD,stock,,Healthcare
+ABBV,AbbVie,USD,stock,,Healthcare
+ACN,Accenture,USD,stock,,Technology
+ADBE,Adobe Inc.,USD,stock,,Technology
+AMD,Advanced Micro Devices,USD,stock,,Technology
+AES,AES Corporation,USD,stock,,Utilities
+AFL,Aflac,USD,stock,,Financials
+A,Agilent Technologies,USD,stock,,Healthcare
+APD,Air Products,USD,stock,,Materials
+ABNB,Airbnb,USD,stock,,Consumer Discretionary
+AKAM,Akamai Technologies,USD,stock,,Technology
+ALB,Albemarle Corporation,USD,stock,,Materials
+ARE,Alexandria Real Estate Equities,USD,stock,,Real Estate
+ALGN,Align Technology,USD,stock,,Healthcare
+ALLE,Allegion,USD,stock,,Industrials
+LNT,Alliant Energy,USD,stock,,Utilities
+ALL,Allstate,USD,stock,,Financials
+GOOGL,Alphabet Inc. (Class A),USD,stock,,Communication
+GOOG,Alphabet Inc. (Class C),USD,stock,,Communication
+MO,Altria,USD,stock,,Consumer Staples
+AMZN,Amazon,USD,stock,,Consumer Discretionary
+AMCR,Amcor,USD,stock,,Materials
+AEE,Ameren,USD,stock,,Utilities
+AEP,American Electric Power,USD,stock,,Utilities
+AXP,American Express,USD,stock,,Financials
+AIG,American International Group,USD,stock,,Financials
+AMT,American Tower,USD,stock,,Real Estate
+AWK,American Water Works,USD,stock,,Utilities
+AMP,Ameriprise Financial,USD,stock,,Financials
+AME,Ametek,USD,stock,,Industrials
+AMGN,Amgen,USD,stock,,Healthcare
+APH,Amphenol,USD,stock,,Technology
+ADI,Analog Devices,USD,stock,,Technology
+AON,Aon plc,USD,stock,,Financials
+APA,APA Corporation,USD,stock,,Energy
+APO,Apollo Global Management,USD,stock,,Financials
+AAPL,Apple Inc.,USD,stock,,Technology
+AMAT,Applied Materials,USD,stock,,Technology
+APP,AppLovin,USD,stock,,Technology
+APTV,Aptiv,USD,stock,,Consumer Discretionary
+ACGL,Arch Capital Group,USD,stock,,Financials
+ADM,Archer Daniels Midland,USD,stock,,Consumer Staples
+ARES,Ares Management,USD,stock,,Financials
+ANET,Arista Networks,USD,stock,,Technology
+AJG,Arthur J. Gallagher & Co.,USD,stock,,Financials
+AIZ,Assurant,USD,stock,,Financials
+T,AT&T,USD,stock,,Communication
+ATO,Atmos Energy,USD,stock,,Utilities
+ADSK,Autodesk,USD,stock,,Technology
+ADP,Automatic Data Processing,USD,stock,,Industrials
+AZO,AutoZone,USD,stock,,Consumer Discretionary
+AVB,AvalonBay Communities,USD,stock,,Real Estate
+AVY,Avery Dennison,USD,stock,,Materials
+AXON,Axon Enterprise,USD,stock,,Industrials
+BKR,Baker Hughes,USD,stock,,Energy
+BALL,Ball Corporation,USD,stock,,Materials
+BAC,Bank of America,USD,stock,,Financials
+BAX,Baxter International,USD,stock,,Healthcare
+BDX,Becton Dickinson,USD,stock,,Healthcare
+BRK-B,Berkshire Hathaway,USD,stock,,Financials
+BBY,Best Buy,USD,stock,,Consumer Discretionary
+TECH,Bio-Techne,USD,stock,,Healthcare
+BIIB,Biogen,USD,stock,,Healthcare
+BLK,BlackRock,USD,stock,,Financials
+BX,Blackstone Inc.,USD,stock,,Financials
+XYZ,"Block, Inc.",USD,stock,,Financials
+BK,BNY Mellon,USD,stock,,Financials
+BA,Boeing,USD,stock,,Industrials
+BKNG,Booking Holdings,USD,stock,,Consumer Discretionary
+BSX,Boston Scientific,USD,stock,,Healthcare
+BMY,Bristol Myers Squibb,USD,stock,,Healthcare
+AVGO,Broadcom,USD,stock,,Technology
+BR,Broadridge Financial Solutions,USD,stock,,Industrials
+BRO,Brown & Brown,USD,stock,,Financials
+BF-B,Brown–Forman,USD,stock,,Consumer Staples
+BLDR,Builders FirstSource,USD,stock,,Industrials
+BG,Bunge Global,USD,stock,,Consumer Staples
+BXP,"BXP, Inc.",USD,stock,,Real Estate
+CHRW,C.H. Robinson,USD,stock,,Industrials
+CDNS,Cadence Design Systems,USD,stock,,Technology
+CPT,Camden Property Trust,USD,stock,,Real Estate
+CPB,Campbell's Company (The),USD,stock,,Consumer Staples
+COF,Capital One,USD,stock,,Financials
+CAH,Cardinal Health,USD,stock,,Healthcare
+CCL,Carnival,USD,stock,,Consumer Discretionary
+CARR,Carrier Global,USD,stock,,Industrials
+CVNA,Carvana,USD,stock,,Consumer Discretionary
+CAT,Caterpillar Inc.,USD,stock,,Industrials
+CBOE,Cboe Global Markets,USD,stock,,Financials
+CBRE,CBRE Group,USD,stock,,Real Estate
+CDW,CDW Corporation,USD,stock,,Technology
+COR,Cencora,USD,stock,,Healthcare
+CNC,Centene Corporation,USD,stock,,Healthcare
+CNP,CenterPoint Energy,USD,stock,,Utilities
+CF,CF Industries,USD,stock,,Materials
+CRL,Charles River Laboratories,USD,stock,,Healthcare
+SCHW,Charles Schwab Corporation,USD,stock,,Financials
+CHTR,Charter Communications,USD,stock,,Communication
+CVX,Chevron Corporation,USD,stock,,Energy
+CMG,Chipotle Mexican Grill,USD,stock,,Consumer Discretionary
+CB,Chubb Limited,USD,stock,,Financials
+CHD,Church & Dwight,USD,stock,,Consumer Staples
+CIEN,Ciena,USD,stock,,Technology
+CI,Cigna,USD,stock,,Healthcare
+CINF,Cincinnati Financial,USD,stock,,Financials
+CTAS,Cintas,USD,stock,,Industrials
+CSCO,Cisco,USD,stock,,Technology
+C,Citigroup,USD,stock,,Financials
+CFG,Citizens Financial Group,USD,stock,,Financials
+CLX,Clorox,USD,stock,,Consumer Staples
+CME,CME Group,USD,stock,,Financials
+CMS,CMS Energy,USD,stock,,Utilities
+KO,Coca-Cola Company (The),USD,stock,,Consumer Staples
+CTSH,Cognizant,USD,stock,,Technology
+COIN,Coinbase,USD,stock,,Financials
+CL,Colgate-Palmolive,USD,stock,,Consumer Staples
+CMCSA,Comcast,USD,stock,,Communication
+FIX,Comfort Systems USA,USD,stock,,Industrials
+CAG,Conagra Brands,USD,stock,,Consumer Staples
+COP,ConocoPhillips,USD,stock,,Energy
+ED,Consolidated Edison,USD,stock,,Utilities
+STZ,Constellation Brands,USD,stock,,Consumer Staples
+CEG,Constellation Energy,USD,stock,,Utilities
+COO,Cooper Companies (The),USD,stock,,Healthcare
+CPRT,Copart,USD,stock,,Industrials
+GLW,Corning Inc.,USD,stock,,Technology
+CPAY,Corpay,USD,stock,,Financials
+CTVA,Corteva,USD,stock,,Materials
+CSGP,CoStar Group,USD,stock,,Real Estate
+COST,Costco,USD,stock,,Consumer Staples
+CTRA,Coterra,USD,stock,,Energy
+CRH,CRH plc,USD,stock,,Materials
+CRWD,CrowdStrike,USD,stock,,Technology
+CCI,Crown Castle,USD,stock,,Real Estate
+CSX,CSX Corporation,USD,stock,,Industrials
+CMI,Cummins,USD,stock,,Industrials
+CVS,CVS Health,USD,stock,,Healthcare
+DHR,Danaher Corporation,USD,stock,,Healthcare
+DRI,Darden Restaurants,USD,stock,,Consumer Discretionary
+DDOG,Datadog,USD,stock,,Technology
+DVA,DaVita,USD,stock,,Healthcare
+DECK,Deckers Brands,USD,stock,,Consumer Discretionary
+DE,Deere & Company,USD,stock,,Industrials
+DELL,Dell Technologies,USD,stock,,Technology
+DAL,Delta Air Lines,USD,stock,,Industrials
+DVN,Devon Energy,USD,stock,,Energy
+DXCM,Dexcom,USD,stock,,Healthcare
+FANG,Diamondback Energy,USD,stock,,Energy
+DLR,Digital Realty,USD,stock,,Real Estate
+DG,Dollar General,USD,stock,,Consumer Staples
+DLTR,Dollar Tree,USD,stock,,Consumer Staples
+D,Dominion Energy,USD,stock,,Utilities
+DPZ,Domino's,USD,stock,,Consumer Discretionary
+DASH,DoorDash,USD,stock,,Consumer Discretionary
+DOV,Dover Corporation,USD,stock,,Industrials
+DOW,Dow Inc.,USD,stock,,Materials
+DHI,D. R. Horton,USD,stock,,Consumer Discretionary
+DTE,DTE Energy,USD,stock,,Utilities
+DUK,Duke Energy,USD,stock,,Utilities
+DD,DuPont,USD,stock,,Materials
+ETN,Eaton Corporation,USD,stock,,Industrials
+EBAY,eBay Inc.,USD,stock,,Consumer Discretionary
+ECL,Ecolab,USD,stock,,Materials
+EIX,Edison International,USD,stock,,Utilities
+EW,Edwards Lifesciences,USD,stock,,Healthcare
+EA,Electronic Arts,USD,stock,,Communication
+ELV,Elevance Health,USD,stock,,Healthcare
+EME,Emcor,USD,stock,,Industrials
+EMR,Emerson Electric,USD,stock,,Industrials
+ETR,Entergy,USD,stock,,Utilities
+EOG,EOG Resources,USD,stock,,Energy
+EPAM,EPAM Systems,USD,stock,,Technology
+EQT,EQT Corporation,USD,stock,,Energy
+EFX,Equifax,USD,stock,,Industrials
+EQIX,Equinix,USD,stock,,Real Estate
+EQR,Equity Residential,USD,stock,,Real Estate
+ERIE,Erie Indemnity,USD,stock,,Financials
+ESS,Essex Property Trust,USD,stock,,Real Estate
+EL,Estée Lauder Companies (The),USD,stock,,Consumer Staples
+EG,Everest Group,USD,stock,,Financials
+EVRG,Evergy,USD,stock,,Utilities
+ES,Eversource Energy,USD,stock,,Utilities
+EXC,Exelon,USD,stock,,Utilities
+EXE,Expand Energy,USD,stock,,Energy
+EXPE,Expedia Group,USD,stock,,Consumer Discretionary
+EXPD,Expeditors International,USD,stock,,Industrials
+EXR,Extra Space Storage,USD,stock,,Real Estate
+XOM,ExxonMobil,USD,stock,,Energy
+FFIV,"F5, Inc.",USD,stock,,Technology
+FDS,FactSet,USD,stock,,Financials
+FICO,Fair Isaac,USD,stock,,Technology
+FAST,Fastenal,USD,stock,,Industrials
+FRT,Federal Realty Investment Trust,USD,stock,,Real Estate
+FDX,FedEx,USD,stock,,Industrials
+FIS,Fidelity National Information Services,USD,stock,,Financials
+FITB,Fifth Third Bancorp,USD,stock,,Financials
+FSLR,First Solar,USD,stock,,Technology
+FE,FirstEnergy,USD,stock,,Utilities
+FISV,Fiserv,USD,stock,,Financials
+F,Ford Motor Company,USD,stock,,Consumer Discretionary
+FTNT,Fortinet,USD,stock,,Technology
+FTV,Fortive,USD,stock,,Industrials
+FOXA,Fox Corporation (Class A),USD,stock,,Communication
+FOX,Fox Corporation (Class B),USD,stock,,Communication
+BEN,Franklin Resources,USD,stock,,Financials
+FCX,Freeport-McMoRan,USD,stock,,Materials
+GRMN,Garmin,USD,stock,,Consumer Discretionary
+IT,Gartner,USD,stock,,Technology
+GE,GE Aerospace,USD,stock,,Industrials
+GEHC,GE HealthCare,USD,stock,,Healthcare
+GEV,GE Vernova,USD,stock,,Industrials
+GEN,Gen Digital,USD,stock,,Technology
+GNRC,Generac,USD,stock,,Industrials
+GD,General Dynamics,USD,stock,,Industrials
+GIS,General Mills,USD,stock,,Consumer Staples
+GM,General Motors,USD,stock,,Consumer Discretionary
+GPC,Genuine Parts Company,USD,stock,,Consumer Discretionary
+GILD,Gilead Sciences,USD,stock,,Healthcare
+GPN,Global Payments,USD,stock,,Financials
+GL,Globe Life,USD,stock,,Financials
+GDDY,GoDaddy,USD,stock,,Technology
+GS,Goldman Sachs,USD,stock,,Financials
+HAL,Halliburton,USD,stock,,Energy
+HIG,Hartford (The),USD,stock,,Financials
+HAS,Hasbro,USD,stock,,Consumer Discretionary
+HCA,HCA Healthcare,USD,stock,,Healthcare
+DOC,Healthpeak Properties,USD,stock,,Real Estate
+HSIC,Henry Schein,USD,stock,,Healthcare
+HSY,Hershey Company (The),USD,stock,,Consumer Staples
+HPE,Hewlett Packard Enterprise,USD,stock,,Technology
+HLT,Hilton Worldwide,USD,stock,,Consumer Discretionary
+HOLX,Hologic,USD,stock,,Healthcare
+HD,Home Depot (The),USD,stock,,Consumer Discretionary
+HON,Honeywell,USD,stock,,Industrials
+HRL,Hormel Foods,USD,stock,,Consumer Staples
+HST,Host Hotels & Resorts,USD,stock,,Real Estate
+HWM,Howmet Aerospace,USD,stock,,Industrials
+HPQ,HP Inc.,USD,stock,,Technology
+HUBB,Hubbell Incorporated,USD,stock,,Industrials
+HUM,Humana,USD,stock,,Healthcare
+HBAN,Huntington Bancshares,USD,stock,,Financials
+HII,Huntington Ingalls Industries,USD,stock,,Industrials
+IBM,IBM,USD,stock,,Technology
+IEX,IDEX Corporation,USD,stock,,Industrials
+IDXX,Idexx Laboratories,USD,stock,,Healthcare
+ITW,Illinois Tool Works,USD,stock,,Industrials
+INCY,Incyte,USD,stock,,Healthcare
+IR,Ingersoll Rand,USD,stock,,Industrials
+PODD,Insulet Corporation,USD,stock,,Healthcare
+INTC,Intel,USD,stock,,Technology
+IBKR,Interactive Brokers,USD,stock,,Financials
+ICE,Intercontinental Exchange,USD,stock,,Financials
+IFF,International Flavors & Fragrances,USD,stock,,Materials
+IP,International Paper,USD,stock,,Materials
+INTU,Intuit,USD,stock,,Technology
+ISRG,Intuitive Surgical,USD,stock,,Healthcare
+IVZ,Invesco,USD,stock,,Financials
+INVH,Invitation Homes,USD,stock,,Real Estate
+IQV,IQVIA,USD,stock,,Healthcare
+IRM,Iron Mountain,USD,stock,,Real Estate
+JBHT,J.B. Hunt,USD,stock,,Industrials
+JBL,Jabil,USD,stock,,Technology
+JKHY,Jack Henry & Associates,USD,stock,,Financials
+J,Jacobs Solutions,USD,stock,,Industrials
+JNJ,Johnson & Johnson,USD,stock,,Healthcare
+JCI,Johnson Controls,USD,stock,,Industrials
+JPM,JPMorgan Chase,USD,stock,,Financials
+KVUE,Kenvue,USD,stock,,Consumer Staples
+KDP,Keurig Dr Pepper,USD,stock,,Consumer Staples
+KEY,KeyCorp,USD,stock,,Financials
+KEYS,Keysight Technologies,USD,stock,,Technology
+KMB,Kimberly-Clark,USD,stock,,Consumer Staples
+KIM,Kimco Realty,USD,stock,,Real Estate
+KMI,Kinder Morgan,USD,stock,,Energy
+KKR,KKR & Co.,USD,stock,,Financials
+KLAC,KLA Corporation,USD,stock,,Technology
+KHC,Kraft Heinz,USD,stock,,Consumer Staples
+KR,Kroger,USD,stock,,Consumer Staples
+LHX,L3Harris,USD,stock,,Industrials
+LH,Labcorp,USD,stock,,Healthcare
+LRCX,Lam Research,USD,stock,,Technology
+LW,Lamb Weston,USD,stock,,Consumer Staples
+LVS,Las Vegas Sands,USD,stock,,Consumer Discretionary
+LDOS,Leidos,USD,stock,,Industrials
+LEN,Lennar,USD,stock,,Consumer Discretionary
+LII,Lennox International,USD,stock,,Industrials
+LLY,Lilly (Eli),USD,stock,,Healthcare
+LIN,Linde plc,USD,stock,,Materials
+LYV,Live Nation Entertainment,USD,stock,,Communication
+LMT,Lockheed Martin,USD,stock,,Industrials
+L,Loews Corporation,USD,stock,,Financials
+LOW,Lowe's,USD,stock,,Consumer Discretionary
+LULU,Lululemon Athletica,USD,stock,,Consumer Discretionary
+LYB,LyondellBasell,USD,stock,,Materials
+MTB,M&T Bank,USD,stock,,Financials
+MPC,Marathon Petroleum,USD,stock,,Energy
+MAR,Marriott International,USD,stock,,Consumer Discretionary
+MRSH,Marsh McLennan,USD,stock,,Financials
+MLM,Martin Marietta Materials,USD,stock,,Materials
+MAS,Masco,USD,stock,,Industrials
+MA,Mastercard,USD,stock,,Financials
+MTCH,Match Group,USD,stock,,Communication
+MKC,McCormick & Company,USD,stock,,Consumer Staples
+MCD,McDonald's,USD,stock,,Consumer Discretionary
+MCK,McKesson Corporation,USD,stock,,Healthcare
+MDT,Medtronic,USD,stock,,Healthcare
+MRK,Merck & Co.,USD,stock,,Healthcare
+META,Meta Platforms,USD,stock,,Communication
+MET,MetLife,USD,stock,,Financials
+MTD,Mettler Toledo,USD,stock,,Healthcare
+MGM,MGM Resorts,USD,stock,,Consumer Discretionary
+MCHP,Microchip Technology,USD,stock,,Technology
+MU,Micron Technology,USD,stock,,Technology
+MSFT,Microsoft,USD,stock,,Technology
+MAA,Mid-America Apartment Communities,USD,stock,,Real Estate
+MRNA,Moderna,USD,stock,,Healthcare
+MOH,Molina Healthcare,USD,stock,,Healthcare
+TAP,Molson Coors Beverage Company,USD,stock,,Consumer Staples
+MDLZ,Mondelez International,USD,stock,,Consumer Staples
+MPWR,Monolithic Power Systems,USD,stock,,Technology
+MNST,Monster Beverage,USD,stock,,Consumer Staples
+MCO,Moody's Corporation,USD,stock,,Financials
+MS,Morgan Stanley,USD,stock,,Financials
+MOS,Mosaic Company (The),USD,stock,,Materials
+MSI,Motorola Solutions,USD,stock,,Technology
+MSCI,MSCI Inc.,USD,stock,,Financials
+NDAQ,"Nasdaq, Inc.",USD,stock,,Financials
+NTAP,NetApp,USD,stock,,Technology
+NFLX,Netflix,USD,stock,,Communication
+NEM,Newmont,USD,stock,,Materials
+NWSA,News Corp (Class A),USD,stock,,Communication
+NWS,News Corp (Class B),USD,stock,,Communication
+NEE,NextEra Energy,USD,stock,,Utilities
+NKE,"Nike, Inc.",USD,stock,,Consumer Discretionary
+NI,NiSource,USD,stock,,Utilities
+NDSN,Nordson Corporation,USD,stock,,Industrials
+NSC,Norfolk Southern,USD,stock,,Industrials
+NTRS,Northern Trust,USD,stock,,Financials
+NOC,Northrop Grumman,USD,stock,,Industrials
+NCLH,Norwegian Cruise Line Holdings,USD,stock,,Consumer Discretionary
+NRG,NRG Energy,USD,stock,,Utilities
+NUE,Nucor,USD,stock,,Materials
+NVDA,Nvidia,USD,stock,,Technology
+NVR,"NVR, Inc.",USD,stock,,Consumer Discretionary
+NXPI,NXP Semiconductors,USD,stock,,Technology
+ORLY,O’Reilly Automotive,USD,stock,,Consumer Discretionary
+OXY,Occidental Petroleum,USD,stock,,Energy
+ODFL,Old Dominion,USD,stock,,Industrials
+OMC,Omnicom Group,USD,stock,,Communication
+ON,ON Semiconductor,USD,stock,,Technology
+OKE,Oneok,USD,stock,,Energy
+ORCL,Oracle Corporation,USD,stock,,Technology
+OTIS,Otis Worldwide,USD,stock,,Industrials
+PCAR,Paccar,USD,stock,,Industrials
+PKG,Packaging Corporation of America,USD,stock,,Materials
+PLTR,Palantir Technologies,USD,stock,,Technology
+PANW,Palo Alto Networks,USD,stock,,Technology
+PSKY,Paramount Skydance Corporation,USD,stock,,Communication
+PH,Parker Hannifin,USD,stock,,Industrials
+PAYX,Paychex,USD,stock,,Industrials
+PAYC,Paycom,USD,stock,,Industrials
+PYPL,PayPal,USD,stock,,Financials
+PNR,Pentair,USD,stock,,Industrials
+PEP,PepsiCo,USD,stock,,Consumer Staples
+PFE,Pfizer,USD,stock,,Healthcare
+PCG,PG&E Corporation,USD,stock,,Utilities
+PM,Philip Morris International,USD,stock,,Consumer Staples
+PSX,Phillips 66,USD,stock,,Energy
+PNW,Pinnacle West Capital,USD,stock,,Utilities
+PNC,PNC Financial Services,USD,stock,,Financials
+POOL,Pool Corporation,USD,stock,,Consumer Discretionary
+PPG,PPG Industries,USD,stock,,Materials
+PPL,PPL Corporation,USD,stock,,Utilities
+PFG,Principal Financial Group,USD,stock,,Financials
+PG,Procter & Gamble,USD,stock,,Consumer Staples
+PGR,Progressive Corporation,USD,stock,,Financials
+PLD,Prologis,USD,stock,,Real Estate
+PRU,Prudential Financial,USD,stock,,Financials
+PEG,Public Service Enterprise Group,USD,stock,,Utilities
+PTC,PTC Inc.,USD,stock,,Technology
+PSA,Public Storage,USD,stock,,Real Estate
+PHM,PulteGroup,USD,stock,,Consumer Discretionary
+PWR,Quanta Services,USD,stock,,Industrials
+QCOM,Qualcomm,USD,stock,,Technology
+DGX,Quest Diagnostics,USD,stock,,Healthcare
+Q,Qnity Electronics,USD,stock,,Technology
+RL,Ralph Lauren Corporation,USD,stock,,Consumer Discretionary
+RJF,Raymond James Financial,USD,stock,,Financials
+RTX,RTX Corporation,USD,stock,,Industrials
+O,Realty Income,USD,stock,,Real Estate
+REG,Regency Centers,USD,stock,,Real Estate
+REGN,Regeneron Pharmaceuticals,USD,stock,,Healthcare
+RF,Regions Financial Corporation,USD,stock,,Financials
+RSG,Republic Services,USD,stock,,Industrials
+RMD,ResMed,USD,stock,,Healthcare
+RVTY,Revvity,USD,stock,,Healthcare
+HOOD,Robinhood Markets,USD,stock,,Financials
+ROK,Rockwell Automation,USD,stock,,Industrials
+ROL,"Rollins, Inc.",USD,stock,,Industrials
+ROP,Roper Technologies,USD,stock,,Technology
+ROST,Ross Stores,USD,stock,,Consumer Discretionary
+RCL,Royal Caribbean Group,USD,stock,,Consumer Discretionary
+SPGI,S&P Global,USD,stock,,Financials
+CRM,Salesforce,USD,stock,,Technology
+SNDK,Sandisk,USD,stock,,Technology
+SBAC,SBA Communications,USD,stock,,Real Estate
+SLB,Schlumberger,USD,stock,,Energy
+STX,Seagate Technology,USD,stock,,Technology
+SRE,Sempra,USD,stock,,Utilities
+NOW,ServiceNow,USD,stock,,Technology
+SHW,Sherwin-Williams,USD,stock,,Materials
+SPG,Simon Property Group,USD,stock,,Real Estate
+SWKS,Skyworks Solutions,USD,stock,,Technology
+SJM,J.M. Smucker Company (The),USD,stock,,Consumer Staples
+SW,Smurfit Westrock,USD,stock,,Materials
+SNA,Snap-on,USD,stock,,Industrials
+SOLV,Solventum,USD,stock,,Healthcare
+SO,Southern Company,USD,stock,,Utilities
+LUV,Southwest Airlines,USD,stock,,Industrials
+SWK,Stanley Black & Decker,USD,stock,,Industrials
+SBUX,Starbucks,USD,stock,,Consumer Discretionary
+STT,State Street Corporation,USD,stock,,Financials
+STLD,Steel Dynamics,USD,stock,,Materials
+STE,Steris,USD,stock,,Healthcare
+SYK,Stryker Corporation,USD,stock,,Healthcare
+SMCI,Supermicro,USD,stock,,Technology
+SYF,Synchrony Financial,USD,stock,,Financials
+SNPS,Synopsys,USD,stock,,Technology
+SYY,Sysco,USD,stock,,Consumer Staples
+TMUS,T-Mobile US,USD,stock,,Communication
+TROW,T. Rowe Price,USD,stock,,Financials
+TTWO,Take-Two Interactive,USD,stock,,Communication
+TPR,"Tapestry, Inc.",USD,stock,,Consumer Discretionary
+TRGP,Targa Resources,USD,stock,,Energy
+TGT,Target Corporation,USD,stock,,Consumer Staples
+TEL,TE Connectivity,USD,stock,,Technology
+TDY,Teledyne Technologies,USD,stock,,Technology
+TER,Teradyne,USD,stock,,Technology
+TSLA,"Tesla, Inc.",USD,stock,,Consumer Discretionary
+TXN,Texas Instruments,USD,stock,,Technology
+TPL,Texas Pacific Land Corporation,USD,stock,,Energy
+TXT,Textron,USD,stock,,Industrials
+TMO,Thermo Fisher Scientific,USD,stock,,Healthcare
+TJX,TJX Companies,USD,stock,,Consumer Discretionary
+TKO,TKO Group Holdings,USD,stock,,Communication
+TTD,Trade Desk (The),USD,stock,,Communication
+TSCO,Tractor Supply,USD,stock,,Consumer Discretionary
+TT,Trane Technologies,USD,stock,,Industrials
+TDG,TransDigm Group,USD,stock,,Industrials
+TRV,Travelers Companies (The),USD,stock,,Financials
+TRMB,Trimble Inc.,USD,stock,,Technology
+TFC,Truist Financial,USD,stock,,Financials
+TYL,Tyler Technologies,USD,stock,,Technology
+TSN,Tyson Foods,USD,stock,,Consumer Staples
+USB,U.S. Bancorp,USD,stock,,Financials
+UBER,Uber,USD,stock,,Industrials
+UDR,"UDR, Inc.",USD,stock,,Real Estate
+ULTA,Ulta Beauty,USD,stock,,Consumer Discretionary
+UNP,Union Pacific Corporation,USD,stock,,Industrials
+UAL,United Airlines Holdings,USD,stock,,Industrials
+UPS,United Parcel Service,USD,stock,,Industrials
+URI,United Rentals,USD,stock,,Industrials
+UNH,UnitedHealth Group,USD,stock,,Healthcare
+UHS,Universal Health Services,USD,stock,,Healthcare
+VLO,Valero Energy,USD,stock,,Energy
+VTR,Ventas,USD,stock,,Real Estate
+VLTO,Veralto,USD,stock,,Industrials
+VRSN,Verisign,USD,stock,,Technology
+VRSK,Verisk Analytics,USD,stock,,Industrials
+VZ,Verizon,USD,stock,,Communication
+VRTX,Vertex Pharmaceuticals,USD,stock,,Healthcare
+VTRS,Viatris,USD,stock,,Healthcare
+VICI,Vici Properties,USD,stock,,Real Estate
+V,Visa Inc.,USD,stock,,Financials
+VST,Vistra Corp.,USD,stock,,Utilities
+VMC,Vulcan Materials Company,USD,stock,,Materials
+WRB,W. R. Berkley Corporation,USD,stock,,Financials
+GWW,W. W. Grainger,USD,stock,,Industrials
+WAB,Wabtec,USD,stock,,Industrials
+WMT,Walmart,USD,stock,,Consumer Staples
+DIS,Walt Disney Company (The),USD,stock,,Communication
+WBD,Warner Bros. Discovery,USD,stock,,Communication
+WM,Waste Management,USD,stock,,Industrials
+WAT,Waters Corporation,USD,stock,,Healthcare
+WEC,WEC Energy Group,USD,stock,,Utilities
+WFC,Wells Fargo,USD,stock,,Financials
+WELL,Welltower,USD,stock,,Real Estate
+WST,West Pharmaceutical Services,USD,stock,,Healthcare
+WDC,Western Digital,USD,stock,,Technology
+WY,Weyerhaeuser,USD,stock,,Real Estate
+WSM,"Williams-Sonoma, Inc.",USD,stock,,Consumer Discretionary
+WMB,Williams Companies,USD,stock,,Energy
+WTW,Willis Towers Watson,USD,stock,,Financials
+WDAY,"Workday, Inc.",USD,stock,,Technology
+WYNN,Wynn Resorts,USD,stock,,Consumer Discretionary
+XEL,Xcel Energy,USD,stock,,Utilities
+XYL,Xylem Inc.,USD,stock,,Industrials
+YUM,Yum! Brands,USD,stock,,Consumer Discretionary
+ZBRA,Zebra Technologies,USD,stock,,Technology
+ZBH,Zimmer Biomet,USD,stock,,Healthcare
+ZTS,Zoetis,USD,stock,,Healthcare
+III.L,3i,GBP,stock,,Financial services
+ADM.L,Admiral Group,GBP,stock,,Insurance
+AAF.L,Airtel Africa,GBP,stock,,Telecommunications services
+ALW.L,Alliance Witan,GBP,stock,,Investment Trusts
+AAL.L,Anglo American plc,GBP,stock,,Mining
+ANTO.L,Antofagasta plc,GBP,stock,,Mining
+AHT.L,Ashtead Group,GBP,stock,,Support services
+ABF.L,Associated British Foods,GBP,stock,,Food & tobacco
+AZN.L,AstraZeneca,GBP,stock,,Pharmaceuticals & biotechnology
+AUTO.L,Autotrader Group,GBP,stock,,Media
+AV.L,Aviva,GBP,stock,,Life insurance
+BAB.L,Babcock International,GBP,stock,,Aerospace & defence
+BA.L,BAE Systems,GBP,stock,,Aerospace & defence
+BARC.L,Barclays,GBP,stock,,Banks
+BTRW.L,Barratt Redrow,GBP,stock,,Household goods & home construction
+BEZ.L,Beazley,GBP,stock,,Insurance
+BKG.L,Berkeley Group Holdings,GBP,stock,,Household goods & home construction
+BP.L,BP,GBP,stock,,Oil & gas producers
+BATS.L,British American Tobacco,GBP,stock,,Tobacco
+BLND.L,British Land,GBP,stock,,Real estate
+BT-A.L,BT Group,GBP,stock,,Telecommunications services
+BNZL.L,Bunzl,GBP,stock,,Support services
+BRBY.L,Burberry Group,GBP,stock,,Personal goods
+CNA.L,Centrica,GBP,stock,,Multiline utilities
+CCEP.L,Coca-Cola Europacific Partners,GBP,stock,,Beverages
+CCH.L,Coca-Cola HBC,GBP,stock,,Beverages
+CPG.L,Compass Group,GBP,stock,,Support services
+CTEC.L,Convatec,GBP,stock,,Health care equipment & supplies
+CRDA.L,Croda International,GBP,stock,,Chemicals
+DCC.L,DCC plc,GBP,stock,,Support services
+DGE.L,Diageo,GBP,stock,,Beverages
+DPLM.L,Diploma,GBP,stock,,Industrial Support services
+EDV.L,Endeavour Mining,GBP,stock,,Precious Metals and Mining
+ENT.L,Entain,GBP,stock,,Travel & leisure
+EZJ.L,EasyJet,GBP,stock,,Travel & leisure
+EXPN.L,Experian,GBP,stock,,Support services
+FCIT.L,F & C Investment Trust,GBP,stock,,Collective investments
+FRES.L,Fresnillo plc,GBP,stock,,Mining
+GAW.L,Games Workshop,GBP,stock,,Leisure Goods
+GLEN.L,Glencore,GBP,stock,,Mining
+GSK.L,GSK plc,GBP,stock,,Pharmaceuticals & biotechnology
+HLN.L,Haleon,GBP,stock,,Pharmaceuticals & biotechnology
+HLMA.L,Halma plc,GBP,stock,,Electronic equipment & parts
+HIK.L,Hikma Pharmaceuticals,GBP,stock,,Pharmaceuticals & biotechnology
+HSX.L,Hiscox,GBP,stock,,Non-life Insurance
+HWDN.L,Howdens Joinery,GBP,stock,,Homebuilding & construction supplies
+HSBA.L,HSBC,GBP,stock,,Banks
+ICG.L,ICG,GBP,stock,,Financial services
+IHG.L,IHG Hotels & Resorts,GBP,stock,,Travel & leisure
+IMI.L,IMI,GBP,stock,,Industrial engineering
+IMB.L,Imperial Brands,GBP,stock,,Tobacco
+INF.L,Informa,GBP,stock,,Media
+IAG.L,International Airlines Group,GBP,stock,,Travel & leisure
+ITRK.L,Intertek,GBP,stock,,Support services
+JD.L,JD Sports,GBP,stock,,General retailers
+KGF.L,Kingfisher plc,GBP,stock,,Retailers
+LAND.L,Land Securities,GBP,stock,,Real estate investment trusts
+LGEN.L,Legal & General,GBP,stock,,Life insurance
+LLOY.L,Lloyds Banking Group,GBP,stock,,Banks
+LMP.L,LondonMetric Property,GBP,stock,,Real Estate Investment Trusts
+LSEG.L,London Stock Exchange Group,GBP,stock,,Financial services
+MNG.L,M&G,GBP,stock,,Financial services
+MKS.L,Marks & Spencer,GBP,stock,,Food & drug retailing
+MRO.L,Melrose Industries,GBP,stock,,Aerospace & defence
+MTLN.L,Metlen Energy & Metals,GBP,stock,,Multiline utilities
+MNDI.L,Mondi,GBP,stock,,Containers & packaging
+NG.L,National Grid plc,GBP,stock,,Multiline utilities
+NWG.L,NatWest Group,GBP,stock,,Banks
+NXT.L,Next plc,GBP,stock,,General retailers
+PSON.L,Pearson plc,GBP,stock,,Media
+PSH.L,Pershing Square Holdings,GBP,stock,,Financial services
+PSN.L,Persimmon,GBP,stock,,Household goods & home construction
+PHNX.L,Phoenix Group,GBP,stock,,Life insurance
+PCT.L,Polar Capital Technology Trust,GBP,stock,,Investment trusts
+PRU.L,Prudential plc,GBP,stock,,Life insurance
+RKT.L,Reckitt,GBP,stock,,Household goods & home construction
+REL.L,RELX,GBP,stock,,Media
+RTO.L,Rentokil Initial,GBP,stock,,Support services
+RMV.L,Rightmove,GBP,stock,,Media
+RIO.L,Rio Tinto,GBP,stock,,Mining
+RR.L,Rolls-Royce Holdings,GBP,stock,,Aerospace & defence
+SGE.L,Sage Group,GBP,stock,,Software & computer services
+SBRY.L,Sainsbury's,GBP,stock,,Food & drug retailing
+SDR.L,Schroders,GBP,stock,,Financial services
+SMT.L,Scottish Mortgage Investment Trust,GBP,stock,,Collective investments
+SGRO.L,Segro,GBP,stock,,Real estate investment trusts
+SVT.L,Severn Trent,GBP,stock,,Multiline utilities
+SHEL.L,Shell plc,GBP,stock,,Oil & gas producers
+SMIN.L,Smiths Group,GBP,stock,,General industrials
+SN.L,Smith & Nephew,GBP,stock,,Health care equipment & supplies
+SPX.L,Spirax Group,GBP,stock,,Industrial engineering
+SSE.L,SSE plc,GBP,stock,,Electrical utilities & independent power producers
+STAN.L,Standard Chartered,GBP,stock,,Banks
+STJ.L,St. James's Place,GBP,stock,,Financial services
+TSCO.L,Tesco,GBP,stock,,Food & drug retailing
+ULVR.L,Unilever,GBP,stock,,Personal goods
+UU.L,United Utilities,GBP,stock,,Multiline utilities
+VOD.L,Vodafone Group,GBP,stock,,Mobile telecommunications
+WEIR.L,Weir Group,GBP,stock,,Industrial goods and services
+WTB.L,Whitbread,GBP,stock,,Retail hospitality
+3IN.L,3i Infrastructure,GBP,stock,,Financial Services
+FOUR.L,4imprint,GBP,stock,,Media
+AAS.L,Aberdeen Asia Focus,GBP,stock,,Investment Trusts
+ABDN.L,Aberdeen Group,GBP,stock,,Financial Services
+ASL.L,Aberforth Smaller Companies Trust,GBP,stock,,Investment Trusts
+AEP.L,AEP Plantations,GBP,stock,,Food Producers
+ALFA.L,Alfa Financial Software,GBP,stock,,Software and Computer Services
+ATT.L,Allianz Technology Trust,GBP,stock,,Investment Trusts
+AO.L,AO World,GBP,stock,,Retail
+APN.L,Applied Nutrition,GBP,stock,,Food Producers
+ASHM.L,Ashmore Group,GBP,stock,,Financial Services
+AIE.L,Ashoka India Equity Investment Trust,GBP,stock,,Investment Trusts
+AML.L,Aston Martin Lagonda,GBP,stock,,Automobiles & Parts
+ATYM.L,Atalaya Mining,GBP,stock,,Industrial Metals and Mining
+AGT.L,AVI Global Trust,GBP,stock,,Investment Trusts
+AVON.L,Avon Technologies,GBP,stock,,Industrial Goods and Services
+BME.L,B&M,GBP,stock,,Retailers
+BGFD.L,Baillie Gifford Japan Trust,GBP,stock,,Investment Trusts
+USA.L,Baillie Gifford US Growth Trust,GBP,stock,,Investment Trusts
+BBY.L,Balfour Beatty,GBP,stock,,Construction & Materials
+BCG.L,Baltic Classifieds,GBP,stock,,Consumer Digital Services
+BNKR.L,Bankers Investment Trust,GBP,stock,,Investment Trusts
+BAG.L,A.G. Barr,GBP,stock,,Beverages
+AJB.L,AJ Bell,GBP,stock,,Financial Services
+BWY.L,Bellway,GBP,stock,,Home Construction
+BHMG.L,BH Macro,GBP,stock,,Hedge Funds
+BYG.L,Big Yellow Group,GBP,stock,,Real Estate Investment Trusts
+BPCR.L,Biopharma Credit,GBP,stock,,Investment Trusts
+BRGE.L,BlackRock Greater Europe Investment Trust,GBP,stock,,Investment Trusts
+BRSC.L,BlackRock Smaller Companies Trust,GBP,stock,,Equity Investments
+THRG.L,BlackRock Throgmorton Trust,GBP,stock,,Equity Investments
+BRWM.L,BlackRock World Mining Trust,GBP,stock,,Investment Trusts
+BSIF.L,Bluefield Solar Income Fund,GBP,stock,,Investment Trusts
+BOY.L,Bodycote,GBP,stock,,Industrial Engineering
+BREE.L,Breedon Group,GBP,stock,,Construction & Materials
+BPT.L,Bridgepoint Group,GBP,stock,,Financial Services
+BUT.L,Brunner Investment Trust,GBP,stock,,Investment Trusts
+BYIT.L,Bytes Technology Group,GBP,stock,,Aerospace & Defence
+CCR.L,C&C Group,GBP,stock,,Food & Tobacco
+CLDN.L,Caledonia Investments,GBP,stock,,Investment Trusts
+CGT.L,Capital Gearing Trust,GBP,stock,,Investment Trusts
+CCL.L,Carnival Corporation & plc,GBP,stock,,Travel & Leisure
+CWR.L,Ceres Power,GBP,stock,,Alternative Energy
+CHG.L,Chemring Group,GBP,stock,,Aerospace & Defence
+CSN.L,Chesnara,GBP,stock,,Life Insurance
+CHRY.L,Chrysalis Investments,GBP,stock,,Investment Trusts
+CTY.L,City of London Investment Trust,GBP,stock,,Investment Trusts
+CKN.L,Clarkson,GBP,stock,,Industrial Transportation
+CBG.L,Close Brothers Group,GBP,stock,,Financial Services
+CMCX.L,CMC Markets,GBP,stock,,Financial Services
+COA.L,Coats Group,GBP,stock,,Consumer Staples
+CCC.L,Computacenter,GBP,stock,,Software & Computer Services
+CWK.L,Cranswick,GBP,stock,,Food Producers
+CURY.L,Currys,GBP,stock,,Retailers
+DLN.L,Derwent London,GBP,stock,,Real Estate Investment Trusts
+DSCV.L,discoverIE,GBP,stock,,Support Services
+DOM.L,Domino's Pizza,GBP,stock,,Travel & Leisure
+DRX.L,Drax Group,GBP,stock,,Electricity
+DOCS.L,Dr. Martens,GBP,stock,,Retailers
+DNLM.L,Dunelm Group,GBP,stock,,Retailers
+EDIN.L,Edinburgh Investment Trust,GBP,stock,,Investment Trusts
+EWI.L,Edinburgh Worldwide Investment Trust,GBP,stock,,Investment Trusts
+ELM.L,Elementis,GBP,stock,,Chemicals
+ENOG.L,Energean,GBP,stock,,Oil & Gas Producers
+ESCT.L,European Smaller Companies Trust,GBP,stock,,Investment Trusts
+FCSS.L,Fidelity China Special Situations,GBP,stock,,Investment Trusts
+FEML.L,Fidelity Emerging Markets,GBP,stock,,Investment Trusts
+FEV.L,Fidelity European Trust,GBP,stock,,Investment Trusts
+FSV.L,Fidelity Special Values,GBP,stock,,Investment Trusts
+FGT.L,Finsbury Growth & Income Trust,GBP,stock,,Equity Investments
+FGP.L,FirstGroup,GBP,stock,,Travel & Leisure
+FGEN.L,Foresight Environmental Infrastructure,GBP,stock,,Investment Trusts
+FSG.L,Foresight Group,GBP,stock,,Investment Banking and Brokerage Services
+FRAS.L,Frasers Group,GBP,stock,,Retailers
+FCH.L,Funding Circle,GBP,stock,,Financial Services
+FUTR.L,Future,GBP,stock,,Media
+GFRD.L,Galliford Try,GBP,stock,,Construction
+GAMA.L,Gamma Communications,GBP,stock,,Telecommunications
+GBG.L,GB Group,GBP,stock,,Software and Computer Services
+GCP.L,GCP Infrastructure Investments,GBP,stock,,General Financial
+GEN.L,Genuit Group,GBP,stock,,Construction & Materials
+GNS.L,Genus,GBP,stock,,Pharmaceuticals & Biotechnology
+GSCT.L,Global Smaller Companies Trust,GBP,stock,,Investment Trusts
+GDWN.L,Goodwin,GBP,stock,,General Industrials
+GFTU.L,Grafton Group,GBP,stock,,Support Services
+GRI.L,Grainger,GBP,stock,,Real Estate Investment & Services
+GPE.L,Great Portland Estates,GBP,stock,,Real Estate Investment Trusts
+UKW.L,Greencoat UK Wind,GBP,stock,,"Gas, Water & Multiutilities"
+GNC.L,Greencore,GBP,stock,,"Food, Beverage and Tobacco"
+GRG.L,Greggs,GBP,stock,,Food & Drug Retailers
+HMSO.L,Hammerson,GBP,stock,,Real Estate Investment Trusts
+HBR.L,Harbour Energy,GBP,stock,,Oil & Gas Producers
+HVPE.L,HarbourVest Global Private Equity,GBP,stock,,Equity Investments
+HWG.L,Harworth Group,GBP,stock,,Real Estate
+HAS.L,Hays,GBP,stock,,Support Services
+HTWS.L,Helios Towers,GBP,stock,,Telecomms
+HSL.L,Henderson Smaller Companies Investment Trust,GBP,stock,,Investment Trusts
+HRI.L,Herald Investment Trust,GBP,stock,,Investment Trusts
+HGT.L,Hg Capital Trust,GBP,stock,,Investment Trusts
+HICL.L,HICL Infrastructure Company,GBP,stock,,Investment Trusts
+HILS.L,Hill & Smith,GBP,stock,,Industrial Engineering
+HFG.L,Hilton Food Group,GBP,stock,,Food Producers
+HOC.L,Hochschild Mining,GBP,stock,,Basic Resources
+BOWL.L,Hollywood Bowl Group,GBP,stock,,Travel and leisure
+HTG.L,Hunting,GBP,stock,,"Oil, Gas and Coal"
+IBST.L,Ibstock,GBP,stock,,Construction & Materials
+ICGT.L,ICG Enterprise Trust,GBP,stock,,Investment Trusts
+IGG.L,IG Group Holdings,GBP,stock,,Financial Services
+IEM.L,Impax Environmental Markets,GBP,stock,,Investment Trusts
+INCH.L,Inchcape,GBP,stock,,Retailers
+IHP.L,IntegraFin Holdings,GBP,stock,,Financial Services
+IPF.L,International Personal Finance,GBP,stock,,Financial Services
+INPP.L,International Public Partnerships,GBP,stock,,Financial Services
+IWG.L,International Workplace Group,GBP,stock,,Support Services
+IAD.L,Invesco Asia Dragon Trust,GBP,stock,,Investment Trusts
+INVP.L,Investec,GBP,stock,,Financial Services
+IPO.L,IP Group,GBP,stock,,Financial Services
+ITH.L,Ithaca Energy,GBP,stock,,Oil & Gas Producers
+ITV.L,ITV,GBP,stock,,Media
+JMAT.L,Johnson Matthey,GBP,stock,,Chemicals
+JSG.L,Johnson Service Group,GBP,stock,,Industrial Support Services
+JAM.L,JPMorgan American Investment Trust,GBP,stock,,Investment Trusts
+JEMI.L,JPMorgan Emerging Markets Dividend Income,GBP,stock,,Investment Trusts
+JMG.L,JPMorgan Emerging Markets Growth & Income,GBP,stock,,Investment Trusts
+JEDT.L,JPMorgan European Discovery,GBP,stock,,Investment Trusts
+JEGI.L,JPMorgan European Growth & Income,GBP,stock,,Investment Trusts
+JGGI.L,JPMorgan Global Growth & Income,GBP,stock,,Investment Trusts
+JII.L,JPMorgan India Growth & Income,GBP,stock,,Investment Trusts
+JFJ.L,JPMorgan Japanese Investment Trust,GBP,stock,,Investment Trusts
+JTC.L,JTC,GBP,stock,,Financial Services
+JUP.L,Jupiter Fund Management,GBP,stock,,Financial Services
+JUST.L,Just Group,GBP,stock,,Life Insurance
+KNOS.L,Kainos,GBP,stock,,Software & Computer Services
+KLR.L,Keller Group,GBP,stock,,Construction & Materials
+KIE.L,Kier Group,GBP,stock,,Construction & Materials
+LRE.L,Lancashire Holdings,GBP,stock,,Nonlife Insurance
+LWDB.L,Law Debenture,GBP,stock,,Investment Trusts
+BGEO.L,Lion Finance Group,GBP,stock,,Banking Services
+EMG.L,Man Group,GBP,stock,,Investment Trusts
+MSLH.L,Marshalls,GBP,stock,,Construction & Materials
+MEGP.L,ME Group International,GBP,stock,,Leisure Goods
+MRC.L,Mercantile Investment Trust,GBP,stock,,Collective Investments
+MRCH.L,Merchants Trust,GBP,stock,,Investment Trusts
+MTRO.L,Metro Bank,GBP,stock,,Banks
+MAB.L,Mitchells & Butlers,GBP,stock,,Travel & Leisure
+MTO.L,Mitie,GBP,stock,,Support Services
+GROW.L,Molten Ventures,GBP,stock,,Financial Services
+MNKS.L,Monks Investment Trust,GBP,stock,,Investment Trusts
+MONY.L,MONY Group,GBP,stock,,Media
+MOON.L,Moonpig,GBP,stock,,Retailers
+MGAM.L,Morgan Advanced Materials,GBP,stock,,Electronic & Electrical Equipment
+MGNS.L,Morgan Sindall Group,GBP,stock,,Construction & Materials
+MUT.L,Murray Income Trust,GBP,stock,,Investment Trusts
+MYI.L,Murray International Trust,GBP,stock,,Investment Trusts
+NBPE.L,NB Private Equity Partners,GBP,stock,,Collective Investments
+NCC.L,NCC Group,GBP,stock,,Software and Computer Services
+N91.L,Ninety One,GBP,stock,,Financial Services
+NAS.L,North Atlantic Smaller Companies Investment Trust,GBP,stock,,Investment Trusts
+OCI.L,Oakley Capital Investments,GBP,stock,,Investment Trusts
+OCDO.L,Ocado Group,GBP,stock,,Food & drug retailers
+OSB.L,OSB Group,GBP,stock,,Banks
+OXB.L,Oxford Biomedica,GBP,stock,,Pharmaceuticals and Biotechnology
+OXIG.L,Oxford Instruments,GBP,stock,,Electronic & Electrical Equipment
+ONT.L,Oxford Nanopore Technologies,GBP,stock,,Health Care
+PHI.L,Pacific Horizon Investment Trust,GBP,stock,,Investment Trusts
+PAGE.L,PageGroup,GBP,stock,,Support Services
+PAF.L,Pan African Resources,GBP,stock,,Precious Metals and Mining
+PINT.L,Pantheon Infrastructure,GBP,stock,,Investment Trusts
+PIN.L,Pantheon International,GBP,stock,,Equity Investments
+PAG.L,Paragon Banking Group,GBP,stock,,Financial Services
+PEY.L,Partners Group Private Equity,GBP,stock,,Investment Trusts
+PPET.L,Patria Private Equity Trust,GBP,stock,,Financial Services
+PNN.L,Pennon Group,GBP,stock,,"Gas, Water & Multiutilities"
+PNL.L,Personal Assets Trust,GBP,stock,,Investment Trusts
+PETS.L,Pets at Home,GBP,stock,,Retailers
+PINE.L,Pinewood Technologies,GBP,stock,,Software & Computer Services
+PTEC.L,Playtech,GBP,stock,,Software & Computer Services
+PLUS.L,Plus500,GBP,stock,,Financial Services
+PCGH.L,Polar Capital Global Healthcare Trust,GBP,stock,,Investment Trusts
+POLN.L,Pollen Street Group,GBP,stock,,Financial Services
+PPH.L,PPHE Hotel Group,GBP,stock,,Travel and Leisure
+PFD.L,Premier Foods,GBP,stock,,Food & Drug Retailers
+PHP.L,Primary Health Properties,GBP,stock,,Real Estate Investment Trusts
+PRN.L,Princes Group,GBP,stock,,Food and drink
+QQ.L,Qinetiq,GBP,stock,,Aerospace & Defence
+QLT.L,Quilter,GBP,stock,,Financial Services
+RNK.L,Rank Group,GBP,stock,,Travel and Leisure
+RPI.L,Raspberry Pi Holdings,GBP,stock,,Technology
+RAT.L,Rathbones,GBP,stock,,Financial Services
+RSW.L,Renishaw,GBP,stock,,Electronic & Electrical Equipment
+RHIM.L,RHI Magnesita,GBP,stock,,Support Services
+RCP.L,RIT Capital Partners,GBP,stock,,Investment Trusts
+ROR.L,Rotork,GBP,stock,,Industrial Engineering
+RS1.L,RS Group,GBP,stock,,Industrials
+RTW.L,RTW Biotech Opportunities,GBP,stock,,Investment Trusts
+RICA.L,Ruffer Investment Company,GBP,stock,,Investment Trusts
+SAFE.L,Safestore,GBP,stock,,Real Estate Investment Trusts
+SAGA.L,Saga,GBP,stock,,Financial Services
+SVS.L,Savills,GBP,stock,,Real Estate Investment & Services
+ATR.L,Schroder Asian Total Return Investment Company,GBP,stock,,Investment Trusts
+SDP.L,Schroder AsiaPacific Fund,GBP,stock,,Investment Trusts
+SOI.L,Schroder Oriental Income Fund,GBP,stock,,Financial Services
+SAIN.L,Scottish American Investment Company,GBP,stock,,Investment Trusts
+SEIT.L,SDCL Energy Efficiency Income Trust,GBP,stock,,Energy
+SNR.L,Senior,GBP,stock,,Aerospace & Defence
+SEQI.L,Sequoia Economic Infrastructure Income Fund,GBP,stock,,Financial Services
+SRP.L,Serco,GBP,stock,,Support Services
+SHC.L,Shaftesbury Capital,GBP,stock,,Real Estate Investment Trusts
+SHAW.L,Shawbrook Bank,GBP,stock,,Banking
+SRE.L,Sirius Real Estate,GBP,stock,,Real Estate
+SCT.L,Softcat,GBP,stock,,Software & Computer Services
+SPI.L,Spire Healthcare,GBP,stock,,Health Care Equipment & Services
+SSPG.L,SSP Group,GBP,stock,,Retailers
+SUPR.L,Supermarket Income REIT,GBP,stock,,Real Estate Investment Trusts
+SYNC.L,Syncona,GBP,stock,,Pharmaceuticals & Biotechnology
+THRL.L,Target Healthcare REIT,GBP,stock,,Real Estate Investment Trusts
+TATE.L,Tate & Lyle,GBP,stock,,Food Producers
+TW.L,Taylor Wimpey,GBP,stock,,Household goods & home construction
+TBCG.L,TBC Bank,GBP,stock,,Banks
+TEP.L,Telecom Plus,GBP,stock,,Telecomms
+TMPL.L,Temple Bar Investment Trust,GBP,stock,,Collective Investments
+TEM.L,Templeton Emerging Markets Investment Trust,GBP,stock,,Investment Trusts
+TRIG.L,The Renewables Infrastructure Group,GBP,stock,,Investment Trusts
+THG.L,THG,GBP,stock,,Personal Products
+TCAP.L,TP ICAP,GBP,stock,,Support Services
+TRN.L,Trainline,GBP,stock,,Industrial Transportation
+TPK.L,Travis Perkins,GBP,stock,,Support Services
+BBOX.L,Tritax Big Box REIT,GBP,stock,,Real Estate Investment Trusts
+TRY.L,TR Property Investment Trust,GBP,stock,,Investment Trusts
+TRST.L,Trustpilot,GBP,stock,,Technology
+TFIF.L,Twentyfour Income Fund,GBP,stock,,Investment Trusts
+UTG.L,Unite Group,GBP,stock,,Real estate investment trusts
+UEM.L,Utilico Emerging Markets,GBP,stock,,Investment Trusts
+VSVS.L,Vesuvius,GBP,stock,,General Industrials
+VCT.L,Victrex,GBP,stock,,Chemicals
+VEIL.L,Vietnam Enterprise Investments,GBP,stock,,General Financial
+VOF.L,VinaCapital Vietnam Opportunity Fund,GBP,stock,,General Financial
+VTY.L,Vistry Group,GBP,stock,,Home Construction
+FAN.L,Volution Group,GBP,stock,,Construction & Materials
+WPS.L,W. A. G. Payment Solutions,GBP,stock,,Financial Services
+WOSG.L,Watches of Switzerland,GBP,stock,,Personal Goods
+JDW.L,Wetherspoon (J D),GBP,stock,,Travel & Leisure
+SMWH.L,W H Smith,GBP,stock,,Retailers
+WIX.L,Wickes,GBP,stock,,Retailers
+WIZZ.L,Wizz Air,GBP,stock,,Travel & Leisure
+WKP.L,Workspace Group,GBP,stock,,Real Estate Investment Trusts
+WWH.L,Worldwide Healthcare Trust,GBP,stock,,Investment Trusts
+WPP.L,WPP,GBP,stock,,Media
+XPS.L,XPS Pensions,GBP,stock,,Financial Services
+ZIG.L,Zigup,GBP,stock,,Support Services
+AC.PA,Accor,EUR,stock,,Consumer Services
+AI.PA,Air Liquide,EUR,stock,,Basic Materials
+AIR.PA,Airbus,EUR,stock,,Industrials
+MT.AS.PA,ArcelorMittal,EUR,stock,,Basic Materials
+CS.PA,Axa,EUR,stock,,Financial Services
+BNP.PA,BNP Paribas,EUR,stock,,Financial Services
+EN.PA,Bouygues,EUR,stock,,Industrials
+BVI.PA,Bureau Veritas,EUR,stock,,Inspection and certification
+CAP.PA,Capgemini,EUR,stock,,Technology
+CA.PA,Carrefour,EUR,stock,,Consumer Defensive
+ACA.PA,Crédit Agricole,EUR,stock,,Financial Services
+BN.PA,Danone,EUR,stock,,Consumer Defensive
+DSY.PA,Dassault Systèmes,EUR,stock,,Technology
+EDEN.PA,Edenred,EUR,stock,,Industrials
+ENGI.PA,Engie,EUR,stock,,Utilities
+EL.PA,EssilorLuxottica,EUR,stock,,Healthcare
+ERF.PA,Eurofins Scientific,EUR,stock,,Healthcare
+RMS.PA,Hermès,EUR,stock,,Consumer Cyclical
+KER.PA,Kering,EUR,stock,,Consumer Cyclical
+OR.PA,L'Oréal,EUR,stock,,Consumer Defensive
+LR.PA,Legrand,EUR,stock,,Industrials
+MC.PA,LVMH,EUR,stock,,Consumer Cyclical
+ML.PA,Michelin,EUR,stock,,Industrials
+ORA.PA,Orange,EUR,stock,,Communication
+RI.PA,Pernod Ricard,EUR,stock,,Consumer Defensive
+PUB.PA,Publicis,EUR,stock,,Communication
+RNO.PA,Renault,EUR,stock,,Consumer Cyclical
+SAF.PA,Safran,EUR,stock,,Industrials
+SGO.PA,Saint-Gobain,EUR,stock,,Industrials
+SAN.PA,Sanofi,EUR,stock,,Healthcare
+SU.PA,Schneider Electric,EUR,stock,,Industrials
+GLE.PA,Société Générale,EUR,stock,,Financial Services
+STLAP.PA,Stellantis,EUR,stock,,Consumer Cyclical
+STMPA.PA,STMicroelectronics,EUR,stock,,Technology
+TEP.PA,Teleperformance,EUR,stock,,Communication
+HO.PA,Thales,EUR,stock,,Industrials
+TTE.PA,TotalEnergies,EUR,stock,,Energy
+URW.PA,Unibail-Rodamco-Westfield,EUR,stock,,Real Estate
+VIE.PA,Veolia,EUR,stock,,Industrials
+DG.PA,Vinci,EUR,stock,,Industrials
+ADS.DE,Adidas,EUR,stock,,Apparel
+AIR.PA.DE,Airbus,EUR,stock,,Aerospace & Defence
+ALV.DE,Allianz,EUR,stock,,Financial Services
+BAS.DE,BASF,EUR,stock,,Chemicals
+BAYN.DE,Bayer,EUR,stock,,Pharmaceuticals
+BEI.DE,Beiersdorf,EUR,stock,,Consumer goods
+BMW.DE,BMW,EUR,stock,,Automotive
+BNR.DE,Brenntag,EUR,stock,,Distribution
+CBK.DE,Commerzbank,EUR,stock,,Financial Services
+CON.DE,Continental,EUR,stock,,Automotive
+DTG.DE,Daimler Truck,EUR,stock,,Automotive
+DBK.DE,Deutsche Bank,EUR,stock,,Financial Services
+DB1.DE,Deutsche Börse,EUR,stock,,Financial Services
+DHL.DE,Deutsche Post,EUR,stock,,Logistics
+DTE.DE,Deutsche Telekom,EUR,stock,,Telecommunication
+EOAN.DE,E.ON,EUR,stock,,Utilities
+FRE.DE,Fresenius,EUR,stock,,Healthcare
+FME.DE,Fresenius Medical Care,EUR,stock,,Healthcare
+G1A.DE,GEA Group,EUR,stock,,Mechanical Engineering
+HNR1.DE,Hannover Re,EUR,stock,,Insurance
+HEI.DE,Heidelberg Materials,EUR,stock,,Construction Materials
+HEN3.DE,Henkel,EUR,stock,,Consumer Goods
+IFX.DE,Infineon Technologies,EUR,stock,,Technology
+MBG.DE,Mercedes-Benz Group,EUR,stock,,Automotive
+MRK.DE,Merck,EUR,stock,,Pharmaceuticals
+MTX.DE,MTU Aero Engines,EUR,stock,,Aerospace & Defence
+MUV2.DE,Munich Re,EUR,stock,,Financial Services
+PAH3.DE,Porsche SE,EUR,stock,,Automotive
+QIA.DE,Qiagen,EUR,stock,,Biotech
+RHM.DE,Rheinmetall,EUR,stock,,Aerospace & Defence
+RWE.DE,RWE,EUR,stock,,Utilities
+SAP.DE,SAP,EUR,stock,,Technology
+G24.DE,Scout24,EUR,stock,,E-Commerce
+SIE.DE,Siemens,EUR,stock,,Industrials
+ENR.DE,Siemens Energy,EUR,stock,,Energy technology
+SHL.DE,Siemens Healthineers,EUR,stock,,Medical Equipment
+SY1.DE,Symrise,EUR,stock,,Chemicals
+VOW3.DE,Volkswagen Group,EUR,stock,,Automotive
+VNA.DE,Vonovia,EUR,stock,,Real Estate
+ZAL.DE,Zalando,EUR,stock,,E-Commerce

@@ -379,7 +379,7 @@ def render():
                 fig_dd.update_layout(
                     yaxis=dict(autorange="reversed"), height=550, showlegend=False
                 )
-                st.plotly_chart(fig_dd, use_container_width=True)
+                st.plotly_chart(fig_dd, width="stretch")
         else:
             st.info(
                 f"`{drawdown_col}` column not available yet. Re-run data import after SQL update."
@@ -588,7 +588,7 @@ def render():
                 )
                 fig.update_traces(textposition="top center")
                 fig.update_layout(height=450)
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, width="stretch")
 
             # If we have strict candidates, we can also show watchlist below if desired,
             # OR just keep it focused. User asked for "close" candidates.
@@ -744,7 +744,7 @@ def render():
                 fig_buy.update_layout(
                     yaxis=dict(autorange="reversed"), height=350, showlegend=False
                 )
-                st.plotly_chart(fig_buy, use_container_width=True)
+                st.plotly_chart(fig_buy, width="stretch")
 
         # ═══════════════════════════════════════════
         # Section 5: Vol Spike Heatmap
@@ -791,4 +791,4 @@ def render():
             opacity=0.5,
             annotation_text="Neutral",
         )
-        st.plotly_chart(fig_vol, use_container_width=True)
+        st.plotly_chart(fig_vol, width="stretch")

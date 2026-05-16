@@ -1,0 +1,28 @@
+ticker,name,ccy,listing,domicile,country,sector,yfinance_symbol,ibkr_symbol,ibkr_primary_exchange,ibkr_currency
+ASML,ASML Holding,EUR,EU,NL,Netherlands,Technology,ASML.AS,ASML,AEB,EUR
+SAP,SAP,EUR,EU,DE,Germany,Software & computer services,SAP.DE,SAP,IBIS,EUR
+SIE,Siemens,EUR,EU,DE,Germany,Industrial engineering,SIE.DE,SIE,IBIS,EUR
+IFX,Infineon Technologies,EUR,EU,DE,Germany,Electronic equipment & parts,IFX.DE,IFX,IBIS,EUR
+RHM,Rheinmetall,EUR,EU,DE,Germany,Aerospace & defence,RHM.DE,RHM,IBIS,EUR
+DB1,Deutsche Boerse,EUR,EU,DE,Germany,Financial services,DB1.DE,DB1,IBIS,EUR
+ALV,Allianz,EUR,EU,DE,Germany,Insurance,ALV.DE,ALV,IBIS,EUR
+MUV2,Munich Re,EUR,EU,DE,Germany,Insurance,MUV2.DE,MUV2,IBIS,EUR
+BAS,BASF,EUR,EU,DE,Germany,Chemicals,BAS.DE,BAS,IBIS,EUR
+AIR,Airbus,EUR,EU,FR,France,Aerospace & defence,AIR.PA,AIR,SBF,EUR
+SU,Schneider Electric,EUR,EU,FR,France,Electronic equipment & parts,SU.PA,SU,SBF,EUR
+MC,LVMH,EUR,EU,FR,France,Personal goods,MC.PA,MC,SBF,EUR
+OR,L'Oreal,EUR,EU,FR,France,Personal goods,OR.PA,OR,SBF,EUR
+SANOFI,Sanofi,EUR,EU,FR,France,Pharmaceuticals & biotechnology,SAN.PA,SAN,SBF,EUR
+BNP,BNP Paribas,EUR,EU,FR,France,Banks,BNP.PA,BNP,SBF,EUR
+AI,Air Liquide,EUR,EU,FR,France,Chemicals,AI.PA,AI,SBF,EUR
+TTE,TotalEnergies,EUR,EU,FR,France,Oil & gas producers,TTE.PA,TTE,SBF,EUR
+ENI,Eni,EUR,EU,IT,Italy,Oil & gas producers,ENI.MI,ENI,BVME,EUR
+UCG,UniCredit,EUR,EU,IT,Italy,Banks,UCG.MI,UCG,BVME,EUR
+ISP,Intesa Sanpaolo,EUR,EU,IT,Italy,Banks,ISP.MI,ISP,BVME,EUR
+RACE,Ferrari,EUR,EU,IT,Italy,Personal goods,RACE.MI,RACE,BVME,EUR
+SANTANDER,Banco Santander,EUR,EU,ES,Spain,Banks,SAN.MC,SAN,BM,EUR
+BBVA,BBVA,EUR,EU,ES,Spain,Banks,BBVA.MC,BBVA,BM,EUR
+CABK,CaixaBank,EUR,EU,ES,Spain,Banks,CABK.MC,CABK,BM,EUR
+IBE,Iberdrola,EUR,EU,ES,Spain,Electrical utilities & independent power producers,IBE.MC,IBE,BM,EUR
+FER,Ferrovial,EUR,EU,ES,Spain,Industrial goods and services,FER.MC,FER,BM,EUR
+ABI,AB InBev,EUR,EU,BE,Belgium,Beverages,ABI.BR,ABI,ENEXT.BR,EUR

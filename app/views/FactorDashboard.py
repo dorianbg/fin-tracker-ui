@@ -92,7 +92,7 @@ def render():
                 ),
             },
             height=max(300, len(heatmap_data) * 35 + 38),
-            use_container_width=True,
+            width="stretch",
         )
 
         st.header("Factor Comparison")
@@ -114,7 +114,7 @@ def render():
         fig_bar.update_layout(
             yaxis=dict(autorange="reversed"), height=max(350, len(comparison) * 28)
         )
-        st.plotly_chart(fig_bar, use_container_width=True)
+        st.plotly_chart(fig_bar, width="stretch")
 
         st.header("Factor Spread")
         st.markdown(
@@ -136,7 +136,7 @@ def render():
             title="Average Return by Factor Group",
         )
         fig_spread.update_layout(height=max(300, len(factor_avg) * 40))
-        st.plotly_chart(fig_spread, use_container_width=True)
+        st.plotly_chart(fig_spread, width="stretch")
 
         st.dataframe(
             factor_avg.style.format("{:+.2f}%"),

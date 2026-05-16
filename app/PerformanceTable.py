@@ -33,6 +33,7 @@ import views.AssetCorrelation as AssetCorrelation
 import views.PerformanceChart as PerformanceChart
 import views.RotationStrategies as RotationStrategies
 import views.PortfolioAllocator as PortfolioAllocator
+import views.RAAMStrategy as RAAMStrategy
 
 st.set_page_config(
     page_icon="🏠",
@@ -403,7 +404,7 @@ def load_signal_backtest_data(fund_types: tuple[str, ...], years: int) -> pd.Dat
     tickers_str = "','".join(tickers)
     price_df = get_conn().execute(
         f"""
-        SELECT ticker, date, price
+        SELECT ticker, date, price AS px_price
         FROM {di.px_tbl}
         WHERE ticker IN ('{tickers_str}')
           AND date >= '{start_date.isoformat()}'
@@ -414,11 +415,15 @@ def load_signal_backtest_data(fund_types: tuple[str, ...], years: int) -> pd.Dat
         return pd.DataFrame()
 
     price_df["date"] = pd.to_datetime(price_df["date"], format="%Y-%m-%d")
-    return perf_df.merge(
+    perf_df["price"] = pd.to_numeric(perf_df["price"], errors="coerce")
+    merged = perf_df.merge(
         price_df,
         on=["ticker", "date"],
         how="left",
     )
+    merged["price"] = merged["price"].fillna(merged["px_price"])
+    merged = merged.drop(columns=["px_price"])
+    return merged
 
 
 def simulate_signal_trades(
@@ -615,7 +620,7 @@ def render_signal_backtest(fund_types: list[str]):
         title="Exit Reasons",
     )
     fig_reasons.update_layout(height=max(250, len(reason_counts) * 45))
-    st.plotly_chart(fig_reasons, use_container_width=True)
+    st.plotly_chart(fig_reasons, width="stretch")
 
     recent = trades.sort_values("Entry Date", ascending=False).head(50).copy()
     recent["ticker"] = recent["Ticker"]
@@ -744,7 +749,7 @@ def render_action_screens(df: pd.DataFrame):
             opacity=0.5,
             annotation_text="Neutral",
         )
-        st.plotly_chart(fig_vol, use_container_width=True)
+        st.plotly_chart(fig_vol, width="stretch")
 
     with tab_capitulation:
         st.markdown(
@@ -880,6 +885,7 @@ def render_action_screens(df: pd.DataFrame):
     tab_charts,
     tab_corr,
     tab_allocator,
+    tab_raam,
 ) = st.tabs([
     "Today",
     "Performance",
@@ -893,6 +899,7 @@ def render_action_screens(df: pd.DataFrame):
     "Charts",
     "Correlation",
     "Allocator",
+    "RAAM Strategy",
 ])
 
 with tab_today:
@@ -1068,3 +1075,6 @@ with tab_corr:
 
 with tab_allocator:
     PortfolioAllocator.render()
+
+with tab_raam:
+    RAAMStrategy.render()

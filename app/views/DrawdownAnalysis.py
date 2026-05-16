@@ -78,7 +78,7 @@ def render():
             opacity=0.5,
             annotation_text="Severe",
         )
-        st.plotly_chart(fig_dd, use_container_width=True)
+        st.plotly_chart(fig_dd, width="stretch")
 
         # Summary metrics
         col1, col2, col3, col4 = st.columns(4)
@@ -133,7 +133,7 @@ def render():
             x=severity_threshold, line_dash="dash", line_color="red", opacity=0.3
         )
         fig_scatter.update_layout(height=550)
-        st.plotly_chart(fig_scatter, use_container_width=True)
+        st.plotly_chart(fig_scatter, width="stretch")
 
         # ═══════════════════════════════════════════
         # Section 3: Severe Drawdowns Table
@@ -285,7 +285,7 @@ def render():
                     opacity=0.3,
                 )
                 fig_dd_hist.update_layout(height=450)
-                st.plotly_chart(fig_dd_hist, use_container_width=True)
+                st.plotly_chart(fig_dd_hist, width="stretch")
 
                 # Max drawdown stats
                 st.subheader("📋 Max Drawdown Statistics")

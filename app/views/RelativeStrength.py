@@ -122,7 +122,7 @@ def render():
             title=f"Distribution of RS Ratings — {rs_period}",
         )
         fig_hist.update_layout(height=350)
-        st.plotly_chart(fig_hist, use_container_width=True)
+        st.plotly_chart(fig_hist, width="stretch")
 
         st.header("🏆 RS Rankings")
 
@@ -235,7 +235,7 @@ def render():
             fig_top.update_layout(
                 yaxis=dict(autorange="reversed"), height=450, showlegend=False
             )
-            st.plotly_chart(fig_top, use_container_width=True)
+            st.plotly_chart(fig_top, width="stretch")
 
         with col_bot:
             st.subheader("🔴 Bottom 15")
@@ -256,7 +256,7 @@ def render():
             fig_bot.update_layout(
                 yaxis=dict(autorange="reversed"), height=450, showlegend=False
             )
-            st.plotly_chart(fig_bot, use_container_width=True)
+            st.plotly_chart(fig_bot, width="stretch")
 
         st.header("🎯 RS vs Trend Alignment")
         st.markdown(
@@ -296,4 +296,4 @@ def render():
             annotation_text="252d MA",
         )
         fig_align.update_layout(height=550)
-        st.plotly_chart(fig_align, use_container_width=True)
+        st.plotly_chart(fig_align, width="stretch")

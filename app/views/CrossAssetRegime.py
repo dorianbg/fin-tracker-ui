@@ -118,7 +118,7 @@ def render():
             labels=dict(color="Return %"),
         )
         fig.update_layout(height=max(500, len(heatmap_data) * 28))
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
         # ═══════════════════════════════════════════
         # Section 2: Regime Indicator
@@ -183,7 +183,7 @@ def render():
                 yaxis=dict(autorange="reversed"), height=max(500, len(df) * 24)
             )
             fig_bar.add_vline(x=0, line_dash="solid", line_color="grey", opacity=0.5)
-            st.plotly_chart(fig_bar, use_container_width=True)
+            st.plotly_chart(fig_bar, width="stretch")
 
         # ═══════════════════════════════════════════
         # Section 3: Moving Average Status
@@ -210,7 +210,7 @@ def render():
             labels=dict(color="% from MA"),
         )
         fig_ma.update_layout(height=max(500, len(ma_data) * 28))
-        st.plotly_chart(fig_ma, use_container_width=True)
+        st.plotly_chart(fig_ma, width="stretch")
 
         # ═══════════════════════════════════════════
         # Section 4: Volatility Regime
@@ -263,7 +263,7 @@ def render():
                 textposition="top center", selector=dict(mode="markers+text")
             )
             fig_vol.update_layout(height=500)
-            st.plotly_chart(fig_vol, use_container_width=True)
+            st.plotly_chart(fig_vol, width="stretch")
 
         with col_v2:
             # average vol ratio per asset class
@@ -332,7 +332,7 @@ def render():
                 title="Asset Class Return Spreads",
             )
             fig_spread.update_layout(height=300)
-            st.plotly_chart(fig_spread, use_container_width=True)
+            st.plotly_chart(fig_spread, width="stretch")
 
         # ═══════════════════════════════════════════
         # Section 6: Risk Appetite Dashboard
@@ -381,7 +381,7 @@ def render():
                 yaxis=dict(autorange="reversed"), height=350, showlegend=False
             )
             fig_ra.add_vline(x=0, line_dash="solid", line_color="grey", opacity=0.5)
-            st.plotly_chart(fig_ra, use_container_width=True)
+            st.plotly_chart(fig_ra, width="stretch")
 
             # summary
             positive_count = sum(1 for r in risk_rows if r["Spread"] > 0)
@@ -462,7 +462,7 @@ def render():
                         title="Average 3-Month Return by Regime & Asset Class",
                     )
                     fig_rc.update_layout(height=350)
-                    st.plotly_chart(fig_rc, use_container_width=True)
+                    st.plotly_chart(fig_rc, width="stretch")
 
                     # regime frequency
                     regime_freq = regime_df["regime"].value_counts()
@@ -547,7 +547,7 @@ def render():
             )
             fig_corr.add_hline(y=0, line_dash="dash", line_color="grey", opacity=0.3)
             fig_corr.update_layout(height=500, hovermode="x unified")
-            st.plotly_chart(fig_corr, use_container_width=True)
+            st.plotly_chart(fig_corr, width="stretch")
 
             # current snapshot table
             st.subheader("📋 Current Correlation Snapshot")

@@ -227,7 +227,7 @@ def render():
             fig.update_traces(textposition="top center")
             fig.add_hline(y=0, line_dash="dash", line_color="grey", opacity=0.3)
             fig.update_layout(height=500)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
 
         st.markdown("---")
 
@@ -338,7 +338,7 @@ def render():
             fig_bar.update_layout(
                 yaxis=dict(autorange="reversed"), height=450, showlegend=False
             )
-            st.plotly_chart(fig_bar, use_container_width=True)
+            st.plotly_chart(fig_bar, width="stretch")
 
         st.markdown("---")
 
@@ -418,7 +418,7 @@ def render():
                     fig_52w.update_layout(
                         yaxis=dict(autorange="reversed"), height=500, showlegend=False
                     )
-                    st.plotly_chart(fig_52w, use_container_width=True)
+                    st.plotly_chart(fig_52w, width="stretch")
 
                 # ── History Chart ──
                 st.subheader("📅 New 52-Week Highs Over Time")
@@ -478,7 +478,7 @@ def render():
                             line=dict(color="black", width=2),
                         )
                         fig_hist.update_layout(height=400, hovermode="x unified")
-                        st.plotly_chart(fig_hist, use_container_width=True)
+                        st.plotly_chart(fig_hist, width="stretch")
                 except Exception as e:
                     st.warning(f"Could not load 52-week high history: {e}")
 
@@ -568,7 +568,7 @@ def render():
                 height=700,
                 margin=dict(t=50, l=10, r=10, b=10),
             )
-            st.plotly_chart(fig_treemap, use_container_width=True)
+            st.plotly_chart(fig_treemap, width="stretch")
 
             # Also show a classic heatmap grid (like the ThematicDashboard)
             st.subheader("📊 Multi-Period Return Grid")
@@ -616,6 +616,6 @@ def render():
                 height=max(500, len(grid_heatmap) * 22),
                 coloraxis=dict(cmin=-robust_max, cmax=robust_max),
             )
-            st.plotly_chart(fig_grid, use_container_width=True)
+            st.plotly_chart(fig_grid, width="stretch")
 
         section_heatmap()

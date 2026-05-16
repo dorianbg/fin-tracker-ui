@@ -1,3 +1,4 @@
 {
-    "python.analysis.extraPaths": ["./app"]
+    "python.analysis.extraPaths": ["./app"],
+    "window.title": "${rootName}${separator}${activeEditorShort}${separator}${appName}"
 }

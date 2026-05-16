@@ -464,7 +464,7 @@ def render():
             fig_gain.update_layout(
                 yaxis=dict(autorange="reversed"), height=350, showlegend=False
             )
-            st.plotly_chart(fig_gain, use_container_width=True)
+            st.plotly_chart(fig_gain, width="stretch")
 
         with col_dn:
             st.subheader("🔴 Top Losers")
@@ -480,7 +480,7 @@ def render():
             fig_lose.update_layout(
                 yaxis=dict(autorange="reversed"), height=350, showlegend=False
             )
-            st.plotly_chart(fig_lose, use_container_width=True)
+            st.plotly_chart(fig_lose, width="stretch")
 
         # ═══════════════════════════════════════════
         # Section 5: Summary Metrics

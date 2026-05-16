@@ -110,3 +110,13 @@ ENV/
 *.iml
 
 *.duckdb
+
+# Pipeline
+*.db
+*.db.wal
+storage/
+logs/
+pipeline/logs/
+
+# Data files (too large for GitHub)
+*.parquet

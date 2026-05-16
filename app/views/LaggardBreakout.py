@@ -198,7 +198,7 @@ def render():
             labels=dict(color="Excess Return %"),
         )
         fig_rs.update_layout(height=max(400, len(rs_show) * 25))
-        st.plotly_chart(fig_rs, use_container_width=True)
+        st.plotly_chart(fig_rs, width="stretch")
 
         # ═══════════════════════════════════════════
         # Section 2: Laggard Awakening
@@ -365,7 +365,7 @@ def render():
                     height=max(300, len(top_awk) * 35),
                     showlegend=False,
                 )
-                st.plotly_chart(fig_awk, use_container_width=True)
+                st.plotly_chart(fig_awk, width="stretch")
             else:
                 st.info(
                     f"No laggards are currently showing positive {rs_awakening} relative strength. "

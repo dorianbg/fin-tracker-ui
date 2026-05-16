@@ -5,7 +5,7 @@ from PIL import Image
 import io
 
 # ---- SETTINGS ----
-input_pdf = "/Users/dbg/code/IdeaProjects/fin-tracker-ui/algobook.pdf"
+input_pdf = "/Users/dbg/code/fin-tracker-ui/algobook.pdf"
 threshold_values = [90, 100, 110]  # adjust between 120–200 depending on scan brightness
 for threshold_value in threshold_values:
     output_pdf = f"output_bw_{threshold_value}.pdf"

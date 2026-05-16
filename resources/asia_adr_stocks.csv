@@ -1,0 +1,13 @@
+ticker,name,ccy,listing,domicile,country,sector,yfinance_symbol,ibkr_symbol,ibkr_primary_exchange,ibkr_currency
+TSM,Taiwan Semiconductor Manufacturing ADR,USD,US,TW,Taiwan,Technology,TSM,TSM,NYSE,USD
+BABA,Alibaba Group ADR,USD,US,CN,China,Consumer Discretionary,BABA,BABA,NYSE,USD
+PDD,PDD Holdings ADR,USD,US,CN,China,Consumer Discretionary,PDD,PDD,NASDAQ,USD
+JD,JD.com ADR,USD,US,CN,China,Consumer Discretionary,JD,JD,NASDAQ,USD
+BIDU,Baidu ADR,USD,US,CN,China,Communication,BIDU,BIDU,NASDAQ,USD
+NTES,NetEase ADR,USD,US,CN,China,Communication,NTES,NTES,NASDAQ,USD
+YUMC,Yum China,USD,US,CN,China,Consumer Discretionary,YUMC,YUMC,NYSE,USD
+HDB,HDFC Bank ADR,USD,US,IN,India,Financials,HDB,HDB,NYSE,USD
+IBN,ICICI Bank ADR,USD,US,IN,India,Financials,IBN,IBN,NYSE,USD
+INFY,Infosys ADR,USD,US,IN,India,Technology,INFY,INFY,NYSE,USD
+WIT,Wipro ADR,USD,US,IN,India,Technology,WIT,WIT,NYSE,USD
+TCEHY,Tencent ADR,USD,US,CN,China,Communication,TCEHY,TCEHY,PINK,USD
