@@ -1,5 +1,15 @@
 # Tasks
 
+## 2026-05-18 00:00 - Add Sector Rotation Strategy
+
+- Goal: Implement a Faber-style sector rotation dashboard using the existing price data.
+- Scope: `app/views/SectorRotation.py`, `app/PerformanceTable.py`, tests, plus tracking updates.
+- Assumptions: Use monthly closes, average 1/3/6/9/12-month relative strength, equal-weight top N sectors, optional 10-month benchmark SMA cash filter, and existing total-return price series as the data source.
+- Plan: Add pure ranking/backtest functions with tests, create a Streamlit tab for current ranks/backtest/rebalances, then compile and run targeted tests.
+- Test-first approach: Add unit tests for ranking order and backtest/stat generation before verification.
+- Verify: `uv run pytest tests/test_sector_rotation.py`; `uv run python -m py_compile app/PerformanceTable.py app/views/SectorRotation.py tests/test_sector_rotation.py`; `uv run ruff check --select E9,F63,F7,F82 app/PerformanceTable.py app/views/SectorRotation.py tests/test_sector_rotation.py`.
+- Status: completed locally, uncommitted.
+
 ## 2026-05-12 00:00 - Improve Trade Simulation Validity
 
 - Goal: Reduce lookahead bias in Today trade simulation and compare simulated trades against the dashboard benchmark.

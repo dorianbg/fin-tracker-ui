@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-05-18 00:00 - Add Sector Rotation Strategy
+
+- Changed: Added a dedicated Sector Rotation tab with Faber-style composite relative-strength rankings, monthly rebalance backtest, optional 10-month SMA cash filter, current sector ranks, performance stats, equity curve, and recent rebalance history.
+- Why: The existing generic rotation page did not implement the sector-specific research model from Faber/ChartSchool/Quantpedia.
+- How: Created reusable ranking/backtest functions in `app/views/SectorRotation.py`, added unit tests, and wired the view into `app/PerformanceTable.py`.
+- Verified: `uv run pytest tests/test_sector_rotation.py`; `uv run python -m py_compile app/PerformanceTable.py app/views/SectorRotation.py tests/test_sector_rotation.py`; `uv run ruff check --select E9,F63,F7,F82 app/PerformanceTable.py app/views/SectorRotation.py tests/test_sector_rotation.py`.
+- Commit: Uncommitted
+
 ## 2026-05-12 00:00 - Improve Today Trade Simulation Validity
 
 - Changed: Updated the Today trade simulation to enter on the next available trading day after a signal and to report benchmark-relative returns.

@@ -32,6 +32,7 @@ import views.CrossAssetRegime as CrossAssetRegime
 import views.AssetCorrelation as AssetCorrelation
 import views.PerformanceChart as PerformanceChart
 import views.RotationStrategies as RotationStrategies
+import views.SectorRotation as SectorRotation
 import views.PortfolioAllocator as PortfolioAllocator
 import views.RAAMStrategy as RAAMStrategy
 
@@ -881,6 +882,7 @@ def render_action_screens(df: pd.DataFrame):
     tab_rs,
     tab_rotation,
     tab_regime,
+    tab_sector_rotation,
     tab_factors,
     tab_charts,
     tab_corr,
@@ -896,6 +898,7 @@ def render_action_screens(df: pd.DataFrame):
     "Rotation",
     "Cross-Asset",
     "Factors",
+    "Sector Rotation",
     "Charts",
     "Correlation",
     "Allocator",
@@ -1063,6 +1066,9 @@ with tab_rotation:
 
 with tab_regime:
     CrossAssetRegime.render()
+
+with tab_sector_rotation:
+    SectorRotation.render()
 
 with tab_factors:
     FactorDashboard.render()
