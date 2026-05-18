@@ -105,6 +105,11 @@ IWMO.L,iShares Edge MSCI World Momentum Factor,USD,eq,,Factor - Momentum
 IUMF.L,iShares Edge MSCI USA Momentum Factor,USD,eq,,Factor - Momentum
 MVOL.L,iShares Edge MSCI World Min Volatility,USD,eq,,Factor - Low Vol
 IEFS.L,iShares Edge MSCI Europe Size Factor,EUR,eq,,Factor - Size
+ESIS.L,iShares MSCI Europe Consumer Staples Sector,GBP,eq,,Sector - Consumer Staples
+MTRL.L,SPDR MSCI Europe Materials UCITS ETF,EUR,eq,,Sector - Materials
+UTIL.L,SPDR MSCI Europe Utilities UCITS ETF,EUR,eq,,Sector - Utilities
+IPRP.L,iShares European Property Yield UCITS ETF,GBP,eq,,Sector - Real Estate
+TELE.L,SPDR MSCI Europe Communication Services UCITS ETF,EUR,eq,,Sector - Communication Services
 IFSW.L,iShares World Equity Multi-Factor,USD,eq,,Factor - Multi
 R1GB.L,iShares Russell 1000 Growth,USD,eq,,Factor - Growth
 USDV.L,SPDR S&P US Dividend Aristocrats,USD,eq,,Factor - Dividend

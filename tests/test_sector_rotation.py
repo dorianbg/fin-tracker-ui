@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 
 from app.views.SectorRotation import (
+    SECTOR_UNIVERSES,
     build_sector_rotation_backtest,
     current_sector_ranks,
     performance_stats,
@@ -57,3 +58,24 @@ def test_backtest_applies_signals_after_warmup_and_reports_stats():
     stats = performance_stats(backtest)
     assert stats["Series"].tolist() == ["Strategy", "Benchmark"]
     assert stats.loc[stats["Series"] == "Strategy", "CAGR"].iloc[0] > 0
+
+
+def test_sector_universes_include_complete_spdr_and_lse_europe_sectors():
+    spdr = SECTOR_UNIVERSES["US Select Sector SPDRs"]["tickers"]
+    lse_europe = SECTOR_UNIVERSES["LSE Europe Sectors"]["tickers"]
+
+    assert spdr == [
+        "XLC",
+        "XLY",
+        "XLP",
+        "XLE",
+        "XLF",
+        "XLV",
+        "XLI",
+        "XLB",
+        "XLRE",
+        "XLK",
+        "XLU",
+    ]
+    assert len(lse_europe) == 11
+    assert all(ticker.endswith(".L") for ticker in lse_europe)

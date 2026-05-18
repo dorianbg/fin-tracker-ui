@@ -1,5 +1,15 @@
 # Tasks
 
+## 2026-05-18 10:40 - Expand Sector Rotation Universes
+
+- Goal: Fill sector-rotation gaps by covering all 11 SPDR sectors, adding broader US industry ETFs, and adding a complete LSE-listed Europe sector universe.
+- Scope: `app/views/SectorRotation.py`, `resources/instrument_info.csv`, `tests/test_sector_rotation.py`, plus tracking updates.
+- Assumptions: The US SPDR universe should remain the canonical 11-sector GICS set; the expanded US universe can include narrower industry ETFs; Europe uses validated LSE `.L` sector ETFs and may require a pipeline/export refresh for new tickers.
+- Plan: Add missing Europe sector metadata, expand Europe universe to 11 sectors, add an explicit LSE Europe universe and a US extended universe, then run targeted tests/checks.
+- Test-first approach: Extend sector-universe tests to assert complete SPDR and LSE Europe coverage.
+- Verify: `uv run pytest tests/test_sector_rotation.py`; `uv run python -m py_compile app/views/SectorRotation.py tests/test_sector_rotation.py`; `uv run ruff check --select E9,F63,F7,F82 app/views/SectorRotation.py tests/test_sector_rotation.py`.
+- Status: completed locally, uncommitted.
+
 ## 2026-05-18 00:00 - Add Sector Rotation Strategy
 
 - Goal: Implement a Faber-style sector rotation dashboard using the existing price data.

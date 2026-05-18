@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-05-18 10:40 - Expand Sector Rotation Universes
+
+- Changed: Expanded sector rotation with a broader US ETF universe, complete 11-sector Europe/LSE universes, and metadata rows for the missing Europe sector ETFs.
+- Why: The initial Europe rotation universe only covered 6 sectors, and the dashboard lacked a broader industry-level rotation option.
+- How: Added validated LSE-listed Europe Consumer Staples, Materials, Utilities, Real Estate, and Communication Services sector ETF metadata; updated `SECTOR_UNIVERSES`; added a regression test for complete SPDR and LSE Europe coverage.
+- Verified: `uv run pytest tests/test_sector_rotation.py`; `uv run python -m py_compile app/views/SectorRotation.py tests/test_sector_rotation.py`; `uv run ruff check --select E9,F63,F7,F82 app/views/SectorRotation.py tests/test_sector_rotation.py`.
+- Commit: Uncommitted
+
 ## 2026-05-18 00:00 - Add Sector Rotation Strategy
 
 - Changed: Added a dedicated Sector Rotation tab with Faber-style composite relative-strength rankings, monthly rebalance backtest, optional 10-month SMA cash filter, current sector ranks, performance stats, equity curve, and recent rebalance history.
