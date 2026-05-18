@@ -29,6 +29,10 @@ streamlit run PerformanceTable.py
 
 **Required env var**: `PARQUET_ENCRYPTION_KEY`
 
+## Agent Workflow
+
+For non-trivial code changes, create and work in a separate git worktree before editing. This is required when the current tree is dirty, the task is risky, or concurrent work may be happening. Edit in place only for trivial changes or when the user explicitly asks to use the current branch/worktree.
+
 ## Data Loading
 
 On first load, `duckdb_importer.run()` exports DuckDB views to encrypted Parquet files in `app/data/`. The UI reads Parquet into an in-memory DuckDB connection via `data.get_conn()`.
