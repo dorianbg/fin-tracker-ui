@@ -10,6 +10,46 @@
 - Verify: `uv run pytest tests/test_sector_rotation.py`; `uv run python -m py_compile app/views/SectorRotation.py tests/test_sector_rotation.py`; `uv run ruff check --select E9,F63,F7,F82 app/views/SectorRotation.py tests/test_sector_rotation.py`.
 - Status: completed locally, uncommitted.
 
+## 2026-05-18 10:24 - Scrape Official RAA Holdings
+
+- Goal: Download official RAA holdings/allocation from the 3Fourteen RAA holdings page and use it as the live allocation anchor.
+- Scope: `app/raa_official.py`, `scripts/download_raa_holdings.py`, `app/views/RAAMStrategy.py`, `Makefile`, `resources/raa_current_allocation.json`, plus tracking updates.
+- Assumptions: The page's server-rendered `Asset Allocation` section is the authoritative current allocation source; if live scraping fails, the app can fall back to the last cached scrape.
+- Plan: Add a stdlib HTML scraper, normalize official labels to RAAM asset names, cache successful downloads, wire RAAM latest incomplete-month anchoring to scraped data, and add a Make target.
+- Test-first approach: Verify scraper output against the official page and then verify latest RAAM weights match scraped allocation.
+- Verify: `uv run python scripts/download_raa_holdings.py`; `source .venv/bin/activate && python -m compileall -q app pipeline scripts`; latest RAAM comparison to scraped holdings has MAD `0.0000%`, max delta `0.0000%`, correlation `1.0000`.
+- Status: completed locally, uncommitted.
+
+## 2026-05-18 08:35 - Anchor Latest RAAM To Official Holdings
+
+- Goal: Make latest RAAM allocation match the official live holdings supplied by the user.
+- Scope: `app/views/RAAMStrategy.py`, plus tracking updates.
+- Assumptions: Current official holdings should be treated as the authoritative live allocation when available; historical/backtest behavior should remain model-driven.
+- Plan: Add current official holdings as a latest incomplete-month anchor, apply it only to the latest incomplete month, and document the behavior in the tab.
+- Test-first approach: Compare latest model weights directly against the supplied official holdings.
+- Verify: `source .venv/bin/activate && python -m compileall -q app pipeline`; latest live comparison has MAD `0.0000%`, max delta `0.0000%`, correlation `1.0000`, and sum `100.00%`.
+- Status: completed locally, uncommitted.
+
+## 2026-05-18 07:43 - Fix RAAM Live Nasdaq Underweight
+
+- Goal: Bring latest RAAM Nasdaq weight closer to the official source while preserving historical snapshot fit.
+- Scope: `app/views/RAAMStrategy.py`, plus tracking updates.
+- Assumptions: Official-like behavior should not let tiny satellite equity sleeves crowd out Nasdaq/US large cap, and current incomplete-month live allocations should not be dragged by stale smoothing.
+- Plan: Inspect latest weight decomposition, tighten satellite equity caps, skip smoothing for the current incomplete month, and verify live Nasdaq plus historical fit metrics.
+- Test-first approach: Use the official Nasdaq `18.38%` example as the failing live check, then rerun allocation-fit verification.
+- Verify: `source .venv/bin/activate && python -m compileall -q app pipeline`; latest model Nasdaq is `18.43%`; historical average correlation/MAD is `0.915`/`1.71%`.
+- Status: completed locally, uncommitted.
+
+## 2026-05-18 07:38 - Refine RAAM Fit And Explain Tab
+
+- Goal: Further improve RAAM historical allocation fit and make the Streamlit tab easier to interpret.
+- Scope: `app/views/RAAMStrategy.py`, plus tracking updates.
+- Assumptions: Keep calibration surgical by only changing existing blend/smoothing defaults and adding descriptive UI text.
+- Plan: Test focused trend/HRP blend and smoothing alpha combinations, update the best simple defaults, and add model/readme descriptions in the tab.
+- Test-first approach: Use allocation-fit script before changing defaults; then compile and rerun the fit check.
+- Verify: `source .venv/bin/activate && python -m compileall -q app pipeline`; allocation-fit script confirmed average correlation/MAD improved to `0.897`/`1.83%`.
+- Status: completed locally, uncommitted.
+
 ## 2026-05-18 00:00 - Add Sector Rotation Strategy
 
 - Goal: Implement a Faber-style sector rotation dashboard using the existing price data.
@@ -18,6 +58,28 @@
 - Plan: Add pure ranking/backtest functions with tests, create a Streamlit tab for current ranks/backtest/rebalances, then compile and run targeted tests.
 - Test-first approach: Add unit tests for ranking order and backtest/stat generation before verification.
 - Verify: `uv run pytest tests/test_sector_rotation.py`; `uv run python -m py_compile app/PerformanceTable.py app/views/SectorRotation.py tests/test_sector_rotation.py`; `uv run ruff check --select E9,F63,F7,F82 app/PerformanceTable.py app/views/SectorRotation.py tests/test_sector_rotation.py`.
+- Status: completed locally, uncommitted.
+
+## 2026-05-18 00:00 - Add Robotics Stock Tracker
+
+- Goal: Add a dedicated dashboard tab for the requested robotics stock universe with performance-table style data and price visualisation.
+- Scope: `app/PerformanceTable.py`, `app/views/RoboticsStocks.py`, `resources/instrument_info.csv`, plus tracking updates.
+- Assumptions: Use the existing yfinance/DuckDB/export pipeline; only add clearly public or reasonably mappable symbols; show unclear/private names separately rather than inventing tickers.
+- Alignment: User requested a new tab like the Performance table and asked to parallelise with subagents.
+- Plan: Add robotics metadata rows, create a focused Streamlit view using existing latest performance and price loaders, wire it into top-level tabs, then compile/check syntax.
+- Test-first approach: No Streamlit UI tests cover tabs; use compile and syntax-critical lint checks plus CSV duplicate validation.
+- Verify: `uv run python -m py_compile app/PerformanceTable.py app/views/RoboticsStocks.py`; `uv run ruff check --select E9,F63,F7,F82 app/PerformanceTable.py app/views/RoboticsStocks.py`; `make pipeline`; `make export`; CSV validation confirmed required mapped robotics tickers are present and no duplicate tickers exist; DuckDB check found `48/48` robotics tracker tickers in `latest_performance`.
+- Status: completed locally, uncommitted.
+
+## 2026-05-17 11:27 - Continue RAAM Calibration
+
+- Goal: Load official-like RAAM proxy data and improve historical allocation fit against transcribed official snapshots.
+- Scope: `app/views/RAAMStrategy.py`, `pipeline/utils.py`, exported app data, plus tracking updates.
+- Assumptions: Monthly smoothing is plausible official-like behavior and must use only prior model weights, not future official allocations.
+- Alignment: Continued from `HANDOFF.md`; no repeated questions for decisions already recorded there.
+- Plan: Run pipeline/export, fix any pipeline compatibility issue blocking official proxies, rerun allocation checks, then add the smallest calibration change if fit still lags.
+- Test-first approach: Use allocation-fit scripts and compile checks; no existing UI automation covers RAAM calibration.
+- Verify: `source .venv/bin/activate && python -m compileall -q app pipeline`; RAAM allocation-fit script confirmed all official proxies present and average correlation/MAD improved to `0.882`/`1.94%`.
 - Status: completed locally, uncommitted.
 
 ## 2026-05-12 00:00 - Improve Trade Simulation Validity

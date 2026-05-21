@@ -1,0 +1,319 @@
+- generic:
+  - generic [ref=e2]:
+    - generic [ref=e359]:
+      - heading "RAAM Controls" [level=2] [ref=e363]
+      - generic [ref=e365]:
+        - paragraph [ref=e369]: Date range
+        - textbox "Select a date range." [ref=e373]:
+          - /placeholder: YYYY/MM/DD – YYYY/MM/DD
+          - text: 2011/02/14 – 2026/05/13
+        - paragraph: Press the down arrow key to interact with the calendar and select a date. Press the escape button to close the calendar.
+        - paragraph: Selected date range is from 2011/02/14 to 2026/05/13.
+      - generic [ref=e376]:
+        - paragraph [ref=e379]: Rebalance Dates
+        - paragraph [ref=e382]: "184"
+      - generic [ref=e385]:
+        - paragraph [ref=e388]: Proxy Tickers
+        - paragraph [ref=e391]: "20"
+      - separator [ref=e396]
+      - paragraph [ref=e401]:
+        - text: "Latest rebalance:"
+        - strong [ref=e402]: 2026-05-13
+      - separator [ref=e407]
+      - heading "Parameter Tuning" [level=2] [ref=e411]
+      - generic [ref=e414] [cursor=pointer]:
+        - checkbox "Enable tuning"
+        - generic [ref=e417]:
+          - paragraph [ref=e419]: Enable tuning
+          - button "Help for Enable tuning" [ref=e423]:
+            - img [ref=e424]
+    - generic [ref=e3]:
+      - banner [ref=e6]:
+        - generic [ref=e8]:
+          - button "keyboard_double_arrow_right" [ref=e431] [cursor=pointer]:
+            - generic [ref=e433]: keyboard_double_arrow_right
+          - generic [ref=e9]:
+            - generic [ref=e460]:
+              - generic [ref=e462]: info
+              - generic [ref=e463]: File change.
+              - button "Rerun" [ref=e465] [cursor=pointer]:
+                - generic [ref=e466]: Rerun
+              - button "Always rerun" [ref=e468] [cursor=pointer]:
+                - generic [ref=e469]: Always rerun
+            - button "Main menu" [ref=e23] [cursor=pointer]:
+              - img [ref=e24]
+      - generic [ref=e31]:
+        - generic [ref=e52]:
+          - tablist [ref=e54]:
+            - tab "Today" [ref=e55] [cursor=pointer]:
+              - paragraph [ref=e57]: Today
+            - tab "Performance" [active] [selected] [ref=e58] [cursor=pointer]:
+              - paragraph [ref=e60]: Performance
+            - tab "Pullback" [ref=e61] [cursor=pointer]:
+              - paragraph [ref=e63]: Pullback
+            - tab "Crossings" [ref=e64] [cursor=pointer]:
+              - paragraph [ref=e66]: Crossings
+            - tab "Daily Summary" [ref=e67] [cursor=pointer]:
+              - paragraph [ref=e69]: Daily Summary
+            - tab "Relative Strength" [ref=e70] [cursor=pointer]:
+              - paragraph [ref=e72]: Relative Strength
+            - tab "Rotation" [ref=e73] [cursor=pointer]:
+              - paragraph [ref=e75]: Rotation
+            - tab "Cross-Asset" [ref=e76] [cursor=pointer]:
+              - paragraph [ref=e78]: Cross-Asset
+            - tab "Factors" [ref=e79] [cursor=pointer]:
+              - paragraph [ref=e81]: Factors
+            - tab "Charts" [ref=e82] [cursor=pointer]:
+              - paragraph [ref=e84]: Charts
+            - tab "Correlation" [ref=e85] [cursor=pointer]:
+              - paragraph [ref=e87]: Correlation
+            - tab "Allocator" [ref=e88] [cursor=pointer]:
+              - paragraph [ref=e90]: Allocator
+            - tab "RAAM Strategy" [ref=e91] [cursor=pointer]:
+              - paragraph [ref=e93]: RAAM Strategy
+          - tabpanel "Performance" [ref=e470]:
+            - generic [ref=e471]:
+              - generic [ref=e473]:
+                - generic [ref=e477]:
+                  - generic [ref=e480] [cursor=pointer]:
+                    - checkbox "Show Sharpe ratio" [checked]
+                    - paragraph [ref=e486]: Show Sharpe ratio
+                  - generic [ref=e489] [cursor=pointer]:
+                    - checkbox "Show Gross return" [checked]
+                    - paragraph [ref=e495]: Show Gross return
+                - generic [ref=e499]:
+                  - generic [ref=e502] [cursor=pointer]:
+                    - checkbox "Custom sort on Sharpe"
+                    - paragraph [ref=e508]: Custom sort on Sharpe
+                  - generic [ref=e511] [cursor=pointer]:
+                    - checkbox "Custom sort on Returns"
+                    - paragraph [ref=e517]: Custom sort on Returns
+                - generic [ref=e521]:
+                  - paragraph [ref=e525]: Returns
+                  - generic [ref=e528]:
+                    - generic [ref=e529]:
+                      - button "1d, close by backspace":
+                        - generic "1d" [ref=e530]
+                        - img [ref=e532] [cursor=pointer]
+                      - button "1w, close by backspace":
+                        - generic "1w" [ref=e534]
+                        - img [ref=e536] [cursor=pointer]
+                      - button "2w, close by backspace":
+                        - generic "2w" [ref=e538]
+                        - img [ref=e540] [cursor=pointer]
+                      - button "1mo, close by backspace":
+                        - generic "1mo" [ref=e542]
+                        - img [ref=e544] [cursor=pointer]
+                      - button "3mo, close by backspace":
+                        - generic "3mo" [ref=e546]
+                        - img [ref=e548] [cursor=pointer]
+                      - button "6mo, close by backspace":
+                        - generic "6mo" [ref=e550]
+                        - img [ref=e552] [cursor=pointer]
+                      - button "1y, close by backspace":
+                        - generic "1y" [ref=e554]
+                        - img [ref=e556] [cursor=pointer]
+                      - button "3y, close by backspace":
+                        - generic "3y" [ref=e558]
+                        - img [ref=e560] [cursor=pointer]
+                      - button "5y, close by backspace":
+                        - generic "5y" [ref=e562]
+                        - img [ref=e564] [cursor=pointer]
+                      - combobox "Selected 1d, 1w, 2w, 1mo, 3mo, 6mo, 1y, 3y, 5y. Returns" [ref=e567]
+                    - generic [ref=e568]:
+                      - button "Clear all" [ref=e569] [cursor=pointer]
+                      - img "open" [ref=e571] [cursor=pointer]
+                - generic [ref=e576]:
+                  - paragraph [ref=e580]: Instrument Category
+                  - generic [ref=e583]:
+                    - generic [ref=e584]:
+                      - button "eq, close by backspace":
+                        - generic "eq" [ref=e585]
+                        - img [ref=e587] [cursor=pointer]
+                      - button "stock, close by backspace":
+                        - generic "stock" [ref=e589]
+                        - img [ref=e591] [cursor=pointer]
+                      - button "commod, close by backspace":
+                        - generic "commod" [ref=e593]
+                        - img [ref=e595] [cursor=pointer]
+                      - combobox "Selected eq, stock, commod. Instrument Category" [ref=e598]
+                    - generic [ref=e599]:
+                      - button "Clear all" [ref=e600] [cursor=pointer]
+                      - img "open" [ref=e602] [cursor=pointer]
+              - generic [ref=e605]:
+                - generic [ref=e609]:
+                  - paragraph [ref=e613]: Filter dataframe on
+                  - generic [ref=e616]:
+                    - generic [ref=e617]:
+                      - combobox "Filter dataframe on" [ref=e619]
+                      - generic: Choose options
+                    - img "open" [ref=e621] [cursor=pointer]
+                - generic [ref=e627]:
+                  - button "Show/hide columns" [ref=e631] [cursor=pointer]:
+                    - img [ref=e632]
+                  - button "Download as CSV" [ref=e637] [cursor=pointer]:
+                    - img [ref=e638]
+                  - button "Search" [ref=e643] [cursor=pointer]:
+                    - img [ref=e644]
+                  - button "Fullscreen" [ref=e649] [cursor=pointer]:
+                    - img [ref=e650]
+                - separator [ref=e665]
+                - heading "Action Screens" [level=2] [ref=e670]:
+                  - text: Action Screens
+                  - generic [ref=e671]:
+                    - link "Link to heading":
+                      - /url: "#action-screens"
+                      - img
+                - paragraph [ref=e676]: "Fast screens for unusual volatility: stress/capitulation on the downside and ETF breakouts on the upside."
+                - generic [ref=e678]:
+                  - tablist [ref=e680]:
+                    - tab "📊 Volatility Spikes" [selected] [ref=e681] [cursor=pointer]:
+                      - paragraph [ref=e683]: 📊 Volatility Spikes
+                    - tab "💀 Capitulation" [ref=e684] [cursor=pointer]:
+                      - paragraph [ref=e686]: 💀 Capitulation
+                    - tab "🚀 High-Vol Breakouts" [ref=e687] [cursor=pointer]:
+                      - paragraph [ref=e689]: 🚀 High-Vol Breakouts
+                  - tabpanel "📊 Volatility Spikes" [ref=e692]:
+                    - generic [ref=e693]:
+                      - paragraph [ref=e698]:
+                        - text: Highest
+                        - strong [ref=e699]: 1-month / 1-year volatility ratio
+                        - text: . Values above 1.0 mean short-term volatility is running hotter than normal.
+                      - generic [ref=e705]:
+                        - img:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - generic: "0"
+                                - generic:
+                                  - generic: "0.2"
+                                - generic:
+                                  - generic: "0.4"
+                                - generic:
+                                  - generic: "0.6"
+                                - generic:
+                                  - generic: "0.8"
+                                - generic:
+                                  - generic: "1"
+                              - generic:
+                                - generic:
+                                  - generic: Vanguard FTSE Developed Markets ETF
+                                - generic:
+                                  - generic: Emerging Mkts
+                                - generic:
+                                  - generic: Global Infrastructure ETF
+                                - generic:
+                                  - generic: T-Mobile US
+                                - generic:
+                                  - generic: Vanguard FTSE Europe ETF
+                                - generic:
+                                  - generic: Rocket Lab
+                                - generic:
+                                  - generic: Emerging Markets ex-China ETF
+                                - generic:
+                                  - generic: SPDR EURO Stoxx50
+                                - generic:
+                                  - generic: Fortinet
+                                - generic:
+                                  - generic: EM Small-Cap
+                                - generic:
+                                  - generic: Rolls-Royce Holdings OTC
+                                - generic:
+                                  - generic: Edwards Lifesciences
+                                - generic:
+                                  - generic: World Energy
+                                - generic:
+                                  - generic: South Korea
+                                - generic:
+                                  - generic: Intel
+                                - generic:
+                                  - generic: U.S. Medical Devices ETF
+                                - generic:
+                                  - generic: Emerging Markets Min Vol Factor ETF
+                                - generic:
+                                  - generic: United Parcel Service
+                                - generic:
+                                  - generic: Hermes International
+                                - generic:
+                                  - generic: Equinor ADR
+                                - generic:
+                                  - generic: Datadog
+                                - generic:
+                                  - generic: FedEx
+                                - generic:
+                                  - generic: Stryker
+                                - generic:
+                                  - generic: Arm Holdings
+                                - generic:
+                                  - generic: Brookfield Renewable
+                                - generic:
+                                  - generic: Cloudflare
+                                - generic:
+                                  - generic: ServiceNow
+                                - generic:
+                                  - generic: Comcast
+                                - generic:
+                                  - generic: Boeing
+                                - generic:
+                                  - generic: Qualcomm
+                        - img:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - generic: "0.45"
+                                - generic:
+                                  - generic: "0.5"
+                                - generic:
+                                  - generic: "0.55"
+                                - generic:
+                                  - generic: "0.6"
+                              - generic:
+                                - generic:
+                                  - generic: Vol Ratio (1mo/1y)
+                            - generic:
+                              - generic:
+                                - generic: Top 30 - Highest Vol Spike Ratio
+                            - generic:
+                              - generic: Vol Ratio (1mo/1y)
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - generic: Neutral
+                        - toolbar [ref=e719]:
+                          - button "Download plot as a PNG" [ref=e721] [cursor=pointer]:
+                            - img [ref=e722]
+                          - generic [ref=e724]:
+                            - button "Zoom" [ref=e725] [cursor=pointer]:
+                              - img [ref=e726]
+                            - button "Pan" [ref=e728] [cursor=pointer]:
+                              - img [ref=e729]
+                          - generic [ref=e731]:
+                            - button "Zoom in" [ref=e732] [cursor=pointer]:
+                              - img [ref=e733]
+                            - button "Zoom out" [ref=e735] [cursor=pointer]:
+                              - img [ref=e736]
+                            - button "Autoscale" [ref=e738] [cursor=pointer]:
+                              - img [ref=e739]
+                            - button "Reset axes" [ref=e741] [cursor=pointer]:
+                              - img [ref=e742]
+                          - button "Fullscreen" [ref=e745] [cursor=pointer]:
+                            - img [ref=e746]
+                        - img
+        - alert [ref=e442]:
+          - generic [ref=e445]:
+            - generic [ref=e446]: "AttributeError: 'Styler' object has no attribute 'applymap'"
+            - generic [ref=e447]:
+              - generic [ref=e448]: "Traceback:"
+              - code [ref=e451]:
+                - generic [ref=e452]: File "/Users/dbg/code/fin-tracker-ui/app/PerformanceTable.py", line 1080, in <module> RAAMStrategy.render()
+                - generic [ref=e453]: File "/Users/dbg/code/fin-tracker-ui/app/views/RAAMStrategy.py", line 650, in render _render_allocation_table(latest_weights, trend_df, latest_date)
+                - generic [ref=e454]: File "/Users/dbg/code/fin-tracker-ui/app/views/RAAMStrategy.py", line 1127, in _render_allocation_table .applymap(_color_active, subset=["Active"]) ^^^^^^^^
+            - generic [ref=e455]:
+              - button "Copy" [ref=e456] [cursor=pointer]
+              - link "Ask Google" [ref=e457] [cursor=pointer]:
+                - /url: https://www.google.com/search?q=AttributeError%3A%20'Styler'%20object%20has%20no%20attribute%20'applymap'
+              - link "Ask ChatGPT" [ref=e458] [cursor=pointer]:
+                - /url: https://chatgpt.com/?q=AttributeError%3A%20'Styler'%20object%20has%20no%20attribute%20'applymap'%0A%0AFile%20%22%2FUsers%2Fdbg%2Fcode%2Ffin-tracker-ui%2Fapp%2FPerformanceTable.py%22%2C%20line%201080%2C%20in%20%3Cmodule%3E%0A%20%20%20%20RAAMStrategy.render()%0AFile%20%22%2FUsers%2Fdbg%2Fcode%2Ffin-tracker-ui%2Fapp%2Fviews%2FRAAMStrategy.py%22%2C%20line%20650%2C%20in%20render%0A%20%20%20%20_render_allocation_table(latest_weights%2C%20trend_df%2C%20latest_date)%0AFile%20%22%2FUsers%2Fdbg%2Fcode%2Ffin-tracker-ui%2Fapp%2Fviews%2FRAAMStrategy.py%22%2C%20line%201127%2C%20in%20_render_allocation_table%0A%20%20%20%20.applymap(_color_active%2C%20subset%3D%5B%22Active%22%5D)%0A%20%20%20%20%20%5E%5E%5E%5E%5E%5E%5E%5E
+  - img [ref=e356]

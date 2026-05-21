@@ -8,12 +8,60 @@
 - Verified: `uv run pytest tests/test_sector_rotation.py`; `uv run python -m py_compile app/views/SectorRotation.py tests/test_sector_rotation.py`; `uv run ruff check --select E9,F63,F7,F82 app/views/SectorRotation.py tests/test_sector_rotation.py`.
 - Commit: Uncommitted
 
+## 2026-05-18 10:24 - Scrape Official RAA Holdings
+
+- Changed: Added a 3Fourteen RAA holdings scraper, cache file, download script, and `make raa-holdings` target; RAAM now anchors latest incomplete-month weights to scraped official allocation instead of hardcoded weights.
+- Why: Live allocation matching should follow the official source automatically rather than requiring manual constant updates.
+- How: Parsed the server-rendered `Asset Allocation` section with stdlib `urllib`/`html.parser`, normalized official labels to RAAM asset names, wrote successful downloads to `resources/raa_current_allocation.json`, and used the cached scrape as fallback.
+- Verified: `uv run python scripts/download_raa_holdings.py`; `source .venv/bin/activate && python -m compileall -q app pipeline scripts`; latest RAAM comparison to scraped holdings has MAD `0.0000%`, max delta `0.0000%`, correlation `1.0000`.
+- Commit: Uncommitted
+
+## 2026-05-18 08:35 - Anchor Latest RAAM To Official Holdings
+
+- Changed: Added current official RAA holdings and anchored the latest incomplete-month allocation to those weights.
+- Why: The user wants the live strategy tab close to the official source, and indirect model calibration still left large asset-level deltas outside Nasdaq.
+- How: Added `CURRENT_RAA_ALLOCATION`, `CURRENT_RAA_SOURCE`, and `_apply_current_official_anchor(...)`; historical month-end weights/backtests remain model-driven.
+- Verified: `source .venv/bin/activate && python -m compileall -q app pipeline`; latest official comparison has MAD `0.0000%`, max delta `0.0000%`, correlation `1.0000`, and total weight `100.00%`.
+- Commit: Uncommitted
+
+## 2026-05-18 07:43 - Fix RAAM Live Nasdaq Underweight
+
+- Changed: Tightened small satellite equity caps, increased default trend emphasis to `80%`, and skipped smoothing for the current incomplete month.
+- Why: The model's raw latest Nasdaq signal was close to the official source, but stale smoothing plus loose tiny-sleeve caps pushed live Nasdaq down to about `12%`.
+- How: Capped EM ex-China/Europe/Japan/US Small Cap at `2%`/`3%`/`3%`/`4%`, preserved month-end smoothing for historical fit, and left the latest partial-month allocation unsmoothed.
+- Verified: `source .venv/bin/activate && python -m compileall -q app pipeline`; latest Nasdaq is `18.43%` versus official `18.38%`; historical average correlation/MAD improved to `0.915`/`1.71%`.
+- Commit: Uncommitted
+
+## 2026-05-18 07:38 - Refine RAAM Calibration And Tab Guidance
+
+- Changed: Updated RAAM defaults to `65%` trend / `35%` HRP and smoothing alpha `0.20`; added explanatory Streamlit sections for how to read the tab and what the calibration means.
+- Why: Focused calibration showed these defaults improve historical allocation fit while preserving the existing model structure.
+- How: Tested nearby blend/smoothing combinations, kept the smallest parameter-only model change, and added concise `st.info`/expander guidance near the tab header.
+- Verified: `source .venv/bin/activate && python -m compileall -q app pipeline`; allocation-fit script improved average correlation/MAD to `0.897`/`1.83%` with max absolute snapshot delta `12.51%`.
+- Commit: Uncommitted
+
 ## 2026-05-18 00:00 - Add Sector Rotation Strategy
 
 - Changed: Added a dedicated Sector Rotation tab with Faber-style composite relative-strength rankings, monthly rebalance backtest, optional 10-month SMA cash filter, current sector ranks, performance stats, equity curve, and recent rebalance history.
 - Why: The existing generic rotation page did not implement the sector-specific research model from Faber/ChartSchool/Quantpedia.
 - How: Created reusable ranking/backtest functions in `app/views/SectorRotation.py`, added unit tests, and wired the view into `app/PerformanceTable.py`.
 - Verified: `uv run pytest tests/test_sector_rotation.py`; `uv run python -m py_compile app/PerformanceTable.py app/views/SectorRotation.py tests/test_sector_rotation.py`; `uv run ruff check --select E9,F63,F7,F82 app/PerformanceTable.py app/views/SectorRotation.py tests/test_sector_rotation.py`.
+- Commit: Uncommitted
+
+## 2026-05-18 00:00 - Add Robotics Stock Tracker
+
+- Changed: Added a dedicated Robotics tab with a focused robotics universe, latest performance table, sparklines, filters, and selected indexed price charts; added public robotics-related symbols to `instrument_info.csv` and exported refreshed app data.
+- Why: Robotics names were spread across general performance data and several requested companies were not yet in the tracked universe.
+- How: Created `app/views/RoboticsStocks.py`, wired it into `app/PerformanceTable.py`, and mapped clear public tickers to the existing pipeline metadata.
+- Verified: `uv run python -m py_compile app/PerformanceTable.py app/views/RoboticsStocks.py`; `uv run ruff check --select E9,F63,F7,F82 app/PerformanceTable.py app/views/RoboticsStocks.py`; `make pipeline`; `make export`; CSV validation confirmed required mapped robotics tickers are present and no duplicate tickers exist; DuckDB check found `48/48` robotics tracker tickers in `latest_performance`.
+- Commit: Uncommitted
+
+## 2026-05-17 11:27 - Improve RAAM Historical Allocation Fit
+
+- Changed: Loaded official-like RAAM proxies into the exported app data, added no-lookahead monthly allocation smoothing with a default alpha of `0.30`, and exposed smoothing alpha in RAAM tuning controls.
+- Why: Official proxy substitution alone barely changed average MAD, while smoothing materially improved alignment with official allocation snapshots.
+- How: Fixed DuckDB insertion for Pandas 3 string extension columns in `pipeline/utils.py`, reran `make pipeline && make export`, and smoothed each rebalance against prior model weights after cap and bucket constraints.
+- Verified: `source .venv/bin/activate && python -m compileall -q app pipeline`; allocation-fit script confirmed all official proxies available and improved average correlation/MAD from about `0.796`/`2.21%` to `0.882`/`1.94%`.
 - Commit: Uncommitted
 
 ## 2026-05-12 00:00 - Improve Today Trade Simulation Validity

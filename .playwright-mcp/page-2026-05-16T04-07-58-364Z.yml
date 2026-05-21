@@ -1,0 +1,1167 @@
+- generic:
+  - generic:
+    - generic [ref=e3]:
+      - banner [ref=e6]:
+        - generic [ref=e9]:
+          - generic [ref=e1660]:
+            - img [ref=e1661]
+            - generic [ref=e1663]: Connecting
+          - button "Deploy" [ref=e20] [cursor=pointer]:
+            - generic [ref=e22]: Deploy
+          - button "Main menu" [ref=e24] [cursor=pointer]:
+            - img [ref=e25]
+      - generic [ref=e30]:
+        - tablist [ref=e32]:
+          - tab "Today" [ref=e33] [cursor=pointer]:
+            - paragraph [ref=e35]: Today
+          - tab "Performance" [ref=e36] [cursor=pointer]:
+            - paragraph [ref=e38]: Performance
+          - tab "Pullback" [ref=e39] [cursor=pointer]:
+            - paragraph [ref=e41]: Pullback
+          - tab "Crossings" [ref=e42] [cursor=pointer]:
+            - paragraph [ref=e44]: Crossings
+          - tab "Daily Summary" [ref=e45] [cursor=pointer]:
+            - paragraph [ref=e47]: Daily Summary
+          - tab "Relative Strength" [ref=e48] [cursor=pointer]:
+            - paragraph [ref=e50]: Relative Strength
+          - tab "Rotation" [ref=e51] [cursor=pointer]:
+            - paragraph [ref=e53]: Rotation
+          - tab "Cross-Asset" [ref=e54] [cursor=pointer]:
+            - paragraph [ref=e56]: Cross-Asset
+          - tab "Factors" [ref=e57] [cursor=pointer]:
+            - paragraph [ref=e59]: Factors
+          - tab "Charts" [ref=e60] [cursor=pointer]:
+            - paragraph [ref=e62]: Charts
+          - tab "Correlation" [ref=e63] [cursor=pointer]:
+            - paragraph [ref=e65]: Correlation
+          - tab "Allocator" [ref=e66] [cursor=pointer]:
+            - paragraph [ref=e68]: Allocator
+          - tab "RAAM Strategy" [selected] [ref=e69] [cursor=pointer]:
+            - paragraph [ref=e71]: RAAM Strategy
+        - tabpanel "RAAM Strategy" [ref=e304]:
+          - generic [ref=e307]:
+            - heading "📊 RAAM Strategy — Real Asset Allocation Model" [level=1] [ref=e312]:
+              - text: 📊 RAAM Strategy — Real Asset Allocation Model
+              - generic [ref=e313]:
+                - link "Link to heading":
+                  - /url: "#raam-strategy-real-asset-allocation-model"
+                  - img
+            - paragraph [ref=e318]:
+              - text: Based on 3Fourteen Research's
+              - emphasis [ref=e319]: "Real Asset Allocation: The World Has Changed"
+              - text: (May 2023). This implementation uses
+              - strong [ref=e320]: 20 US-listed ETFs
+              - text: ", regression-based trend scoring across 6 timeframes, two-level hierarchical risk parity, and monthly rebalancing with no lookahead."
+            - generic [ref=e323]:
+              - checkbox "Load RAAM Strategy" [checked] [disabled]
+              - paragraph [ref=e328]: Load RAAM Strategy
+            - group [ref=e347]:
+              - generic "keyboard_arrow_right RAAM Controls" [ref=e348] [cursor=pointer]:
+                - generic [ref=e349]:
+                  - generic [ref=e351]: keyboard_arrow_right
+                  - paragraph [ref=e354]: RAAM Controls
+            - heading "🎯 Default Current Model Allocation" [level=2] [ref=e359]:
+              - text: 🎯 Default Current Model Allocation
+              - generic [ref=e360]:
+                - link "Link to heading":
+                  - /url: "#default-current-model-allocation"
+                  - img
+            - generic [ref=e365]:
+              - button "Show/hide columns" [ref=e369] [cursor=pointer]:
+                - img [ref=e370]
+              - button "Download as CSV" [ref=e375] [cursor=pointer]:
+                - img [ref=e376]
+              - button "Search" [ref=e381] [cursor=pointer]:
+                - img [ref=e382]
+              - button "Fullscreen" [ref=e387] [cursor=pointer]:
+                - img [ref=e388]
+            - paragraph [ref=e403]:
+              - text: "Pre-norm weight sum:"
+              - strong [ref=e404]: 119.4%
+              - text: "| Final weights are cap-normalised to 100% | Compress > 1 = weight gained in normalisation; < 1 = lost."
+            - heading "Pre-Normalisation vs Final Weights" [level=3] [ref=e409]:
+              - text: Pre-Normalisation vs Final Weights
+              - generic [ref=e410]:
+                - link "Link to heading":
+                  - /url: "#pre-normalisation-vs-final-weights"
+                  - img
+            - generic [ref=e413]:
+              - generic [ref=e415]:
+                - button "Show data" [ref=e418] [cursor=pointer]:
+                  - img [ref=e419]
+                - button "Fullscreen" [ref=e424] [cursor=pointer]:
+                  - img [ref=e425]
+              - generic [ref=e428]:
+                - generic "Vega visualization" [ref=e429]:
+                  - img [ref=e430]:
+                    - generic [ref=e434]:
+                      - generic "Y-axis for a linear scale with values from 0% to 40%" [ref=e438]:
+                        - generic [ref=e440]:
+                          - generic:
+                            - generic: 0%
+                            - generic: 5%
+                            - generic: 10%
+                            - generic: 15%
+                            - generic: 20%
+                            - generic: 25%
+                            - generic: 30%
+                            - generic: 35%
+                            - generic: 40%
+                      - generic [ref=e441]:
+                        - generic [ref=e446]:
+                          - generic "Title text 'Alternatives'":
+                            - generic: Alternatives
+                        - generic [ref=e451]:
+                          - generic "Title text 'Equities'":
+                            - generic: Equities
+                        - generic [ref=e456]:
+                          - generic "Title text 'Fixed Income'":
+                            - generic: Fixed Income
+                      - generic [ref=e457]:
+                        - 'generic "X-axis for a discrete scale with 20 values: Bitcoin, Commodities, Energy, Gold, Managed Futures, ending with TIPS" [ref=e460]':
+                          - generic [ref=e462]:
+                            - generic:
+                              - generic: Bitcoin
+                              - generic: Commodities
+                              - generic: Energy
+                              - generic: Gold
+                              - generic: Managed Futures
+                              - generic: Miners
+                              - generic: Real Estate
+                              - generic: Dividend Payers
+                              - generic: EM ex-China
+                              - generic: Europe
+                              - generic: Japan
+                              - generic: Nasdaq
+                              - generic: US Large Cap
+                              - generic: US Small Cap
+                              - generic: Corporate Bonds
+                              - generic: EM Bonds
+                              - generic: High Yield
+                              - generic: Long-Term Treas…
+                              - generic: T-Bills
+                              - generic: TIPS
+                        - 'generic "X-axis for a discrete scale with 20 values: Bitcoin, Commodities, Energy, Gold, Managed Futures, ending with TIPS" [ref=e465]':
+                          - generic [ref=e467]:
+                            - generic:
+                              - generic: Bitcoin
+                              - generic: Commodities
+                              - generic: Energy
+                              - generic: Gold
+                              - generic: Managed Futures
+                              - generic: Miners
+                              - generic: Real Estate
+                              - generic: Dividend Payers
+                              - generic: EM ex-China
+                              - generic: Europe
+                              - generic: Japan
+                              - generic: Nasdaq
+                              - generic: US Large Cap
+                              - generic: US Small Cap
+                              - generic: Corporate Bonds
+                              - generic: EM Bonds
+                              - generic: High Yield
+                              - generic: Long-Term Treas…
+                              - generic: T-Bills
+                              - generic: TIPS
+                        - 'generic "X-axis for a discrete scale with 20 values: Bitcoin, Commodities, Energy, Gold, Managed Futures, ending with TIPS" [ref=e470]':
+                          - generic [ref=e472]:
+                            - generic:
+                              - generic: Bitcoin
+                              - generic: Commodities
+                              - generic: Energy
+                              - generic: Gold
+                              - generic: Managed Futures
+                              - generic: Miners
+                              - generic: Real Estate
+                              - generic: Dividend Payers
+                              - generic: EM ex-China
+                              - generic: Europe
+                              - generic: Japan
+                              - generic: Nasdaq
+                              - generic: US Large Cap
+                              - generic: US Small Cap
+                              - generic: Corporate Bonds
+                              - generic: EM Bonds
+                              - generic: High Yield
+                              - generic: Long-Term Treas…
+                              - generic: T-Bills
+                              - generic: TIPS
+                      - generic [ref=e473]:
+                        - generic [ref=e480]:
+                          - 'generic "Asset: Bitcoin; Weight: 2%; Stage: Pre-Normalisation" [ref=e481]'
+                          - 'generic "Asset: Commodities; Weight: 11%; Stage: Pre-Normalisation" [ref=e482]'
+                          - 'generic "Asset: Energy; Weight: 5%; Stage: Pre-Normalisation" [ref=e483]'
+                          - 'generic "Asset: Gold; Weight: 2%; Stage: Pre-Normalisation" [ref=e484]'
+                          - 'generic "Asset: Managed Futures; Weight: 6%; Stage: Pre-Normalisation" [ref=e485]'
+                          - 'generic "Asset: Miners; Weight: 6%; Stage: Pre-Normalisation" [ref=e486]'
+                          - 'generic "Asset: Real Estate; Weight: 7%; Stage: Pre-Normalisation" [ref=e487]'
+                          - 'generic "Asset: Bitcoin; Weight: 2%; Stage: Final" [ref=e488]'
+                          - 'generic "Asset: Commodities; Weight: 9%; Stage: Final" [ref=e489]'
+                          - 'generic "Asset: Energy; Weight: 4%; Stage: Final" [ref=e490]'
+                          - 'generic "Asset: Gold; Weight: 1%; Stage: Final" [ref=e491]'
+                          - 'generic "Asset: Managed Futures; Weight: 5%; Stage: Final" [ref=e492]'
+                          - 'generic "Asset: Miners; Weight: 5%; Stage: Final" [ref=e493]'
+                          - 'generic "Asset: Real Estate; Weight: 6%; Stage: Final" [ref=e494]'
+                        - generic [ref=e501]:
+                          - 'generic "Asset: Dividend Payers; Weight: 7%; Stage: Pre-Normalisation" [ref=e502]'
+                          - 'generic "Asset: EM ex-China; Weight: 6%; Stage: Pre-Normalisation" [ref=e503]'
+                          - 'generic "Asset: Europe; Weight: 2%; Stage: Pre-Normalisation" [ref=e504]'
+                          - 'generic "Asset: Japan; Weight: 2%; Stage: Pre-Normalisation" [ref=e505]'
+                          - 'generic "Asset: Nasdaq; Weight: 21%; Stage: Pre-Normalisation" [ref=e506]'
+                          - 'generic "Asset: US Large Cap; Weight: 18%; Stage: Pre-Normalisation" [ref=e507]'
+                          - 'generic "Asset: US Small Cap; Weight: 6%; Stage: Pre-Normalisation" [ref=e508]'
+                          - 'generic "Asset: Dividend Payers; Weight: 6%; Stage: Final" [ref=e509]'
+                          - 'generic "Asset: EM ex-China; Weight: 5%; Stage: Final" [ref=e510]'
+                          - 'generic "Asset: Europe; Weight: 2%; Stage: Final" [ref=e511]'
+                          - 'generic "Asset: Japan; Weight: 2%; Stage: Final" [ref=e512]'
+                          - 'generic "Asset: Nasdaq; Weight: 18%; Stage: Final" [ref=e513]'
+                          - 'generic "Asset: US Large Cap; Weight: 15%; Stage: Final" [ref=e514]'
+                          - 'generic "Asset: US Small Cap; Weight: 5%; Stage: Final" [ref=e515]'
+                        - generic [ref=e522]:
+                          - 'generic "Asset: Corporate Bonds; Weight: 3%; Stage: Pre-Normalisation" [ref=e523]'
+                          - 'generic "Asset: EM Bonds; Weight: 3%; Stage: Pre-Normalisation" [ref=e524]'
+                          - 'generic "Asset: High Yield; Weight: 4%; Stage: Pre-Normalisation" [ref=e525]'
+                          - 'generic "Asset: Long-Term Treasuries; Weight: 2%; Stage: Pre-Normalisation" [ref=e526]'
+                          - 'generic "Asset: T-Bills; Weight: 3%; Stage: Pre-Normalisation" [ref=e527]'
+                          - 'generic "Asset: TIPS; Weight: 3%; Stage: Pre-Normalisation" [ref=e528]'
+                          - 'generic "Asset: Corporate Bonds; Weight: 2%; Stage: Final" [ref=e529]'
+                          - 'generic "Asset: EM Bonds; Weight: 2%; Stage: Final" [ref=e530]'
+                          - 'generic "Asset: High Yield; Weight: 3%; Stage: Final" [ref=e531]'
+                          - 'generic "Asset: Long-Term Treasuries; Weight: 2%; Stage: Final" [ref=e532]'
+                          - 'generic "Asset: T-Bills; Weight: 2%; Stage: Final" [ref=e533]'
+                          - 'generic "Asset: TIPS; Weight: 2%; Stage: Final" [ref=e534]'
+                      - 'generic "Symbol legend titled ''Stage'' for fill color with 2 values: Pre-Normalisation, Final" [ref=e535]':
+                        - generic [ref=e537]:
+                          - generic [ref=e541]:
+                            - generic [ref=e543]:
+                              - generic:
+                                - generic: Pre-Normalisation
+                            - generic [ref=e545]:
+                              - generic:
+                                - generic: Final
+                          - generic:
+                            - generic: Stage
+                - group "Click to view actions":
+                  - img [ref=e547] [cursor=pointer]
+            - heading "Bucket Summary" [level=3] [ref=e555]:
+              - text: Bucket Summary
+              - generic [ref=e556]:
+                - link "Link to heading":
+                  - /url: "#bucket-summary"
+                  - img
+            - paragraph [ref=e561]:
+              - strong [ref=e562]: Alternatives
+              - text: ": 32.3% (benchmark: 20.0%, active: +12.3%, pre-norm: 38.6%) |"
+              - strong [ref=e563]: Equities
+              - text: ": 53.2% (benchmark: 50.0%, active: +3.2%, pre-norm: 63.5%) |"
+              - strong [ref=e564]: Fixed Income
+              - text: ": 14.5% (benchmark: 30.0%, active: -15.5%, pre-norm: 17.3%)"
+            - heading "🔗 Trend Rank → Weight Attribution" [level=2] [ref=e569]:
+              - text: 🔗 Trend Rank → Weight Attribution
+              - generic [ref=e570]:
+                - link "Link to heading":
+                  - /url: "#trend-rank-weight-attribution"
+                  - img
+            - generic [ref=e572]:
+              - generic [ref=e574]:
+                - heading "Rank → Weight Pipeline" [level=3] [ref=e579]:
+                  - text: Rank → Weight Pipeline
+                  - generic [ref=e580]:
+                    - link "Link to heading":
+                      - /url: "#rank-weight-pipeline"
+                      - img
+                - generic [ref=e585]:
+                  - button "Show/hide columns" [ref=e589] [cursor=pointer]:
+                    - img [ref=e590]
+                  - button "Download as CSV" [ref=e595] [cursor=pointer]:
+                    - img [ref=e596]
+                  - button "Search" [ref=e601] [cursor=pointer]:
+                    - img [ref=e602]
+                  - button "Fullscreen" [ref=e607] [cursor=pointer]:
+                    - img [ref=e608]
+                - paragraph [ref=e623]:
+                  - text: "Pre-normalisation sum:"
+                  - strong [ref=e624]: 119.4%
+                  - text: ". Normalisation target: 100% after cap enforcement. Benchmark-weighted avg rank:"
+                  - strong [ref=e625]: "0.500"
+                  - text: (target 0.500)
+              - generic [ref=e627]:
+                - heading "Rank vs Final Weight" [level=3] [ref=e632]:
+                  - text: Rank vs Final Weight
+                  - generic [ref=e633]:
+                    - link "Link to heading":
+                      - /url: "#rank-vs-final-weight"
+                      - img
+                - generic [ref=e636]:
+                  - generic [ref=e638]:
+                    - button "Show data" [ref=e641] [cursor=pointer]:
+                      - img [ref=e642]
+                    - button "Fullscreen" [ref=e647] [cursor=pointer]:
+                      - img [ref=e648]
+                  - generic [ref=e651]:
+                    - generic "Vega visualization" [ref=e652]:
+                      - img [ref=e653]:
+                        - generic [ref=e658]:
+                          - generic "X-axis titled 'Trend Rank Percentile' for a linear scale with values from 0% to 100%" [ref=e665]:
+                            - generic [ref=e667]:
+                              - generic:
+                                - generic: 0%
+                                - generic: 10%
+                                - generic: 20%
+                                - generic: 30%
+                                - generic: 40%
+                                - generic: 50%
+                                - generic: 60%
+                                - generic: 70%
+                                - generic: 80%
+                                - generic: 90%
+                                - generic: 100%
+                              - generic:
+                                - generic: Trend Rank Percentile
+                          - generic "Y-axis titled 'Final Model Weight' for a linear scale with values from 0% to 20%" [ref=e668]:
+                            - generic [ref=e670]:
+                              - generic:
+                                - generic: 0%
+                                - generic: 2%
+                                - generic: 4%
+                                - generic: 6%
+                                - generic: 8%
+                                - generic: 10%
+                                - generic: 12%
+                                - generic: 14%
+                                - generic: 16%
+                                - generic: 18%
+                                - generic: 20%
+                              - generic:
+                                - generic: Final Model Weight
+                          - generic [ref=e671]:
+                            - 'generic "Trend Rank Percentile: 51%; Final Model Weight: 2%; final_val: 0.0177417086255; Asset: Bitcoin; rank_val: 0.51; bench_val: 0.02" [ref=e672]'
+                            - 'generic "Trend Rank Percentile: 96%; Final Model Weight: 9%; final_val: 0.0885010067167; Asset: Commodities; rank_val: 0.96; bench_val: 0.04" [ref=e673]'
+                            - 'generic "Trend Rank Percentile: 6%; Final Model Weight: 2%; final_val: 0.0249945111644; Asset: Corporate Bonds; rank_val: 0.06; bench_val: 0.1" [ref=e674]'
+                            - 'generic "Trend Rank Percentile: 71%; Final Model Weight: 6%; final_val: 0.0602384550126; Asset: Dividend Payers; rank_val: 0.71; bench_val: 0.05" [ref=e675]'
+                            - 'generic "Trend Rank Percentile: 16%; Final Model Weight: 2%; final_val: 0.021397928782; Asset: EM Bonds; rank_val: 0.16; bench_val: 0.02" [ref=e676]'
+                            - 'generic "Trend Rank Percentile: 91%; Final Model Weight: 5%; final_val: 0.0537132797786; Asset: EM ex-China; rank_val: 0.91; bench_val: 0.01" [ref=e677]'
+                            - 'generic "Trend Rank Percentile: 66%; Final Model Weight: 4%; final_val: 0.0446825755342; Asset: Energy; rank_val: 0.66; bench_val: 0.02" [ref=e678]'
+                            - 'generic "Trend Rank Percentile: 36%; Final Model Weight: 2%; final_val: 0.0200851522213; Asset: Europe; rank_val: 0.36; bench_val: 0.01" [ref=e679]'
+                            - 'generic "Trend Rank Percentile: 11%; Final Model Weight: 1%; final_val: 0.0142768538439; Asset: Gold; rank_val: 0.11; bench_val: 0.02" [ref=e680]'
+                            - 'generic "Trend Rank Percentile: 31%; Final Model Weight: 3%; final_val: 0.032961057222; Asset: High Yield; rank_val: 0.31; bench_val: 0.06" [ref=e681]'
+                            - 'generic "Trend Rank Percentile: 41%; Final Model Weight: 2%; final_val: 0.0177841771412; Asset: Japan; rank_val: 0.41; bench_val: 0.01" [ref=e682]'
+                            - 'generic "Trend Rank Percentile: 1%; Final Model Weight: 2%; final_val: 0.0177570160845; Asset: Long-Term Treasuries; rank_val: 0.01; bench_val: 0.1" [ref=e683]'
+                            - 'generic "Trend Rank Percentile: 46%; Final Model Weight: 5%; final_val: 0.0496182413959; Asset: Managed Futures; rank_val: 0.46; bench_val: 0.06" [ref=e684]'
+                            - 'generic "Trend Rank Percentile: 86%; Final Model Weight: 5%; final_val: 0.0524269283526; Asset: Miners; rank_val: 0.86; bench_val: 0.02" [ref=e685]'
+                            - 'generic "Trend Rank Percentile: 81%; Final Model Weight: 18%; final_val: 0.178548466183; Asset: Nasdaq; rank_val: 0.81; bench_val: 0.2" [ref=e686]'
+                            - 'generic "Trend Rank Percentile: 56%; Final Model Weight: 6%; final_val: 0.0558085382528; Asset: Real Estate; rank_val: 0.56; bench_val: 0.02" [ref=e687]'
+                            - 'generic "Trend Rank Percentile: 26%; Final Model Weight: 2%; final_val: 0.0235150467259; Asset: T-Bills; rank_val: 0.26; bench_val: 0" [ref=e688]'
+                            - 'generic "Trend Rank Percentile: 21%; Final Model Weight: 2%; final_val: 0.0245785379935; Asset: TIPS; rank_val: 0.21; bench_val: 0.02" [ref=e689]'
+                            - 'generic "Trend Rank Percentile: 61%; Final Model Weight: 15%; final_val: 0.15154858422; Asset: US Large Cap; rank_val: 0.61; bench_val: 0.2" [ref=e690]'
+                            - 'generic "Trend Rank Percentile: 76%; Final Model Weight: 5%; final_val: 0.0498219347495; Asset: US Small Cap; rank_val: 0.76; bench_val: 0.02" [ref=e691]'
+                          - generic:
+                            - 'generic "rank_val: 0.01; bench_val: 0.1"'
+                    - group "Click to view actions":
+                      - img [ref=e693] [cursor=pointer]
+                - paragraph [ref=e701]: Dashed line = benchmark weight at each rank. Points above = overweight.
+            - separator [ref=e706]
+            - 'heading "Comparison: Our Model vs Live RAA ETF" [level=3] [ref=e711]':
+              - text: "Comparison: Our Model vs Live RAA ETF"
+              - generic [ref=e712]:
+                - link "Link to heading":
+                  - /url: "#comparison-our-model-vs-live-raa-etf"
+                  - img
+            - generic [ref=e717]:
+              - button "Show/hide columns" [ref=e721] [cursor=pointer]:
+                - img [ref=e722]
+              - button "Download as CSV" [ref=e727] [cursor=pointer]:
+                - img [ref=e728]
+              - button "Search" [ref=e733] [cursor=pointer]:
+                - img [ref=e734]
+              - button "Fullscreen" [ref=e739] [cursor=pointer]:
+                - img [ref=e740]
+            - paragraph [ref=e755]:
+              - strong [ref=e756]: Alternatives
+              - text: ": 32.3% (live: 27.5%, benchmark: 20.0%) |"
+              - strong [ref=e757]: Equities
+              - text: ": 53.2% (live: 46.2%, benchmark: 50.0%) |"
+              - strong [ref=e758]: Fixed Income
+              - text: ": 14.5% (live: 26.3%, benchmark: 30.0%)"
+            - paragraph [ref=e763]:
+              - text: "Weight correlation with live RAA ETF:"
+              - strong [ref=e764]: "0.814"
+              - text: "| Mean absolute deviation:"
+              - strong [ref=e765]: 2.1%
+              - text: "|"
+              - link "View live RAA holdings" [ref=e766] [cursor=pointer]:
+                - /url: https://3fourteensmi.com/raa#holdings
+            - separator [ref=e771]
+            - heading "Normalisation Compression Diagnostic" [level=3] [ref=e776]:
+              - text: Normalisation Compression Diagnostic
+              - generic [ref=e777]:
+                - link "Link to heading":
+                  - /url: "#normalisation-compression-diagnostic"
+                  - img
+            - paragraph [ref=e782]: Trend weights naturally sum above or below 100% depending on whether most assets are trending above or below their benchmarks. The HRP blend pulls toward 100% (HRP always sums to exactly 100%), then final cap-aware normalisation targets a 100%-invested portfolio.
+            - generic [ref=e784]:
+              - generic [ref=e789]:
+                - paragraph [ref=e792]: Trend sum
+                - paragraph [ref=e795]: 135.3%
+                - generic [ref=e797]:
+                  - img [ref=e798]
+                  - paragraph [ref=e802]: +35.3%
+              - generic [ref=e807]:
+                - paragraph [ref=e810]: HRP sum
+                - paragraph [ref=e813]: 100.0%
+                - generic [ref=e815]:
+                  - img [ref=e816]
+                  - paragraph [ref=e820]: = 100%
+              - generic [ref=e825]:
+                - paragraph [ref=e828]: Blend (pre-norm)
+                - paragraph [ref=e831]: 119.4%
+                - generic [ref=e833]:
+                  - img [ref=e834]
+                  - paragraph [ref=e838]: +19.4%
+            - paragraph [ref=e843]: When pre-normalisation sum differs from 100%, weights are rescaled while respecting asset caps. Rank centering (benchmark-weighted avg rank = 0.500) minimises this normalisation effect.
+            - heading "📈 Backtest Performance" [level=2] [ref=e848]:
+              - text: 📈 Backtest Performance
+              - generic [ref=e849]:
+                - link "Link to heading":
+                  - /url: "#backtest-performance"
+                  - img
+            - generic [ref=e851]:
+              - generic [ref=e853]:
+                - heading "Equity Curve" [level=3] [ref=e858]:
+                  - text: Equity Curve
+                  - generic [ref=e859]:
+                    - link "Link to heading":
+                      - /url: "#equity-curve"
+                      - img
+                - generic [ref=e862]:
+                  - generic [ref=e864]:
+                    - button "Show data" [ref=e867] [cursor=pointer]:
+                      - img [ref=e868]
+                    - button "Fullscreen" [ref=e873] [cursor=pointer]:
+                      - img [ref=e874]
+                  - generic [ref=e877]:
+                    - generic "Vega visualization" [ref=e878]:
+                      - img [ref=e879]:
+                        - generic [ref=e884]:
+                          - generic "X-axis for a time scale with values from Friday, 01 June 2012, 12:00:00 AM to Wednesday, 13 May 2026, 12:00:00 AM" [ref=e888]:
+                            - generic [ref=e890]:
+                              - generic:
+                                - generic: "2014"
+                                - generic: "2016"
+                                - generic: "2018"
+                                - generic: "2020"
+                                - generic: "2022"
+                                - generic: "2024"
+                                - generic: "2026"
+                          - generic "Y-axis titled 'Growth of $1' for a linear scale with values from 0 to 5" [ref=e891]:
+                            - generic [ref=e893]:
+                              - generic:
+                                - generic: "0.0"
+                                - generic: "0.5"
+                                - generic: "1.0"
+                                - generic: "1.5"
+                                - generic: "2.0"
+                                - generic: "2.5"
+                                - generic: "3.0"
+                                - generic: "3.5"
+                                - generic: "4.0"
+                                - generic: "4.5"
+                                - generic: "5.0"
+                              - generic:
+                                - generic: Growth of $1
+                          - generic [ref=e894]:
+                            - 'generic "date: Jun 01, 2012; Growth of $1: 1.00240758664; Portfolio: RAAM Dynamic" [ref=e899]'
+                            - 'generic "date: Jun 01, 2012; Growth of $1: 0.993034890797; Portfolio: RAAM Static" [ref=e904]'
+                            - 'generic "date: Jun 01, 2012; Growth of $1: 0.999978522088; Portfolio: 60/40" [ref=e909]'
+                          - 'generic "Symbol legend titled ''Portfolio'' for stroke color with 3 values: RAAM Dynamic, RAAM Static, 60/40" [ref=e910]':
+                            - generic [ref=e912]:
+                              - generic [ref=e916]:
+                                - generic [ref=e918]:
+                                  - generic:
+                                    - generic: RAAM Dynamic
+                                - generic [ref=e920]:
+                                  - generic:
+                                    - generic: RAAM Static
+                                - generic [ref=e922]:
+                                  - generic:
+                                    - generic: 60/40
+                              - generic:
+                                - generic: Portfolio
+                    - group "Click to view actions":
+                      - img [ref=e924] [cursor=pointer]
+              - generic [ref=e929]:
+                - heading "Drawdowns" [level=3] [ref=e934]:
+                  - text: Drawdowns
+                  - generic [ref=e935]:
+                    - link "Link to heading":
+                      - /url: "#drawdowns"
+                      - img
+                - generic [ref=e938]:
+                  - generic [ref=e940]:
+                    - button "Show data" [ref=e943] [cursor=pointer]:
+                      - img [ref=e944]
+                    - button "Fullscreen" [ref=e949] [cursor=pointer]:
+                      - img [ref=e950]
+                  - generic [ref=e953]:
+                    - generic "Vega visualization" [ref=e954]:
+                      - img [ref=e955]:
+                        - generic [ref=e960]:
+                          - generic "X-axis for a time scale with values from Friday, 01 June 2012, 12:00:00 AM to Wednesday, 13 May 2026, 12:00:00 AM" [ref=e964]:
+                            - generic [ref=e966]:
+                              - generic:
+                                - generic: "2014"
+                                - generic: "2016"
+                                - generic: "2018"
+                                - generic: "2020"
+                                - generic: "2022"
+                                - generic: "2024"
+                                - generic: "2026"
+                          - generic "Y-axis titled 'Drawdown' for a linear scale with values from −35% to 0%" [ref=e967]:
+                            - generic [ref=e969]:
+                              - generic:
+                                - generic: 0%
+                                - generic: −35%
+                                - generic: −30%
+                                - generic: −25%
+                                - generic: −20%
+                                - generic: −15%
+                                - generic: −10%
+                                - generic: −5%
+                              - generic:
+                                - generic: Drawdown
+                          - generic [ref=e970]:
+                            - 'generic "date: Jun 01, 2012; Drawdown: 0%; Portfolio: RAAM Dynamic" [ref=e975]'
+                            - 'generic "date: Jun 01, 2012; Drawdown: 0%; Portfolio: 60/40" [ref=e980]'
+                          - 'generic "Symbol legend titled ''Portfolio'' for fill color with 2 values: 60/40, RAAM Dynamic" [ref=e981]':
+                            - generic [ref=e983]:
+                              - generic [ref=e987]:
+                                - generic [ref=e989]:
+                                  - generic:
+                                    - generic: 60/40
+                                - generic [ref=e991]:
+                                  - generic:
+                                    - generic: RAAM Dynamic
+                              - generic:
+                                - generic: Portfolio
+                    - group "Click to view actions":
+                      - img [ref=e993] [cursor=pointer]
+            - heading "Performance Metrics" [level=3] [ref=e1001]:
+              - text: Performance Metrics
+              - generic [ref=e1002]:
+                - link "Link to heading":
+                  - /url: "#performance-metrics"
+                  - img
+            - generic [ref=e1007]:
+              - button "Show/hide columns" [ref=e1011] [cursor=pointer]:
+                - img [ref=e1012]
+              - button "Download as CSV" [ref=e1017] [cursor=pointer]:
+                - img [ref=e1018]
+              - button "Search" [ref=e1023] [cursor=pointer]:
+                - img [ref=e1024]
+              - button "Fullscreen" [ref=e1029] [cursor=pointer]:
+                - img [ref=e1030]
+            - heading "🔍 Trend Signals" [level=2] [ref=e1045]:
+              - text: 🔍 Trend Signals
+              - generic [ref=e1046]:
+                - link "Link to heading":
+                  - /url: "#trend-signals"
+                  - img
+            - generic [ref=e1051]:
+              - button "Show/hide columns" [ref=e1055] [cursor=pointer]:
+                - img [ref=e1056]
+              - button "Download as CSV" [ref=e1061] [cursor=pointer]:
+                - img [ref=e1062]
+              - button "Search" [ref=e1067] [cursor=pointer]:
+                - img [ref=e1068]
+              - button "Fullscreen" [ref=e1073] [cursor=pointer]:
+                - img [ref=e1074]
+            - generic [ref=e1086]:
+              - generic [ref=e1091]:
+                - generic [ref=e1093]:
+                  - button "Show data" [ref=e1096] [cursor=pointer]:
+                    - img [ref=e1097]
+                  - button "Fullscreen" [ref=e1102] [cursor=pointer]:
+                    - img [ref=e1103]
+                - generic [ref=e1106]:
+                  - generic "Vega visualization" [ref=e1107]:
+                    - img [ref=e1108]:
+                      - generic [ref=e1113]:
+                        - generic "X-axis titled 'Trend Breadth' for a linear scale with values from 0.0 to 1.0" [ref=e1120]:
+                          - generic [ref=e1122]:
+                            - generic:
+                              - generic: "0.0"
+                              - generic: "0.1"
+                              - generic: "0.2"
+                              - generic: "0.3"
+                              - generic: "0.4"
+                              - generic: "0.5"
+                              - generic: "0.6"
+                              - generic: "0.7"
+                              - generic: "0.8"
+                              - generic: "0.9"
+                              - generic: "1.0"
+                            - generic:
+                              - generic: Trend Breadth
+                        - generic "Y-axis titled 'Trend Rank' for a linear scale with values from 0% to 100%" [ref=e1123]:
+                          - generic [ref=e1125]:
+                            - generic:
+                              - generic: 0%
+                              - generic: 20%
+                              - generic: 40%
+                              - generic: 60%
+                              - generic: 80%
+                              - generic: 100%
+                            - generic:
+                              - generic: Trend Rank
+                        - generic [ref=e1126]:
+                          - 'generic "Trend Breadth: 0.75; Trend Rank: 50.550000%; Bucket: Alternatives; Benchmark: 0.02; asset: Bitcoin; bucket: Alternatives; breadth: 0.75; final_score: 0.25; rank_pct: 51%" [ref=e1127]'
+                          - 'generic "Trend Breadth: 1; Trend Rank: 95.550000%; Bucket: Alternatives; Benchmark: 0.04; asset: Commodities; bucket: Alternatives; breadth: 1.00; final_score: 2.18; rank_pct: 96%" [ref=e1128]'
+                          - 'generic "Trend Breadth: 0.75; Trend Rank: 65.550000%; Bucket: Alternatives; Benchmark: 0.02; asset: Energy; bucket: Alternatives; breadth: 0.75; final_score: 0.48; rank_pct: 66%" [ref=e1129]'
+                          - 'generic "Trend Breadth: 0.25; Trend Rank: 10.550000%; Bucket: Alternatives; Benchmark: 0.02; asset: Gold; bucket: Alternatives; breadth: 0.25; final_score: −1.19; rank_pct: 11%" [ref=e1130]'
+                          - 'generic "Trend Breadth: 0.8; Trend Rank: 45.550000%; Bucket: Alternatives; Benchmark: 0.06; asset: Managed Futures; bucket: Alternatives; breadth: 0.80; final_score: 0.12; rank_pct: 46%" [ref=e1131]'
+                          - 'generic "Trend Breadth: 1; Trend Rank: 85.550000%; Bucket: Alternatives; Benchmark: 0.02; asset: Miners; bucket: Alternatives; breadth: 1.00; final_score: 0.82; rank_pct: 86%" [ref=e1132]'
+                          - 'generic "Trend Breadth: 1; Trend Rank: 55.550000%; Bucket: Alternatives; Benchmark: 0.02; asset: Real Estate; bucket: Alternatives; breadth: 1.00; final_score: 0.26; rank_pct: 56%" [ref=e1133]'
+                          - 'generic "Trend Breadth: 1; Trend Rank: 70.550000%; Bucket: Equities; Benchmark: 0.05; asset: Dividend Payers; bucket: Equities; breadth: 1.00; final_score: 0.52; rank_pct: 71%" [ref=e1134]'
+                          - 'generic "Trend Breadth: 1; Trend Rank: 90.550000%; Bucket: Equities; Benchmark: 0.01; asset: EM ex-China; bucket: Equities; breadth: 1.00; final_score: 1.12; rank_pct: 91%" [ref=e1135]'
+                          - 'generic "Trend Breadth: 0.5; Trend Rank: 35.550000%; Bucket: Equities; Benchmark: 0.01; asset: Europe; bucket: Equities; breadth: 0.50; final_score: −0.55; rank_pct: 36%" [ref=e1136]'
+                          - 'generic "Trend Breadth: 0.8; Trend Rank: 40.550000%; Bucket: Equities; Benchmark: 0.01; asset: Japan; bucket: Equities; breadth: 0.80; final_score: 0.03; rank_pct: 41%" [ref=e1137]'
+                          - 'generic "Trend Breadth: 1; Trend Rank: 80.550000%; Bucket: Equities; Benchmark: 0.2; asset: Nasdaq; bucket: Equities; breadth: 1.00; final_score: 0.80; rank_pct: 81%" [ref=e1138]'
+                          - 'generic "Trend Breadth: 1; Trend Rank: 60.550000%; Bucket: Equities; Benchmark: 0.2; asset: US Large Cap; bucket: Equities; breadth: 1.00; final_score: 0.41; rank_pct: 61%" [ref=e1139]'
+                          - 'generic "Trend Breadth: 1; Trend Rank: 75.550000%; Bucket: Equities; Benchmark: 0.02; asset: US Small Cap; bucket: Equities; breadth: 1.00; final_score: 0.59; rank_pct: 76%" [ref=e1140]'
+                          - 'generic "Trend Breadth: 0.13; Trend Rank: 5.550000%; Bucket: Fixed Income; Benchmark: 0.1; asset: Corporate Bonds; bucket: Fixed Income; breadth: 0.13; final_score: −1.25; rank_pct: 6%" [ref=e1141]'
+                          - 'generic "Trend Breadth: 0.38; Trend Rank: 15.550000%; Bucket: Fixed Income; Benchmark: 0.02; asset: EM Bonds; bucket: Fixed Income; breadth: 0.38; final_score: −0.81; rank_pct: 16%" [ref=e1142]'
+                          - 'generic "Trend Breadth: 0.45; Trend Rank: 30.550000%; Bucket: Fixed Income; Benchmark: 0.06; asset: High Yield; bucket: Fixed Income; breadth: 0.45; final_score: −0.71; rank_pct: 31%" [ref=e1143]'
+                          - 'generic "Trend Breadth: 0.05; Trend Rank: 0.550000%; Bucket: Fixed Income; Benchmark: 0.1; asset: Long-Term Treasuries; bucket: Fixed Income; breadth: 0.05; final_score: −1.60; rank_pct: 1%" [ref=e1144]'
+                          - 'generic "Trend Breadth: 0.45; Trend Rank: 25.550000%; Bucket: Fixed Income; Benchmark: 0; asset: T-Bills; bucket: Fixed Income; breadth: 0.45; final_score: −0.72; rank_pct: 26%" [ref=e1145]'
+                          - 'generic "Trend Breadth: 0.43; Trend Rank: 20.550000%; Bucket: Fixed Income; Benchmark: 0.02; asset: TIPS; bucket: Fixed Income; breadth: 0.43; final_score: −0.75; rank_pct: 21%" [ref=e1146]'
+                        - generic:
+                          - 'generic "breadth: 0.75; rank_pct: 0.5055; asset: Bitcoin"': Bitcoin
+                          - 'generic "breadth: 1; rank_pct: 0.9555; asset: Commodities"': Commodities
+                          - 'generic "breadth: 0.75; rank_pct: 0.6555; asset: Energy"': Energy
+                          - 'generic "breadth: 0.25; rank_pct: 0.1055; asset: Gold"': Gold
+                          - 'generic "breadth: 0.8; rank_pct: 0.4555; asset: Managed Futures"': Managed Futures
+                          - 'generic "breadth: 1; rank_pct: 0.8555; asset: Miners"': Miners
+                          - 'generic "breadth: 1; rank_pct: 0.5555; asset: Real Estate"': Real Estate
+                          - 'generic "breadth: 1; rank_pct: 0.7055; asset: Dividend Payers"': Dividend Payers
+                          - 'generic "breadth: 1; rank_pct: 0.9055; asset: EM ex-China"': EM ex-China
+                          - 'generic "breadth: 0.5; rank_pct: 0.3555; asset: Europe"': Europe
+                          - 'generic "breadth: 0.8; rank_pct: 0.4055; asset: Japan"': Japan
+                          - 'generic "breadth: 1; rank_pct: 0.8055; asset: Nasdaq"': Nasdaq
+                          - 'generic "breadth: 1; rank_pct: 0.6055; asset: US Large Cap"': US Large Cap
+                          - 'generic "breadth: 1; rank_pct: 0.7555; asset: US Small Cap"': US Small Cap
+                          - 'generic "breadth: 0.13; rank_pct: 0.0555; asset: Corporate Bonds"': Corporate Bonds
+                          - 'generic "breadth: 0.38; rank_pct: 0.1555; asset: EM Bonds"': EM Bonds
+                          - 'generic "breadth: 0.45; rank_pct: 0.3055; asset: High Yield"': High Yield
+                          - 'generic "breadth: 0.05; rank_pct: 0.0055; asset: Long-Term Treasuries"': Long-Term Treasuries
+                          - 'generic "breadth: 0.45; rank_pct: 0.2555; asset: T-Bills"': T-Bills
+                          - 'generic "breadth: 0.43; rank_pct: 0.2055; asset: TIPS"': TIPS
+                        - 'generic "Symbol legend titled ''Bucket'' for fill color with 3 values: Alternatives, Equities, Fixed Income" [ref=e1147]':
+                          - generic [ref=e1149]:
+                            - generic [ref=e1153]:
+                              - generic [ref=e1155]:
+                                - generic:
+                                  - generic: Alternatives
+                              - generic [ref=e1157]:
+                                - generic:
+                                  - generic: Equities
+                              - generic [ref=e1159]:
+                                - generic:
+                                  - generic: Fixed Income
+                            - generic:
+                              - generic: Bucket
+                        - generic "Symbol legend titled 'Benchmark' for size with values from 0.00 to 0.20" [ref=e1160]:
+                          - generic [ref=e1162]:
+                            - generic [ref=e1166]:
+                              - generic [ref=e1168]:
+                                - generic:
+                                  - generic: "0.00"
+                              - generic [ref=e1170]:
+                                - generic:
+                                  - generic: "0.05"
+                              - generic [ref=e1172]:
+                                - generic:
+                                  - generic: "0.10"
+                              - generic [ref=e1174]:
+                                - generic:
+                                  - generic: "0.15"
+                              - generic [ref=e1176]:
+                                - generic:
+                                  - generic: "0.20"
+                            - generic:
+                              - generic: Benchmark
+                        - generic [ref=e1179]:
+                          - generic "Title text 'Latest Trend Rank vs Breadth'":
+                            - generic: Latest Trend Rank vs Breadth
+                  - group "Click to view actions":
+                    - img [ref=e1181] [cursor=pointer]
+              - generic [ref=e1189]:
+                - generic [ref=e1191]:
+                  - button "Show data" [ref=e1194] [cursor=pointer]:
+                    - img [ref=e1195]
+                  - button "Fullscreen" [ref=e1200] [cursor=pointer]:
+                    - img [ref=e1201]
+                - generic [ref=e1204]:
+                  - generic "Vega visualization" [ref=e1205]:
+                    - img [ref=e1206]:
+                      - generic [ref=e1211]:
+                        - generic [ref=e1212]:
+                          - 'generic "Month: 1748530800000; asset: Bitcoin; Rank: 99.700000%; date: May 30, 2025; bucket: Alternatives; rank_pct: 100%" [ref=e1213]'
+                          - 'generic "Month: 1748530800000; asset: Commodities; Rank: 14.700000%; date: May 30, 2025; bucket: Alternatives; rank_pct: 15%" [ref=e1214]'
+                          - 'generic "Month: 1748530800000; asset: Energy; Rank: 9.700000%; date: May 30, 2025; bucket: Alternatives; rank_pct: 10%" [ref=e1215]'
+                          - 'generic "Month: 1748530800000; asset: Gold; Rank: 94.700000%; date: May 30, 2025; bucket: Alternatives; rank_pct: 95%" [ref=e1216]'
+                          - 'generic "Month: 1748530800000; asset: Managed Futures; Rank: 19.700000%; date: May 30, 2025; bucket: Alternatives; rank_pct: 20%" [ref=e1217]'
+                          - 'generic "Month: 1748530800000; asset: Miners; Rank: 64.700000%; date: May 30, 2025; bucket: Alternatives; rank_pct: 65%" [ref=e1218]'
+                          - 'generic "Month: 1748530800000; asset: Real Estate; Rank: 54.700000%; date: May 30, 2025; bucket: Alternatives; rank_pct: 55%" [ref=e1219]'
+                          - 'generic "Month: 1748530800000; asset: Dividend Payers; Rank: 24.700000%; date: May 30, 2025; bucket: Equities; rank_pct: 25%" [ref=e1220]'
+                          - 'generic "Month: 1748530800000; asset: EM ex-China; Rank: 79.700000%; date: May 30, 2025; bucket: Equities; rank_pct: 80%" [ref=e1221]'
+                          - 'generic "Month: 1748530800000; asset: Europe; Rank: 89.700000%; date: May 30, 2025; bucket: Equities; rank_pct: 90%" [ref=e1222]'
+                          - 'generic "Month: 1748530800000; asset: Japan; Rank: 84.700000%; date: May 30, 2025; bucket: Equities; rank_pct: 85%" [ref=e1223]'
+                          - 'generic "Month: 1748530800000; asset: Nasdaq; Rank: 74.700000%; date: May 30, 2025; bucket: Equities; rank_pct: 75%" [ref=e1224]'
+                          - 'generic "Month: 1748530800000; asset: US Large Cap; Rank: 69.700000%; date: May 30, 2025; bucket: Equities; rank_pct: 70%" [ref=e1225]'
+                          - 'generic "Month: 1748530800000; asset: US Small Cap; Rank: 59.700000%; date: May 30, 2025; bucket: Equities; rank_pct: 60%" [ref=e1226]'
+                          - 'generic "Month: 1748530800000; asset: Corporate Bonds; Rank: 29.700000%; date: May 30, 2025; bucket: Fixed Income; rank_pct: 30%" [ref=e1227]'
+                          - 'generic "Month: 1748530800000; asset: EM Bonds; Rank: 39.700000%; date: May 30, 2025; bucket: Fixed Income; rank_pct: 40%" [ref=e1228]'
+                          - 'generic "Month: 1748530800000; asset: High Yield; Rank: 49.700000%; date: May 30, 2025; bucket: Fixed Income; rank_pct: 50%" [ref=e1229]'
+                          - 'generic "Month: 1748530800000; asset: Long-Term Treasuries; Rank: 4.700000%; date: May 30, 2025; bucket: Fixed Income; rank_pct: 5%" [ref=e1230]'
+                          - 'generic "Month: 1748530800000; asset: T-Bills; Rank: 44.700000%; date: May 30, 2025; bucket: Fixed Income; rank_pct: 45%" [ref=e1231]'
+                          - 'generic "Month: 1748530800000; asset: TIPS; Rank: 34.700000%; date: May 30, 2025; bucket: Fixed Income; rank_pct: 35%" [ref=e1232]'
+                          - 'generic "Month: 1751209200000; asset: Bitcoin; Rank: 91.450000%; date: Jun 30, 2025; bucket: Alternatives; rank_pct: 91%" [ref=e1233]'
+                          - 'generic "Month: 1751209200000; asset: Commodities; Rank: 41.450000%; date: Jun 30, 2025; bucket: Alternatives; rank_pct: 41%" [ref=e1234]'
+                          - 'generic "Month: 1751209200000; asset: Energy; Rank: 36.450000%; date: Jun 30, 2025; bucket: Alternatives; rank_pct: 36%" [ref=e1235]'
+                          - 'generic "Month: 1751209200000; asset: Gold; Rank: 51.450000%; date: Jun 30, 2025; bucket: Alternatives; rank_pct: 51%" [ref=e1236]'
+                          - 'generic "Month: 1751209200000; asset: Managed Futures; Rank: 11.450000%; date: Jun 30, 2025; bucket: Alternatives; rank_pct: 11%" [ref=e1237]'
+                          - 'generic "Month: 1751209200000; asset: Miners; Rank: 66.450000%; date: Jun 30, 2025; bucket: Alternatives; rank_pct: 66%" [ref=e1238]'
+                          - 'generic "Month: 1751209200000; asset: Real Estate; Rank: 6.450000%; date: Jun 30, 2025; bucket: Alternatives; rank_pct: 6%" [ref=e1239]'
+                          - 'generic "Month: 1751209200000; asset: Dividend Payers; Rank: 31.450000%; date: Jun 30, 2025; bucket: Equities; rank_pct: 31%" [ref=e1240]'
+                          - 'generic "Month: 1751209200000; asset: EM ex-China; Rank: 81.450000%; date: Jun 30, 2025; bucket: Equities; rank_pct: 81%" [ref=e1241]'
+                          - 'generic "Month: 1751209200000; asset: Europe; Rank: 71.450000%; date: Jun 30, 2025; bucket: Equities; rank_pct: 71%" [ref=e1242]'
+                          - 'generic "Month: 1751209200000; asset: Japan; Rank: 56.450000%; date: Jun 30, 2025; bucket: Equities; rank_pct: 56%" [ref=e1243]'
+                          - 'generic "Month: 1751209200000; asset: Nasdaq; Rank: 86.450000%; date: Jun 30, 2025; bucket: Equities; rank_pct: 86%" [ref=e1244]'
+                          - 'generic "Month: 1751209200000; asset: US Large Cap; Rank: 76.450000%; date: Jun 30, 2025; bucket: Equities; rank_pct: 76%" [ref=e1245]'
+                          - 'generic "Month: 1751209200000; asset: US Small Cap; Rank: 61.450000%; date: Jun 30, 2025; bucket: Equities; rank_pct: 61%" [ref=e1246]'
+                          - 'generic "Month: 1751209200000; asset: Corporate Bonds; Rank: 21.450000%; date: Jun 30, 2025; bucket: Fixed Income; rank_pct: 21%" [ref=e1247]'
+                          - 'generic "Month: 1751209200000; asset: EM Bonds; Rank: 46.450000%; date: Jun 30, 2025; bucket: Fixed Income; rank_pct: 46%" [ref=e1248]'
+                          - 'generic "Month: 1751209200000; asset: High Yield; Rank: 26.450000%; date: Jun 30, 2025; bucket: Fixed Income; rank_pct: 26%" [ref=e1249]'
+                          - 'generic "Month: 1751209200000; asset: Long-Term Treasuries; Rank: 1.450000%; date: Jun 30, 2025; bucket: Fixed Income; rank_pct: 1%" [ref=e1250]'
+                          - 'generic "Month: 1751209200000; asset: T-Bills; Rank: 0.000000%; date: Jun 30, 2025; bucket: Fixed Income; rank_pct: 0%" [ref=e1251]'
+                          - 'generic "Month: 1751209200000; asset: TIPS; Rank: 16.450000%; date: Jun 30, 2025; bucket: Fixed Income; rank_pct: 16%" [ref=e1252]'
+                          - 'generic "Month: 1753887600000; asset: Bitcoin; Rank: 94.400000%; date: Jul 31, 2025; bucket: Alternatives; rank_pct: 94%" [ref=e1253]'
+                          - 'generic "Month: 1753887600000; asset: Commodities; Rank: 29.400000%; date: Jul 31, 2025; bucket: Alternatives; rank_pct: 29%" [ref=e1254]'
+                          - 'generic "Month: 1753887600000; asset: Energy; Rank: 44.400000%; date: Jul 31, 2025; bucket: Alternatives; rank_pct: 44%" [ref=e1255]'
+                          - 'generic "Month: 1753887600000; asset: Gold; Rank: 69.400000%; date: Jul 31, 2025; bucket: Alternatives; rank_pct: 69%" [ref=e1256]'
+                          - 'generic "Month: 1753887600000; asset: Managed Futures; Rank: 19.400000%; date: Jul 31, 2025; bucket: Alternatives; rank_pct: 19%" [ref=e1257]'
+                          - 'generic "Month: 1753887600000; asset: Miners; Rank: 74.400000%; date: Jul 31, 2025; bucket: Alternatives; rank_pct: 74%" [ref=e1258]'
+                          - 'generic "Month: 1753887600000; asset: Real Estate; Rank: 14.400000%; date: Jul 31, 2025; bucket: Alternatives; rank_pct: 14%" [ref=e1259]'
+                          - 'generic "Month: 1753887600000; asset: Dividend Payers; Rank: 34.400000%; date: Jul 31, 2025; bucket: Equities; rank_pct: 34%" [ref=e1260]'
+                          - 'generic "Month: 1753887600000; asset: EM ex-China; Rank: 84.400000%; date: Jul 31, 2025; bucket: Equities; rank_pct: 84%" [ref=e1261]'
+                          - 'generic "Month: 1753887600000; asset: Europe; Rank: 79.400000%; date: Jul 31, 2025; bucket: Equities; rank_pct: 79%" [ref=e1262]'
+                          - 'generic "Month: 1753887600000; asset: Japan; Rank: 59.400000%; date: Jul 31, 2025; bucket: Equities; rank_pct: 59%" [ref=e1263]'
+                          - 'generic "Month: 1753887600000; asset: Nasdaq; Rank: 89.400000%; date: Jul 31, 2025; bucket: Equities; rank_pct: 89%" [ref=e1264]'
+                          - 'generic "Month: 1753887600000; asset: US Large Cap; Rank: 64.400000%; date: Jul 31, 2025; bucket: Equities; rank_pct: 64%" [ref=e1265]'
+                          - 'generic "Month: 1753887600000; asset: US Small Cap; Rank: 54.400000%; date: Jul 31, 2025; bucket: Equities; rank_pct: 54%" [ref=e1266]'
+                          - 'generic "Month: 1753887600000; asset: Corporate Bonds; Rank: 24.400000%; date: Jul 31, 2025; bucket: Fixed Income; rank_pct: 24%" [ref=e1267]'
+                          - 'generic "Month: 1753887600000; asset: EM Bonds; Rank: 49.400000%; date: Jul 31, 2025; bucket: Fixed Income; rank_pct: 49%" [ref=e1268]'
+                          - 'generic "Month: 1753887600000; asset: High Yield; Rank: 39.400000%; date: Jul 31, 2025; bucket: Fixed Income; rank_pct: 39%" [ref=e1269]'
+                          - 'generic "Month: 1753887600000; asset: Long-Term Treasuries; Rank: 0.000000%; date: Jul 31, 2025; bucket: Fixed Income; rank_pct: 0%" [ref=e1270]'
+                          - 'generic "Month: 1753887600000; asset: T-Bills; Rank: 4.400000%; date: Jul 31, 2025; bucket: Fixed Income; rank_pct: 4%" [ref=e1271]'
+                          - 'generic "Month: 1753887600000; asset: TIPS; Rank: 9.400000%; date: Jul 31, 2025; bucket: Fixed Income; rank_pct: 9%" [ref=e1272]'
+                          - 'generic "Month: 1756393200000; asset: Bitcoin; Rank: 72.850000%; date: Aug 29, 2025; bucket: Alternatives; rank_pct: 73%" [ref=e1273]'
+                          - 'generic "Month: 1756393200000; asset: Commodities; Rank: 0.000000%; date: Aug 29, 2025; bucket: Alternatives; rank_pct: 0%" [ref=e1274]'
+                          - 'generic "Month: 1756393200000; asset: Energy; Rank: 32.850000%; date: Aug 29, 2025; bucket: Alternatives; rank_pct: 33%" [ref=e1275]'
+                          - 'generic "Month: 1756393200000; asset: Gold; Rank: 37.850000%; date: Aug 29, 2025; bucket: Alternatives; rank_pct: 38%" [ref=e1276]'
+                          - 'generic "Month: 1756393200000; asset: Managed Futures; Rank: 47.850000%; date: Aug 29, 2025; bucket: Alternatives; rank_pct: 48%" [ref=e1277]'
+                          - 'generic "Month: 1756393200000; asset: Miners; Rank: 92.850000%; date: Aug 29, 2025; bucket: Alternatives; rank_pct: 93%" [ref=e1278]'
+                          - 'generic "Month: 1756393200000; asset: Real Estate; Rank: 27.850000%; date: Aug 29, 2025; bucket: Alternatives; rank_pct: 28%" [ref=e1279]'
+                          - 'generic "Month: 1756393200000; asset: Dividend Payers; Rank: 52.850000%; date: Aug 29, 2025; bucket: Equities; rank_pct: 53%" [ref=e1280]'
+                          - 'generic "Month: 1756393200000; asset: EM ex-China; Rank: 57.850000%; date: Aug 29, 2025; bucket: Equities; rank_pct: 58%" [ref=e1281]'
+                          - 'generic "Month: 1756393200000; asset: Europe; Rank: 62.850000%; date: Aug 29, 2025; bucket: Equities; rank_pct: 63%" [ref=e1282]'
+                          - 'generic "Month: 1756393200000; asset: Japan; Rank: 82.850000%; date: Aug 29, 2025; bucket: Equities; rank_pct: 83%" [ref=e1283]'
+                          - 'generic "Month: 1756393200000; asset: Nasdaq; Rank: 67.850000%; date: Aug 29, 2025; bucket: Equities; rank_pct: 68%" [ref=e1284]'
+                          - 'generic "Month: 1756393200000; asset: US Large Cap; Rank: 87.850000%; date: Aug 29, 2025; bucket: Equities; rank_pct: 88%" [ref=e1285]'
+                          - 'generic "Month: 1756393200000; asset: US Small Cap; Rank: 77.850000%; date: Aug 29, 2025; bucket: Equities; rank_pct: 78%" [ref=e1286]'
+                          - 'generic "Month: 1756393200000; asset: Corporate Bonds; Rank: 17.850000%; date: Aug 29, 2025; bucket: Fixed Income; rank_pct: 18%" [ref=e1287]'
+                          - 'generic "Month: 1756393200000; asset: EM Bonds; Rank: 42.850000%; date: Aug 29, 2025; bucket: Fixed Income; rank_pct: 43%" [ref=e1288]'
+                          - 'generic "Month: 1756393200000; asset: High Yield; Rank: 22.850000%; date: Aug 29, 2025; bucket: Fixed Income; rank_pct: 23%" [ref=e1289]'
+                          - 'generic "Month: 1756393200000; asset: Long-Term Treasuries; Rank: 2.850000%; date: Aug 29, 2025; bucket: Fixed Income; rank_pct: 3%" [ref=e1290]'
+                          - 'generic "Month: 1756393200000; asset: T-Bills; Rank: 7.850000%; date: Aug 29, 2025; bucket: Fixed Income; rank_pct: 8%" [ref=e1291]'
+                          - 'generic "Month: 1756393200000; asset: TIPS; Rank: 12.850000%; date: Aug 29, 2025; bucket: Fixed Income; rank_pct: 13%" [ref=e1292]'
+                          - 'generic "Month: 1759158000000; asset: Bitcoin; Rank: 5.450000%; date: Sep 30, 2025; bucket: Alternatives; rank_pct: 5%" [ref=e1293]'
+                          - 'generic "Month: 1759158000000; asset: Commodities; Rank: 15.450000%; date: Sep 30, 2025; bucket: Alternatives; rank_pct: 15%" [ref=e1294]'
+                          - 'generic "Month: 1759158000000; asset: Energy; Rank: 30.450000%; date: Sep 30, 2025; bucket: Alternatives; rank_pct: 30%" [ref=e1295]'
+                          - 'generic "Month: 1759158000000; asset: Gold; Rank: 75.450000%; date: Sep 30, 2025; bucket: Alternatives; rank_pct: 75%" [ref=e1296]'
+                          - 'generic "Month: 1759158000000; asset: Managed Futures; Rank: 45.450000%; date: Sep 30, 2025; bucket: Alternatives; rank_pct: 45%" [ref=e1297]'
+                          - 'generic "Month: 1759158000000; asset: Miners; Rank: 85.450000%; date: Sep 30, 2025; bucket: Alternatives; rank_pct: 85%" [ref=e1298]'
+                          - 'generic "Month: 1759158000000; asset: Real Estate; Rank: 20.450000%; date: Sep 30, 2025; bucket: Alternatives; rank_pct: 20%" [ref=e1299]'
+                          - 'generic "Month: 1759158000000; asset: Dividend Payers; Rank: 0.450000%; date: Sep 30, 2025; bucket: Equities; rank_pct: 0%" [ref=e1300]'
+                          - 'generic "Month: 1759158000000; asset: EM ex-China; Rank: 60.450000%; date: Sep 30, 2025; bucket: Equities; rank_pct: 60%" [ref=e1301]'
+                          - 'generic "Month: 1759158000000; asset: Europe; Rank: 55.450000%; date: Sep 30, 2025; bucket: Equities; rank_pct: 55%" [ref=e1302]'
+                          - 'generic "Month: 1759158000000; asset: Japan; Rank: 90.450000%; date: Sep 30, 2025; bucket: Equities; rank_pct: 90%" [ref=e1303]'
+                          - 'generic "Month: 1759158000000; asset: Nasdaq; Rank: 80.450000%; date: Sep 30, 2025; bucket: Equities; rank_pct: 80%" [ref=e1304]'
+                          - 'generic "Month: 1759158000000; asset: US Large Cap; Rank: 70.450000%; date: Sep 30, 2025; bucket: Equities; rank_pct: 70%" [ref=e1305]'
+                          - 'generic "Month: 1759158000000; asset: US Small Cap; Rank: 65.450000%; date: Sep 30, 2025; bucket: Equities; rank_pct: 65%" [ref=e1306]'
+                          - 'generic "Month: 1759158000000; asset: Corporate Bonds; Rank: 40.450000%; date: Sep 30, 2025; bucket: Fixed Income; rank_pct: 40%" [ref=e1307]'
+                          - 'generic "Month: 1759158000000; asset: EM Bonds; Rank: 50.450000%; date: Sep 30, 2025; bucket: Fixed Income; rank_pct: 50%" [ref=e1308]'
+                          - 'generic "Month: 1759158000000; asset: High Yield; Rank: 35.450000%; date: Sep 30, 2025; bucket: Fixed Income; rank_pct: 35%" [ref=e1309]'
+                          - 'generic "Month: 1759158000000; asset: Long-Term Treasuries; Rank: 10.450000%; date: Sep 30, 2025; bucket: Fixed Income; rank_pct: 10%" [ref=e1310]'
+                          - 'generic "Month: 1759158000000; asset: T-Bills; Rank: 0.000000%; date: Sep 30, 2025; bucket: Fixed Income; rank_pct: 0%" [ref=e1311]'
+                          - 'generic "Month: 1759158000000; asset: TIPS; Rank: 25.450000%; date: Sep 30, 2025; bucket: Fixed Income; rank_pct: 25%" [ref=e1312]'
+                          - 'generic "Month: 1761836400000; asset: Bitcoin; Rank: 0.000000%; date: Oct 31, 2025; bucket: Alternatives; rank_pct: 0%" [ref=e1313]'
+                          - 'generic "Month: 1761836400000; asset: Commodities; Rank: 25.550000%; date: Oct 31, 2025; bucket: Alternatives; rank_pct: 26%" [ref=e1314]'
+                          - 'generic "Month: 1761836400000; asset: Energy; Rank: 15.550000%; date: Oct 31, 2025; bucket: Alternatives; rank_pct: 16%" [ref=e1315]'
+                          - 'generic "Month: 1761836400000; asset: Gold; Rank: 90.550000%; date: Oct 31, 2025; bucket: Alternatives; rank_pct: 91%" [ref=e1316]'
+                          - 'generic "Month: 1761836400000; asset: Managed Futures; Rank: 65.550000%; date: Oct 31, 2025; bucket: Alternatives; rank_pct: 66%" [ref=e1317]'
+                          - 'generic "Month: 1761836400000; asset: Miners; Rank: 85.550000%; date: Oct 31, 2025; bucket: Alternatives; rank_pct: 86%" [ref=e1318]'
+                          - 'generic "Month: 1761836400000; asset: Real Estate; Rank: 10.550000%; date: Oct 31, 2025; bucket: Alternatives; rank_pct: 11%" [ref=e1319]'
+                          - 'generic "Month: 1761836400000; asset: Dividend Payers; Rank: 0.550000%; date: Oct 31, 2025; bucket: Equities; rank_pct: 1%" [ref=e1320]'
+                          - 'generic "Month: 1761836400000; asset: EM ex-China; Rank: 80.550000%; date: Oct 31, 2025; bucket: Equities; rank_pct: 81%" [ref=e1321]'
+                          - 'generic "Month: 1761836400000; asset: Europe; Rank: 50.550000%; date: Oct 31, 2025; bucket: Equities; rank_pct: 51%" [ref=e1322]'
+                          - 'generic "Month: 1761836400000; asset: Japan; Rank: 55.550000%; date: Oct 31, 2025; bucket: Equities; rank_pct: 56%" [ref=e1323]'
+                          - 'generic "Month: 1761836400000; asset: Nasdaq; Rank: 75.550000%; date: Oct 31, 2025; bucket: Equities; rank_pct: 76%" [ref=e1324]'
+                          - 'generic "Month: 1761836400000; asset: US Large Cap; Rank: 60.550000%; date: Oct 31, 2025; bucket: Equities; rank_pct: 61%" [ref=e1325]'
+                          - 'generic "Month: 1761836400000; asset: US Small Cap; Rank: 70.550000%; date: Oct 31, 2025; bucket: Equities; rank_pct: 71%" [ref=e1326]'
+                          - 'generic "Month: 1761836400000; asset: Corporate Bonds; Rank: 40.550000%; date: Oct 31, 2025; bucket: Fixed Income; rank_pct: 41%" [ref=e1327]'
+                          - 'generic "Month: 1761836400000; asset: EM Bonds; Rank: 45.550000%; date: Oct 31, 2025; bucket: Fixed Income; rank_pct: 46%" [ref=e1328]'
+                          - 'generic "Month: 1761836400000; asset: High Yield; Rank: 35.550000%; date: Oct 31, 2025; bucket: Fixed Income; rank_pct: 36%" [ref=e1329]'
+                          - 'generic "Month: 1761836400000; asset: Long-Term Treasuries; Rank: 30.550000%; date: Oct 31, 2025; bucket: Fixed Income; rank_pct: 31%" [ref=e1330]'
+                          - 'generic "Month: 1761836400000; asset: T-Bills; Rank: 5.550000%; date: Oct 31, 2025; bucket: Fixed Income; rank_pct: 6%" [ref=e1331]'
+                          - 'generic "Month: 1761836400000; asset: TIPS; Rank: 20.550000%; date: Oct 31, 2025; bucket: Fixed Income; rank_pct: 21%" [ref=e1332]'
+                          - 'generic "Month: 1764255600000; asset: Bitcoin; Rank: 3.100000%; date: Nov 28, 2025; bucket: Alternatives; rank_pct: 3%" [ref=e1333]'
+                          - 'generic "Month: 1764255600000; asset: Commodities; Rank: 13.100000%; date: Nov 28, 2025; bucket: Alternatives; rank_pct: 13%" [ref=e1334]'
+                          - 'generic "Month: 1764255600000; asset: Energy; Rank: 48.100000%; date: Nov 28, 2025; bucket: Alternatives; rank_pct: 48%" [ref=e1335]'
+                          - 'generic "Month: 1764255600000; asset: Gold; Rank: 98.100000%; date: Nov 28, 2025; bucket: Alternatives; rank_pct: 98%" [ref=e1336]'
+                          - 'generic "Month: 1764255600000; asset: Managed Futures; Rank: 88.100000%; date: Nov 28, 2025; bucket: Alternatives; rank_pct: 88%" [ref=e1337]'
+                          - 'generic "Month: 1764255600000; asset: Miners; Rank: 93.100000%; date: Nov 28, 2025; bucket: Alternatives; rank_pct: 93%" [ref=e1338]'
+                          - 'generic "Month: 1764255600000; asset: Real Estate; Rank: 23.100000%; date: Nov 28, 2025; bucket: Alternatives; rank_pct: 23%" [ref=e1339]'
+                          - 'generic "Month: 1764255600000; asset: Dividend Payers; Rank: 28.100000%; date: Nov 28, 2025; bucket: Equities; rank_pct: 28%" [ref=e1340]'
+                          - 'generic "Month: 1764255600000; asset: EM ex-China; Rank: 78.100000%; date: Nov 28, 2025; bucket: Equities; rank_pct: 78%" [ref=e1341]'
+                          - 'generic "Month: 1764255600000; asset: Europe; Rank: 18.100000%; date: Nov 28, 2025; bucket: Equities; rank_pct: 18%" [ref=e1342]'
+                          - 'generic "Month: 1764255600000; asset: Japan; Rank: 38.100000%; date: Nov 28, 2025; bucket: Equities; rank_pct: 38%" [ref=e1343]'
+                          - 'generic "Month: 1764255600000; asset: Nasdaq; Rank: 43.100000%; date: Nov 28, 2025; bucket: Equities; rank_pct: 43%" [ref=e1344]'
+                          - 'generic "Month: 1764255600000; asset: US Large Cap; Rank: 33.100000%; date: Nov 28, 2025; bucket: Equities; rank_pct: 33%" [ref=e1345]'
+                          - 'generic "Month: 1764255600000; asset: US Small Cap; Rank: 8.100000%; date: Nov 28, 2025; bucket: Equities; rank_pct: 8%" [ref=e1346]'
+                          - 'generic "Month: 1764255600000; asset: Corporate Bonds; Rank: 73.100000%; date: Nov 28, 2025; bucket: Fixed Income; rank_pct: 73%" [ref=e1347]'
+                          - 'generic "Month: 1764255600000; asset: EM Bonds; Rank: 83.100000%; date: Nov 28, 2025; bucket: Fixed Income; rank_pct: 83%" [ref=e1348]'
+                          - 'generic "Month: 1764255600000; asset: High Yield; Rank: 63.100000%; date: Nov 28, 2025; bucket: Fixed Income; rank_pct: 63%" [ref=e1349]'
+                          - 'generic "Month: 1764255600000; asset: Long-Term Treasuries; Rank: 68.100000%; date: Nov 28, 2025; bucket: Fixed Income; rank_pct: 68%" [ref=e1350]'
+                          - 'generic "Month: 1764255600000; asset: T-Bills; Rank: 53.100000%; date: Nov 28, 2025; bucket: Fixed Income; rank_pct: 53%" [ref=e1351]'
+                          - 'generic "Month: 1764255600000; asset: TIPS; Rank: 58.100000%; date: Nov 28, 2025; bucket: Fixed Income; rank_pct: 58%" [ref=e1352]'
+                          - 'generic "Month: 1767106800000; asset: Bitcoin; Rank: 3.300000%; date: Dec 31, 2025; bucket: Alternatives; rank_pct: 3%" [ref=e1353]'
+                          - 'generic "Month: 1767106800000; asset: Commodities; Rank: 33.300000%; date: Dec 31, 2025; bucket: Alternatives; rank_pct: 33%" [ref=e1354]'
+                          - 'generic "Month: 1767106800000; asset: Energy; Rank: 28.300000%; date: Dec 31, 2025; bucket: Alternatives; rank_pct: 28%" [ref=e1355]'
+                          - 'generic "Month: 1767106800000; asset: Gold; Rank: 93.300000%; date: Dec 31, 2025; bucket: Alternatives; rank_pct: 93%" [ref=e1356]'
+                          - 'generic "Month: 1767106800000; asset: Managed Futures; Rank: 88.300000%; date: Dec 31, 2025; bucket: Alternatives; rank_pct: 88%" [ref=e1357]'
+                          - 'generic "Month: 1767106800000; asset: Miners; Rank: 98.300000%; date: Dec 31, 2025; bucket: Alternatives; rank_pct: 98%" [ref=e1358]'
+                          - 'generic "Month: 1767106800000; asset: Real Estate; Rank: 8.300000%; date: Dec 31, 2025; bucket: Alternatives; rank_pct: 8%" [ref=e1359]'
+                          - 'generic "Month: 1767106800000; asset: Dividend Payers; Rank: 68.300000%; date: Dec 31, 2025; bucket: Equities; rank_pct: 68%" [ref=e1360]'
+                          - 'generic "Month: 1767106800000; asset: EM ex-China; Rank: 78.300000%; date: Dec 31, 2025; bucket: Equities; rank_pct: 78%" [ref=e1361]'
+                          - 'generic "Month: 1767106800000; asset: Europe; Rank: 83.300000%; date: Dec 31, 2025; bucket: Equities; rank_pct: 83%" [ref=e1362]'
+                          - 'generic "Month: 1767106800000; asset: Japan; Rank: 63.300000%; date: Dec 31, 2025; bucket: Equities; rank_pct: 63%" [ref=e1363]'
+                          - 'generic "Month: 1767106800000; asset: Nasdaq; Rank: 53.300000%; date: Dec 31, 2025; bucket: Equities; rank_pct: 53%" [ref=e1364]'
+                          - 'generic "Month: 1767106800000; asset: US Large Cap; Rank: 58.300000%; date: Dec 31, 2025; bucket: Equities; rank_pct: 58%" [ref=e1365]'
+                          - 'generic "Month: 1767106800000; asset: US Small Cap; Rank: 73.300000%; date: Dec 31, 2025; bucket: Equities; rank_pct: 73%" [ref=e1366]'
+                          - 'generic "Month: 1767106800000; asset: Corporate Bonds; Rank: 43.300000%; date: Dec 31, 2025; bucket: Fixed Income; rank_pct: 43%" [ref=e1367]'
+                          - 'generic "Month: 1767106800000; asset: EM Bonds; Rank: 48.300000%; date: Dec 31, 2025; bucket: Fixed Income; rank_pct: 48%" [ref=e1368]'
+                          - 'generic "Month: 1767106800000; asset: High Yield; Rank: 38.300000%; date: Dec 31, 2025; bucket: Fixed Income; rank_pct: 38%" [ref=e1369]'
+                          - 'generic "Month: 1767106800000; asset: Long-Term Treasuries; Rank: 13.300000%; date: Dec 31, 2025; bucket: Fixed Income; rank_pct: 13%" [ref=e1370]'
+                          - 'generic "Month: 1767106800000; asset: T-Bills; Rank: 23.300000%; date: Dec 31, 2025; bucket: Fixed Income; rank_pct: 23%" [ref=e1371]'
+                          - 'generic "Month: 1767106800000; asset: TIPS; Rank: 18.300000%; date: Dec 31, 2025; bucket: Fixed Income; rank_pct: 18%" [ref=e1372]'
+                          - 'generic "Month: 1769698800000; asset: Bitcoin; Rank: 11.000000%; date: Jan 30, 2026; bucket: Alternatives; rank_pct: 11%" [ref=e1373]'
+                          - 'generic "Month: 1769698800000; asset: Commodities; Rank: 61.000000%; date: Jan 30, 2026; bucket: Alternatives; rank_pct: 61%" [ref=e1374]'
+                          - 'generic "Month: 1769698800000; asset: Energy; Rank: 66.000000%; date: Jan 30, 2026; bucket: Alternatives; rank_pct: 66%" [ref=e1375]'
+                          - 'generic "Month: 1769698800000; asset: Gold; Rank: 100.000000%; date: Jan 30, 2026; bucket: Alternatives; rank_pct: 100%" [ref=e1376]'
+                          - 'generic "Month: 1769698800000; asset: Managed Futures; Rank: 81.000000%; date: Jan 30, 2026; bucket: Alternatives; rank_pct: 81%" [ref=e1377]'
+                          - 'generic "Month: 1769698800000; asset: Miners; Rank: 100.000000%; date: Jan 30, 2026; bucket: Alternatives; rank_pct: 100%" [ref=e1378]'
+                          - 'generic "Month: 1769698800000; asset: Real Estate; Rank: 56.000000%; date: Jan 30, 2026; bucket: Alternatives; rank_pct: 56%" [ref=e1379]'
+                          - 'generic "Month: 1769698800000; asset: Dividend Payers; Rank: 76.000000%; date: Jan 30, 2026; bucket: Equities; rank_pct: 76%" [ref=e1380]'
+                          - 'generic "Month: 1769698800000; asset: EM ex-China; Rank: 96.000000%; date: Jan 30, 2026; bucket: Equities; rank_pct: 96%" [ref=e1381]'
+                          - 'generic "Month: 1769698800000; asset: Europe; Rank: 91.000000%; date: Jan 30, 2026; bucket: Equities; rank_pct: 91%" [ref=e1382]'
+                          - 'generic "Month: 1769698800000; asset: Japan; Rank: 71.000000%; date: Jan 30, 2026; bucket: Equities; rank_pct: 71%" [ref=e1383]'
+                          - 'generic "Month: 1769698800000; asset: Nasdaq; Rank: 46.000000%; date: Jan 30, 2026; bucket: Equities; rank_pct: 46%" [ref=e1384]'
+                          - 'generic "Month: 1769698800000; asset: US Large Cap; Rank: 51.000000%; date: Jan 30, 2026; bucket: Equities; rank_pct: 51%" [ref=e1385]'
+                          - 'generic "Month: 1769698800000; asset: US Small Cap; Rank: 86.000000%; date: Jan 30, 2026; bucket: Equities; rank_pct: 86%" [ref=e1386]'
+                          - 'generic "Month: 1769698800000; asset: Corporate Bonds; Rank: 31.000000%; date: Jan 30, 2026; bucket: Fixed Income; rank_pct: 31%" [ref=e1387]'
+                          - 'generic "Month: 1769698800000; asset: EM Bonds; Rank: 36.000000%; date: Jan 30, 2026; bucket: Fixed Income; rank_pct: 36%" [ref=e1388]'
+                          - 'generic "Month: 1769698800000; asset: High Yield; Rank: 41.000000%; date: Jan 30, 2026; bucket: Fixed Income; rank_pct: 41%" [ref=e1389]'
+                          - 'generic "Month: 1769698800000; asset: Long-Term Treasuries; Rank: 16.000000%; date: Jan 30, 2026; bucket: Fixed Income; rank_pct: 16%" [ref=e1390]'
+                          - 'generic "Month: 1769698800000; asset: T-Bills; Rank: 21.000000%; date: Jan 30, 2026; bucket: Fixed Income; rank_pct: 21%" [ref=e1391]'
+                          - 'generic "Month: 1769698800000; asset: TIPS; Rank: 26.000000%; date: Jan 30, 2026; bucket: Fixed Income; rank_pct: 26%" [ref=e1392]'
+                          - 'generic "Month: 1772118000000; asset: Bitcoin; Rank: 17.100000%; date: Feb 27, 2026; bucket: Alternatives; rank_pct: 17%" [ref=e1393]'
+                          - 'generic "Month: 1772118000000; asset: Commodities; Rank: 72.100000%; date: Feb 27, 2026; bucket: Alternatives; rank_pct: 72%" [ref=e1394]'
+                          - 'generic "Month: 1772118000000; asset: Energy; Rank: 97.100000%; date: Feb 27, 2026; bucket: Alternatives; rank_pct: 97%" [ref=e1395]'
+                          - 'generic "Month: 1772118000000; asset: Gold; Rank: 100.000000%; date: Feb 27, 2026; bucket: Alternatives; rank_pct: 100%" [ref=e1396]'
+                          - 'generic "Month: 1772118000000; asset: Managed Futures; Rank: 82.100000%; date: Feb 27, 2026; bucket: Alternatives; rank_pct: 82%" [ref=e1397]'
+                          - 'generic "Month: 1772118000000; asset: Miners; Rank: 100.000000%; date: Feb 27, 2026; bucket: Alternatives; rank_pct: 100%" [ref=e1398]'
+                          - 'generic "Month: 1772118000000; asset: Real Estate; Rank: 62.100000%; date: Feb 27, 2026; bucket: Alternatives; rank_pct: 62%" [ref=e1399]'
+                          - 'generic "Month: 1772118000000; asset: Dividend Payers; Rank: 92.100000%; date: Feb 27, 2026; bucket: Equities; rank_pct: 92%" [ref=e1400]'
+                          - 'generic "Month: 1772118000000; asset: EM ex-China; Rank: 100.000000%; date: Feb 27, 2026; bucket: Equities; rank_pct: 100%" [ref=e1401]'
+                          - 'generic "Month: 1772118000000; asset: Europe; Rank: 77.100000%; date: Feb 27, 2026; bucket: Equities; rank_pct: 77%" [ref=e1402]'
+                          - 'generic "Month: 1772118000000; asset: Japan; Rank: 87.100000%; date: Feb 27, 2026; bucket: Equities; rank_pct: 87%" [ref=e1403]'
+                          - 'generic "Month: 1772118000000; asset: Nasdaq; Rank: 22.100000%; date: Feb 27, 2026; bucket: Equities; rank_pct: 22%" [ref=e1404]'
+                          - 'generic "Month: 1772118000000; asset: US Large Cap; Rank: 37.100000%; date: Feb 27, 2026; bucket: Equities; rank_pct: 37%" [ref=e1405]'
+                          - 'generic "Month: 1772118000000; asset: US Small Cap; Rank: 67.100000%; date: Feb 27, 2026; bucket: Equities; rank_pct: 67%" [ref=e1406]'
+                          - 'generic "Month: 1772118000000; asset: Corporate Bonds; Rank: 52.100000%; date: Feb 27, 2026; bucket: Fixed Income; rank_pct: 52%" [ref=e1407]'
+                          - 'generic "Month: 1772118000000; asset: EM Bonds; Rank: 57.100000%; date: Feb 27, 2026; bucket: Fixed Income; rank_pct: 57%" [ref=e1408]'
+                          - 'generic "Month: 1772118000000; asset: High Yield; Rank: 32.100000%; date: Feb 27, 2026; bucket: Fixed Income; rank_pct: 32%" [ref=e1409]'
+                          - 'generic "Month: 1772118000000; asset: Long-Term Treasuries; Rank: 47.100000%; date: Feb 27, 2026; bucket: Fixed Income; rank_pct: 47%" [ref=e1410]'
+                          - 'generic "Month: 1772118000000; asset: T-Bills; Rank: 27.100000%; date: Feb 27, 2026; bucket: Fixed Income; rank_pct: 27%" [ref=e1411]'
+                          - 'generic "Month: 1772118000000; asset: TIPS; Rank: 42.100000%; date: Feb 27, 2026; bucket: Fixed Income; rank_pct: 42%" [ref=e1412]'
+                          - 'generic "Month: 1774882800000; asset: Bitcoin; Rank: 14.350000%; date: Mar 31, 2026; bucket: Alternatives; rank_pct: 14%" [ref=e1413]'
+                          - 'generic "Month: 1774882800000; asset: Commodities; Rank: 100.000000%; date: Mar 31, 2026; bucket: Alternatives; rank_pct: 100%" [ref=e1414]'
+                          - 'generic "Month: 1774882800000; asset: Energy; Rank: 100.000000%; date: Mar 31, 2026; bucket: Alternatives; rank_pct: 100%" [ref=e1415]'
+                          - 'generic "Month: 1774882800000; asset: Gold; Rank: 69.350000%; date: Mar 31, 2026; bucket: Alternatives; rank_pct: 69%" [ref=e1416]'
+                          - 'generic "Month: 1774882800000; asset: Managed Futures; Rank: 89.350000%; date: Mar 31, 2026; bucket: Alternatives; rank_pct: 89%" [ref=e1417]'
+                          - 'generic "Month: 1774882800000; asset: Miners; Rank: 79.350000%; date: Mar 31, 2026; bucket: Alternatives; rank_pct: 79%" [ref=e1418]'
+                          - 'generic "Month: 1774882800000; asset: Real Estate; Rank: 44.350000%; date: Mar 31, 2026; bucket: Alternatives; rank_pct: 44%" [ref=e1419]'
+                          - 'generic "Month: 1774882800000; asset: Dividend Payers; Rank: 94.350000%; date: Mar 31, 2026; bucket: Equities; rank_pct: 94%" [ref=e1420]'
+                          - 'generic "Month: 1774882800000; asset: EM ex-China; Rank: 74.350000%; date: Mar 31, 2026; bucket: Equities; rank_pct: 74%" [ref=e1421]'
+                          - 'generic "Month: 1774882800000; asset: Europe; Rank: 34.350000%; date: Mar 31, 2026; bucket: Equities; rank_pct: 34%" [ref=e1422]'
+                          - 'generic "Month: 1774882800000; asset: Japan; Rank: 49.350000%; date: Mar 31, 2026; bucket: Equities; rank_pct: 49%" [ref=e1423]'
+                          - 'generic "Month: 1774882800000; asset: Nasdaq; Rank: 19.350000%; date: Mar 31, 2026; bucket: Equities; rank_pct: 19%" [ref=e1424]'
+                          - 'generic "Month: 1774882800000; asset: US Large Cap; Rank: 24.350000%; date: Mar 31, 2026; bucket: Equities; rank_pct: 24%" [ref=e1425]'
+                          - 'generic "Month: 1774882800000; asset: US Small Cap; Rank: 29.350000%; date: Mar 31, 2026; bucket: Equities; rank_pct: 29%" [ref=e1426]'
+                          - 'generic "Month: 1774882800000; asset: Corporate Bonds; Rank: 59.350000%; date: Mar 31, 2026; bucket: Fixed Income; rank_pct: 59%" [ref=e1427]'
+                          - 'generic "Month: 1774882800000; asset: EM Bonds; Rank: 39.350000%; date: Mar 31, 2026; bucket: Fixed Income; rank_pct: 39%" [ref=e1428]'
+                          - 'generic "Month: 1774882800000; asset: High Yield; Rank: 84.350000%; date: Mar 31, 2026; bucket: Fixed Income; rank_pct: 84%" [ref=e1429]'
+                          - 'generic "Month: 1774882800000; asset: Long-Term Treasuries; Rank: 54.350000%; date: Mar 31, 2026; bucket: Fixed Income; rank_pct: 54%" [ref=e1430]'
+                          - 'generic "Month: 1774882800000; asset: T-Bills; Rank: 99.350000%; date: Mar 31, 2026; bucket: Fixed Income; rank_pct: 99%" [ref=e1431]'
+                          - 'generic "Month: 1774882800000; asset: TIPS; Rank: 64.350000%; date: Mar 31, 2026; bucket: Fixed Income; rank_pct: 64%" [ref=e1432]'
+                          - 'generic "Month: 1777474800000; asset: Bitcoin; Rank: 29.250000%; date: Apr 30, 2026; bucket: Alternatives; rank_pct: 29%" [ref=e1433]'
+                          - 'generic "Month: 1777474800000; asset: Commodities; Rank: 99.250000%; date: Apr 30, 2026; bucket: Alternatives; rank_pct: 99%" [ref=e1434]'
+                          - 'generic "Month: 1777474800000; asset: Energy; Rank: 69.250000%; date: Apr 30, 2026; bucket: Alternatives; rank_pct: 69%" [ref=e1435]'
+                          - 'generic "Month: 1777474800000; asset: Gold; Rank: 19.250000%; date: Apr 30, 2026; bucket: Alternatives; rank_pct: 19%" [ref=e1436]'
+                          - 'generic "Month: 1777474800000; asset: Managed Futures; Rank: 49.250000%; date: Apr 30, 2026; bucket: Alternatives; rank_pct: 49%" [ref=e1437]'
+                          - 'generic "Month: 1777474800000; asset: Miners; Rank: 94.250000%; date: Apr 30, 2026; bucket: Alternatives; rank_pct: 94%" [ref=e1438]'
+                          - 'generic "Month: 1777474800000; asset: Real Estate; Rank: 74.250000%; date: Apr 30, 2026; bucket: Alternatives; rank_pct: 74%" [ref=e1439]'
+                          - 'generic "Month: 1777474800000; asset: Dividend Payers; Rank: 84.250000%; date: Apr 30, 2026; bucket: Equities; rank_pct: 84%" [ref=e1440]'
+                          - 'generic "Month: 1777474800000; asset: EM ex-China; Rank: 89.250000%; date: Apr 30, 2026; bucket: Equities; rank_pct: 89%" [ref=e1441]'
+                          - 'generic "Month: 1777474800000; asset: Europe; Rank: 54.250000%; date: Apr 30, 2026; bucket: Equities; rank_pct: 54%" [ref=e1442]'
+                          - 'generic "Month: 1777474800000; asset: Japan; Rank: 34.250000%; date: Apr 30, 2026; bucket: Equities; rank_pct: 34%" [ref=e1443]'
+                          - 'generic "Month: 1777474800000; asset: Nasdaq; Rank: 64.250000%; date: Apr 30, 2026; bucket: Equities; rank_pct: 64%" [ref=e1444]'
+                          - 'generic "Month: 1777474800000; asset: US Large Cap; Rank: 59.250000%; date: Apr 30, 2026; bucket: Equities; rank_pct: 59%" [ref=e1445]'
+                          - 'generic "Month: 1777474800000; asset: US Small Cap; Rank: 79.250000%; date: Apr 30, 2026; bucket: Equities; rank_pct: 79%" [ref=e1446]'
+                          - 'generic "Month: 1777474800000; asset: Corporate Bonds; Rank: 9.250000%; date: Apr 30, 2026; bucket: Fixed Income; rank_pct: 9%" [ref=e1447]'
+                          - 'generic "Month: 1777474800000; asset: EM Bonds; Rank: 39.250000%; date: Apr 30, 2026; bucket: Fixed Income; rank_pct: 39%" [ref=e1448]'
+                          - 'generic "Month: 1777474800000; asset: High Yield; Rank: 44.250000%; date: Apr 30, 2026; bucket: Fixed Income; rank_pct: 44%" [ref=e1449]'
+                          - 'generic "Month: 1777474800000; asset: Long-Term Treasuries; Rank: 4.250000%; date: Apr 30, 2026; bucket: Fixed Income; rank_pct: 4%" [ref=e1450]'
+                          - 'generic "Month: 1777474800000; asset: T-Bills; Rank: 24.250000%; date: Apr 30, 2026; bucket: Fixed Income; rank_pct: 24%" [ref=e1451]'
+                          - 'generic "Month: 1777474800000; asset: TIPS; Rank: 14.250000%; date: Apr 30, 2026; bucket: Fixed Income; rank_pct: 14%" [ref=e1452]'
+                          - 'generic "Month: 1778598000000; asset: Bitcoin; Rank: 50.550000%; date: May 13, 2026; bucket: Alternatives; rank_pct: 51%" [ref=e1453]'
+                          - 'generic "Month: 1778598000000; asset: Commodities; Rank: 95.550000%; date: May 13, 2026; bucket: Alternatives; rank_pct: 96%" [ref=e1454]'
+                          - 'generic "Month: 1778598000000; asset: Energy; Rank: 65.550000%; date: May 13, 2026; bucket: Alternatives; rank_pct: 66%" [ref=e1455]'
+                          - 'generic "Month: 1778598000000; asset: Gold; Rank: 10.550000%; date: May 13, 2026; bucket: Alternatives; rank_pct: 11%" [ref=e1456]'
+                          - 'generic "Month: 1778598000000; asset: Managed Futures; Rank: 45.550000%; date: May 13, 2026; bucket: Alternatives; rank_pct: 46%" [ref=e1457]'
+                          - 'generic "Month: 1778598000000; asset: Miners; Rank: 85.550000%; date: May 13, 2026; bucket: Alternatives; rank_pct: 86%" [ref=e1458]'
+                          - 'generic "Month: 1778598000000; asset: Real Estate; Rank: 55.550000%; date: May 13, 2026; bucket: Alternatives; rank_pct: 56%" [ref=e1459]'
+                          - 'generic "Month: 1778598000000; asset: Dividend Payers; Rank: 70.550000%; date: May 13, 2026; bucket: Equities; rank_pct: 71%" [ref=e1460]'
+                          - 'generic "Month: 1778598000000; asset: EM ex-China; Rank: 90.550000%; date: May 13, 2026; bucket: Equities; rank_pct: 91%" [ref=e1461]'
+                          - 'generic "Month: 1778598000000; asset: Europe; Rank: 35.550000%; date: May 13, 2026; bucket: Equities; rank_pct: 36%" [ref=e1462]'
+                          - 'generic "Month: 1778598000000; asset: Japan; Rank: 40.550000%; date: May 13, 2026; bucket: Equities; rank_pct: 41%" [ref=e1463]'
+                          - 'generic "Month: 1778598000000; asset: Nasdaq; Rank: 80.550000%; date: May 13, 2026; bucket: Equities; rank_pct: 81%" [ref=e1464]'
+                          - 'generic "Month: 1778598000000; asset: US Large Cap; Rank: 60.550000%; date: May 13, 2026; bucket: Equities; rank_pct: 61%" [ref=e1465]'
+                          - 'generic "Month: 1778598000000; asset: US Small Cap; Rank: 75.550000%; date: May 13, 2026; bucket: Equities; rank_pct: 76%" [ref=e1466]'
+                          - 'generic "Month: 1778598000000; asset: Corporate Bonds; Rank: 5.550000%; date: May 13, 2026; bucket: Fixed Income; rank_pct: 6%" [ref=e1467]'
+                          - 'generic "Month: 1778598000000; asset: EM Bonds; Rank: 15.550000%; date: May 13, 2026; bucket: Fixed Income; rank_pct: 16%" [ref=e1468]'
+                          - 'generic "Month: 1778598000000; asset: High Yield; Rank: 30.550000%; date: May 13, 2026; bucket: Fixed Income; rank_pct: 31%" [ref=e1469]'
+                          - 'generic "Month: 1778598000000; asset: Long-Term Treasuries; Rank: 0.550000%; date: May 13, 2026; bucket: Fixed Income; rank_pct: 1%" [ref=e1470]'
+                          - 'generic "Month: 1778598000000; asset: T-Bills; Rank: 25.550000%; date: May 13, 2026; bucket: Fixed Income; rank_pct: 26%" [ref=e1471]'
+                          - 'generic "Month: 1778598000000; asset: TIPS; Rank: 20.550000%; date: May 13, 2026; bucket: Fixed Income; rank_pct: 21%" [ref=e1472]'
+                        - generic "Gradient legend titled 'Rank' for fill color with values from 0% to 100%" [ref=e1473]:
+                          - generic [ref=e1475]:
+                            - generic [ref=e1478]:
+                              - generic:
+                                - generic: 0%
+                                - generic: 20%
+                                - generic: 40%
+                                - generic: 60%
+                                - generic: 80%
+                                - generic: 100%
+                            - generic:
+                              - generic: Rank
+                        - generic [ref=e1481]:
+                          - generic "Title text '12-Month Trend Rank Heatmap'":
+                            - generic: 12-Month Trend Rank Heatmap
+                        - 'generic "X-axis titled ''Month'' for a discrete scale with 13 values: May 2025, June 2025, July 2025, August 2025, September 2025, ending with May 2026" [ref=e1482]':
+                          - generic [ref=e1484]:
+                            - generic:
+                              - generic: May 2025
+                              - generic: Jun 2025
+                              - generic: Jul 2025
+                              - generic: Aug 2025
+                              - generic: Sep 2025
+                              - generic: Oct 2025
+                              - generic: Nov 2025
+                              - generic: Dec 2025
+                              - generic: Jan 2026
+                              - generic: Feb 2026
+                              - generic: Mar 2026
+                              - generic: Apr 2026
+                              - generic: May 2026
+                            - generic:
+                              - generic: Month
+                        - 'generic "Y-axis for a discrete scale with 20 values: Commodities, EM ex-China, Miners, Nasdaq, US Small Cap, ending with Long-Term Treasuries" [ref=e1485]':
+                          - generic [ref=e1487]:
+                            - generic:
+                              - generic: Commodities
+                              - generic: EM ex-China
+                              - generic: Miners
+                              - generic: Nasdaq
+                              - generic: US Small Cap
+                              - generic: Dividend Payers
+                              - generic: Energy
+                              - generic: US Large Cap
+                              - generic: Real Estate
+                              - generic: Bitcoin
+                              - generic: Managed Futures
+                              - generic: Japan
+                              - generic: Europe
+                              - generic: High Yield
+                              - generic: T-Bills
+                              - generic: TIPS
+                              - generic: EM Bonds
+                              - generic: Gold
+                              - generic: Corporate Bonds
+                              - generic: Long-Term Treas…
+                  - group "Click to view actions":
+                    - img [ref=e1489] [cursor=pointer]
+            - heading "🔬 Trend Diagnostics" [level=2] [ref=e1497]:
+              - text: 🔬 Trend Diagnostics
+              - generic [ref=e1498]:
+                - link "Link to heading":
+                  - /url: "#trend-diagnostics"
+                  - img
+            - heading "Trend Breadth — Per-Window Regression Direction" [level=3] [ref=e1503]:
+              - text: Trend Breadth — Per-Window Regression Direction
+              - generic [ref=e1504]:
+                - link "Link to heading":
+                  - /url: "#trend-breadth-per-window-regression-direction"
+                  - img
+            - generic [ref=e1509]:
+              - button "Show/hide columns" [ref=e1513] [cursor=pointer]:
+                - img [ref=e1514]
+              - button "Download as CSV" [ref=e1519] [cursor=pointer]:
+                - img [ref=e1520]
+              - button "Search" [ref=e1525] [cursor=pointer]:
+                - img [ref=e1526]
+              - button "Fullscreen" [ref=e1531] [cursor=pointer]:
+                - img [ref=e1532]
+            - paragraph [ref=e1547]: ▲ = positive regression slope (uptrend). ▼ = negative (downtrend). Value = annualised regression slope. Trend Breadth = count(▲) / 6.
+            - heading "🌊 Weight Attribution Waterfall" [level=2] [ref=e1552]:
+              - text: 🌊 Weight Attribution Waterfall
+              - generic [ref=e1553]:
+                - link "Link to heading":
+                  - /url: "#weight-attribution-waterfall"
+                  - img
+            - generic [ref=e1555]:
+              - paragraph [ref=e1559]: Select asset
+              - generic [ref=e1561]:
+                - generic [ref=e1562]:
+                  - generic [ref=e1563]: Miners
+                  - combobox "Selected Miners. Select asset" [disabled] [ref=e1565]
+                - img "open" [ref=e1567]
+            - generic [ref=e1574]:
+              - img:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic: 2.0%
+                              - generic:
+                                - generic: 86%
+                              - generic:
+                                - generic: 8.5%
+                              - generic:
+                                - generic: 3.5%
+                              - generic:
+                                - generic: 6.3%
+                              - generic:
+                                - generic: 6.3%
+                              - generic:
+                                - generic: 5.2%
+                    - generic:
+                      - generic:
+                        - generic: 1. Benchmark weight
+                      - generic:
+                        - generic: 2. Trend rank percentile
+                      - generic:
+                        - generic: 3. Rank × tilt → raw trend weight
+                      - generic:
+                        - generic: 4. HRP weight (bucket risk parity)
+                      - generic:
+                        - generic: 5. Blended (55% trend / 45% HRP)
+                      - generic:
+                        - generic: 6. Capped at max (10%)
+                      - generic:
+                        - generic: 7. Final (after normalisation)
+                    - generic:
+                      - generic:
+                        - generic: 0%
+                      - generic:
+                        - generic: 20%
+                      - generic:
+                        - generic: 40%
+                      - generic:
+                        - generic: 60%
+                      - generic:
+                        - generic: 80%
+              - img:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic: Weight Attribution — Miners (PICK)
+                  - generic:
+                    - generic: Weight
+              - toolbar [ref=e1588]:
+                - button "Download plot as a PNG" [ref=e1590] [cursor=pointer]:
+                  - img [ref=e1591]
+                - generic [ref=e1593]:
+                  - button "Zoom" [ref=e1594] [cursor=pointer]:
+                    - img [ref=e1595]
+                  - button "Pan" [ref=e1597] [cursor=pointer]:
+                    - img [ref=e1598]
+                - generic [ref=e1600]:
+                  - button "Zoom in" [ref=e1601] [cursor=pointer]:
+                    - img [ref=e1602]
+                  - button "Zoom out" [ref=e1604] [cursor=pointer]:
+                    - img [ref=e1605]
+                  - button "Autoscale" [ref=e1607] [cursor=pointer]:
+                    - img [ref=e1608]
+                  - button "Reset axes" [ref=e1610] [cursor=pointer]:
+                    - img [ref=e1611]
+                - button "Fullscreen" [ref=e1614] [cursor=pointer]:
+                  - img [ref=e1615]
+              - img
+            - paragraph [ref=e1621]: "Benchmark: 2.0% | Max: 10.0% | Trend rank: 86% | Final weight: 5.2%"
+            - heading "📋 Details" [level=2] [ref=e1626]:
+              - text: 📋 Details
+              - generic [ref=e1627]:
+                - link "Link to heading":
+                  - /url: "#details"
+                  - img
+            - group [ref=e1630]:
+              - generic "keyboard_arrow_right Allocation History (weight heatmap)" [ref=e1631] [cursor=pointer]:
+                - generic [ref=e1632]:
+                  - generic [ref=e1634]: keyboard_arrow_right
+                  - paragraph [ref=e1637]: Allocation History (weight heatmap)
+            - group [ref=e1640]:
+              - generic "keyboard_arrow_right Trend Score History" [ref=e1641] [cursor=pointer]:
+                - generic [ref=e1642]:
+                  - generic [ref=e1644]: keyboard_arrow_right
+                  - paragraph [ref=e1647]: Trend Score History
+            - group [ref=e1650]:
+              - generic "keyboard_arrow_right Bucket Allocation Over Time" [ref=e1651] [cursor=pointer]:
+                - generic [ref=e1652]:
+                  - generic [ref=e1654]: keyboard_arrow_right
+                  - paragraph [ref=e1657]: Bucket Allocation Over Time
+    - dialog "dialog" [ref=e1666]:
+      - generic [ref=e1667]: Connection error
+      - generic [ref=e1668]:
+        - generic [ref=e1669]: "Is Streamlit still running? If you accidentally stopped Streamlit, just restart it in your terminal:"
+        - code [ref=e1672]: streamlit run yourscript.py
+      - button "Close" [ref=e1673] [cursor=pointer]:
+        - img [ref=e1674]
+  - img [ref=e305]

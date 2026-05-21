@@ -10,6 +10,8 @@ from streamlit import cache_data
 import config
 import duckdb_importer as di
 
+logging.getLogger("streamlit.runtime.caching.cache_data_api").setLevel(logging.ERROR)
+
 duckdb_file: str = ":memory:"
 _conn: duckdb.DuckDBPyConnection = None
 

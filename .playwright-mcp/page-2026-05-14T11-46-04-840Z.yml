@@ -1,0 +1,104 @@
+- generic:
+  - generic [ref=e2]:
+    - generic [ref=e359]:
+      - heading "RAAM Controls" [level=2] [ref=e363]
+      - generic [ref=e365]:
+        - paragraph [ref=e369]: Date range
+        - textbox "Select a date range." [ref=e373]:
+          - /placeholder: YYYY/MM/DD – YYYY/MM/DD
+          - text: 2011/02/14 – 2026/05/13
+        - paragraph: Press the down arrow key to interact with the calendar and select a date. Press the escape button to close the calendar.
+        - paragraph: Selected date range is from 2011/02/14 to 2026/05/13.
+      - generic [ref=e376]:
+        - paragraph [ref=e379]: Rebalance Dates
+        - paragraph [ref=e382]: "184"
+      - generic [ref=e385]:
+        - paragraph [ref=e388]: Proxy Tickers
+        - paragraph [ref=e391]: "20"
+      - separator [ref=e396]
+      - paragraph [ref=e401]:
+        - text: "Latest rebalance:"
+        - strong [ref=e402]: 2026-05-13
+      - separator [ref=e407]
+      - heading "Parameter Tuning" [level=2] [ref=e411]
+      - generic [ref=e414] [cursor=pointer]:
+        - checkbox "Enable tuning"
+        - generic [ref=e417]:
+          - paragraph [ref=e419]: Enable tuning
+          - button "Help for Enable tuning" [ref=e423]:
+            - img [ref=e424]
+    - generic [ref=e3]:
+      - banner [ref=e6]:
+        - generic [ref=e8]:
+          - button "keyboard_double_arrow_right" [ref=e431] [cursor=pointer]:
+            - generic [ref=e433]: keyboard_double_arrow_right
+          - generic [ref=e9]:
+            - button "Deploy" [ref=e19] [cursor=pointer]:
+              - generic [ref=e21]: Deploy
+            - button "Main menu" [ref=e23] [cursor=pointer]:
+              - img [ref=e24]
+      - generic [ref=e31]:
+        - generic [ref=e52]:
+          - tablist [ref=e54]:
+            - tab "Today" [ref=e55] [cursor=pointer]:
+              - paragraph [ref=e57]: Today
+            - tab "Performance" [ref=e58] [cursor=pointer]:
+              - paragraph [ref=e60]: Performance
+            - tab "Pullback" [ref=e61] [cursor=pointer]:
+              - paragraph [ref=e63]: Pullback
+            - tab "Crossings" [ref=e64] [cursor=pointer]:
+              - paragraph [ref=e66]: Crossings
+            - tab "Daily Summary" [ref=e67] [cursor=pointer]:
+              - paragraph [ref=e69]: Daily Summary
+            - tab "Relative Strength" [ref=e70] [cursor=pointer]:
+              - paragraph [ref=e72]: Relative Strength
+            - tab "Rotation" [ref=e73] [cursor=pointer]:
+              - paragraph [ref=e75]: Rotation
+            - tab "Cross-Asset" [ref=e76] [cursor=pointer]:
+              - paragraph [ref=e78]: Cross-Asset
+            - tab "Factors" [ref=e79] [cursor=pointer]:
+              - paragraph [ref=e81]: Factors
+            - tab "Charts" [ref=e82] [cursor=pointer]:
+              - paragraph [ref=e84]: Charts
+            - tab "Correlation" [ref=e85] [cursor=pointer]:
+              - paragraph [ref=e87]: Correlation
+            - tab "Allocator" [ref=e88] [cursor=pointer]:
+              - paragraph [ref=e90]: Allocator
+            - tab "RAAM Strategy" [active] [selected] [ref=e91] [cursor=pointer]:
+              - paragraph [ref=e93]: RAAM Strategy
+          - tabpanel "RAAM Strategy" [ref=e325]:
+            - generic [ref=e326]:
+              - heading "📊 RAAM Strategy — Real Asset Allocation Model" [level=1] [ref=e331]:
+                - text: 📊 RAAM Strategy — Real Asset Allocation Model
+                - generic [ref=e332]:
+                  - link "Link to heading":
+                    - /url: "#raam-strategy-real-asset-allocation-model"
+                    - img
+              - paragraph [ref=e337]:
+                - text: Based on 3Fourteen Research's
+                - emphasis [ref=e338]: "Real Asset Allocation: The World Has Changed"
+                - text: (May 2023). This implementation uses
+                - strong [ref=e339]: 20 US-listed ETFs
+                - text: ", regression-based trend scoring across 6 timeframes, two-level hierarchical risk parity, and monthly rebalancing with no lookahead."
+              - heading "🎯 Current Model Allocation" [level=2] [ref=e438]:
+                - text: 🎯 Current Model Allocation
+                - generic [ref=e439]:
+                  - link "Link to heading":
+                    - /url: "#current-model-allocation"
+                    - img
+        - alert [ref=e442]:
+          - generic [ref=e445]:
+            - generic [ref=e446]: "AttributeError: 'Styler' object has no attribute 'applymap'"
+            - generic [ref=e447]:
+              - generic [ref=e448]: "Traceback:"
+              - code [ref=e451]:
+                - generic [ref=e452]: File "/Users/dbg/code/fin-tracker-ui/app/PerformanceTable.py", line 1080, in <module> RAAMStrategy.render()
+                - generic [ref=e453]: File "/Users/dbg/code/fin-tracker-ui/app/views/RAAMStrategy.py", line 650, in render _render_allocation_table(latest_weights, trend_df, latest_date)
+                - generic [ref=e454]: File "/Users/dbg/code/fin-tracker-ui/app/views/RAAMStrategy.py", line 1127, in _render_allocation_table .applymap(_color_active, subset=["Active"]) ^^^^^^^^
+            - generic [ref=e455]:
+              - button "Copy" [ref=e456] [cursor=pointer]
+              - link "Ask Google" [ref=e457] [cursor=pointer]:
+                - /url: https://www.google.com/search?q=AttributeError%3A%20'Styler'%20object%20has%20no%20attribute%20'applymap'
+              - link "Ask ChatGPT" [ref=e458] [cursor=pointer]:
+                - /url: https://chatgpt.com/?q=AttributeError%3A%20'Styler'%20object%20has%20no%20attribute%20'applymap'%0A%0AFile%20%22%2FUsers%2Fdbg%2Fcode%2Ffin-tracker-ui%2Fapp%2FPerformanceTable.py%22%2C%20line%201080%2C%20in%20%3Cmodule%3E%0A%20%20%20%20RAAMStrategy.render()%0AFile%20%22%2FUsers%2Fdbg%2Fcode%2Ffin-tracker-ui%2Fapp%2Fviews%2FRAAMStrategy.py%22%2C%20line%20650%2C%20in%20render%0A%20%20%20%20_render_allocation_table(latest_weights%2C%20trend_df%2C%20latest_date)%0AFile%20%22%2FUsers%2Fdbg%2Fcode%2Ffin-tracker-ui%2Fapp%2Fviews%2FRAAMStrategy.py%22%2C%20line%201127%2C%20in%20_render_allocation_table%0A%20%20%20%20.applymap(_color_active%2C%20subset%3D%5B%22Active%22%5D)%0A%20%20%20%20%20%5E%5E%5E%5E%5E%5E%5E%5E
+  - img [ref=e356]

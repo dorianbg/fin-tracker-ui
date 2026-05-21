@@ -1,0 +1,26 @@
+{
+  "allocation": {
+    "Bitcoin": 0.0223,
+    "Commodities": 0.0395,
+    "Corporate Bonds": 0.058600000000000006,
+    "Dividend Payers": 0.0384,
+    "EM Bonds": 0.039,
+    "EM ex-China": 0.0204,
+    "Energy": 0.0203,
+    "Europe": 0.019299999999999998,
+    "Gold": 0.0484,
+    "High Yield": 0.058600000000000006,
+    "Japan": 0.0202,
+    "Long-Term Treasuries": 0.0673,
+    "Managed Futures": 0.060599999999999994,
+    "Miners": 0.0707,
+    "Nasdaq": 0.1863,
+    "Real Estate": 0.0096,
+    "T-Bills": 0.0102,
+    "TIPS": 0.0291,
+    "US Large Cap": 0.1421,
+    "US Small Cap": 0.0391
+  },
+  "as_of": "5/15/2026",
+  "source": "https://3fourteensmi.com/raa#holdings"
+}

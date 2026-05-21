@@ -1,0 +1,136 @@
+- generic [ref=e3]:
+  - banner [ref=e6]:
+    - generic [ref=e9]:
+      - generic [ref=e11]:
+        - img "Running..." [ref=e12]:
+          - img [ref=e319]
+        - button "Stop" [ref=e17] [cursor=pointer]
+      - button "Deploy" [ref=e19] [cursor=pointer]:
+        - generic [ref=e21]: Deploy
+      - button "Main menu" [ref=e23] [cursor=pointer]:
+        - img [ref=e24]
+  - generic [ref=e49]:
+    - tablist [ref=e51]:
+      - tab "Today" [selected] [ref=e52] [cursor=pointer]:
+        - paragraph [ref=e54]: Today
+      - tab "Performance" [ref=e55] [cursor=pointer]:
+        - paragraph [ref=e57]: Performance
+      - tab "Pullback" [ref=e58] [cursor=pointer]:
+        - paragraph [ref=e60]: Pullback
+      - tab "Crossings" [ref=e61] [cursor=pointer]:
+        - paragraph [ref=e63]: Crossings
+      - tab "Daily Summary" [ref=e64] [cursor=pointer]:
+        - paragraph [ref=e66]: Daily Summary
+      - tab "Relative Strength" [ref=e67] [cursor=pointer]:
+        - paragraph [ref=e69]: Relative Strength
+      - tab "Rotation" [ref=e70] [cursor=pointer]:
+        - paragraph [ref=e72]: Rotation
+      - tab "Cross-Asset" [ref=e73] [cursor=pointer]:
+        - paragraph [ref=e75]: Cross-Asset
+      - tab "Factors" [ref=e76] [cursor=pointer]:
+        - paragraph [ref=e78]: Factors
+      - tab "Charts" [ref=e79] [cursor=pointer]:
+        - paragraph [ref=e81]: Charts
+      - tab "Correlation" [ref=e82] [cursor=pointer]:
+        - paragraph [ref=e84]: Correlation
+      - tab "Allocator" [ref=e85] [cursor=pointer]:
+        - paragraph [ref=e87]: Allocator
+      - tab "RAAM Strategy" [ref=e88] [cursor=pointer]:
+        - paragraph [ref=e90]: RAAM Strategy
+    - tabpanel "Today" [ref=e93]:
+      - generic [ref=e94]:
+        - group [ref=e97]:
+          - generic "keyboard_arrow_right Universe" [ref=e98] [cursor=pointer]:
+            - generic [ref=e99]:
+              - generic [ref=e101]: keyboard_arrow_right
+              - paragraph [ref=e104]: Universe
+        - heading "🎯 Today’s Action List" [level=2] [ref=e109]:
+          - text: 🎯 Today’s Action List
+          - generic [ref=e110]:
+            - link "Link to heading":
+              - /url: "#todays-action-list"
+              - img
+        - paragraph [ref=e115]: A daily decision queue synthesized from pullbacks, breakouts, capitulation, leader weakness, and rollover monitors.
+        - generic [ref=e117]:
+          - generic [ref=e122]:
+            - paragraph [ref=e125]: Risk Review
+            - paragraph [ref=e128]: "21"
+          - generic [ref=e133]:
+            - paragraph [ref=e136]: Wait For Reclaim
+            - paragraph [ref=e139]: "10"
+          - generic [ref=e144]:
+            - paragraph [ref=e147]: Buy Candidate
+            - paragraph [ref=e150]: "1"
+        - generic [ref=e152]:
+          - generic [ref=e156]:
+            - paragraph [ref=e160]: Signal filter
+            - generic [ref=e163]:
+              - generic [ref=e164]:
+                - button "Buy Watch, close by backspace":
+                  - generic "Buy Watch" [ref=e165]
+                  - img [ref=e167] [cursor=pointer]
+                - button "Short Monitor, close by backspace":
+                  - generic "Short Monitor" [ref=e169]
+                  - img [ref=e171] [cursor=pointer]
+                - combobox "Selected Buy Watch, Short Monitor. Signal filter" [ref=e174]
+              - generic [ref=e175]:
+                - button "Clear all" [ref=e176] [cursor=pointer]
+                - img "open" [ref=e178] [cursor=pointer]
+          - generic [ref=e184]:
+            - paragraph [ref=e188]: Max rows
+            - generic [ref=e189]:
+              - slider "Max rows" [ref=e193]:
+                - generic:
+                  - generic:
+                    - paragraph: "30"
+              - generic:
+                - generic:
+                  - paragraph: "5"
+                - generic:
+                  - paragraph: "100"
+        - generic [ref=e199]:
+          - button "Show/hide columns" [ref=e203] [cursor=pointer]:
+            - img [ref=e204]
+          - button "Download as CSV" [ref=e209] [cursor=pointer]:
+            - img [ref=e210]
+          - button "Search" [ref=e215] [cursor=pointer]:
+            - img [ref=e216]
+          - button "Fullscreen" [ref=e221] [cursor=pointer]:
+            - img [ref=e222]
+        - separator [ref=e237]
+        - heading "Trade Simulation Backtest" [level=2] [ref=e242]:
+          - text: Trade Simulation Backtest
+          - generic [ref=e243]:
+            - link "Link to heading":
+              - /url: "#trade-simulation-backtest"
+              - img
+        - paragraph [ref=e248]: Simulates historical signal entries with trigger-based exits. Max hold is only a safety cap, not the main exit rule.
+        - generic [ref=e250]:
+          - generic [ref=e254]:
+            - paragraph [ref=e258]: Signal
+            - generic [ref=e260]:
+              - generic [ref=e261]:
+                - generic [ref=e262]: Buy Watch
+                - combobox "Selected Buy Watch. Signal" [ref=e264]
+              - img "open" [ref=e266]
+          - generic [ref=e271]:
+            - paragraph [ref=e275]: Bounce timeout
+            - generic [ref=e277]:
+              - generic [ref=e278]:
+                - generic [ref=e279]: 10 trading days
+                - combobox "Selected 10 trading days. Bounce timeout" [ref=e281]
+              - img "open" [ref=e283]
+          - generic [ref=e288]:
+            - paragraph [ref=e292]: Max hold cap
+            - generic [ref=e294]:
+              - generic [ref=e295]:
+                - generic [ref=e296]: 126 trading days
+                - combobox "Selected 126 trading days. Max hold cap" [ref=e298]
+              - img "open" [ref=e300]
+          - generic [ref=e305]:
+            - paragraph [ref=e309]: History
+            - generic [ref=e311]:
+              - generic [ref=e312]:
+                - generic [ref=e313]: 3y
+                - combobox "Selected 3y. History" [ref=e315]
+              - img "open" [ref=e317]

@@ -59,6 +59,15 @@ INXG.L,£ Index-Linked Gilts,GBP,bonds,,Bond - UK Gilt
 LTPZ,PIMCO 15+ Year US TIPS,USD,bonds,,Bond - TIPS
 GLD,SPDR Gold Shares,USD,eq,,Commodity - Gold
 GSG,S&P GSCI Commodity-Indexed Trust,USD,eq,,Commodity - Broad
+LQD,iShares iBoxx $ Investment Grade Corporate Bond ETF,USD,bonds-corp,,Bond - Corporate
+USRT,iShares Core U.S. REIT ETF,USD,eq,,Sector - Real Estate
+SDY,SPDR S&P Dividend ETF,USD,eq,,Factor - Dividend
+NOBL,ProShares S&P 500 Dividend Aristocrats ETF,USD,eq,,Factor - Dividend
+IEV,iShares Europe ETF,USD,eq,,Equity - Europe
+BITO,ProShares Bitcoin Strategy ETF,USD,eq,,Commodity - Digital
+GBTC,Grayscale Bitcoin Trust ETF,USD,eq,,Commodity - Digital
+JNK,SPDR Bloomberg High Yield Bond ETF,USD,bonds-corp,,Bond - High Yield
+CTA,Simplify Managed Futures Strategy ETF,USD,eq,,Alternatives - Managed Futures
 ^VIX,CBOE Volatility Index,USD,volatility,,Volatility
 JEDI.L,VanEck Space Innovators,USD,eq,,Thematic - Space
 AGED.L,iShares Ageing Population,USD,eq,,Thematic - Demographics
@@ -96,6 +105,11 @@ ESIE.L,iShares MSCI Europe Energy Sector,EUR,eq,,Sector - Energy
 ESIN.L,iShares MSCI Europe Industrials Sector,EUR,eq,,Sector - Industrials
 ESIT.L,iShares MSCI Europe IT Sector,EUR,eq,,Sector - Technology
 ESIC.L,iShares MSCI Europe Consumer Discretionary,EUR,eq,,Sector - Consumer Discretionary
+ESIS.L,iShares MSCI Europe Consumer Staples Sector,GBP,eq,,Sector - Consumer Staples
+MTRL.L,SPDR MSCI Europe Materials UCITS ETF,EUR,eq,,Sector - Materials
+UTIL.L,SPDR MSCI Europe Utilities UCITS ETF,EUR,eq,,Sector - Utilities
+IPRP.L,iShares European Property Yield UCITS ETF,GBP,eq,,Sector - Real Estate
+TELE.L,SPDR MSCI Europe Communication Services UCITS ETF,EUR,eq,,Sector - Communication Services
 IWVL.L,iShares Edge MSCI World Value Factor,USD,eq,,Factor - Value
 IUVL.L,iShares Edge MSCI USA Value Factor,USD,eq,,Factor - Value
 IEVL.L,iShares Edge MSCI Europe Value Factor,EUR,eq,,Factor - Value
@@ -105,11 +119,6 @@ IWMO.L,iShares Edge MSCI World Momentum Factor,USD,eq,,Factor - Momentum
 IUMF.L,iShares Edge MSCI USA Momentum Factor,USD,eq,,Factor - Momentum
 MVOL.L,iShares Edge MSCI World Min Volatility,USD,eq,,Factor - Low Vol
 IEFS.L,iShares Edge MSCI Europe Size Factor,EUR,eq,,Factor - Size
-ESIS.L,iShares MSCI Europe Consumer Staples Sector,GBP,eq,,Sector - Consumer Staples
-MTRL.L,SPDR MSCI Europe Materials UCITS ETF,EUR,eq,,Sector - Materials
-UTIL.L,SPDR MSCI Europe Utilities UCITS ETF,EUR,eq,,Sector - Utilities
-IPRP.L,iShares European Property Yield UCITS ETF,GBP,eq,,Sector - Real Estate
-TELE.L,SPDR MSCI Europe Communication Services UCITS ETF,EUR,eq,,Sector - Communication Services
 IFSW.L,iShares World Equity Multi-Factor,USD,eq,,Factor - Multi
 R1GB.L,iShares Russell 1000 Growth,USD,eq,,Factor - Growth
 USDV.L,SPDR S&P US Dividend Aristocrats,USD,eq,,Factor - Dividend
@@ -245,7 +254,51 @@ RIVN,Rivian Automotive,USD,stock,,Thematic - EV
 ALB,Albemarle,USD,stock,,Thematic - Battery
 SQM,Sociedad Quimica y Minera,USD,stock,,Thematic - Battery
 ISRG,Intuitive Surgical,USD,stock,,Thematic - Robotics
-ABB,ABB ADR,USD,stock,,Thematic - Robotics
+ABBNY,ABB ADR,USD,stock,,Thematic - Robotics
+OUST,Ouster,USD,stock,,Thematic - Robotics
+277810.KQ,Rainbow Robotics,KRW,stock,,Thematic - Robotics
+AMBA,Ambarella,USD,stock,,Thematic - Robotics
+9880.HK,UBTech Robotics,HKD,stock,,Thematic - Robotics
+SYM,Symbotic,USD,stock,,Thematic - Robotics
+6324.T,Harmonic Drive Systems,JPY,stock,,Thematic - Robotics
+VPG,Vishay Precision Group,USD,stock,,Thematic - Robotics
+MBLY,Mobileye,USD,stock,,Thematic - Robotics
+ARBE,Arbe Robotics,USD,stock,,Thematic - Robotics
+6268.T,Nabtesco,JPY,stock,,Thematic - Robotics
+SERV,Serve Robotics,USD,stock,,Thematic - Robotics
+HSYDF,Harmonic Drive Systems OTC,USD,stock,,Thematic - Robotics
+HSAI,Hesai Group ADS,USD,stock,,Thematic - Robotics
+ZBRA,Zebra Technologies,USD,stock,,Thematic - Robotics
+300750.SZ,CATL,CNY,stock,,Thematic - Robotics
+LSCC,Lattice Semiconductor,USD,stock,,Thematic - Robotics
+300024.SZ,Siasun Robot & Automation,CNY,stock,,Thematic - Robotics
+NOVT,Novanta,USD,stock,,Thematic - Robotics
+RR,Richtech Robotics,USD,stock,,Thematic - Robotics
+2525.HK,Hesai Group,HKD,stock,,Thematic - Robotics
+SHA0.DE,Schaeffler,EUR,stock,,Thematic - Robotics
+XPEV,XPeng,USD,stock,,Thematic - Robotics
+BAM,Brookfield Asset Management,USD,stock,,Thematic - Robotics
+ALNT,Allient,USD,stock,,Thematic - Robotics
+AMBQ,Ambiq Micro,USD,stock,,Thematic - Robotics
+ATOM,Atomera,USD,stock,,Thematic - Robotics
+MRAM,Everspin Technologies,USD,stock,,Thematic - Robotics
+HLIT,Harmonic,USD,stock,,Thematic - Robotics
+2498.HK,RoboSense Technology,HKD,stock,,Thematic - Robotics
+ACUVI.ST,Acuvi,SEK,stock,,Thematic - Robotics
+CGNX,Cognex,USD,stock,,Thematic - Robotics
+KLIC,Kulicke and Soffa Industries,USD,stock,,Thematic - Robotics
+AEVA,Aeva Technologies,USD,stock,,Thematic - Robotics
+AUR,Aurora Innovation,USD,stock,,Thematic - Robotics
+KITT,Nauticus Robotics,USD,stock,,Thematic - Robotics
+INDI,indie Semiconductor,USD,stock,,Thematic - Robotics
+2590.HK,Geekplus Technology,HKD,stock,,Thematic - Robotics
+PDYN,Palladyne AI,USD,stock,,Thematic - Robotics
+XBOT.V,Realbotix,CAD,stock,,Thematic - Robotics
+KDK,Kodiak AI,USD,stock,,Thematic - Robotics
+MRLN,Merlin,USD,stock,,Thematic - Robotics
+MKA.V,Mkango Resources,CAD,stock,,Thematic - Robotics
+CTH.V,CoTec Holdings,CAD,stock,,Thematic - Robotics
+IMSR,Terrestrial Energy,USD,stock,,Thematic - Robotics
 REGN,Regeneron Pharmaceuticals,USD,stock,,Thematic - Biotech
 VRTX,Vertex Pharmaceuticals,USD,stock,,Thematic - Biotech
 MRNA,Moderna,USD,stock,,Thematic - Biotech

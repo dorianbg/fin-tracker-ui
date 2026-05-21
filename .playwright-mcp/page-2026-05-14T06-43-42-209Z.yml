@@ -1,0 +1,77 @@
+- generic [ref=e3]:
+  - banner [ref=e6]:
+    - generic [ref=e9]:
+      - generic [ref=e11]:
+        - img "Running..." [ref=e12]:
+          - img [ref=e13]
+        - button "Stop" [ref=e18] [cursor=pointer]
+      - button "Deploy" [ref=e20] [cursor=pointer]:
+        - generic [ref=e22]: Deploy
+      - button [ref=e24] [cursor=pointer]:
+        - img [ref=e25]
+  - generic [ref=e30]:
+    - tablist [ref=e32]:
+      - tab "Today" [selected] [ref=e33] [cursor=pointer]:
+        - paragraph [ref=e35]: Today
+      - tab "Performance" [ref=e36] [cursor=pointer]:
+        - paragraph [ref=e38]: Performance
+      - tab "Pullback" [ref=e39] [cursor=pointer]:
+        - paragraph [ref=e41]: Pullback
+      - tab "Crossings" [ref=e42] [cursor=pointer]:
+        - paragraph [ref=e44]: Crossings
+      - tab "Daily Summary" [ref=e45] [cursor=pointer]:
+        - paragraph [ref=e47]: Daily Summary
+      - tab "Relative Strength" [ref=e48] [cursor=pointer]:
+        - paragraph [ref=e50]: Relative Strength
+      - tab "Rotation" [ref=e51] [cursor=pointer]:
+        - paragraph [ref=e53]: Rotation
+      - tab "Cross-Asset" [ref=e54] [cursor=pointer]:
+        - paragraph [ref=e56]: Cross-Asset
+      - tab "Factors" [ref=e57] [cursor=pointer]:
+        - paragraph [ref=e59]: Factors
+      - tab "Charts" [ref=e60] [cursor=pointer]:
+        - paragraph [ref=e62]: Charts
+      - tab "Correlation" [ref=e63] [cursor=pointer]:
+        - paragraph [ref=e65]: Correlation
+      - tab "Allocator" [ref=e66] [cursor=pointer]:
+        - paragraph [ref=e68]: Allocator
+      - tab "RAAM Strategy" [ref=e69] [cursor=pointer]:
+        - paragraph [ref=e71]: RAAM Strategy
+    - tabpanel "Today" [ref=e74]:
+      - generic [ref=e75]:
+        - group [ref=e78]:
+          - generic "keyboard_arrow_right Universe" [ref=e79] [cursor=pointer]:
+            - generic [ref=e80]:
+              - generic [ref=e82]: keyboard_arrow_right
+              - paragraph [ref=e84]: Universe
+        - heading "🎯 Today’s Action List" [level=2] [ref=e89]: 🎯 Today’s Action List
+        - paragraph [ref=e94]: A daily decision queue synthesized from pullbacks, breakouts, capitulation, leader weakness, and rollover monitors.
+        - generic [ref=e96]:
+          - generic [ref=e101]:
+            - paragraph [ref=e105]: Risk Review
+            - generic [ref=e107]: "21"
+          - generic [ref=e112]:
+            - paragraph [ref=e116]: Wait For Reclaim
+            - generic [ref=e118]: "10"
+          - generic [ref=e123]:
+            - paragraph [ref=e127]: Buy Candidate
+            - generic [ref=e129]: "1"
+        - generic [ref=e131]:
+          - generic [ref=e135]:
+            - paragraph [ref=e138]: Signal filter
+            - generic [ref=e141]:
+              - generic [ref=e142]:
+                - button "Buy Watch, close by backspace" [ref=e143]:
+                  - generic "Buy Watch" [ref=e144]
+                  - img [ref=e146] [cursor=pointer]
+                - button "Short Monitor, close by backspace" [ref=e148]:
+                  - generic "Short Monitor" [ref=e149]
+                  - img [ref=e151] [cursor=pointer]
+                - combobox "Selected Buy Watch, Short Monitor. Signal filter" [ref=e154]
+              - generic [ref=e155]:
+                - button "Clear all" [ref=e156] [cursor=pointer]
+                - img "open" [ref=e158] [cursor=pointer]
+          - generic [ref=e164]:
+            - paragraph [ref=e167]: Max rows
+            - slider "Max rows" [ref=e171]:
+              - generic: "30"

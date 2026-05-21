@@ -1,0 +1,134 @@
+- generic [ref=e3]:
+  - banner [ref=e6]:
+    - generic [ref=e9]:
+      - button "Deploy" [ref=e20] [cursor=pointer]:
+        - generic [ref=e22]: Deploy
+      - button [ref=e24] [cursor=pointer]:
+        - img [ref=e25]
+  - generic [ref=e28]:
+    - generic [ref=e44]:
+      - tablist [ref=e46]:
+        - tab "Today" [selected] [ref=e47] [cursor=pointer]:
+          - paragraph [ref=e49]: Today
+        - tab "Performance" [ref=e50] [cursor=pointer]:
+          - paragraph [ref=e52]: Performance
+        - tab "Pullback" [ref=e53] [cursor=pointer]:
+          - paragraph [ref=e55]: Pullback
+        - tab "Crossings" [ref=e56] [cursor=pointer]:
+          - paragraph [ref=e58]: Crossings
+        - tab "Daily Summary" [ref=e59] [cursor=pointer]:
+          - paragraph [ref=e61]: Daily Summary
+        - tab "Relative Strength" [ref=e62] [cursor=pointer]:
+          - paragraph [ref=e64]: Relative Strength
+        - tab "Rotation" [ref=e65] [cursor=pointer]:
+          - paragraph [ref=e67]: Rotation
+        - tab "Cross-Asset" [ref=e68] [cursor=pointer]:
+          - paragraph [ref=e70]: Cross-Asset
+        - tab "Factors" [ref=e71] [cursor=pointer]:
+          - paragraph [ref=e73]: Factors
+        - tab "Charts" [ref=e74] [cursor=pointer]:
+          - paragraph [ref=e76]: Charts
+        - tab "Correlation" [ref=e77] [cursor=pointer]:
+          - paragraph [ref=e79]: Correlation
+        - tab "Allocator" [ref=e80] [cursor=pointer]:
+          - paragraph [ref=e82]: Allocator
+        - tab "RAAM Strategy" [ref=e83] [cursor=pointer]:
+          - paragraph [ref=e85]: RAAM Strategy
+      - tabpanel "Today" [ref=e88]:
+        - generic [ref=e89]:
+          - group [ref=e92]:
+            - generic "keyboard_arrow_right Universe" [ref=e93] [cursor=pointer]:
+              - generic [ref=e94]:
+                - generic [ref=e96]: keyboard_arrow_right
+                - paragraph [ref=e98]: Universe
+          - heading "🎯 Today’s Action List" [level=2] [ref=e103]: 🎯 Today’s Action List
+          - paragraph [ref=e108]: A daily decision queue synthesized from pullbacks, breakouts, capitulation, leader weakness, and rollover monitors.
+          - generic [ref=e110]:
+            - generic [ref=e115]:
+              - paragraph [ref=e119]: Risk Review
+              - generic [ref=e121]: "21"
+            - generic [ref=e126]:
+              - paragraph [ref=e130]: Wait For Reclaim
+              - generic [ref=e132]: "10"
+            - generic [ref=e137]:
+              - paragraph [ref=e141]: Buy Candidate
+              - generic [ref=e143]: "1"
+          - generic [ref=e145]:
+            - generic [ref=e149]:
+              - paragraph [ref=e152]: Signal filter
+              - generic [ref=e155]:
+                - generic [ref=e156]:
+                  - button "Buy Watch, close by backspace" [ref=e157]:
+                    - generic "Buy Watch" [ref=e158]
+                    - img [ref=e160] [cursor=pointer]
+                  - button "Short Monitor, close by backspace" [ref=e162]:
+                    - generic "Short Monitor" [ref=e163]
+                    - img [ref=e165] [cursor=pointer]
+                  - combobox "Selected Buy Watch, Short Monitor. Signal filter" [ref=e168]
+                - generic [ref=e169]:
+                  - button "Clear all" [ref=e170] [cursor=pointer]
+                  - img "open" [ref=e172] [cursor=pointer]
+            - generic [ref=e178]:
+              - paragraph [ref=e181]: Max rows
+              - slider "Max rows" [ref=e185]:
+                - generic: "30"
+          - generic [ref=e190]:
+            - button "Show/hide columns" [ref=e194] [cursor=pointer]:
+              - img [ref=e195]
+            - button "Download as CSV" [ref=e200] [cursor=pointer]:
+              - img [ref=e201]
+            - button "Search" [ref=e206] [cursor=pointer]:
+              - img [ref=e207]
+            - button "Fullscreen" [ref=e212] [cursor=pointer]:
+              - img [ref=e213]
+          - separator [ref=e227]
+          - heading "Trade Simulation Backtest" [level=2] [ref=e232]: Trade Simulation Backtest
+          - paragraph [ref=e237]: Simulates historical signal entries with trigger-based exits. Max hold is only a safety cap, not the main exit rule.
+          - generic [ref=e239]:
+            - generic [ref=e243]:
+              - paragraph [ref=e246]: Signal
+              - generic [ref=e248]:
+                - generic [ref=e249]:
+                  - generic [ref=e250]: Buy Watch
+                  - combobox "Selected Buy Watch. Signal" [ref=e252]
+                - img "open" [ref=e254] [cursor=pointer]
+            - generic [ref=e259]:
+              - paragraph [ref=e262]: Bounce timeout
+              - generic [ref=e264]:
+                - generic [ref=e265]:
+                  - generic [ref=e266]: 10 trading days
+                  - combobox "Selected 10 trading days. Bounce timeout" [ref=e268]
+                - img "open" [ref=e270] [cursor=pointer]
+            - generic [ref=e275]:
+              - paragraph [ref=e278]: Max hold cap
+              - generic [ref=e280]:
+                - generic [ref=e281]:
+                  - generic [ref=e282]: 126 trading days
+                  - combobox "Selected 126 trading days. Max hold cap" [ref=e284]
+                - img "open" [ref=e286] [cursor=pointer]
+            - generic [ref=e291]:
+              - paragraph [ref=e294]: History
+              - generic [ref=e296]:
+                - generic [ref=e297]:
+                  - generic [ref=e298]: 3y
+                  - combobox "Selected 3y. History" [ref=e300]
+                - img "open" [ref=e302] [cursor=pointer]
+    - alert [ref=e306]:
+      - generic [ref=e309]:
+        - generic [ref=e310]: "KeyError: 'price'"
+        - generic [ref=e311]:
+          - generic [ref=e312]: "Traceback:"
+          - code [ref=e315]:
+            - generic [ref=e316]: File "/Users/dbg/code/fin-tracker-ui/app/PerformanceTable.py", line 902, in <module> render_today_tab()
+            - generic [ref=e317]: File "/Users/dbg/code/fin-tracker-ui/app/PerformanceTable.py", line 693, in render_today_tab render_signal_backtest(instrument_categories)
+            - generic [ref=e318]: File "/Users/dbg/code/fin-tracker-ui/app/PerformanceTable.py", line 580, in render_signal_backtest trades = simulate_signal_trades( ^^^^^^^^^^^^^^^^^^^^^^^
+            - generic [ref=e319]: File "/Users/dbg/code/fin-tracker-ui/app/PerformanceTable.py", line 478, in simulate_signal_trades entry_price = entry_row["price"] ~~~~~~~~~^^^^^^^^^
+            - generic [ref=e320]: File "/Users/dbg/code/fin-tracker-ui/.venv/lib/python3.12/site-packages/pandas/core/series.py", line 1130, in __getitem__ return self._get_value(key) ^^^^^^^^^^^^^^^^^^^^
+            - generic [ref=e321]: File "/Users/dbg/code/fin-tracker-ui/.venv/lib/python3.12/site-packages/pandas/core/series.py", line 1246, in _get_value loc = self.index.get_loc(label) ^^^^^^^^^^^^^^^^^^^^^^^^^
+            - generic [ref=e322]: File "/Users/dbg/code/fin-tracker-ui/.venv/lib/python3.12/site-packages/pandas/core/indexes/base.py", line 3819, in get_loc raise KeyError(key) from err
+        - generic [ref=e323]:
+          - button "Copy" [ref=e324] [cursor=pointer]
+          - link "Ask Google" [ref=e325] [cursor=pointer]:
+            - /url: https://www.google.com/search?q=KeyError%3A%20'price'
+          - link "Ask ChatGPT" [ref=e326] [cursor=pointer]:
+            - /url: https://chatgpt.com/?q=KeyError%3A%20'price'%0A%0AFile%20%22%2FUsers%2Fdbg%2Fcode%2Ffin-tracker-ui%2Fapp%2FPerformanceTable.py%22%2C%20line%20902%2C%20in%20%3Cmodule%3E%0A%20%20%20%20render_today_tab()%0AFile%20%22%2FUsers%2Fdbg%2Fcode%2Ffin-tracker-ui%2Fapp%2FPerformanceTable.py%22%2C%20line%20693%2C%20in%20render_today_tab%0A%20%20%20%20render_signal_backtest(instrument_categories)%0AFile%20%22%2FUsers%2Fdbg%2Fcode%2Ffin-tracker-ui%2Fapp%2FPerformanceTable.py%22%2C%20line%20580%2C%20in%20render_signal_backtest%0A%20%20%20%20trades%20%3D%20simulate_signal_trades(%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%0AFile%20%22%2FUsers%2Fdbg%2Fcode%2Ffin-tracker-ui%2Fapp%2FPerformanceTable.py%22%2C%20line%20478%2C%20in%20simulate_signal_trades%0A%20%20%20%20entry_price%20%3D%20entry_row%5B%22price%22%5D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20~~~~~~~~~%5E%5E%5E%5E%5E%5E%5E%5E%5E%0AFile%20%22%2FUsers%2Fdbg%2Fcode%2Ffin-tracker-ui%2F.venv%2Flib%2Fpython3.12%2Fsite-packages%2Fpandas%2Fcore%2Fseries.py%22%2C%20line%201130%2C%20in%20__getitem__%0A%20%20%20%20return%20self._get_value(key)%0A%20%20%20%20%20%20%20%20%20%20%20%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%0AFile%20%22%2FUsers%2Fdbg%2Fcode%2Ffin-tracker-ui%2F.venv%2Flib%2Fpython3.12%2Fsite-packages%2Fpandas%2Fcore%2Fseries.py%22%2C%20line%201246%2C%20in%20_get_value%0A%20%20%20%20loc%20%3D%20self.index.get_loc(label)%0A%20%20%20%20%20%20%20%20%20%20%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%5E%0AFile%20%22%2FUsers%2Fdbg%2Fcode%2Ffin-tracker-ui%2F.venv%2Flib%2Fpython3.12%2Fsite-packages%2Fpandas%2Fcore%2Findexes%2Fbase.py%22%2C%20line%203819%2C%20in%20get_loc%0A%20%20%20%20raise%20KeyError(key)%20from%20err

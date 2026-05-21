@@ -62,6 +62,10 @@ def insert_df_to_duckdb(
     if dataframe is None or dataframe.empty:
         return
 
+    dataframe = dataframe.copy()
+    for column in dataframe.select_dtypes(include="string").columns:
+        dataframe[column] = dataframe[column].astype(object)
+
     view_name = "temp_df_" + "".join(random.choices(string.ascii_uppercase, k=10))
     cursor = conn.cursor()
     cursor.register(view_name, dataframe)

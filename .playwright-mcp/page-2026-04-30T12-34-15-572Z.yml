@@ -1,0 +1,44 @@
+- generic:
+  - generic [ref=e3]:
+    - banner [ref=e6]:
+      - generic [ref=e9]:
+        - button "Deploy" [ref=e19] [cursor=pointer]:
+          - generic [ref=e21]: Deploy
+        - button [ref=e23] [cursor=pointer]:
+          - img [ref=e24]
+    - generic [ref=e43]:
+      - tablist [ref=e45]:
+        - tab "Performance" [ref=e46] [cursor=pointer]:
+          - paragraph [ref=e48]: Performance
+        - tab "Daily Summary" [ref=e49] [cursor=pointer]:
+          - paragraph [ref=e51]: Daily Summary
+        - tab "Breakout" [active] [selected] [ref=e52] [cursor=pointer]:
+          - paragraph [ref=e54]: Breakout
+        - tab "Pullback" [ref=e55] [cursor=pointer]:
+          - paragraph [ref=e57]: Pullback
+        - tab "Puke Detector" [ref=e58] [cursor=pointer]:
+          - paragraph [ref=e60]: Puke Detector
+        - tab "Laggard Breakout" [ref=e61] [cursor=pointer]:
+          - paragraph [ref=e63]: Laggard Breakout
+        - tab "Crossings" [ref=e64] [cursor=pointer]:
+          - paragraph [ref=e66]: Crossings
+        - tab "Relative Strength" [ref=e67] [cursor=pointer]:
+          - paragraph [ref=e69]: Relative Strength
+        - tab "Drawdowns" [ref=e70] [cursor=pointer]:
+          - paragraph [ref=e72]: Drawdowns
+        - tab "Factors" [ref=e73] [cursor=pointer]:
+          - paragraph [ref=e75]: Factors
+        - tab "Thematic" [ref=e76] [cursor=pointer]:
+          - paragraph [ref=e78]: Thematic
+        - tab "Cross-Asset" [ref=e79] [cursor=pointer]:
+          - paragraph [ref=e81]: Cross-Asset
+        - tab "Correlation" [ref=e82] [cursor=pointer]:
+          - paragraph [ref=e84]: Correlation
+        - tab "Charts" [ref=e85] [cursor=pointer]:
+          - paragraph [ref=e87]: Charts
+        - tab "Rotation" [ref=e88] [cursor=pointer]:
+          - paragraph [ref=e90]: Rotation
+        - tab "Allocator" [ref=e91] [cursor=pointer]:
+          - paragraph [ref=e93]: Allocator
+      - tabpanel "Breakout" [ref=e96]
+  - img [ref=e97]

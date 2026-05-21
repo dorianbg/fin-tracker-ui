@@ -35,6 +35,7 @@ import views.RotationStrategies as RotationStrategies
 import views.SectorRotation as SectorRotation
 import views.PortfolioAllocator as PortfolioAllocator
 import views.RAAMStrategy as RAAMStrategy
+import views.RoboticsStocks as RoboticsStocks
 
 st.set_page_config(
     page_icon="🏠",
@@ -881,11 +882,12 @@ def render_action_screens(df: pd.DataFrame):
     tab_daily,
     tab_rs,
     tab_rotation,
-    tab_regime,
     tab_sector_rotation,
+    tab_regime,
     tab_factors,
     tab_charts,
     tab_corr,
+    tab_robotics,
     tab_allocator,
     tab_raam,
 ) = st.tabs([
@@ -896,11 +898,12 @@ def render_action_screens(df: pd.DataFrame):
     "Daily Summary",
     "Relative Strength",
     "Rotation",
+    "Sector Rotation",
     "Cross-Asset",
     "Factors",
-    "Sector Rotation",
     "Charts",
     "Correlation",
+    "Robotics",
     "Allocator",
     "RAAM Strategy",
 ])
@@ -1064,11 +1067,11 @@ with tab_rs:
 with tab_rotation:
     RotationStrategies.render()
 
-with tab_regime:
-    CrossAssetRegime.render()
-
 with tab_sector_rotation:
     SectorRotation.render()
+
+with tab_regime:
+    CrossAssetRegime.render()
 
 with tab_factors:
     FactorDashboard.render()
@@ -1078,6 +1081,9 @@ with tab_charts:
 
 with tab_corr:
     AssetCorrelation.render()
+
+with tab_robotics:
+    RoboticsStocks.render()
 
 with tab_allocator:
     PortfolioAllocator.render()

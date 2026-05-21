@@ -1,0 +1,126 @@
+- generic:
+  - generic [ref=e3]:
+    - banner [ref=e6]:
+      - generic [ref=e9]:
+        - button "Deploy" [ref=e11] [cursor=pointer]:
+          - generic [ref=e13]: Deploy
+        - button [ref=e15] [cursor=pointer]:
+          - img [ref=e16]
+    - generic [ref=e21]:
+      - tablist [ref=e23]:
+        - tab "Performance" [selected] [ref=e24] [cursor=pointer]:
+          - paragraph [ref=e26]: Performance
+        - tab "Daily Summary" [ref=e27] [cursor=pointer]:
+          - paragraph [ref=e29]: Daily Summary
+        - tab "Breakout" [ref=e30] [cursor=pointer]:
+          - paragraph [ref=e32]: Breakout
+        - tab "Pullback" [ref=e33] [cursor=pointer]:
+          - paragraph [ref=e35]: Pullback
+        - tab "Puke Detector" [ref=e36] [cursor=pointer]:
+          - paragraph [ref=e38]: Puke Detector
+        - tab "Laggard Breakout" [ref=e39] [cursor=pointer]:
+          - paragraph [ref=e41]: Laggard Breakout
+        - tab "Crossings" [ref=e42] [cursor=pointer]:
+          - paragraph [ref=e44]: Crossings
+        - tab "Relative Strength" [ref=e45] [cursor=pointer]:
+          - paragraph [ref=e47]: Relative Strength
+        - tab "Drawdowns" [ref=e48] [cursor=pointer]:
+          - paragraph [ref=e50]: Drawdowns
+        - tab "Factors" [ref=e51] [cursor=pointer]:
+          - paragraph [ref=e53]: Factors
+        - tab "Thematic" [ref=e54] [cursor=pointer]:
+          - paragraph [ref=e56]: Thematic
+        - tab "Cross-Asset" [ref=e57] [cursor=pointer]:
+          - paragraph [ref=e59]: Cross-Asset
+        - tab "Correlation" [ref=e60] [cursor=pointer]:
+          - paragraph [ref=e62]: Correlation
+        - tab "Charts" [ref=e63] [cursor=pointer]:
+          - paragraph [ref=e65]: Charts
+        - tab "Rotation" [ref=e66] [cursor=pointer]:
+          - paragraph [ref=e68]: Rotation
+        - tab "Allocator" [ref=e69] [cursor=pointer]:
+          - paragraph [ref=e71]: Allocator
+      - tabpanel "Performance" [ref=e74]:
+        - generic [ref=e75]:
+          - generic [ref=e77]:
+            - generic [ref=e81]:
+              - generic [ref=e84] [cursor=pointer]:
+                - checkbox "Show Sharpe ratio" [checked]
+                - paragraph [ref=e90]: Show Sharpe ratio
+              - generic [ref=e93] [cursor=pointer]:
+                - checkbox "Show Gross return" [checked]
+                - paragraph [ref=e99]: Show Gross return
+            - generic [ref=e103]:
+              - generic [ref=e106] [cursor=pointer]:
+                - checkbox "Custom sort on Sharpe"
+                - paragraph [ref=e112]: Custom sort on Sharpe
+              - generic [ref=e115] [cursor=pointer]:
+                - checkbox "Custom sort on Returns"
+                - paragraph [ref=e121]: Custom sort on Returns
+            - generic [ref=e125]:
+              - paragraph [ref=e128]: Returns
+              - generic [ref=e131]:
+                - generic [ref=e132]:
+                  - button "1d, close by backspace" [ref=e133]:
+                    - generic "1d" [ref=e134]
+                    - img [ref=e136] [cursor=pointer]
+                  - button "1w, close by backspace" [ref=e138]:
+                    - generic "1w" [ref=e139]
+                    - img [ref=e141] [cursor=pointer]
+                  - button "2w, close by backspace" [ref=e143]:
+                    - generic "2w" [ref=e144]
+                    - img [ref=e146] [cursor=pointer]
+                  - button "1mo, close by backspace" [ref=e148]:
+                    - generic "1mo" [ref=e149]
+                    - img [ref=e151] [cursor=pointer]
+                  - button "3mo, close by backspace" [ref=e153]:
+                    - generic "3mo" [ref=e154]
+                    - img [ref=e156] [cursor=pointer]
+                  - button "6mo, close by backspace" [ref=e158]:
+                    - generic "6mo" [ref=e159]
+                    - img [ref=e161] [cursor=pointer]
+                  - button "1y, close by backspace" [ref=e163]:
+                    - generic "1y" [ref=e164]
+                    - img [ref=e166] [cursor=pointer]
+                  - button "3y, close by backspace" [ref=e168]:
+                    - generic "3y" [ref=e169]
+                    - img [ref=e171] [cursor=pointer]
+                  - button "5y, close by backspace" [ref=e173]:
+                    - generic "5y" [ref=e174]
+                    - img [ref=e176] [cursor=pointer]
+                  - combobox "Selected 1d, 1w, 2w, 1mo, 3mo, 6mo, 1y, 3y, 5y. Returns" [ref=e179]
+                - generic [ref=e180]:
+                  - button "Clear all" [ref=e181] [cursor=pointer]
+                  - img "open" [ref=e183] [cursor=pointer]
+            - generic [ref=e188]:
+              - paragraph [ref=e191]: Instrument Category
+              - generic [ref=e194]:
+                - generic [ref=e195]:
+                  - button "eq, close by backspace" [ref=e196]:
+                    - generic "eq" [ref=e197]
+                    - img [ref=e199] [cursor=pointer]
+                  - button "commod, close by backspace" [ref=e201]:
+                    - generic "commod" [ref=e202]
+                    - img [ref=e204] [cursor=pointer]
+                  - combobox "Selected eq, commod. Instrument Category" [ref=e207]
+                - generic [ref=e208]:
+                  - button "Clear all" [ref=e209] [cursor=pointer]
+                  - img "open" [ref=e211] [cursor=pointer]
+          - generic [ref=e214]:
+            - generic [ref=e218]:
+              - paragraph [ref=e221]: Filter dataframe on
+              - generic [ref=e224]:
+                - generic [ref=e225]:
+                  - combobox "Filter dataframe on" [ref=e227]
+                  - generic [ref=e228]: Choose options
+                - img "open" [ref=e230] [cursor=pointer]
+            - generic [ref=e236]:
+              - button "Show/hide columns" [ref=e240] [cursor=pointer]:
+                - img [ref=e241]
+              - button "Download as CSV" [ref=e246] [cursor=pointer]:
+                - img [ref=e247]
+              - button "Search" [ref=e252] [cursor=pointer]:
+                - img [ref=e253]
+              - button "Fullscreen" [ref=e258] [cursor=pointer]:
+                - img [ref=e259]
+  - img [ref=e270]

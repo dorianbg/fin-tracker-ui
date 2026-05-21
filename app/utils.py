@@ -257,7 +257,7 @@ def style_performance_table(df, vol_adjust, show_returns, returns_cols):
     # Apply background_gradient to each numeric column
     styled_df = df.style.apply(apply_gradient)
     # format numeric columns
-    percent_cols = [] + di.perf_vol_cols + di.perf_mavg_cols
+    percent_cols = [c for c in di.perf_vol_cols + di.perf_mavg_cols if c in df.columns]
     two_decimal_cols = []  # + di.perf_z_score_cols
     perf_cols = di.get_perf_cols(
         show_returns=show_returns, vol_adjust=vol_adjust, returns_cols=returns_cols
@@ -265,8 +265,8 @@ def style_performance_table(df, vol_adjust, show_returns, returns_cols):
     if vol_adjust and not show_returns:
         two_decimal_cols += perf_cols
     else:
-        percent_cols += [p for p in perf_cols if sharpe_col_suffix not in p]
-        two_decimal_cols += [p for p in perf_cols if sharpe_col_suffix in p]
+        percent_cols += [p for p in perf_cols if sharpe_col_suffix not in p and p in df.columns]
+        two_decimal_cols += [p for p in perf_cols if sharpe_col_suffix in p and p in df.columns]
 
     styled_df = styled_df.format(subset=percent_cols, formatter="{:.2f}%")
     styled_df = styled_df.format(subset=two_decimal_cols, formatter="{:.2f}")

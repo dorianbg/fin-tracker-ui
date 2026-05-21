@@ -1,0 +1,118 @@
+- generic [ref=e3]:
+  - banner [ref=e6]:
+    - generic [ref=e9]:
+      - generic [ref=e11]:
+        - img "Running..." [ref=e12]:
+          - img [ref=e13]
+        - button "Stop" [ref=e17] [cursor=pointer]
+      - button "Deploy" [ref=e19] [cursor=pointer]:
+        - generic [ref=e21]: Deploy
+      - button [ref=e23] [cursor=pointer]:
+        - img [ref=e24]
+  - generic [ref=e29]:
+    - tablist [ref=e31]:
+      - tab "Today" [selected] [ref=e32] [cursor=pointer]:
+        - paragraph [ref=e34]: Today
+      - tab "Performance" [ref=e35] [cursor=pointer]:
+        - paragraph [ref=e37]: Performance
+      - tab "Pullback" [ref=e38] [cursor=pointer]:
+        - paragraph [ref=e40]: Pullback
+      - tab "Crossings" [ref=e41] [cursor=pointer]:
+        - paragraph [ref=e43]: Crossings
+      - tab "Daily Summary" [ref=e44] [cursor=pointer]:
+        - paragraph [ref=e46]: Daily Summary
+      - tab "Relative Strength" [ref=e47] [cursor=pointer]:
+        - paragraph [ref=e49]: Relative Strength
+      - tab "Rotation" [ref=e50] [cursor=pointer]:
+        - paragraph [ref=e52]: Rotation
+      - tab "Cross-Asset" [ref=e53] [cursor=pointer]:
+        - paragraph [ref=e55]: Cross-Asset
+      - tab "Factors" [ref=e56] [cursor=pointer]:
+        - paragraph [ref=e58]: Factors
+      - tab "Charts" [ref=e59] [cursor=pointer]:
+        - paragraph [ref=e61]: Charts
+      - tab "Correlation" [ref=e62] [cursor=pointer]:
+        - paragraph [ref=e64]: Correlation
+      - tab "Allocator" [ref=e65] [cursor=pointer]:
+        - paragraph [ref=e67]: Allocator
+      - tab "RAAM Strategy" [ref=e68] [cursor=pointer]:
+        - paragraph [ref=e70]: RAAM Strategy
+    - tabpanel "Today" [ref=e73]:
+      - generic [ref=e74]:
+        - group [ref=e77]:
+          - generic "keyboard_arrow_right Universe" [ref=e78] [cursor=pointer]:
+            - generic [ref=e79]:
+              - generic [ref=e81]: keyboard_arrow_right
+              - paragraph [ref=e83]: Universe
+        - heading "🎯 Today’s Action List" [level=2] [ref=e88]: 🎯 Today’s Action List
+        - paragraph [ref=e93]: A daily decision queue synthesized from pullbacks, breakouts, capitulation, leader weakness, and rollover monitors.
+        - generic [ref=e95]:
+          - generic [ref=e100]:
+            - paragraph [ref=e104]: Risk Review
+            - generic [ref=e106]: "21"
+          - generic [ref=e111]:
+            - paragraph [ref=e115]: Wait For Reclaim
+            - generic [ref=e117]: "10"
+          - generic [ref=e122]:
+            - paragraph [ref=e126]: Buy Candidate
+            - generic [ref=e128]: "1"
+        - generic [ref=e130]:
+          - generic [ref=e134]:
+            - paragraph [ref=e137]: Signal filter
+            - generic [ref=e140]:
+              - generic [ref=e141]:
+                - button "Buy Watch, close by backspace" [ref=e142]:
+                  - generic "Buy Watch" [ref=e143]
+                  - img [ref=e145] [cursor=pointer]
+                - button "Short Monitor, close by backspace" [ref=e147]:
+                  - generic "Short Monitor" [ref=e148]
+                  - img [ref=e150] [cursor=pointer]
+                - combobox "Selected Buy Watch, Short Monitor. Signal filter" [ref=e153]
+              - generic [ref=e154]:
+                - button "Clear all" [ref=e155] [cursor=pointer]
+                - img "open" [ref=e157] [cursor=pointer]
+          - generic [ref=e163]:
+            - paragraph [ref=e166]: Max rows
+            - slider "Max rows" [ref=e170]:
+              - generic: "30"
+        - generic [ref=e175]:
+          - button "Show/hide columns" [ref=e179] [cursor=pointer]:
+            - img [ref=e180]
+          - button "Download as CSV" [ref=e185] [cursor=pointer]:
+            - img [ref=e186]
+          - button "Search" [ref=e191] [cursor=pointer]:
+            - img [ref=e192]
+          - button "Fullscreen" [ref=e197] [cursor=pointer]:
+            - img [ref=e198]
+        - separator [ref=e212]
+        - heading "Trade Simulation Backtest" [level=2] [ref=e217]: Trade Simulation Backtest
+        - paragraph [ref=e222]: Simulates historical signal entries with trigger-based exits. Max hold is only a safety cap, not the main exit rule.
+        - generic [ref=e224]:
+          - generic [ref=e228]:
+            - paragraph [ref=e231]: Signal
+            - generic [ref=e233]:
+              - generic [ref=e234]:
+                - generic [ref=e235]: Buy Watch
+                - combobox "Selected Buy Watch. Signal" [ref=e237]
+              - img "open" [ref=e239] [cursor=pointer]
+          - generic [ref=e244]:
+            - paragraph [ref=e247]: Bounce timeout
+            - generic [ref=e249]:
+              - generic [ref=e250]:
+                - generic [ref=e251]: 10 trading days
+                - combobox "Selected 10 trading days. Bounce timeout" [ref=e253]
+              - img "open" [ref=e255] [cursor=pointer]
+          - generic [ref=e260]:
+            - paragraph [ref=e263]: Max hold cap
+            - generic [ref=e265]:
+              - generic [ref=e266]:
+                - generic [ref=e267]: 126 trading days
+                - combobox "Selected 126 trading days. Max hold cap" [ref=e269]
+              - img "open" [ref=e271] [cursor=pointer]
+          - generic [ref=e276]:
+            - paragraph [ref=e279]: History
+            - generic [ref=e281]:
+              - generic [ref=e282]:
+                - generic [ref=e283]: 3y
+                - combobox "Selected 3y. History" [ref=e285]
+              - img "open" [ref=e287] [cursor=pointer]

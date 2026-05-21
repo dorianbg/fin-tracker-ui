@@ -6,7 +6,7 @@ LOG_FILE    := $(LOG_DIR)/fintracker.log
 # Paths needed for cron (which has minimal PATH)
 export PATH := /opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$(PATH)
 
-.PHONY: pipeline pipeline-rewrite pipeline-postgres export ui allocator allocator-v1 test cron clean
+.PHONY: pipeline pipeline-rewrite pipeline-postgres export raa-holdings ui allocator allocator-v1 test cron clean
 
 # ── Tests ──
 
@@ -28,6 +28,9 @@ pipeline-postgres:
 
 export:
 	cd app && uv run python duckdb_importer.py
+
+raa-holdings:
+	uv run python scripts/download_raa_holdings.py
 
 # ── Streamlit UI ──
 

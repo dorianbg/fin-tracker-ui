@@ -1,0 +1,56 @@
+- generic:
+  - generic [ref=e3]:
+    - banner [ref=e6]:
+      - generic [ref=e9]:
+        - button "Deploy" [ref=e19] [cursor=pointer]:
+          - generic [ref=e21]: Deploy
+        - button "Main menu" [ref=e23] [cursor=pointer]:
+          - img [ref=e24]
+    - generic [ref=e48]:
+      - tablist [ref=e50]:
+        - tab "Today" [ref=e51] [cursor=pointer]:
+          - paragraph [ref=e53]: Today
+        - tab "Performance" [ref=e54] [cursor=pointer]:
+          - paragraph [ref=e56]: Performance
+        - tab "Pullback" [ref=e57] [cursor=pointer]:
+          - paragraph [ref=e59]: Pullback
+        - tab "Crossings" [ref=e60] [cursor=pointer]:
+          - paragraph [ref=e62]: Crossings
+        - tab "Daily Summary" [ref=e63] [cursor=pointer]:
+          - paragraph [ref=e65]: Daily Summary
+        - tab "Relative Strength" [ref=e66] [cursor=pointer]:
+          - paragraph [ref=e68]: Relative Strength
+        - tab "Rotation" [ref=e69] [cursor=pointer]:
+          - paragraph [ref=e71]: Rotation
+        - tab "Cross-Asset" [ref=e72] [cursor=pointer]:
+          - paragraph [ref=e74]: Cross-Asset
+        - tab "Factors" [ref=e75] [cursor=pointer]:
+          - paragraph [ref=e77]: Factors
+        - tab "Charts" [ref=e78] [cursor=pointer]:
+          - paragraph [ref=e80]: Charts
+        - tab "Correlation" [ref=e81] [cursor=pointer]:
+          - paragraph [ref=e83]: Correlation
+        - tab "Allocator" [ref=e84] [cursor=pointer]:
+          - paragraph [ref=e86]: Allocator
+        - tab "RAAM Strategy" [active] [selected] [ref=e87] [cursor=pointer]:
+          - paragraph [ref=e89]: RAAM Strategy
+      - tabpanel "RAAM Strategy" [ref=e489]:
+        - generic [ref=e490]:
+          - heading "📊 RAAM Strategy — Real Asset Allocation Model" [level=1] [ref=e495]:
+            - text: 📊 RAAM Strategy — Real Asset Allocation Model
+            - generic [ref=e496]:
+              - link "Link to heading":
+                - /url: "#raam-strategy-real-asset-allocation-model"
+                - img
+          - paragraph [ref=e501]:
+            - text: Based on 3Fourteen Research's
+            - emphasis [ref=e502]: "Real Asset Allocation: The World Has Changed"
+            - text: (May 2023). This implementation uses
+            - strong [ref=e503]: 20 US-listed ETFs
+            - text: ", regression-based trend scoring across 6 timeframes, two-level hierarchical risk parity, and monthly rebalancing with no lookahead."
+          - generic [ref=e506] [cursor=pointer]:
+            - checkbox "Load RAAM Strategy"
+            - paragraph [ref=e511]: Load RAAM Strategy
+          - alert [ref=e514]:
+            - paragraph [ref=e519]: Enable this when you want to run the RAAM model. Streamlit tabs execute eagerly, so this prevents the full backtest running while you are using other tabs.
+  - img [ref=e487]

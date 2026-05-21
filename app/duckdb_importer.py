@@ -8,6 +8,7 @@ data_dir = "data"
 if not os.path.exists(data_dir):
     os.makedirs(data_dir)
 duckdb_file = os.path.join(os.path.dirname(__file__), "..", "duckdb.db")
+perf_view_file = os.path.join(os.path.dirname(__file__), "..", "resources", "latest_performance.sql")
 
 encrypt_key = os.environ["PARQUET_ENCRYPTION_KEY"]
 add_encrypt_key = f"PRAGMA add_parquet_key('key256', '{encrypt_key}');"
@@ -22,6 +23,18 @@ px_pq_file = os.path.join(data_dir, f"{px_tbl}.parquet")
 px_cols = [
     "ticker",
     "ticker_full",
+    "price",
+    "date::date as date",
+    "description",
+    "fund_type",
+]
+px_export_cols = [
+    "ticker",
+    "ticker_full",
+    "price_open",
+    "price_high",
+    "price_low",
+    "price_close",
     "price",
     "date::date as date",
     "description",
@@ -126,7 +139,7 @@ perf_cols = (
 def run():
     prices_query = f"""
         select 
-            {",".join(px_cols)}
+            {",".join(px_export_cols)}
         from {px_src_tbl_name}
     """
     performance_query = f"""
@@ -153,6 +166,8 @@ def run():
 
     with duckdb.connect(database=duckdb_file, read_only=False) as conn:
         conn.execute(add_encrypt_key)
+        with open(perf_view_file) as file:
+            conn.execute(file.read())
         conn.execute(export_to_parquet_query(query=prices_query, output=px_pq_file))
         (
             conn.execute(

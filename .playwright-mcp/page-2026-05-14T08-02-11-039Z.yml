@@ -1,0 +1,460 @@
+- generic:
+  - generic [ref=e2]:
+    - generic [ref=e7]:
+      - heading "RAAM Controls" [level=2] [ref=e11]
+      - generic [ref=e13]:
+        - paragraph [ref=e16]: Date range
+        - textbox "Select a date range." [ref=e20]:
+          - /placeholder: YYYY/MM/DD – YYYY/MM/DD
+          - text: 2011/02/14 – 2026/05/13
+        - paragraph: Press the down arrow key to interact with the calendar and select a date. Press the escape button to close the calendar.
+        - paragraph: Selected date range is from 2011/02/14 to 2026/05/13.
+      - generic [ref=e23]:
+        - paragraph [ref=e27]: Rebalance Dates
+        - generic [ref=e29]: "184"
+      - generic [ref=e32]:
+        - paragraph [ref=e36]: Proxy Tickers
+        - generic [ref=e38]: "20"
+      - separator [ref=e42]
+      - paragraph [ref=e46]:
+        - text: "Latest rebalance:"
+        - strong [ref=e47]: 2026-05-13
+    - generic [ref=e3]:
+      - banner [ref=e50]:
+        - generic [ref=e52]:
+          - button "keyboard_double_arrow_right" [ref=e55] [cursor=pointer]:
+            - generic [ref=e57]: keyboard_double_arrow_right
+          - generic [ref=e58]:
+            - button "Deploy" [ref=e68] [cursor=pointer]:
+              - generic [ref=e70]: Deploy
+            - button [ref=e72] [cursor=pointer]:
+              - img [ref=e73]
+      - generic [ref=e78]:
+        - tablist [ref=e80]:
+          - tab "Today" [ref=e81] [cursor=pointer]:
+            - paragraph [ref=e83]: Today
+          - tab "Performance" [ref=e84] [cursor=pointer]:
+            - paragraph [ref=e86]: Performance
+          - tab "Pullback" [ref=e87] [cursor=pointer]:
+            - paragraph [ref=e89]: Pullback
+          - tab "Crossings" [ref=e90] [cursor=pointer]:
+            - paragraph [ref=e92]: Crossings
+          - tab "Daily Summary" [ref=e93] [cursor=pointer]:
+            - paragraph [ref=e95]: Daily Summary
+          - tab "Relative Strength" [ref=e96] [cursor=pointer]:
+            - paragraph [ref=e98]: Relative Strength
+          - tab "Rotation" [ref=e99] [cursor=pointer]:
+            - paragraph [ref=e101]: Rotation
+          - tab "Cross-Asset" [ref=e102] [cursor=pointer]:
+            - paragraph [ref=e104]: Cross-Asset
+          - tab "Factors" [ref=e105] [cursor=pointer]:
+            - paragraph [ref=e107]: Factors
+          - tab "Charts" [ref=e108] [cursor=pointer]:
+            - paragraph [ref=e110]: Charts
+          - tab "Correlation" [ref=e111] [cursor=pointer]:
+            - paragraph [ref=e113]: Correlation
+          - tab "Allocator" [ref=e114] [cursor=pointer]:
+            - paragraph [ref=e116]: Allocator
+          - tab "RAAM Strategy" [active] [selected] [ref=e117] [cursor=pointer]:
+            - paragraph [ref=e119]: RAAM Strategy
+        - tabpanel "RAAM Strategy" [ref=e505]:
+          - generic [ref=e506]:
+            - heading "📊 RAAM Strategy — Real Asset Allocation Model" [level=1] [ref=e511]: 📊 RAAM Strategy — Real Asset Allocation Model
+            - paragraph [ref=e516]:
+              - text: Based on 3Fourteen Research's
+              - emphasis [ref=e517]: "Real Asset Allocation: The World Has Changed"
+              - text: (May 2023). This implementation uses
+              - strong [ref=e518]: 20 US-listed ETFs
+              - text: ", regression-based trend scoring across 6 timeframes, two-level hierarchical risk parity, and monthly rebalancing with no lookahead."
+            - heading "🎯 Current Model Allocation" [level=2] [ref=e523]: 🎯 Current Model Allocation
+            - generic [ref=e529]:
+              - button "Download as CSV" [ref=e532] [cursor=pointer]:
+                - img [ref=e533]
+              - button "Search" [ref=e538] [cursor=pointer]:
+                - img [ref=e539]
+              - button "Fullscreen" [ref=e544] [cursor=pointer]:
+                - img [ref=e545]
+            - heading "Bucket Summary" [level=3] [ref=e560]: Bucket Summary
+            - paragraph [ref=e565]:
+              - strong [ref=e566]: Alternatives
+              - text: ": 32.3% (benchmark: 20.0%, active: +12.3%) |"
+              - strong [ref=e567]: Equities
+              - text: ": 53.2% (benchmark: 50.0%, active: +3.2%) |"
+              - strong [ref=e568]: Fixed Income
+              - text: ": 14.5% (benchmark: 30.0%, active: -15.5%)"
+            - heading "🔗 Trend Rank → Weight Attribution" [level=2] [ref=e573]: 🔗 Trend Rank → Weight Attribution
+            - generic [ref=e576]:
+              - generic [ref=e578]:
+                - heading "Rank → Weight Pipeline" [level=3] [ref=e583]: Rank → Weight Pipeline
+                - generic [ref=e589]:
+                  - button "Download as CSV" [ref=e592] [cursor=pointer]:
+                    - img [ref=e593]
+                  - button "Search" [ref=e598] [cursor=pointer]:
+                    - img [ref=e599]
+                  - button "Fullscreen" [ref=e604] [cursor=pointer]:
+                    - img [ref=e605]
+                - paragraph [ref=e619]:
+                  - text: "Pre-normalisation sum:"
+                  - strong [ref=e620]: 119.4%
+                  - text: ". Compression: weights ÷ 1.19. Benchmark-weighted avg rank:"
+                  - strong [ref=e621]: "0.500"
+                  - text: (target 0.500)
+              - generic [ref=e623]:
+                - heading "Rank vs Final Weight" [level=3] [ref=e628]: Rank vs Final Weight
+                - generic [ref=e632]:
+                  - generic [ref=e634]:
+                    - button "Show data" [ref=e637] [cursor=pointer]:
+                      - img [ref=e638]
+                    - button "Fullscreen" [ref=e643] [cursor=pointer]:
+                      - img [ref=e644]
+                  - generic [ref=e647]:
+                    - generic "Vega visualization" [ref=e648]:
+                      - img [ref=e649]:
+                        - generic [ref=e654]:
+                          - generic "X-axis titled 'Trend Rank Percentile' for a linear scale with values from 0% to 100%" [ref=e661]:
+                            - generic [ref=e663]:
+                              - generic:
+                                - generic: 0%
+                                - generic: 10%
+                                - generic: 20%
+                                - generic: 30%
+                                - generic: 40%
+                                - generic: 50%
+                                - generic: 60%
+                                - generic: 70%
+                                - generic: 80%
+                                - generic: 90%
+                                - generic: 100%
+                              - generic:
+                                - generic: Trend Rank Percentile
+                          - generic "Y-axis titled 'Final Model Weight' for a linear scale with values from 0% to 20%" [ref=e664]:
+                            - generic [ref=e666]:
+                              - generic:
+                                - generic: 0%
+                                - generic: 2%
+                                - generic: 4%
+                                - generic: 6%
+                                - generic: 8%
+                                - generic: 10%
+                                - generic: 12%
+                                - generic: 14%
+                                - generic: 16%
+                                - generic: 18%
+                                - generic: 20%
+                              - generic:
+                                - generic: Final Model Weight
+                          - generic [ref=e667]:
+                            - 'generic "Trend Rank Percentile: 51%; Final Model Weight: 2%; final_val: 0.0177427563921; Asset: Bitcoin; rank_val: 0.51; bench_val: 0.02" [ref=e668]'
+                            - 'generic "Trend Rank Percentile: 96%; Final Model Weight: 9%; final_val: 0.0885032762185; Asset: Commodities; rank_val: 0.96; bench_val: 0.04" [ref=e669]'
+                            - 'generic "Trend Rank Percentile: 6%; Final Model Weight: 2%; final_val: 0.0249945111644; Asset: Corporate Bonds; rank_val: 0.06; bench_val: 0.1" [ref=e670]'
+                            - 'generic "Trend Rank Percentile: 71%; Final Model Weight: 6%; final_val: 0.0602491831059; Asset: Dividend Payers; rank_val: 0.71; bench_val: 0.05" [ref=e671]'
+                            - 'generic "Trend Rank Percentile: 16%; Final Model Weight: 2%; final_val: 0.021397928782; Asset: EM Bonds; rank_val: 0.16; bench_val: 0.02" [ref=e672]'
+                            - 'generic "Trend Rank Percentile: 91%; Final Model Weight: 5%; final_val: 0.0537189600028; Asset: EM ex-China; rank_val: 0.91; bench_val: 0.01" [ref=e673]'
+                            - 'generic "Trend Rank Percentile: 66%; Final Model Weight: 4%; final_val: 0.0446847656632; Asset: Energy; rank_val: 0.66; bench_val: 0.02" [ref=e674]'
+                            - 'generic "Trend Rank Percentile: 36%; Final Model Weight: 2%; final_val: 0.0200931389019; Asset: Europe; rank_val: 0.36; bench_val: 0.01" [ref=e675]'
+                            - 'generic "Trend Rank Percentile: 11%; Final Model Weight: 1%; final_val: 0.0142705860479; Asset: Gold; rank_val: 0.11; bench_val: 0.02" [ref=e676]'
+                            - 'generic "Trend Rank Percentile: 31%; Final Model Weight: 3%; final_val: 0.032961057222; Asset: High Yield; rank_val: 0.31; bench_val: 0.06" [ref=e677]'
+                            - 'generic "Trend Rank Percentile: 41%; Final Model Weight: 2%; final_val: 0.0177596909099; Asset: Japan; rank_val: 0.41; bench_val: 0.01" [ref=e678]'
+                            - 'generic "Trend Rank Percentile: 1%; Final Model Weight: 2%; final_val: 0.0177570160845; Asset: Long-Term Treasuries; rank_val: 0.01; bench_val: 0.1" [ref=e679]'
+                            - 'generic "Trend Rank Percentile: 46%; Final Model Weight: 5%; final_val: 0.0496216117723; Asset: Managed Futures; rank_val: 0.46; bench_val: 0.06" [ref=e680]'
+                            - 'generic "Trend Rank Percentile: 86%; Final Model Weight: 5%; final_val: 0.0524205778383; Asset: Miners; rank_val: 0.86; bench_val: 0.02" [ref=e681]'
+                            - 'generic "Trend Rank Percentile: 81%; Final Model Weight: 18%; final_val: 0.178532848002; Asset: Nasdaq; rank_val: 0.81; bench_val: 0.2" [ref=e682]'
+                            - 'generic "Trend Rank Percentile: 56%; Final Model Weight: 6%; final_val: 0.0558122787895; Asset: Real Estate; rank_val: 0.56; bench_val: 0.02" [ref=e683]'
+                            - 'generic "Trend Rank Percentile: 26%; Final Model Weight: 2%; final_val: 0.0235150467259; Asset: T-Bills; rank_val: 0.26; bench_val: 0" [ref=e684]'
+                            - 'generic "Trend Rank Percentile: 21%; Final Model Weight: 2%; final_val: 0.0245785379935; Asset: TIPS; rank_val: 0.21; bench_val: 0.02" [ref=e685]'
+                            - 'generic "Trend Rank Percentile: 61%; Final Model Weight: 15%; final_val: 0.151559088843; Asset: US Large Cap; rank_val: 0.61; bench_val: 0.2" [ref=e686]'
+                            - 'generic "Trend Rank Percentile: 76%; Final Model Weight: 5%; final_val: 0.0498271395406; Asset: US Small Cap; rank_val: 0.76; bench_val: 0.02" [ref=e687]'
+                          - generic:
+                            - 'generic "rank_val: 0.01; bench_val: 0.1"'
+                    - group "Click to view actions":
+                      - img [ref=e689] [cursor=pointer]
+                - paragraph [ref=e696]: Dashed line = benchmark weight at each rank. Points above = overweight.
+            - separator [ref=e700]
+            - 'heading "Comparison: Our Model vs Live RAA ETF" [level=3] [ref=e705]': "Comparison: Our Model vs Live RAA ETF"
+            - generic [ref=e711]:
+              - button "Download as CSV" [ref=e714] [cursor=pointer]:
+                - img [ref=e715]
+              - button "Search" [ref=e720] [cursor=pointer]:
+                - img [ref=e721]
+              - button "Fullscreen" [ref=e726] [cursor=pointer]:
+                - img [ref=e727]
+            - paragraph [ref=e741]:
+              - strong [ref=e742]: Alternatives
+              - text: ": 32.3% (live: 27.5%, benchmark: 20.0%) |"
+              - strong [ref=e743]: Equities
+              - text: ": 53.2% (live: 46.2%, benchmark: 50.0%) |"
+              - strong [ref=e744]: Fixed Income
+              - text: ": 14.5% (live: 26.3%, benchmark: 30.0%)"
+            - paragraph [ref=e748]:
+              - text: "Weight correlation with live RAA ETF:"
+              - strong [ref=e749]: "0.814"
+              - text: "| Mean absolute deviation:"
+              - strong [ref=e750]: 2.1%
+              - text: "|"
+              - link "View live RAA holdings" [ref=e751] [cursor=pointer]:
+                - /url: https://3fourteensmi.com/raa#holdings
+            - separator [ref=e755]
+            - heading "Normalisation Compression Diagnostic" [level=3] [ref=e760]: Normalisation Compression Diagnostic
+            - paragraph [ref=e765]: Trend weights naturally sum above or below 100% depending on whether most assets are trending above or below their benchmarks. The HRP blend pulls toward 100% (HRP always sums to exactly 100%), then final normalisation ensures a 100%-invested portfolio.
+            - generic [ref=e767]:
+              - generic [ref=e772]:
+                - paragraph [ref=e776]: Trend sum
+                - generic [ref=e778]: 135.3%
+                - generic [ref=e779]:
+                  - img [ref=e780]
+                  - generic [ref=e783]: +35.3%
+              - generic [ref=e788]:
+                - paragraph [ref=e792]: HRP sum
+                - generic [ref=e794]: 100.0%
+                - generic [ref=e795]:
+                  - img [ref=e796]
+                  - generic [ref=e799]: = 100%
+              - generic [ref=e804]:
+                - paragraph [ref=e808]: Blend (pre-norm)
+                - generic [ref=e810]: 119.4%
+                - generic [ref=e811]:
+                  - img [ref=e812]
+                  - generic [ref=e815]: +19.4%
+            - paragraph [ref=e819]: When pre-normalisation sum > 100%, all active tilts are compressed proportionally. Rank centering (benchmark-weighted avg rank = 0.500) minimises this compression.
+            - heading "📈 Backtest Performance" [level=2] [ref=e824]: 📈 Backtest Performance
+            - generic [ref=e827]:
+              - generic [ref=e829]:
+                - heading "Equity Curve" [level=3] [ref=e834]: Equity Curve
+                - generic [ref=e838]:
+                  - generic [ref=e840]:
+                    - button "Show data" [ref=e843] [cursor=pointer]:
+                      - img [ref=e844]
+                    - button "Fullscreen" [ref=e849] [cursor=pointer]:
+                      - img [ref=e850]
+                  - generic [ref=e853]:
+                    - generic "Vega visualization" [ref=e854]:
+                      - img [ref=e855]:
+                        - generic [ref=e860]:
+                          - generic "X-axis for a time scale with values from Tuesday, 01 March 2011, 12:00:00 AM to Wednesday, 13 May 2026, 12:00:00 AM" [ref=e864]:
+                            - generic [ref=e866]:
+                              - generic:
+                                - generic: "2012"
+                                - generic: "2014"
+                                - generic: "2016"
+                                - generic: "2018"
+                                - generic: "2020"
+                                - generic: "2022"
+                                - generic: "2024"
+                                - generic: "2026"
+                          - generic "Y-axis titled 'Growth of $1' for a linear scale with values from 0 to 6" [ref=e867]:
+                            - generic [ref=e869]:
+                              - generic:
+                                - generic: "0.0"
+                                - generic: "0.5"
+                                - generic: "1.0"
+                                - generic: "1.5"
+                                - generic: "2.0"
+                                - generic: "2.5"
+                                - generic: "3.0"
+                                - generic: "3.5"
+                                - generic: "4.0"
+                                - generic: "4.5"
+                                - generic: "5.0"
+                                - generic: "5.5"
+                              - generic:
+                                - generic: Growth of $1
+                          - generic [ref=e870]:
+                            - 'generic "date: Mar 01, 2011; Growth of $1: null; Portfolio: RAAM Dynamic" [ref=e875]'
+                            - 'generic "date: Mar 01, 2011; Growth of $1: 0.999272448165; Portfolio: RAAM Static" [ref=e880]'
+                            - 'generic "date: Mar 01, 2011; Growth of $1: 1; Portfolio: 60/40" [ref=e885]'
+                          - 'generic "Symbol legend titled ''Portfolio'' for stroke color with 3 values: RAAM Dynamic, RAAM Static, 60/40" [ref=e886]':
+                            - generic [ref=e888]:
+                              - generic [ref=e892]:
+                                - generic [ref=e894]:
+                                  - generic:
+                                    - generic: RAAM Dynamic
+                                - generic [ref=e896]:
+                                  - generic:
+                                    - generic: RAAM Static
+                                - generic [ref=e898]:
+                                  - generic:
+                                    - generic: 60/40
+                              - generic:
+                                - generic: Portfolio
+                    - group "Click to view actions":
+                      - img [ref=e900] [cursor=pointer]
+              - generic [ref=e905]:
+                - heading "Drawdowns" [level=3] [ref=e910]: Drawdowns
+                - generic [ref=e914]:
+                  - generic [ref=e916]:
+                    - button "Show data" [ref=e919] [cursor=pointer]:
+                      - img [ref=e920]
+                    - button "Fullscreen" [ref=e925] [cursor=pointer]:
+                      - img [ref=e926]
+                  - generic [ref=e929]:
+                    - generic "Vega visualization" [ref=e930]:
+                      - img [ref=e931]:
+                        - generic [ref=e936]:
+                          - generic "X-axis for a time scale with values from Tuesday, 01 March 2011, 12:00:00 AM to Wednesday, 13 May 2026, 12:00:00 AM" [ref=e940]:
+                            - generic [ref=e942]:
+                              - generic:
+                                - generic: "2012"
+                                - generic: "2014"
+                                - generic: "2016"
+                                - generic: "2018"
+                                - generic: "2020"
+                                - generic: "2022"
+                                - generic: "2024"
+                                - generic: "2026"
+                          - generic "Y-axis titled 'Drawdown' for a linear scale with values from −35% to 0%" [ref=e943]:
+                            - generic [ref=e945]:
+                              - generic:
+                                - generic: 0%
+                                - generic: −35%
+                                - generic: −30%
+                                - generic: −25%
+                                - generic: −20%
+                                - generic: −15%
+                                - generic: −10%
+                                - generic: −5%
+                              - generic:
+                                - generic: Drawdown
+                          - generic [ref=e946]:
+                            - 'generic "date: Mar 01, 2011; Drawdown: null; Portfolio: RAAM Dynamic" [ref=e951]'
+                            - 'generic "date: Mar 01, 2011; Drawdown: 0%; Portfolio: 60/40" [ref=e956]'
+                          - 'generic "Symbol legend titled ''Portfolio'' for fill color with 2 values: 60/40, RAAM Dynamic" [ref=e957]':
+                            - generic [ref=e959]:
+                              - generic [ref=e963]:
+                                - generic [ref=e965]:
+                                  - generic:
+                                    - generic: 60/40
+                                - generic [ref=e967]:
+                                  - generic:
+                                    - generic: RAAM Dynamic
+                              - generic:
+                                - generic: Portfolio
+                    - group "Click to view actions":
+                      - img [ref=e969] [cursor=pointer]
+            - heading "Performance Metrics" [level=3] [ref=e977]: Performance Metrics
+            - generic [ref=e983]:
+              - button "Download as CSV" [ref=e986] [cursor=pointer]:
+                - img [ref=e987]
+              - button "Search" [ref=e992] [cursor=pointer]:
+                - img [ref=e993]
+              - button "Fullscreen" [ref=e998] [cursor=pointer]:
+                - img [ref=e999]
+            - heading "🔍 Trend Signals" [level=2] [ref=e1014]: 🔍 Trend Signals
+            - generic [ref=e1020]:
+              - button "Download as CSV" [ref=e1023] [cursor=pointer]:
+                - img [ref=e1024]
+              - button "Search" [ref=e1029] [cursor=pointer]:
+                - img [ref=e1030]
+              - button "Fullscreen" [ref=e1035] [cursor=pointer]:
+                - img [ref=e1036]
+            - heading "🔬 Trend Diagnostics" [level=2] [ref=e1051]: 🔬 Trend Diagnostics
+            - heading "Trend Breadth — Per-Window Regression Direction" [level=3] [ref=e1057]: Trend Breadth — Per-Window Regression Direction
+            - generic [ref=e1063]:
+              - button "Download as CSV" [ref=e1066] [cursor=pointer]:
+                - img [ref=e1067]
+              - button "Search" [ref=e1072] [cursor=pointer]:
+                - img [ref=e1073]
+              - button "Fullscreen" [ref=e1078] [cursor=pointer]:
+                - img [ref=e1079]
+            - paragraph [ref=e1093]: ▲ = positive regression slope (uptrend). ▼ = negative (downtrend). Value = annualised regression slope. Trend Breadth = count(▲) / 6.
+            - heading "🌊 Weight Attribution Waterfall" [level=2] [ref=e1098]: 🌊 Weight Attribution Waterfall
+            - generic [ref=e1101]:
+              - paragraph [ref=e1104]: Select asset
+              - generic [ref=e1106]:
+                - generic [ref=e1107]:
+                  - generic [ref=e1108]: Miners
+                  - combobox "Selected Miners. Select asset" [ref=e1110]
+                - img "open" [ref=e1112] [cursor=pointer]
+            - generic [ref=e1119]:
+              - img:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic: 2.0%
+                              - generic:
+                                - generic: 86%
+                              - generic:
+                                - generic: 8.5%
+                              - generic:
+                                - generic: 3.5%
+                              - generic:
+                                - generic: 6.3%
+                              - generic:
+                                - generic: 6.3%
+                              - generic:
+                                - generic: 5.2%
+                    - generic:
+                      - generic:
+                        - generic: 1. Benchmark weight
+                      - generic:
+                        - generic: 2. Trend rank percentile
+                      - generic:
+                        - generic: 3. Rank × tilt → raw trend weight
+                      - generic:
+                        - generic: 4. HRP weight (bucket risk parity)
+                      - generic:
+                        - generic: 5. Blended (55% trend / 45% HRP)
+                      - generic:
+                        - generic: 6. Capped at max (10%)
+                      - generic:
+                        - generic: 7. Final (after normalisation)
+                    - generic:
+                      - generic:
+                        - generic: 0%
+                      - generic:
+                        - generic: 20%
+                      - generic:
+                        - generic: 40%
+                      - generic:
+                        - generic: 60%
+                      - generic:
+                        - generic: 80%
+              - img:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic: Weight Attribution — Miners (PICK)
+                  - generic:
+                    - generic: Weight
+              - toolbar [ref=e1133]:
+                - button "Download plot as a PNG" [ref=e1135] [cursor=pointer]:
+                  - img [ref=e1136]
+                - generic [ref=e1138]:
+                  - button "Zoom" [ref=e1139] [cursor=pointer]:
+                    - img [ref=e1140]
+                  - button "Pan" [ref=e1142] [cursor=pointer]:
+                    - img [ref=e1143]
+                - generic [ref=e1145]:
+                  - button "Zoom in" [ref=e1146] [cursor=pointer]:
+                    - img [ref=e1147]
+                  - button "Zoom out" [ref=e1149] [cursor=pointer]:
+                    - img [ref=e1150]
+                  - button "Autoscale" [ref=e1152] [cursor=pointer]:
+                    - img [ref=e1153]
+                  - button "Reset axes" [ref=e1155] [cursor=pointer]:
+                    - img [ref=e1156]
+                - button "Fullscreen" [ref=e1159] [cursor=pointer]:
+                  - img [ref=e1160]
+              - img
+            - paragraph [ref=e1165]: "Benchmark: 2.0% | Max: 10.0% | Trend rank: 86% | Final weight: 5.2%"
+            - heading "📋 Details" [level=2] [ref=e1170]: 📋 Details
+            - group [ref=e1174]:
+              - generic "keyboard_arrow_right Allocation History (weight heatmap)" [ref=e1175] [cursor=pointer]:
+                - generic [ref=e1176]:
+                  - generic [ref=e1178]: keyboard_arrow_right
+                  - paragraph [ref=e1180]: Allocation History (weight heatmap)
+            - group [ref=e1183]:
+              - generic "keyboard_arrow_right Trend Score History" [ref=e1184] [cursor=pointer]:
+                - generic [ref=e1185]:
+                  - generic [ref=e1187]: keyboard_arrow_right
+                  - paragraph [ref=e1189]: Trend Score History
+            - group [ref=e1192]:
+              - generic "keyboard_arrow_right Bucket Allocation Over Time" [ref=e1193] [cursor=pointer]:
+                - generic [ref=e1194]:
+                  - generic [ref=e1196]: keyboard_arrow_right
+                  - paragraph [ref=e1198]: Bucket Allocation Over Time
+  - img [ref=e503]

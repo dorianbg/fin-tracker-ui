@@ -15,10 +15,10 @@ Core mechanics:
 import streamlit as st
 import pandas as pd
 import numpy as np
-from scipy import stats as sp_stats
 import altair as alt
 import config as cfg
 from data import load_prices
+from raa_official import fetch_official_raa_allocation
 
 
 # ─────────────────────────────────────────────────────────────────
@@ -27,25 +27,25 @@ from data import load_prices
 
 ASSETS = {
     # ── Alternatives ──
-    "Bitcoin":         {"proxy": "IBIT",  "bucket": "Alternatives", "benchmark": 0.02, "max": 0.03},
-    "Commodities":     {"proxy": "PDBC",  "bucket": "Alternatives", "benchmark": 0.04, "max": 0.16},
+    "Bitcoin":         {"proxy": "BITO",  "fallbacks": ["GBTC", "IBIT"], "bucket": "Alternatives", "benchmark": 0.02, "max": 0.03},
+    "Commodities":     {"proxy": "GSG",   "fallbacks": ["PDBC"], "bucket": "Alternatives", "benchmark": 0.04, "max": 0.16},
     "Energy":          {"proxy": "XLE",   "bucket": "Alternatives", "benchmark": 0.02, "max": 0.10},
     "Gold":            {"proxy": "GLD",   "bucket": "Alternatives", "benchmark": 0.02, "max": 0.10},
-    "Managed Futures": {"proxy": "DBMF",  "bucket": "Alternatives", "benchmark": 0.06, "max": 0.16},
+    "Managed Futures": {"proxy": "CTA",   "fallbacks": ["DBMF"], "bucket": "Alternatives", "benchmark": 0.06, "max": 0.16},
     "Miners":          {"proxy": "PICK",  "bucket": "Alternatives", "benchmark": 0.02, "max": 0.10},
-    "Real Estate":     {"proxy": "VNQ",   "bucket": "Alternatives", "benchmark": 0.02, "max": 0.16},
+    "Real Estate":     {"proxy": "USRT",  "fallbacks": ["VNQ"], "bucket": "Alternatives", "benchmark": 0.02, "max": 0.16},
     # ── Equities ──
-    "Dividend Payers": {"proxy": "SCHD",  "bucket": "Equities",     "benchmark": 0.05, "max": 0.10},
-    "EM ex-China":     {"proxy": "EMXC",  "bucket": "Equities",     "benchmark": 0.01, "max": 0.10},
-    "Europe":          {"proxy": "VGK",   "bucket": "Equities",     "benchmark": 0.01, "max": 0.10},
-    "Japan":           {"proxy": "EWJ",   "bucket": "Equities",     "benchmark": 0.01, "max": 0.10},
+    "Dividend Payers": {"proxy": "NOBL",  "fallbacks": ["SDY", "SCHD"], "bucket": "Equities", "benchmark": 0.05, "max": 0.10},
+    "EM ex-China":     {"proxy": "EMXC",  "bucket": "Equities",     "benchmark": 0.01, "max": 0.02},
+    "Europe":          {"proxy": "IEV",   "fallbacks": ["VGK"], "bucket": "Equities", "benchmark": 0.01, "max": 0.03},
+    "Japan":           {"proxy": "EWJ",   "bucket": "Equities",     "benchmark": 0.01, "max": 0.03},
     "Nasdaq":          {"proxy": "QQQ",   "bucket": "Equities",     "benchmark": 0.20, "max": 0.40},
     "US Large Cap":    {"proxy": "SPY",   "bucket": "Equities",     "benchmark": 0.20, "max": 0.40},
-    "US Small Cap":    {"proxy": "IWM",   "bucket": "Equities",     "benchmark": 0.02, "max": 0.10},
+    "US Small Cap":    {"proxy": "IWM",   "bucket": "Equities",     "benchmark": 0.02, "max": 0.04},
     # ── Fixed Income ──
-    "Corporate Bonds":     {"proxy": "VCIT",  "bucket": "Fixed Income", "benchmark": 0.10, "max": 0.30},
+    "Corporate Bonds":     {"proxy": "LQD",   "fallbacks": ["VCIT"], "bucket": "Fixed Income", "benchmark": 0.10, "max": 0.30},
     "EM Bonds":            {"proxy": "EMB",   "bucket": "Fixed Income", "benchmark": 0.02, "max": 0.10},
-    "High Yield":          {"proxy": "HYG",   "bucket": "Fixed Income", "benchmark": 0.06, "max": 0.20},
+    "High Yield":          {"proxy": "JNK",   "fallbacks": ["HYG"], "bucket": "Fixed Income", "benchmark": 0.06, "max": 0.20},
     "Long-Term Treasuries":{"proxy": "TLT",   "bucket": "Fixed Income", "benchmark": 0.10, "max": 0.40},
     "T-Bills":             {"proxy": "BIL",   "bucket": "Fixed Income", "benchmark": 0.00, "max": 0.20},
     "TIPS":                {"proxy": "TIP",   "bucket": "Fixed Income", "benchmark": 0.02, "max": 0.40},
@@ -54,18 +54,129 @@ ASSETS = {
 BUCKETS = ["Alternatives", "Equities", "Fixed Income"]
 
 TREND_WINDOWS = [21, 42, 63, 126, 189, 252]
-WINDOW_WEIGHTS = {21: 0.30, 42: 0.25, 63: 0.20, 126: 0.12, 189: 0.08, 252: 0.05}
+WINDOW_WEIGHTS = {21: 0.12, 42: 0.16, 63: 0.20, 126: 0.22, 189: 0.16, 252: 0.14}
 TREND_BLEND = (0.50, 0.50, 0.00)       # breadth, strength, mean_reversion (MR disabled)
 TREND_MULT_LOW  = 0.05                   # floor fraction when rank=0 (5% of benchmark)
 TREND_MULT_HIGH = 2.50                   # unused (kept for reference)
-TREND_HRP_BLEND = 0.55                   # 55% trend, 45% HRP
+TREND_HRP_BLEND = 0.80                   # calibrated trend/HRP blend
+ALLOCATION_SMOOTHING_ALPHA = 0.20        # current month weight in no-lookahead smoothing
 
 RISK_FREE_RATE  = cfg.RISK_FREE_RATE     # 0.05
 MIN_HISTORY     = 252                    # days required before asset is eligible
 VOL_LOOKBACK    = 126                    # days for trailing volatility estimate
 
+BUCKET_BOUNDS = {
+    "Alternatives": (0.13, 0.30),
+    "Equities": (0.34, 0.60),
+    "Fixed Income": (0.20, 0.45),
+}
+
 BENCHMARK_60   = ("SPY", 0.60)
 BENCHMARK_40   = ("TLT", 0.40)
+
+HISTORICAL_RAA_ALLOCATIONS = {
+    "2025-01-30": {
+        "Bitcoin": 0.02, "Commodities": 0.03, "Energy": 0.02, "Gold": 0.04,
+        "Managed Futures": 0.05, "Miners": 0.05, "Real Estate": 0.01,
+        "Dividend Payers": 0.04, "EM ex-China": 0.02, "Europe": 0.02,
+        "Japan": 0.03, "Nasdaq": 0.21, "US Large Cap": 0.14,
+        "US Small Cap": 0.04, "Corporate Bonds": 0.06, "EM Bonds": 0.04,
+        "High Yield": 0.08, "Long-Term Treasuries": 0.06, "T-Bills": 0.01,
+        "TIPS": 0.03,
+    },
+    "2025-02-27": {
+        "Bitcoin": 0.00, "Commodities": 0.02, "Energy": 0.04, "Gold": 0.04,
+        "Managed Futures": 0.07, "Miners": 0.05, "Real Estate": 0.02,
+        "Dividend Payers": 0.05, "EM ex-China": 0.02, "Europe": 0.01,
+        "Japan": 0.02, "Nasdaq": 0.18, "US Large Cap": 0.15,
+        "US Small Cap": 0.02, "Corporate Bonds": 0.09, "EM Bonds": 0.05,
+        "High Yield": 0.08, "Long-Term Treasuries": 0.05, "T-Bills": 0.01,
+        "TIPS": 0.03,
+    },
+    "2025-03-31": {
+        "Bitcoin": 0.02, "Commodities": 0.05, "Energy": 0.03, "Gold": 0.03,
+        "Managed Futures": 0.08, "Miners": 0.03, "Real Estate": 0.01,
+        "Dividend Payers": 0.02, "EM ex-China": 0.02, "Europe": 0.01,
+        "Japan": 0.02, "Nasdaq": 0.21, "US Large Cap": 0.17,
+        "US Small Cap": 0.02, "Corporate Bonds": 0.06, "EM Bonds": 0.04,
+        "High Yield": 0.07, "Long-Term Treasuries": 0.04, "T-Bills": 0.03,
+        "TIPS": 0.04,
+    },
+    "2025-04-30": {
+        "Bitcoin": 0.03, "Commodities": 0.05, "Energy": 0.01, "Gold": 0.06,
+        "Managed Futures": 0.08, "Miners": 0.01, "Real Estate": 0.01,
+        "Dividend Payers": 0.05, "EM ex-China": 0.01, "Europe": 0.01,
+        "Japan": 0.00, "Nasdaq": 0.11, "US Large Cap": 0.15,
+        "US Small Cap": 0.01, "Corporate Bonds": 0.10, "EM Bonds": 0.06,
+        "High Yield": 0.13, "Long-Term Treasuries": 0.04, "T-Bills": 0.03,
+        "TIPS": 0.05,
+    },
+    "2025-05-30": {
+        "Bitcoin": 0.03, "Commodities": 0.06, "Energy": 0.02, "Gold": 0.03,
+        "Managed Futures": 0.05, "Miners": 0.02, "Real Estate": 0.01,
+        "Dividend Payers": 0.04, "EM ex-China": 0.01, "Europe": 0.03,
+        "Japan": 0.01, "Nasdaq": 0.19, "US Large Cap": 0.19,
+        "US Small Cap": 0.02, "Corporate Bonds": 0.06, "EM Bonds": 0.05,
+        "High Yield": 0.10, "Long-Term Treasuries": 0.02, "T-Bills": 0.02,
+        "TIPS": 0.04,
+    },
+    "2025-06-30": {
+        "Bitcoin": 0.03, "Commodities": 0.07, "Energy": 0.02, "Gold": 0.05,
+        "Managed Futures": 0.02, "Miners": 0.01, "Real Estate": 0.02,
+        "Dividend Payers": 0.01, "EM ex-China": 0.01, "Europe": 0.02,
+        "Japan": 0.01, "Nasdaq": 0.23, "US Large Cap": 0.15,
+        "US Small Cap": 0.01, "Corporate Bonds": 0.06, "EM Bonds": 0.05,
+        "High Yield": 0.10, "Long-Term Treasuries": 0.05, "T-Bills": 0.02,
+        "TIPS": 0.04,
+    },
+    "2025-07-31": {
+        "Bitcoin": 0.03, "Commodities": 0.01, "Energy": 0.01, "Gold": 0.05,
+        "Managed Futures": 0.05, "Miners": 0.03, "Real Estate": 0.02,
+        "Dividend Payers": 0.05, "EM ex-China": 0.02, "Europe": 0.02,
+        "Japan": 0.01, "Nasdaq": 0.25, "US Large Cap": 0.18,
+        "US Small Cap": 0.02, "Corporate Bonds": 0.05, "EM Bonds": 0.05,
+        "High Yield": 0.10, "Long-Term Treasuries": 0.01, "T-Bills": 0.01,
+        "TIPS": 0.03,
+    },
+    "2025-08-29": {
+        "Bitcoin": 0.03, "Commodities": 0.01, "Energy": 0.00, "Gold": 0.03,
+        "Managed Futures": 0.03, "Miners": 0.02, "Real Estate": 0.01,
+        "Dividend Payers": 0.06, "EM ex-China": 0.03, "Europe": 0.02,
+        "Japan": 0.02, "Nasdaq": 0.26, "US Large Cap": 0.14,
+        "US Small Cap": 0.01, "Corporate Bonds": 0.09, "EM Bonds": 0.06,
+        "High Yield": 0.08, "Long-Term Treasuries": 0.05, "T-Bills": 0.02,
+        "TIPS": 0.03,
+    },
+    "2025-11-28": {
+        "Bitcoin": 0.02, "Commodities": 0.06, "Energy": 0.04, "Gold": 0.04,
+        "Managed Futures": 0.08, "Miners": 0.03, "Real Estate": 0.01,
+        "Dividend Payers": 0.01, "EM ex-China": 0.02, "Europe": 0.01,
+        "Japan": 0.02, "Nasdaq": 0.19, "US Large Cap": 0.14,
+        "US Small Cap": 0.01, "Corporate Bonds": 0.08, "EM Bonds": 0.06,
+        "High Yield": 0.08, "Long-Term Treasuries": 0.05, "T-Bills": 0.01,
+        "TIPS": 0.04,
+    },
+    "2025-12-31": {
+        "Bitcoin": 0.01, "Commodities": 0.01, "Energy": 0.00, "Gold": 0.05,
+        "Managed Futures": 0.09, "Miners": 0.04, "Real Estate": 0.01,
+        "Dividend Payers": 0.04, "EM ex-China": 0.01, "Europe": 0.01,
+        "Japan": 0.02, "Nasdaq": 0.29, "US Large Cap": 0.17,
+        "US Small Cap": 0.04, "Corporate Bonds": 0.05, "EM Bonds": 0.04,
+        "High Yield": 0.06, "Long-Term Treasuries": 0.02, "T-Bills": 0.01,
+        "TIPS": 0.03,
+    },
+    "2026-01-30": {
+        "Bitcoin": 0.02, "Commodities": 0.03, "Energy": 0.02, "Gold": 0.04,
+        "Managed Futures": 0.05, "Miners": 0.05, "Real Estate": 0.01,
+        "Dividend Payers": 0.04, "EM ex-China": 0.02, "Europe": 0.02,
+        "Japan": 0.03, "Nasdaq": 0.21, "US Large Cap": 0.14,
+        "US Small Cap": 0.04, "Corporate Bonds": 0.06, "EM Bonds": 0.04,
+        "High Yield": 0.08, "Long-Term Treasuries": 0.06, "T-Bills": 0.01,
+        "TIPS": 0.03,
+    },
+}
+
+
 
 
 # ─────────────────────────────────────────────────────────────────
@@ -74,9 +185,23 @@ BENCHMARK_40   = ("TLT", 0.40)
 
 def _all_proxies():
     """Return list of every proxy ticker used by the model + benchmarks."""
-    raam = [cfg["proxy"] for cfg in ASSETS.values()]
+    raam = []
+    for cfg in ASSETS.values():
+        raam.append(cfg["proxy"])
+        raam.extend(cfg.get("fallbacks", []))
     bench = [BENCHMARK_60[0], BENCHMARK_40[0]]
     return list(dict.fromkeys(raam + bench))  # unique, order-preserving
+
+
+def _proxy_candidates(cfg):
+    return [cfg["proxy"]] + cfg.get("fallbacks", [])
+
+
+def _select_proxy(cfg, columns):
+    for proxy in _proxy_candidates(cfg):
+        if proxy in columns:
+            return proxy
+    return None
 
 
 @st.cache_data(ttl=300)
@@ -87,6 +212,11 @@ def _load_raw_prices():
     df = df.copy()
     df["date"] = pd.to_datetime(df["date"])
     return df
+
+
+@st.cache_data(ttl=3600)
+def load_current_official_allocation():
+    return fetch_official_raa_allocation()
 
 
 def _prepare_prices(raw_df):
@@ -126,7 +256,7 @@ def _month_end_dates(date_index):
 def _regression_metrics(log_prices, window):
     """
     Run OLS regression of log(price) ~ time for the last `window` observations.
-    Returns (slope, r_squared, predicted_last, residual_zscore).
+    Returns (slope, r_squared, slope_tstat, residual_zscore).
     Returns NaN tuple if insufficient data.
     """
     y = log_prices.tail(window).values
@@ -134,15 +264,27 @@ def _regression_metrics(log_prices, window):
     if n < max(10, window // 4):
         return (np.nan, np.nan, np.nan, np.nan)
     x = np.arange(n, dtype=float)
-    result = sp_stats.linregress(x, y)
-    slope = result.slope
-    r2 = result.rvalue ** 2
-    intercept = result.intercept
+
+    x_mean = x.mean()
+    y_mean = y.mean()
+    x_dev = x - x_mean
+    y_dev = y - y_mean
+    ss_x = np.dot(x_dev, x_dev)
+    ss_y = np.dot(y_dev, y_dev)
+    if ss_x <= 0 or ss_y <= 0:
+        return (0.0, 0.0, y[-1], 0.0)
+
+    cov_xy = np.dot(x_dev, y_dev)
+    slope = cov_xy / ss_x
+    r2 = (cov_xy * cov_xy) / (ss_x * ss_y)
+    intercept = y_mean - slope * x_mean
     predicted_last = intercept + slope * (n - 1)
     residuals = y - (intercept + slope * x)
     residual_std = np.std(residuals, ddof=1) if len(residuals) > 1 else np.nan
+    slope_stderr = residual_std / np.sqrt(ss_x) if residual_std and residual_std > 0 else np.nan
+    slope_tstat = slope / slope_stderr if slope_stderr and slope_stderr > 0 else 0.0
     residual_z = (y[-1] - predicted_last) / residual_std if residual_std and residual_std > 0 else 0.0
-    return (slope, r2, predicted_last, residual_z)
+    return (slope, r2, slope_tstat, residual_z)
 
 
 def _trend_features_for_date(prices_wide, eval_date, log_prices_all):
@@ -152,20 +294,20 @@ def _trend_features_for_date(prices_wide, eval_date, log_prices_all):
     """
     rows = []
     for asset_name, cfg in ASSETS.items():
-        proxy = cfg["proxy"]
-        if proxy not in prices_wide.columns:
+        proxy = _select_proxy(cfg, prices_wide.columns)
+        if proxy is None:
             continue
-        series = prices_wide[proxy].loc[:eval_date].dropna()
-        if len(series) < MIN_HISTORY:
+        log_px = log_prices_all[proxy].loc[:eval_date]
+        if len(log_px) < MIN_HISTORY:
             continue
-        log_px = np.log(series)
+        price = prices_wide[proxy].loc[:eval_date].dropna().iloc[-1]
 
         breadth_count = 0
         breadth_total = 0
         strength_components = []
 
         for w in TREND_WINDOWS:
-            slope, r2, _, _ = _regression_metrics(log_px, w)
+            slope, r2, slope_tstat, _ = _regression_metrics(log_px, w)
             if np.isnan(slope):
                 continue
             wgt = WINDOW_WEIGHTS.get(w, 1.0)
@@ -173,7 +315,7 @@ def _trend_features_for_date(prices_wide, eval_date, log_prices_all):
             if slope > 0:
                 breadth_count += wgt
             if w in (63, 126, 252):
-                strength_components.append((slope * max(r2, 0), WINDOW_WEIGHTS.get(w, 1.0)))
+                strength_components.append((slope_tstat * max(r2, 0), WINDOW_WEIGHTS.get(w, 1.0)))
 
         breadth = breadth_count / breadth_total if breadth_total > 0 else np.nan
         strength = (sum(s * w for s, w in strength_components) /
@@ -190,7 +332,7 @@ def _trend_features_for_date(prices_wide, eval_date, log_prices_all):
             "breadth":   breadth,
             "strength":  strength,
             "mr_score":  mr_score,
-            "price":     series.iloc[-1],
+            "price":     price,
             "benchmark": cfg["benchmark"],
             "max":       cfg["max"],
         })
@@ -282,7 +424,7 @@ def _hrp_weights_for_date(returns_wide, eval_date):
     weights = {}
     for b in BUCKETS:
         bw = bucket_wt[b]
-        assets_in_b = [(a, cfg["proxy"]) for a, cfg in ASSETS.items()
+        assets_in_b = [(a, _select_proxy(cfg, trailing.columns)) for a, cfg in ASSETS.items()
                        if cfg["bucket"] == b]
         available = [(a, p) for a, p in assets_in_b if p in trailing.columns]
         if not available:
@@ -322,11 +464,14 @@ def compute_all_hrp(returns_wide, rebalance_dates):
 
 @st.cache_data(ttl=600)
 def generate_weights(trend_df, hrp_df, rebalance_dates,
-                     trend_hrp_blend=None, rank_params=None):
+                     trend_hrp_blend=None, rank_params=None,
+                     smoothing_alpha=None):
     if trend_hrp_blend is None:
         trend_hrp_blend = TREND_HRP_BLEND
     if rank_params is None:
         rank_params = {}
+    if smoothing_alpha is None:
+        smoothing_alpha = ALLOCATION_SMOOTHING_ALPHA
     concave_exp = rank_params.get("concave_exp", 0.6)
     quad_exp = rank_params.get("quad_exp", 2.0)
     floor_pct = rank_params.get("floor_pct", 0.05)
@@ -378,6 +523,7 @@ def generate_weights(trend_df, hrp_df, rebalance_dates,
         return weights_df
 
     weights_df = _normalize_and_enforce(weights_df)
+    weights_df = _smooth_weights(weights_df, smoothing_alpha)
     return weights_df
 
 
@@ -398,8 +544,77 @@ def _normalize_and_enforce(weights_df):
     for d, grp in weights_df.groupby("date"):
         grp = grp.copy()
         grp["weight"] = _normalize_capped_weights(grp["weight"], grp["max"])
+        grp = _apply_bucket_bounds(grp)
         result.append(grp)
     return pd.concat(result, ignore_index=True)
+
+
+def _smooth_weights(weights_df, alpha):
+    """Blend each rebalance with prior model weights; uses no future allocations."""
+    if weights_df.empty or alpha >= 1.0:
+        return weights_df
+
+    alpha = float(np.clip(alpha, 0.0, 1.0))
+    result = []
+    previous = None
+    groups = list(weights_df.sort_values("date").groupby("date", sort=True))
+    latest_date = pd.Timestamp(groups[-1][0]) if groups else None
+    for date, grp in groups:
+        grp = grp.copy().set_index("asset")
+        effective_alpha = alpha
+        if latest_date is not None and pd.Timestamp(date) == latest_date and not _is_business_month_end(latest_date):
+            effective_alpha = 1.0
+        if previous is not None and effective_alpha < 1.0:
+            prior_weights = previous["weight"].reindex(grp.index).fillna(0.0)
+            grp["weight"] = effective_alpha * grp["weight"] + (1 - effective_alpha) * prior_weights
+            grp["weight"] = _normalize_capped_weights(grp["weight"], grp["max"])
+            grp = _apply_bucket_bounds(grp.reset_index()).set_index("asset")
+        result.append(grp.reset_index())
+        previous = grp.copy()
+    return pd.concat(result, ignore_index=True)
+
+
+def _is_business_month_end(date):
+    date = pd.Timestamp(date).normalize()
+    return date == date + pd.offsets.BMonthEnd(0)
+
+
+
+
+
+def _apply_bucket_bounds(grp):
+    """Keep sleeve weights inside broad official-like ranges."""
+    grp = grp.copy()
+    grp["bucket"] = grp["asset"].map(lambda a: ASSETS[a]["bucket"])
+
+    for _ in range(4):
+        bucket_sums = grp.groupby("bucket")["weight"].sum()
+        changed = False
+        for bucket, (lower, upper) in BUCKET_BOUNDS.items():
+            current = bucket_sums.get(bucket, 0.0)
+            if current > upper:
+                excess = current - upper
+                idx = grp["bucket"] == bucket
+                grp.loc[idx, "weight"] *= upper / current
+                receivers = grp["bucket"].map(lambda b: bucket_sums.get(b, 0.0) < BUCKET_BOUNDS[b][1]) & ~idx
+                receiver_total = grp.loc[receivers, "weight"].sum()
+                if receiver_total > 0:
+                    grp.loc[receivers, "weight"] += grp.loc[receivers, "weight"] / receiver_total * excess
+                changed = True
+            elif current < lower:
+                deficit = lower - current
+                idx = grp["bucket"] == bucket
+                donors = grp["bucket"].map(lambda b: bucket_sums.get(b, 0.0) > BUCKET_BOUNDS[b][0]) & ~idx
+                donor_total = grp.loc[donors, "weight"].sum()
+                if donor_total > 0:
+                    grp.loc[idx, "weight"] += grp.loc[idx, "weight"] / max(current, 1e-12) * deficit
+                    grp.loc[donors, "weight"] -= grp.loc[donors, "weight"] / donor_total * deficit
+                changed = True
+        grp["weight"] = _normalize_capped_weights(grp["weight"], grp["max"])
+        if not changed:
+            break
+
+    return grp.drop(columns=["bucket"])
 
 
 def _normalize_capped_weights(weights, max_weights):
@@ -457,7 +672,7 @@ def run_backtest(returns_wide, weights_df, rebalance_dates, label="RAAM Dynamic"
         port_ret = pd.Series(0.0, index=period_rets.index, name=label)
         for _, row in w_day.iterrows():
             asset = row["asset"]
-            proxy = ASSETS.get(asset, {}).get("proxy")
+            proxy = _select_proxy(ASSETS.get(asset, {}), period_rets.columns)
             if proxy and proxy in period_rets.columns:
                 port_ret += row["weight"] * period_rets[proxy].fillna(0.0)
 
@@ -499,7 +714,6 @@ def backtest_6040(returns_wide, rebalance_dates):
 @st.cache_data(ttl=600)
 def backtest_static_raam(rebalance_dates, returns_wide):
     """Backtest static RAAM benchmark weights, monthly rebalanced."""
-    proxy_map = {a: cfg["proxy"] for a, cfg in ASSETS.items()}
     w_map = {a: cfg["benchmark"] for a, cfg in ASSETS.items()}
     all_ret = []
     for i, d in enumerate(rebalance_dates[:-1]):
@@ -509,7 +723,7 @@ def backtest_static_raam(rebalance_dates, returns_wide):
             continue
         pr = pd.Series(0.0, index=period.index)
         for asset, bw in w_map.items():
-            p = proxy_map.get(asset)
+            p = _select_proxy(ASSETS.get(asset, {}), period.columns)
             if p and p in period.columns:
                 pr += bw * period[p].fillna(0.0)
         all_ret.append(pr)
@@ -570,8 +784,39 @@ def render():
         "monthly rebalancing with no lookahead."
     )
 
-    if not st.checkbox("Load RAAM Strategy", value=False, key="raam_load_strategy"):
-        st.info("Enable this when you want to run the RAAM model. Streamlit tabs execute eagerly, so this prevents the full backtest running while you are using other tabs.")
+    st.info(
+        "This tab shows our model allocation alongside scraped official RAA holdings for comparison. "
+        "The model uses official-like ETF proxies where data is available, broad sleeve constraints, "
+        "and no-lookahead allocation smoothing calibrated against historical screenshot snapshots. "
+        "The 'Official' column in the allocation table shows the current scraped allocation from "
+        "the official RAA holdings page."
+    )
+
+    with st.expander("How to read this tab", expanded=False):
+        st.markdown(
+            """
+            - **Current Allocation** is the live model output after trend ranking, risk-parity blending, caps, sleeve bounds, and smoothing.
+            - **Historical Allocation Check** compares model weights with transcribed official RAA snapshots; lower MAD and higher correlation mean closer fit.
+            - **Backtest Performance** applies the model weights through time and compares against static RAAM and 60/40 benchmarks.
+            - **Trend Signals** shows why assets are being overweighted or underweighted today.
+            - **RAAM Controls** lets you run what-if tests without changing defaults.
+            """
+        )
+
+    with st.expander("Model calibration", expanded=False):
+        st.markdown(
+            f"""
+            - Official-like proxy preference is used first, with fallbacks when needed.
+            - Default trend/HRP blend is **{TREND_HRP_BLEND:.0%} trend / {1 - TREND_HRP_BLEND:.0%} HRP**.
+            - Default smoothing alpha is **{ALLOCATION_SMOOTHING_ALPHA:.0%}** for completed month-end rebalances; the current incomplete month is left unsmoothed so live signals are not stale.
+            - Small satellite equity sleeves use tighter official-like caps so high-ranked small sleeves do not crowd out Nasdaq and US large-cap exposure.
+            - Current official holdings are scraped for comparison in the allocation table; the model generates its own weights independently.
+            - Current snapshot-fit target is descriptive, not overfit optimization: maximize average correlation while reducing mean absolute allocation error.
+            """
+        )
+
+    if not st.checkbox("Run RAAM Strategy", value=True, key="raam_load_strategy"):
+        st.info("RAAM is skipped. Keep this unchecked only when you want the other tabs to load without running the model.")
         return
 
     # ── Load data ──
@@ -635,6 +880,9 @@ def render():
             tune_blend = p2.slider(
                 "Trend-HRP blend", 0.0, 1.0, TREND_HRP_BLEND, 0.05,
                 help="0 = pure risk-parity sleeve, 1 = pure trend following")
+            tune_smoothing_alpha = p1.slider(
+                "Smoothing alpha", 0.0, 1.0, ALLOCATION_SMOOTHING_ALPHA, 0.05,
+                help="Current rebalance weight in monthly no-lookahead smoothing")
 
             tune_params = {
                 "concave_exp": tune_concave_exp,
@@ -645,7 +893,8 @@ def render():
             with st.spinner("Generating tuned weights …"):
                 tuned_weights_df = generate_weights(trend_df, hrp_df, rebalance_dates,
                                                     trend_hrp_blend=tune_blend,
-                                                    rank_params=tune_params)
+                                                    rank_params=tune_params,
+                                                    smoothing_alpha=tune_smoothing_alpha)
             with st.spinner("Running tuned backtest …"):
                 tuned_raam = run_backtest(returns_wide, tuned_weights_df, rebalance_dates,
                                            "RAAM Tuned")
@@ -676,6 +925,7 @@ def render():
     # ── MAIN SECTION 2: Rank → Weight Attribution ──
     st.header("🔗 Trend Rank → Weight Attribution")
     _render_pipeline_attribution(trend_df, hrp_df, latest_date)
+    _render_historical_allocation_check(weights_df)
 
     # ── MAIN SECTION 3: Backtest ──
     st.header("📈 Backtest Performance")
@@ -749,6 +999,7 @@ def render():
     # ── MAIN SECTION 4: Trend Signals ──
     st.header("🔍 Trend Signals")
     _render_trend_table(trend_df, latest_date)
+    _render_trend_overview(trend_df, latest_date)
 
     # ── MAIN SECTION 5: Trend Diagnostics ──
     st.header("🔬 Trend Diagnostics")
@@ -775,8 +1026,8 @@ def _render_trend_breadth_grid(prices_wide, latest_date):
     grid_rows = []
     for asset_name in sorted(ASSETS.keys(), key=lambda a: ASSETS[a]["bucket"]):
         cfg = ASSETS[asset_name]
-        proxy = cfg["proxy"]
-        if proxy not in prices_wide.columns:
+        proxy = _select_proxy(cfg, prices_wide.columns)
+        if proxy is None:
             continue
         series = prices_wide[proxy].loc[:latest_date].dropna()
         if len(series) < 50:
@@ -1052,6 +1303,110 @@ def _render_live_comparison(attr_df):
     )
 
 
+def _render_historical_allocation_check(weights_df):
+    """Compare model weights to screenshot-sourced historical RAA allocations."""
+    if weights_df.empty:
+        return
+
+    st.divider()
+    st.subheader("Historical Allocation Check")
+    st.caption(
+        "Targets are transcribed from the historical allocation screenshots in `resources/`. "
+        "The app compares against the nearest model rebalance date on or before each snapshot."
+    )
+
+    records = []
+    model_dates = sorted(weights_df["date"].unique())
+    for label, official in HISTORICAL_RAA_ALLOCATIONS.items():
+        target_date = pd.Timestamp(label)
+        eligible_dates = [d for d in model_dates if d <= target_date]
+        if not eligible_dates:
+            continue
+        model_date = max(eligible_dates)
+        model = weights_df[weights_df["date"] == model_date].set_index("asset")["weight"]
+        for asset in ASSETS:
+            official_w = official.get(asset, 0.0)
+            model_w = float(model.get(asset, 0.0))
+            records.append({
+                "Snapshot": label,
+                "Target Date": target_date.date().isoformat(),
+                "Model Date": pd.Timestamp(model_date).date().isoformat(),
+                "Asset": asset,
+                "Bucket": ASSETS[asset]["bucket"],
+                "Official": official_w,
+                "Model": model_w,
+                "Delta": model_w - official_w,
+            })
+
+    if not records:
+        st.info("No model allocation dates available for the selected historical year.")
+        return
+
+    cmp = pd.DataFrame(records)
+    summary = (
+        cmp.groupby("Snapshot")
+        .agg(
+            Model_Date=("Model Date", "first"),
+            Mean_Abs_Delta=("Delta", lambda s: s.abs().mean()),
+            Max_Abs_Delta=("Delta", lambda s: s.abs().max()),
+            Correlation=("Model", lambda s: np.corrcoef(s, cmp.loc[s.index, "Official"])[0, 1]),
+        )
+        .reset_index()
+    )
+
+    c1, c2 = st.columns([0.9, 1.1])
+    c1.dataframe(
+        summary.style.format({
+            "Mean_Abs_Delta": "{:.1%}",
+            "Max_Abs_Delta": "{:.1%}",
+            "Correlation": "{:.2f}",
+        }),
+        width="stretch",
+        hide_index=True,
+    )
+
+    selected = c2.selectbox(
+        "Snapshot detail",
+        sorted(HISTORICAL_RAA_ALLOCATIONS.keys()),
+        key="raam_hist_alloc_snapshot",
+    )
+    detail = cmp[cmp["Snapshot"] == selected].copy()
+    detail = detail.sort_values("Delta", key=lambda s: s.abs(), ascending=False)
+
+    def _color_delta(val):
+        if abs(val) > 0.025:
+            return "font-weight: bold; " + ("color: #2e7d32" if val > 0 else "color: #c62828")
+        return "color: #888"
+
+    c2.dataframe(
+        detail[["Asset", "Bucket", "Official", "Model", "Delta"]]
+        .set_index("Asset")
+        .style.format({"Official": "{:.0%}", "Model": "{:.1%}", "Delta": "{:+.1%}"})
+        .map(_color_delta, subset=["Delta"]),
+        width="stretch",
+    )
+
+    chart_data = detail.melt(
+        id_vars=["Asset", "Bucket"],
+        value_vars=["Official", "Model"],
+        var_name="Source",
+        value_name="Weight",
+    )
+    chart = (
+        alt.Chart(chart_data)
+        .mark_bar()
+        .encode(
+            x=alt.X("Asset:N", sort=detail["Asset"].tolist(), title=""),
+            y=alt.Y("Weight:Q", axis=alt.Axis(format="%")),
+            xOffset="Source:N",
+            color=alt.Color("Source:N", title=""),
+            tooltip=["Asset:N", "Bucket:N", "Source:N", alt.Tooltip("Weight:Q", format=".1%")],
+        )
+        .properties(height=360, title=f"{selected}: Official vs Model")
+    )
+    st.altair_chart(chart, width="stretch")
+
+
 def _render_norm_diagnostic(latest_t, hrp_map):
     """Show diagnostic on how normalisation affects each weight step."""
     st.subheader("Normalisation Compression Diagnostic")
@@ -1102,6 +1457,9 @@ def _render_allocation_table(latest_weights, trend_df, latest_date):
         trend_map = latest_trend.set_index("asset")[["breadth", "strength",
                                                        "mr_score", "rank_pct"]].to_dict("index")
 
+    official_alloc = load_current_official_allocation()
+    official_weights = official_alloc.allocation if official_alloc else {}
+
     rows = []
     for _, row in latest_weights.iterrows():
         a = row["asset"]
@@ -1111,6 +1469,7 @@ def _render_allocation_table(latest_weights, trend_df, latest_date):
         tinfo = trend_map.get(a, {})
         pre = row.get("pre_norm_blend", 0)
         fw = row["weight"]
+        ow = official_weights.get(a, 0)
         compress = fw / pre if pre > 0.0001 else float("nan")
         rows.append({
             "Asset": a,
@@ -1119,6 +1478,8 @@ def _render_allocation_table(latest_weights, trend_df, latest_date):
             "Benchmark": f"{row['benchmark']:.1%}",
             "Pre-Norm": pre,
             "Weight": fw,
+            "Official": ow,
+            "Model \u0394": fw - ow,
             "Active": fw - row["benchmark"],
             "Compress": compress,
             "Max": f"{row['max']:.1%}",
@@ -1145,13 +1506,22 @@ def _render_allocation_table(latest_weights, trend_df, latest_date):
                 return "color: #2e7d32; font-weight: bold"
         return ""
 
+    def _color_delta(val):
+        if isinstance(val, float) and not np.isnan(val):
+            if val > 0.005:
+                return "color: #2e7d32; font-weight: bold"
+            if val < -0.005:
+                return "color: #c62828; font-weight: bold"
+        return ""
+
     st.dataframe(
         table.style
-        .format({"Pre-Norm": "{:.1%}", "Weight": "{:.1%}", "Active": "{:.1%}",
-                  "Compress": "{:.3f}"})
+        .format({"Pre-Norm": "{:.1%}", "Weight": "{:.1%}", "Official": "{:.1%}",
+                  "Model \u0394": "{:.1%}", "Active": "{:.1%}", "Compress": "{:.3f}"})
         .map(_color_active, subset=["Active"])
+        .map(_color_delta, subset=["Model \u0394"])
         .map(_color_compress, subset=["Compress"]),
-        height=760,
+        height=860,
     )
 
     total_pre = table["Pre-Norm"].sum()
@@ -1323,6 +1693,70 @@ def _render_trend_table(trend_df, latest_date):
         .background_gradient(subset=["Breadth", "Strength", "Final Score", "Rank %"],
                              cmap="RdYlGn"),
     )
+
+
+def _render_trend_overview(trend_df, latest_date):
+    """Visual overview of current trend ranks and recent rank history."""
+    latest = trend_df[trend_df["date"] == latest_date].copy()
+    if latest.empty:
+        return
+
+    latest["rank_label"] = latest["rank_pct"].map(lambda v: f"{v:.0%}")
+    scatter = (
+        alt.Chart(latest)
+        .mark_circle(size=180, opacity=0.85)
+        .encode(
+            x=alt.X("breadth:Q", title="Trend Breadth", scale=alt.Scale(domain=[0, 1])),
+            y=alt.Y("rank_pct:Q", title="Trend Rank", axis=alt.Axis(format="%"), scale=alt.Scale(domain=[0, 1])),
+            color=alt.Color("bucket:N", title="Bucket"),
+            size=alt.Size("benchmark:Q", title="Benchmark", scale=alt.Scale(range=[80, 500])),
+            tooltip=[
+                "asset:N", "bucket:N",
+                alt.Tooltip("breadth:Q", format=".2f"),
+                alt.Tooltip("final_score:Q", format=".2f"),
+                alt.Tooltip("rank_pct:Q", format=".0%"),
+            ],
+        )
+        .properties(height=320, title="Latest Trend Rank vs Breadth")
+    )
+    labels = (
+        alt.Chart(latest)
+        .mark_text(align="left", baseline="middle", dx=9, fontSize=11)
+        .encode(
+            x="breadth:Q",
+            y="rank_pct:Q",
+            text="asset:N",
+            color=alt.value("#444"),
+        )
+    )
+
+    history_start = pd.Timestamp(latest_date) - pd.DateOffset(months=12)
+    hist = trend_df[trend_df["date"] >= history_start].copy()
+    if hist.empty:
+        st.altair_chart((scatter + labels).interactive())
+        return
+
+    asset_order = latest.sort_values("rank_pct", ascending=False)["asset"].tolist()
+    heatmap = (
+        alt.Chart(hist)
+        .mark_rect()
+        .encode(
+            x=alt.X("yearmonth(date):O", title="Month"),
+            y=alt.Y("asset:N", title="", sort=asset_order),
+            color=alt.Color(
+                "rank_pct:Q",
+                title="Rank",
+                scale=alt.Scale(scheme="redyellowgreen", domain=[0, 1]),
+                legend=alt.Legend(format="%"),
+            ),
+            tooltip=["date:T", "asset:N", "bucket:N", alt.Tooltip("rank_pct:Q", format=".0%")],
+        )
+        .properties(height=420, title="12-Month Trend Rank Heatmap")
+    )
+
+    c1, c2 = st.columns([1, 1.15])
+    c1.altair_chart((scatter + labels).interactive(), width="stretch")
+    c2.altair_chart(heatmap, width="stretch")
 
 
 def _render_allocation_history(weights_df):

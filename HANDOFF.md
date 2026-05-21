@@ -1,398 +1,650 @@
-# Handoff: Fin Tracker UI Actionability, Sparklines, And Backtesting
+# Handoff — RAAM Strategy Calibration + Historical Allocation Fit
+
+**Date:** 2026-05-17  
+**Repo:** `/Users/dbg/code/fin-tracker-ui`  
+**Current branch/worktree:** existing project worktree, dirty  
+**Last known committed baseline before this handoff:** `cf2c8de Add RAAM strategy and allocator tooling`  
+**Current source changes after that commit:** uncommitted  
+
+---
 
 ## 1. Goal / Current Task
 
-We are improving the Streamlit dashboard so it is more actionable and less cluttered.
+We are building and calibrating the **RAAM Strategy** Streamlit dashboard tab: a dynamic asset-allocation model inspired by 3Fourteen Research's *Real Asset Allocation: The World Has Changed*.
 
-Current active direction:
+Current focus:
+- Make the RAAM tab faster and easier to use.
+- Improve model fit against official/historical RAA allocation screenshots supplied by the user.
+- Move the model closer to official RAA behavior by using official-like proxies, slower/risk-adjusted trend scoring, sleeve constraints, and more historical validation points.
+- Keep the dashboard useful for live allocation, diagnostics, backtesting, trend visualization, and model-vs-official comparisons.
 
-- Turn the dashboard from a collection of screens into a daily decision workflow.
-- Use `Today` as the primary entry tab.
-- Make instrument tables easier to scan by showing both short-term and 1-year price shape.
-- Replace vague watchlists and fixed-horizon signal checks with explicit entry/exit rules and trade simulation.
+The user also asked how to increase allocation correlation further. Current answer: load official proxies first, then add calibration/grid search, allocation smoothing, sleeve-level ranking, and explicit optimization against official snapshots.
 
-Most recent task completed:
-
-- Improved `Trade Simulation Backtest` validity by shifting historical entries to the next available trading day after the signal and adding benchmark-relative returns.
+---
 
 ## 2. Completed So Far
 
-### Navigation / Tab Consolidation
+### 2.1 Previously Committed Work
 
-- Added `Today` as the first top-level tab.
-- Removed these tabs from main navigation because their useful signals were merged elsewhere or were redundant:
-  - `Breakout`
-  - `Puke Detector`
-  - `Laggard Breakout`
-  - `Thematic`
-  - `Drawdowns`
-- Current top-level tab order in `app/PerformanceTable.py`:
-  1. `Today`
-  2. `Performance`
-  3. `Pullback`
-  4. `Crossings`
-  5. `Daily Summary`
-  6. `Relative Strength`
-  7. `Rotation`
-  8. `Cross-Asset`
-  9. `Factors`
-  10. `Charts`
-  11. `Correlation`
-  12. `Allocator`
+Committed baseline:
 
-### Layout / Filter Placement
+```text
+cf2c8de Add RAAM strategy and allocator tooling
+```
 
-- Converted tab filters/settings to tab-local left rail pattern using `st.columns([1, 4], gap="large")` where appropriate.
-- Important decision: do not use `st.sidebar` for tab-specific controls because Streamlit sidebars are global and leak across tabs.
-- `Today` originally used a left rail only for `Universe`, but this wasted horizontal space.
-- `Today` now puts `Universe` inside a collapsed top expander.
+That commit included:
+- `app/views/RAAMStrategy.py` initial RAAM dashboard module.
+- `app/PerformanceTable.py` RAAM tab integration.
+- `resources/instrument_info.csv` initial missing RAAM proxy additions.
+- Streamlit/Pandas compatibility upgrade to `streamlit>=1.57.0`, `pandas>=3.0.0,<4`.
+- Replacement of deprecated `use_container_width=True` with `width="stretch"` under `app/`.
+- Replacement of Pandas 3-incompatible `Styler.applymap(...)` with `Styler.map(...)`.
+- `uv.lock` regenerated.
 
-### Today Tab
+### 2.2 Performance Optimization Completed
 
-- Added `Today` tab via `render_today_tab()` in `app/PerformanceTable.py`.
-- `Today` loads performance data from `di.perf_tbl` with:
-  - `vol_adjust=False`
-  - `show_returns=True`
-  - `returns_cols=di.selectable_returns`
-  - `fund_types=instrument_categories`
-- `Today` default universe is `default=["eq", "stock", "commod"]`.
-- `Today` renders:
-  - `🎯 Today’s Action List`
-  - `Trade Simulation Backtest`
-- `Today` action table is balanced across selected action types rather than allowing the first priority bucket to fill the whole table.
-- `Today` table includes both `Price (90d)` and `Price (1y)` sparklines.
+File changed: `app/views/RAAMStrategy.py`
 
-### Today Action List / Signal Logic
+Completed speedup:
+- Removed `scipy.stats.linregress` from the hot trend loop.
+- Replaced it with equivalent NumPy OLS math in `_regression_metrics()`.
+- Reused precomputed log-price series instead of recomputing `np.log(...)` for every asset/date.
 
-- Added `ACTION_PRIORITY` in `app/PerformanceTable.py`:
-  - `Buy Watch`: 1
-  - `Breakout Watch`: 2
-  - `Trim Watch`: 3
-  - `Short Monitor`: 4
-  - `Capitulation Watch`: 5
-- Added `build_signal_candidates(df: pd.DataFrame) -> pd.DataFrame`.
-- Added `build_action_list(df: pd.DataFrame) -> pd.DataFrame` for display formatting.
-- Added `render_today_action_list(df: pd.DataFrame)`.
-- Duplicate tickers across action buckets are allowed.
+Measured impact:
+- Trend computation before: approximately `5.34s`.
+- Trend computation after: approximately `1.87s`.
+- Full model compute path before chart rendering: roughly `3.5s` on current data.
 
-Current signal criteria:
+Verification:
+- `python -m compileall -q app` passed.
+- `import views.RAAMStrategy` passed.
+- RAAM tab rendered in Streamlit smoke tests.
 
-- `Buy Watch`
-  - `ma_252 > 0`
-  - `ma_126 > 0`
-  - `ma_21 < 0`
-  - `drawdown_52w >= -20`
-  - `r_1d > 0 or r_1w > 0`
-  - Score column: `quality_score`
-  - Why: `Strong trend pullback with early bounce`
+### 2.3 RAAM Default Load Behavior Changed
 
-- `Breakout Watch`
-  - `r_1w > 0`
-  - `r_1mo > 0`
-  - `vol_ratio >= 1.1`
-  - If available, prefer candidates with `ma_21 > 0` when that confirmed subset is non-empty.
-  - Score column: `breakout_score = vol_ratio * r_1w`
-  - Why: `Upside move with elevated volatility`
+File changed: `app/views/RAAMStrategy.py`
 
-- `Capitulation Watch`
-  - `drawdown_52w < 0`
-  - `vol_ratio >= 1.2`
-  - `drawdown_52w <= -10`
-  - Score column: `capitulation_score = -drawdown_52w * vol_ratio`
-  - Why: `High stress / drawdown candidate`
+Previous behavior:
+- RAAM had a `Load RAAM Strategy` checkbox defaulting to unchecked because Streamlit tabs execute eagerly.
+- This avoided RAAM computation when using other tabs.
 
-- `Trim Watch`
-  - Benchmark is `config.DEFAULT_BENCHMARK` / imported `DEFAULT_BENCHMARK`.
-  - `r_1y - benchmark_r_1y >= 10`
-  - `r_1w - benchmark_r_1w < 0`
-  - Score column: `trim_score = -(relative_1w) * relative_1y`
-  - Why: `Long-term leader losing short-term relative strength`
-
-- `Short Monitor`
-  - `ma_252 > 0`
-  - `ma_21 < 0`
-  - `ma_63 < 0`
-  - `r_1w < 0`
-  - Score column: `short_priority_score`
-  - Why: `Long-term trend intact but short/intermediate trend rolling over`
+Current behavior:
+- Checkbox renamed to `Run RAAM Strategy`.
+- It defaults to checked.
+- Users no longer need to click to see RAAM.
+- Users can uncheck it if they want non-RAAM tabs to load without running the model.
 
 Important decision:
+- Because Streamlit `st.tabs` execute eagerly, default-on RAAM means the `Today` tab and other tabs pay RAAM compute/render cost on initial app load.
+- Proper future fix is route/page-level navigation so only the active page executes.
 
-- User pushed back that these are still vague watchlists, not investable rules.
-- Next useful work should convert Today rows from `Watch` language into explicit decision states such as `Buy Candidate`, `Wait`, `Avoid`, `Trim`, `Risk Review`, with entry/invalidation text.
+### 2.4 Trend Visualization Added
 
-### Trade Simulation Backtest
+File changed: `app/views/RAAMStrategy.py`
 
-- Replaced fixed-horizon forward return backtest with trigger-based trade simulation.
-- Current backtest functions in `app/PerformanceTable.py`:
-  - `load_signal_backtest_data(fund_types: tuple[str, ...], years: int) -> pd.DataFrame`
-  - `simulate_signal_trades(hist_df, signal_name, max_hold_days, failed_bounce_days) -> pd.DataFrame`
-  - `render_signal_backtest(fund_types: list[str])`
-- Current simulation is signal-level, not portfolio-level.
-- Simulates only long-entry signals:
-  - `Buy Watch`
-  - `Breakout Watch`
-  - `Capitulation Watch`
-- `Trim Watch` and `Short Monitor` are intentionally excluded from long-entry simulation because they are risk/exit signals.
-- It enters on historical signal dates.
-- It avoids overlapping trades on the same ticker by skipping new entries until the previous simulated trade exits.
-- Exit rules currently implemented:
-  - `Hard drawdown stop`: `drawdown_52w <= -25`
-  - `Failed bounce`: for `Buy Watch`, after `failed_bounce_days`, still `ma_21 < 0`
-  - `MA63 trend stop`: for `Buy Watch` / `Breakout Watch`, `ma_63 < -3`
-  - `Profit protection`: for `Breakout Watch`, return is above `8%` and `ma_21 < 0`
-  - `No bounce confirmation`: for `Capitulation Watch`, after `failed_bounce_days`, `r_1w <= 0`
-  - `Max hold`: fallback cap only, not primary exit logic
-- Backtest controls:
-  - `Signal`: `Buy Watch`, `Breakout Watch`, `Capitulation Watch`
-  - `Bounce timeout`: `5`, `10`, `15`, `21` trading days
-  - `Max hold cap`: `63`, `126`, `252` trading days
-  - `History`: `1y`, `2y`, `3y`, `5y`
-- Backtest output:
-  - Trades
-  - Win rate
-  - Average return
-  - Average relative return vs `DEFAULT_BENCHMARK`
-  - Median return
-  - Average hold
-  - Worst return
-  - Exit reason bar chart
-  - Recent simulated trades table with `Signal Date`, next-day `Entry Date`, `Benchmark Return`, `Relative Return`, `Price (90d)`, and `Price (1y)`
-- Latest implementation detail:
-  - `load_signal_backtest_data()` now includes `DEFAULT_BENCHMARK` in the price fetch even when the selected universe would otherwise exclude it.
-  - `simulate_signal_trades()` keeps the historical signal date but uses the next available ticker row as the simulated entry, reducing same-day lookahead bias.
-  - Benchmark-relative return is calculated over the simulated entry/exit window when benchmark prices are available.
+Added visible trend visuals under `Trend Signals`:
+- `Latest Trend Rank vs Breadth` scatter.
+- `12-Month Trend Rank Heatmap`.
 
-### Performance Tab
+Existing trend detail remains:
+- `Trend Signals` table.
+- `Trend Diagnostics` per-window regression direction grid.
+- `Trend Score History` expander.
 
-- Stocks are included by default in Performance via `default=["eq", "stock", "commod"]`.
-- Added `Action Screens` under the main Performance table:
-  - `📊 Volatility Spikes`
-  - `💀 Capitulation`
-  - `🚀 High-Vol Breakouts`
-- Capitulation now falls back to ranked relative stress leaders if strict candidates are empty.
-- High-Vol Breakouts now falls back to strongest positive 1W/1M movers when strict high-vol breakouts are empty.
-- Performance main table includes `Price (90d)` and `Price (1y)` sparklines.
-- Performance action-screen tables include `Price (90d)` and `Price (1y)` where instrument rows are shown.
+### 2.5 Historical Allocation Validation Added
 
-### Pullback Tab
+File changed: `app/views/RAAMStrategy.py`
 
-- Stocks are included by default in Pullback via `fund_type_sidebar(default=["eq", "stock"], key="pullback_fund_types")`.
-- Added `Best only` pullback mode, default enabled.
-- Added `Top pullbacks to show`, default `20`.
-- Defaulted `Require above 126-day MA` to `True`.
-- Added best-only filters:
-  - `Best-only max 52W drawdown (%)`, default `-20%`
-  - `Best-only require bounce`, default `True`
-- Added `quality_score` for pullbacks.
-- Renamed/expanded downside section to `🎯 Short Target Monitor`.
-- Short Target Monitor includes:
-  - `short_priority_score`
-  - `monitor_reason`
-  - `r_1mo`
-  - `drawdown_52w`
-- Added `🚀 Laggard Breakout Candidates` inside Pullback, replacing standalone Laggard Breakout tab.
-- Fixed duplicate-column bug in Pullback recovery logic by deduplicating recovery column selection with `dict.fromkeys(...)`.
-- Pullback tables now include `Price (90d)` and `Price (1y)` sparklines where ticker rows are shown.
+Added `Historical Allocation Check` section.
 
-### Daily Summary
+It compares model weights against screenshot-derived official RAA allocations:
+- Uses nearest model rebalance date on or before the target snapshot date.
+- Shows summary metrics: correlation, mean absolute delta, max absolute delta.
+- Shows asset-level model vs official details.
+- Shows grouped bar chart for selected snapshot.
 
-- Added `⚠️ Leaders Weakening (Long-term Outperformers Losing Momentum)`.
-- Logic:
-  - Uses `config.DEFAULT_BENCHMARK`.
-  - Finds 1Y outperformers vs benchmark by at least 10%.
-  - Flags those with negative 1W relative strength vs benchmark.
-  - Ranks by `weakening_score = (-rs_1w) * (r_1y - bm_1y)`.
-- Existing `🔄 Laggard Awakenings` remains and is valued by the user.
-- Daily Summary ticker/instrument tables now include `Price (90d)` and `Price (1y)` sparklines where applicable.
-- Aggregate/non-ticker tables were intentionally skipped.
+Initial screenshot file used:
+- `resources/Historical allocations.jpg`
 
-### Today's Crossings
+Additional screenshot files added by user and currently untracked:
+- `resources/2025-05.jpg`
+- `resources/2025-06.jpg`
+- `resources/2025-09.jpg`
+- `resources/2026-01.jpg`
 
-- Fixed ambiguous truth-value error by deduplicating latest/yesterday rows by ticker before setting the index.
-- Ticker/instrument tables now include `Price (90d)` and `Price (1y)` sparklines.
+### 2.6 Historical Allocation Snapshots Transcribed
 
-### Relative Strength / Rotation / Factors / Allocator
+File changed: `app/views/RAAMStrategy.py`
 
-- Added `Price (90d)` and `Price (1y)` sparklines to reachable ticker/instrument tables:
-  - Relative Strength ranking table
-  - Rotation current picks table
-  - Factor heatmap table rows for factor/benchmark ETFs
-  - Allocator regional valuation ETF table
-- Aggregate tables without tickers were skipped.
+Current `HISTORICAL_RAA_ALLOCATIONS` includes these snapshot dates:
+- `2025-01-30`
+- `2025-02-27`
+- `2025-03-31`
+- `2025-04-30`
+- `2025-05-30`
+- `2025-06-30`
+- `2025-07-31`
+- `2025-08-29`
+- `2025-11-28`
+- `2025-12-31`
+- `2026-01-30`
 
-### Sparkline Decisions
+Source images and visible official columns:
+- `Historical allocations.jpg`: Jan 30, Feb 27, Mar 31 official from the April RAA positioning screenshot.
+- `2025-05.jpg`: Apr 30 official, plus Mar 31 and Feb 28 columns.
+- `2025-06.jpg`: May 30 official, plus Apr 30 and Mar 31 columns.
+- `2025-09.jpg`: Aug 29 official, plus Jul 31 and Jun 30 columns.
+- `2026-01.jpg`: Jan 30 official, plus Dec 31 and Nov 28 columns.
 
-- Streamlit `LineChartColumn` cannot render OHLC/candles.
-- Current implementation uses normalized close/price history only.
-- Candles would require OHLC data in the pipeline/export and a different UI approach.
-- Decision: keep table sparklines as line charts for now.
-- Added both:
-  - `Price (90d)` for tactical/short-term shape
-  - `Price (1y)` for regime/trend/drawdown context
-- Helper reused: `add_sparkline_column(df, col_name="Price (90d)", days=90)` and `add_sparkline_column(df, col_name="Price (1y)", days=365)` from `app/data.py`.
+Notes:
+- Values were manually transcribed from screenshots.
+- Some image text is low-resolution; if precise production calibration is required, recheck transcription.
+
+### 2.7 Official-Like Proxy Support Added
+
+Files changed:
+- `app/views/RAAMStrategy.py`
+- `resources/instrument_info.csv`
+
+Official screenshot proxies mentioned:
+- `LQD`, `USRT`, `SDY`, `NOBL`, `IEV`, `BITO`, `GBTC`, `JNK`, `CTA`, `GSG`
+
+Added to `resources/instrument_info.csv`:
+
+```csv
+LQD,iShares iBoxx $ Investment Grade Corporate Bond ETF,USD,bonds-corp,,Bond - Corporate
+USRT,iShares Core U.S. REIT ETF,USD,eq,,Sector - Real Estate
+SDY,SPDR S&P Dividend ETF,USD,eq,,Factor - Dividend
+NOBL,ProShares S&P 500 Dividend Aristocrats ETF,USD,eq,,Factor - Dividend
+IEV,iShares Europe ETF,USD,eq,,Equity - Europe
+BITO,ProShares Bitcoin Strategy ETF,USD,eq,,Commodity - Digital
+GBTC,Grayscale Bitcoin Trust ETF,USD,eq,,Commodity - Digital
+JNK,SPDR Bloomberg High Yield Bond ETF,USD,bonds-corp,,Bond - High Yield
+CTA,Simplify Managed Futures Strategy ETF,USD,eq,,Alternatives - Managed Futures
+```
+
+`GSG` was already present in `instrument_info.csv`.
+
+Current RAAM proxy preferences with fallbacks:
+
+| Asset | Preferred | Fallbacks |
+|---|---|---|
+| Bitcoin | `BITO` | `GBTC`, `IBIT` |
+| Commodities | `GSG` | `PDBC` |
+| Energy | `XLE` | none |
+| Gold | `GLD` | none |
+| Managed Futures | `CTA` | `DBMF` |
+| Miners | `PICK` | none |
+| Real Estate | `USRT` | `VNQ` |
+| Dividend Payers | `NOBL` | `SDY`, `SCHD` |
+| EM ex-China | `EMXC` | none |
+| Europe | `IEV` | `VGK` |
+| Japan | `EWJ` | none |
+| Nasdaq | `QQQ` | none |
+| US Large Cap | `SPY` | none |
+| US Small Cap | `IWM` | none |
+| Corporate Bonds | `LQD` | `VCIT` |
+| EM Bonds | `EMB` | none |
+| High Yield | `JNK` | `HYG` |
+| Long-Term Treasuries | `TLT` | none |
+| T-Bills | `BIL` | none |
+| TIPS | `TIP` | none |
+
+Current implementation details:
+- `_all_proxies()` returns preferred proxies plus fallbacks plus benchmark proxies.
+- `_select_proxy(cfg, columns)` chooses the first available proxy from preferred/fallback list.
+- Trend, HRP, dynamic backtest, static RAAM backtest, and trend diagnostics now use `_select_proxy(...)`.
+
+Important data state:
+- At last verification, only `GSG` was available in exported app data among the new official proxies.
+- The other official proxies are now in `instrument_info.csv` but need `make pipeline && make export` before the Streamlit app can use them.
+- Until then, RAAM uses fallbacks.
+
+### 2.8 Trend Engine Calibration Changes
+
+File changed: `app/views/RAAMStrategy.py`
+
+Changed default `WINDOW_WEIGHTS` to slower weighting:
+
+```python
+WINDOW_WEIGHTS = {21: 0.12, 42: 0.16, 63: 0.20, 126: 0.22, 189: 0.16, 252: 0.14}
+```
+
+Previous short windows were too dominant and caused a sharp defensive flip in March 2025.
+
+Changed `_regression_metrics()` return tuple:
+- Now returns `(slope, r_squared, slope_tstat, residual_zscore)`.
+- Previously third return value was `predicted_last`.
+- Downstream code only used ignored `_` for the third item except trend strength.
+
+Changed trend strength:
+- Uses `slope_tstat * r2` for windows `63`, `126`, `252`.
+- Previously used raw `slope * r2`.
+
+Current `TREND_BLEND` remains:
+
+```python
+TREND_BLEND = (0.50, 0.50, 0.00)
+```
+
+Meaning:
+- 50% breadth z-score.
+- 50% risk-adjusted strength z-score.
+- Mean reversion disabled.
+
+### 2.9 Sleeve Constraints Added
+
+File changed: `app/views/RAAMStrategy.py`
+
+Added broad bucket/sleeve bounds:
+
+```python
+BUCKET_BOUNDS = {
+    "Alternatives": (0.13, 0.30),
+    "Equities": (0.34, 0.60),
+    "Fixed Income": (0.20, 0.45),
+}
+```
+
+Implemented `_apply_bucket_bounds(grp)`:
+- Runs after cap-safe normalization in `_normalize_and_enforce()`.
+- Nudges bucket weights into broad official-like ranges.
+- Re-runs capped normalization after bucket adjustments.
+
+Important caveat:
+- These are broad inferred constraints, not confirmed official RAA rules.
+- User said they can provide sleeve-level constraints later.
+
+### 2.10 Expanded Allocation Check Results
+
+Last check ran after adding slower/risk-adjusted trend and sleeve constraints, before loading most new official proxies.
+
+Available official proxies in exported data at that time:
+
+```text
+['GSG']
+```
+
+Model data range/check:
+
+```text
+weights shape: (2926, 8)
+first weight date: 2012-05-31
+latest weight date: 2026-05-13
+latest weight sum: approximately 1.0
+latest buckets:
+  Alternatives: 28.2%
+  Equities: 50.7%
+  Fixed Income: 21.1%
+```
+
+Expanded official allocation fit:
+
+| Snapshot | Model Date | Corr | MAD | Max Abs Delta |
+|---|---:|---:|---:|---:|
+| 2025-01-30 | 2024-12-31 | 0.877 | 1.86% | 4.93% |
+| 2025-02-27 | 2025-01-31 | 0.928 | 1.36% | 4.60% |
+| 2025-03-31 | 2025-03-31 | 0.518 | 3.07% | 13.30% |
+| 2025-04-30 | 2025-04-30 | 0.462 | 2.92% | 10.22% |
+| 2025-05-30 | 2025-05-30 | 0.888 | 1.94% | 4.54% |
+| 2025-06-30 | 2025-06-30 | 0.869 | 2.19% | 6.10% |
+| 2025-07-31 | 2025-07-31 | 0.908 | 2.10% | 7.86% |
+| 2025-08-29 | 2025-08-29 | 0.863 | 2.54% | 7.79% |
+| 2025-11-28 | 2025-11-28 | 0.732 | 2.08% | 10.22% |
+| 2025-12-31 | 2025-12-31 | 0.850 | 2.13% | 16.51% |
+| 2026-01-30 | 2026-01-30 | 0.751 | 2.21% | 10.71% |
+
+Average MAD across snapshots:
+
+```text
+2.22%
+```
+
+Interpretation:
+- Most months are reasonably close.
+- March/April 2025 remain weak but improved from the original severe March miss.
+- Next expected improvement should come from loading official proxies and explicit calibration.
+
+### 2.11 Continued After Handoff
+
+Files changed:
+- `pipeline/utils.py`
+- `app/views/RAAMStrategy.py`
+- `task.md`
+- `changelog.md`
+
+Completed:
+- Ran `make pipeline && make export` to load official-like RAAM proxy data.
+- First pipeline run failed at DuckDB registration with Pandas 3 `StringDtype` columns: `Data type 'str' not recognized`.
+- Fixed `insert_df_to_duckdb()` by copying the dataframe and converting pandas string extension columns to plain object columns before `cursor.register(...)`.
+- Re-ran `make pipeline && make export`; it completed. Yahoo logged a timeout for `DIS`, but the RAAM proxies were downloaded/exported successfully.
+- Confirmed exported RAAM app data now includes all official-like proxies: `LQD`, `USRT`, `SDY`, `NOBL`, `IEV`, `BITO`, `GBTC`, `JNK`, `CTA`, `GSG`.
+- Tested no-lookahead monthly smoothing after cap/bucket constraints. Best simple alpha tested was `0.30`.
+- Added `ALLOCATION_SMOOTHING_ALPHA = 0.30` and `_smooth_weights(...)` to `app/views/RAAMStrategy.py`.
+- `generate_weights(...)` now applies smoothing by default after `_normalize_and_enforce(...)`.
+- RAAM tuning controls now expose `Smoothing alpha` and pass it into tuned weight generation.
+
+Verification:
+- `source .venv/bin/activate && python -m compileall -q app pipeline` passed.
+- Allocation-fit script passed with expected Streamlit bare-mode warnings.
+
+Updated allocation fit after official proxies + smoothing:
+
+| Snapshot | Model Date | Corr | MAD | Max Abs Delta |
+|---|---:|---:|---:|---:|
+| 2025-01-30 | 2024-12-31 | 0.855 | 1.84% | 5.15% |
+| 2025-02-27 | 2025-01-31 | 0.895 | 1.68% | 4.46% |
+| 2025-03-31 | 2025-03-31 | 0.906 | 1.58% | 7.14% |
+| 2025-04-30 | 2025-04-30 | 0.827 | 1.93% | 5.75% |
+| 2025-05-30 | 2025-05-30 | 0.928 | 1.76% | 5.18% |
+| 2025-06-30 | 2025-06-30 | 0.904 | 2.06% | 7.42% |
+| 2025-07-31 | 2025-07-31 | 0.930 | 2.09% | 8.99% |
+| 2025-08-29 | 2025-08-29 | 0.862 | 2.53% | 9.39% |
+| 2025-11-28 | 2025-11-28 | 0.859 | 2.05% | 4.83% |
+| 2025-12-31 | 2025-12-31 | 0.865 | 2.23% | 14.20% |
+| 2026-01-30 | 2026-01-30 | 0.868 | 1.62% | 7.78% |
+
+Average correlation: `0.882`.
+Average MAD: `1.94%`.
+
+### 2.12 Further Fit Refinement + UI Descriptions
+
+File changed:
+- `app/views/RAAMStrategy.py`
+
+Completed:
+- Ran a focused calibration over nearby trend/HRP blend and smoothing alpha values.
+- Updated defaults from `TREND_HRP_BLEND = 0.55` and `ALLOCATION_SMOOTHING_ALPHA = 0.30` to:
+
+```python
+TREND_HRP_BLEND = 0.65
+ALLOCATION_SMOOTHING_ALPHA = 0.20
+```
+
+- Added Streamlit descriptions near the RAAM tab header:
+  - `st.info(...)` explaining this is a research model, not an exact official replication.
+  - `How to read this tab` expander.
+  - `Model calibration` expander showing default blend/smoothing and fit objective.
+
+Updated allocation fit after refined defaults:
+
+| Snapshot | Model Date | Corr | MAD | Max Abs Delta |
+|---|---:|---:|---:|---:|
+| 2025-01-30 | 2024-12-31 | 0.870 | 1.87% | 6.80% |
+| 2025-02-27 | 2025-01-31 | 0.894 | 1.77% | 6.08% |
+| 2025-03-31 | 2025-03-31 | 0.924 | 1.59% | 4.82% |
+| 2025-04-30 | 2025-04-30 | 0.844 | 1.93% | 4.91% |
+| 2025-05-30 | 2025-05-30 | 0.954 | 1.45% | 2.93% |
+| 2025-06-30 | 2025-06-30 | 0.914 | 1.90% | 6.00% |
+| 2025-07-31 | 2025-07-31 | 0.946 | 1.74% | 7.73% |
+| 2025-08-29 | 2025-08-29 | 0.875 | 2.33% | 8.48% |
+| 2025-11-28 | 2025-11-28 | 0.874 | 1.94% | 4.67% |
+| 2025-12-31 | 2025-12-31 | 0.884 | 2.09% | 12.51% |
+| 2026-01-30 | 2026-01-30 | 0.893 | 1.55% | 5.81% |
+
+Average correlation: `0.897`.
+Average MAD: `1.83%`.
+Max absolute snapshot delta: `12.51%`.
+
+### 2.13 Fix Latest Nasdaq Underweight
+
+User flagged latest official Nasdaq weight as `18.38%` while strategy showed roughly `10-12%`.
+
+Root cause found:
+- Nasdaq pre-smoothing/latest model signal was close to official, but final live allocation was dragged down by smoothing from prior allocations.
+- Loose caps on tiny benchmark equity sleeves let EM ex-China/Japan/Small Cap take too much equity sleeve when ranked highly, crowding out Nasdaq and US Large Cap.
+
+Changes:
+- Tightened satellite equity caps:
+  - `EM ex-China`: `10%` -> `2%`
+  - `Europe`: `10%` -> `3%`
+  - `Japan`: `10%` -> `3%`
+  - `US Small Cap`: `10%` -> `4%`
+- Updated `TREND_HRP_BLEND` to `0.80`.
+- Modified `_smooth_weights(...)` so completed business-month-end rebalances still use default smoothing, but the latest incomplete month is unsmoothed.
+- Added `_is_business_month_end(...)` helper.
+
+Verification:
+- `source .venv/bin/activate && python -m compileall -q app pipeline` passed.
+- Latest model date: `2026-05-15`.
+- Latest Nasdaq model weight: `18.43%`, close to official `18.38%`.
+- Latest US Large Cap model weight: `20.20%`.
+- Historical average correlation/MAD improved to `0.915`/`1.71%`.
+- Historical max absolute snapshot delta: `10.23%`.
+
+---
 
 ## 3. Current State Of Relevant Files / Variables / Decisions
 
-### Important Files
+### 3.1 Modified Source/Data Files
 
-- `app/PerformanceTable.py`
-  - Main app entry point and tab navigation.
-  - Contains Today tab, signal/action-list logic, trade simulation backtest, Performance table, and Performance action screens.
-  - Key functions:
-    - `build_signal_candidates(df)`
-    - `build_action_list(df)`
-    - `render_today_action_list(df)`
-    - `load_signal_backtest_data(fund_types, years)`
-    - `simulate_signal_trades(hist_df, signal_name, max_hold_days, failed_bounce_days)`
-    - `render_signal_backtest(fund_types)`
-    - `render_today_tab()`
-    - `render_action_screens(df)`
-  - Key constant:
-    - `ACTION_PRIORITY`
+Uncommitted source/data changes:
+- `app/views/RAAMStrategy.py`
+- `resources/instrument_info.csv`
+- `HANDOFF.md` itself
 
-- `app/data.py`
-  - Provides `get_conn()`, `create_query()`, `get_data()`, `load_latest_perf()`, `load_prices()`, and `add_sparkline_column()`.
-  - `add_sparkline_column()` normalizes price history to start at 100.
-  - `get_sparkline_data()` fetches from `di.px_tbl` and caches data.
+Dirty unrelated/local artifacts remain; do not assume clean worktree.
 
-- `app/views/PullbackScanner.py`
-  - Contains best-only pullback filtering/scoring.
-  - Contains Short Target Monitor.
-  - Contains Laggard Breakout Candidates.
-  - Contains local `_add_sparkline_columns()` and `_sparkline_config()` helpers.
+### 3.2 RAAM Constants And Defaults
 
-- `app/views/DailySummary.py`
-  - Contains Market Pulse, Biggest Movers, Opportunity Radar, Laggard Awakenings, Leaders Weakening, Z-score alerts, MA crossover summary.
-  - Contains local `_add_sparkline_columns()` and `_sparkline_config()` helpers.
+Current key constants in `app/views/RAAMStrategy.py`:
 
-- `app/views/TodaysCrossings.py`
-  - Contains crossing/high/z-score/mover screens.
-  - Deduplicates ticker rows before index lookup.
-  - Contains local `_add_sparkline_columns()` and `_sparkline_config()` helpers.
-
-- `app/views/RelativeStrength.py`
-  - RS ranking table now has both sparklines.
-
-- `app/views/RotationStrategies.py`
-  - Current picks table now has both sparklines.
-
-- `app/views/FactorDashboard.py`
-  - Factor returns heatmap includes both sparklines for ETF rows.
-
-- `app/views/PortfolioAllocator.py`
-  - Regional valuation ETF table includes both sparklines.
-
-- `task.md` and `changelog.md`
-  - Updated with entries for Today tab, sparklines, signal backtest, and trade simulation.
-
-- `HANDOFF.md`
-  - This file. Should be updated again before ending future substantial work.
-
-### Important Constants / Data Columns
-
-- `DEFAULT_BENCHMARK` from `app/config.py` is currently `VWRP`.
-- `FUND_TYPE_OPTIONS` from `app/config.py` is used for category filters.
-- `table_height` from `app/config.py` is used for Performance table height.
-- Performance table/query columns come from `app/duckdb_importer.py` constants:
-  - `perf_desc_cols_start`
-  - `perf_z_score_cols`
-  - `perf_vol_cols`
-  - `perf_mavg_cols`
-  - `perf_returns_cols`
-  - `perf_desc_cols_end`
-  - `perf_rownames_cols`
-- Historical trade simulation depends on:
-  - Performance rows in `di.perf_tbl`
-  - Price rows in `di.px_tbl`
-  - `ticker`, `date`, `price`, moving average columns, return columns, volatility columns, drawdown columns
-
-### Current Verification Commands
-
-Use `uv`.
-
-Most recent broad verification command:
-
-```bash
-uv run python -m py_compile app/PerformanceTable.py app/views/DailySummary.py app/views/TodaysCrossings.py app/views/RelativeStrength.py app/views/RotationStrategies.py app/views/FactorDashboard.py app/views/PortfolioAllocator.py app/views/PullbackScanner.py
-uv run ruff check --select E9,F63,F7,F82 app/PerformanceTable.py app/views/DailySummary.py app/views/TodaysCrossings.py app/views/RelativeStrength.py app/views/RotationStrategies.py app/views/FactorDashboard.py app/views/PortfolioAllocator.py app/views/PullbackScanner.py
+```python
+TREND_WINDOWS = [21, 42, 63, 126, 189, 252]
+WINDOW_WEIGHTS = {21: 0.12, 42: 0.16, 63: 0.20, 126: 0.22, 189: 0.16, 252: 0.14}
+TREND_BLEND = (0.50, 0.50, 0.00)
+TREND_MULT_LOW = 0.05
+TREND_MULT_HIGH = 2.50  # unused, kept for reference
+TREND_HRP_BLEND = 0.55
+RISK_FREE_RATE = cfg.RISK_FREE_RATE
+MIN_HISTORY = 252
+VOL_LOOKBACK = 126
+BENCHMARK_60 = ("SPY", 0.60)
+BENCHMARK_40 = ("TLT", 0.40)
+BUCKET_BOUNDS = {
+    "Alternatives": (0.13, 0.30),
+    "Equities": (0.34, 0.60),
+    "Fixed Income": (0.20, 0.45),
+}
 ```
 
-Both passed after the latest changes.
+### 3.3 Current UI Decisions
+
+- RAAM tab is integrated into `app/PerformanceTable.py` and rendered by `RAAMStrategy.render()`.
+- `Run RAAM Strategy` defaults to checked.
+- Controls are local to the RAAM tab, not in `st.sidebar`.
+- `Enable tuning` still exposes rank-to-weight parameters and trend/HRP blend as a what-if tool.
+- Historical allocation check uses fixed dated snapshot labels, no longer a generic year selector.
+
+### 3.4 Current Worktree Status
+
+Last observed `git status --short`:
+
+```text
+ M .DS_Store
+ M HANDOFF.md
+ M app/.DS_Store
+ M app/views/RAAMStrategy.py
+ M resources/instrument_info.csv
+?? .agent/
+?? .playwright-mcp/
+?? RealAssetAllocation.pdf
+?? allocator/.DS_Store
+?? allocator_v2/.DS_Store
+?? breakout-tab.png
+?? export.csv
+?? page-initial.txt
+?? page-loaded.txt
+?? raam-full-final.png
+?? raam-full-page.png
+?? raam-loading.txt
+?? raam-rebuild-final.png
+?? raam-rebuild-test.png
+?? raam-state.txt
+?? raam-trend-breadth.png
+?? raam-v2-check.png
+?? raam-v2-snap.txt
+?? raam-v2.png
+?? raam-waterfall.png
+?? resources/2025-05.jpg
+?? resources/2025-06.jpg
+?? resources/2025-09.jpg
+?? resources/2026-01.jpg
+?? "resources/Historical allocations.jpg"
+```
+
+Do not commit `.DS_Store`, `.agent/`, `.playwright-mcp/`, screenshots/page dumps, `export.csv`, or runtime artifacts unless explicitly requested.
+
+Need user decision on whether to commit screenshot files under `resources/`.
+
+---
 
 ## 4. What Remains To Be Done
 
-### Immediate Next Useful Work
+### 4.1 Load Official Proxy Data
 
-1. Make Today action list more investable.
-   - Rename vague states like `Buy Watch` into decision states.
-   - Suggested states:
-     - `Buy Candidate`
-     - `Wait For Reclaim`
-     - `Avoid`
-     - `Trim Candidate`
-     - `Risk Review`
-   - Add columns:
-     - `Decision`
-     - `Entry Rule`
-     - `Invalidation`
-     - `Exit Plan`
-     - `Review Trigger`
-     - `Backtest Edge`
+Run:
 
-2. Improve trade simulation validity.
-   - Next-day execution and benchmark-relative returns have been added.
-   - Add CAGR/expectancy/profit factor style metrics.
-   - Add max adverse excursion / max favorable excursion if enough price path data is available.
+```bash
+make pipeline && make export
+```
 
-3. Add per-signal parameter presets.
-   - `Buy Watch` should have different exits than `Breakout Watch` and `Capitulation Watch`.
-   - Current UI exposes shared `Bounce timeout` and `Max hold cap`; this may be too generic.
+Purpose:
+- Download/export official proxy tickers now added to `instrument_info.csv`.
+- Let RAAM use `LQD`, `USRT`, `NOBL`/`SDY`, `IEV`, `BITO`/`GBTC`, `JNK`, `CTA` instead of fallbacks.
 
-4. Decide whether to use trade simulation results to rank Today.
-   - Current Today ranking still uses raw signal score and fixed action priority.
-   - More automated version should weight candidates by historical signal edge.
+After this, rerun allocation checks and compare correlation/MAD again.
 
-5. Consider portfolio-level automation later.
-   - Only after signal-level simulation is credible.
-   - Would need allocation rules, cash handling, max positions, rebalance frequency, and transaction assumptions.
+### 4.2 Verify Streamlit UI After Latest Changes
 
-### Nice-To-Have Later
+Recommended smoke test:
 
-- Add a row-selection detail panel with full-size chart for selected instruments.
-- Add OHLC/candlestick support only if pipeline/export is extended to include OHLC.
-- Make `Price (1y)` optional if tables feel too wide.
-- Move duplicated sparkline helper patterns into a shared utility only if duplication becomes painful.
-- Add UI smoke tests or lightweight data tests if the project adopts a test framework.
+```bash
+source .venv/bin/activate
+cd app
+streamlit run PerformanceTable.py
+```
+
+Check:
+- App initial load with RAAM default-on.
+- RAAM tab renders.
+- `Historical Allocation Check` shows all snapshots.
+- Trend visuals render.
+- `Enable tuning` still works.
+
+### 4.3 Add Calibration / Grid Search
+
+Next high-value model work:
+- Implement a small offline calibration helper, probably under `app/views/RAAMStrategy.py` first or separate script if it grows.
+- Grid search over:
+  - `WINDOW_WEIGHTS`
+  - `TREND_BLEND`
+  - `TREND_HRP_BLEND`
+  - rank-to-weight exponents
+  - floor fraction
+  - bucket bounds
+  - optional smoothing strength
+- Objective:
+  - maximize average correlation to `HISTORICAL_RAA_ALLOCATIONS`
+  - minimize average MAD
+  - penalize bad snapshots like `2025-03-31`, `2025-04-30`, `2025-12-31`
+
+### 4.4 Add Allocation Smoothing
+
+Likely official behavior is slower than raw monthly signals.
+
+Candidate implementation:
+
+```python
+final_weight = alpha * raw_model_weight + (1 - alpha) * prior_month_weight
+```
+
+Suggested initial test:
+- `alpha` between `0.35` and `0.65`.
+
+Need to preserve no-lookahead:
+- Smoothing should use only prior model weights, not future official allocations.
+
+### 4.5 Split Bucket Allocation From Within-Bucket Ranking
+
+Current model ranks all assets cross-sectionally, then applies broad bucket bounds.
+
+Possible better official-like structure:
+- Determine bucket weights first.
+- Rank assets within each bucket.
+- Allocate within each bucket subject to asset max caps.
+
+This may prevent bonds from dominating equities because they are “less bad” during an equity drawdown.
+
+### 4.6 User-Provided Sleeve Constraints
+
+The user said they can provide sleeve-level constraints.
+
+When provided:
+- Replace inferred `BUCKET_BOUNDS` with user/official constraints.
+- Consider max monthly bucket move constraints as well.
+
+### 4.7 Commit Strategy
+
+No commit has been made after `cf2c8de`.
+
+When ready, consider separate commits:
+1. RAAM performance/trend visualization/default-load changes.
+2. Official proxies + historical allocation snapshots.
+3. Trend/sleeve calibration model changes.
+
+Do not commit local artifacts unless explicitly requested.
+
+---
 
 ## 5. Blockers / Open Questions
 
 ### Blockers
 
-- No hard blockers.
+No hard blockers.
+
+Soft blockers:
+- Official proxy tickers are not yet available in exported app data except `GSG`.
+- Need `make pipeline && make export` before evaluating proxy-substitution impact.
 
 ### Open Questions
 
-- Should trade simulation enter on same-day close, next-day close, or next-day open? Current implementation effectively uses signal-day `price` from available data.
-- What should the primary investable universe be by default: ETFs only, stocks only, or mixed `eq + stock + commod`?
-- Should `Capitulation Watch` be treated as a long-entry signal, or only as an alert requiring extra confirmation?
-- Should `Trim Watch` and `Short Monitor` become explicit exit overlays for existing positions instead of independent actions?
-- What are acceptable transaction costs/slippage assumptions if portfolio-level automation is added?
-- Should `Today` prioritize fewer high-confidence candidates over broad coverage of every signal bucket?
+- Should screenshot files under `resources/` be committed, or are they local research artifacts only?
+- Should RAAM remain default-on despite eager Streamlit tab execution, or should we move to page-level navigation?
+- Should `BUCKET_BOUNDS` use official user-provided constraints once supplied?
+- Should the model have two modes:
+  - “Research model” for unconstrained dynamic allocation.
+  - “RAA-fit model” calibrated to official historical allocations.
+- Should calibration prioritize correlation, MAD, backtest performance, live ETF fit, or stress-period protection?
+- Should Bitcoin use `BITO`, `GBTC`, or `IBIT` as primary for live behavior vs historical matching?
+- Should Dividend Payers use `NOBL` or `SDY` as primary? Current primary is `NOBL`.
+- Should Managed Futures use `CTA` or `DBMF` as primary? Current primary is `CTA`.
 
-## Current Git / Staging Notes
+---
 
-- The repo has many pre-existing dirty/untracked files. Do not revert unrelated changes.
-- Relevant files staged/modified during this work include:
-  - `HANDOFF.md`
-  - `app/PerformanceTable.py`
-  - `app/views/DailySummary.py`
-  - `app/views/TodaysCrossings.py`
-  - `app/views/PullbackScanner.py`
-  - `app/views/RelativeStrength.py`
-  - `app/views/RotationStrategies.py`
-  - `app/views/FactorDashboard.py`
-  - `app/views/PortfolioAllocator.py`
-  - `task.md`
-  - `changelog.md`
-- Do not amend, reset, or discard unless explicitly requested.
+## 6. Verification Commands Run Recently
+
+Passed:
+
+```bash
+source .venv/bin/activate && python -m compileall -q app
+```
+
+Passed, with expected Streamlit cache warnings outside runtime:
+
+```bash
+cd app && source ../.venv/bin/activate && python -c "import views.RAAMStrategy; print('import ok')"
+```
+
+Expanded allocation check script ran successfully and produced the metrics in section 2.10.
+
+---
+
+## 7. Suggested Next Agent Actions
+
+1. Run `git status --short` before making further changes.
+2. Do not revert local artifacts or user files.
+3. Run `make pipeline && make export` to load official proxies if the user approves the time/network cost.
+4. Re-run expanded allocation checks after export.
+5. If fit improves, update the handoff/changelog and consider a commit.
+6. If fit still lags, implement calibration/grid search and allocation smoothing next.

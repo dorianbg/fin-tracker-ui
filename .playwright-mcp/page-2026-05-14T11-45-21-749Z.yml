@@ -1,0 +1,17 @@
+- generic [ref=e3]:
+  - banner [ref=e6]:
+    - generic [ref=e9]:
+      - generic [ref=e11]:
+        - img "Running..." [ref=e12]:
+          - img [ref=e27]
+        - button "Stop" [ref=e17] [cursor=pointer]
+      - button "Deploy" [ref=e19] [cursor=pointer]:
+        - generic [ref=e21]: Deploy
+      - button "Main menu" [ref=e23] [cursor=pointer]:
+        - img [ref=e24]
+  - generic [ref=e31]:
+    - paragraph [ref=e38]:
+      - text: Running
+      - code [ref=e39]: run_import_one_off()
+      - text: .
+    - paragraph [ref=e47]: Processing
