@@ -1,5 +1,15 @@
 # Tasks
 
+## 2026-05-22 00:00 - Add Global UCITS Sector Rotation Universe
+
+- Goal: Add a complete global sector rotation universe using UCITS ETFs suitable for UK/LSE execution.
+- Scope: `app/views/SectorRotation.py`, `resources/instrument_info.csv`, `tests/test_sector_rotation.py`, plus tracking updates.
+- Assumptions: Prefer one provider family for consistency; use SPDR MSCI World sector UCITS ETFs where available and `DPYG.L` as the existing developed-market property proxy for real estate.
+- Plan: Use justETF sector ETF coverage as the source direction, validate Yahoo-compatible LSE symbols, add missing metadata, wire the universe into Sector Rotation, and extend tests.
+- Test-first approach: Extend universe tests to assert a complete 11-ticker `.L` global UCITS universe.
+- Verify: `"/Users/dbg/code/fin-tracker-ui/.venv/bin/python" -m pytest tests/test_sector_rotation.py`; `"/Users/dbg/code/fin-tracker-ui/.venv/bin/python" -m py_compile app/views/SectorRotation.py tests/test_sector_rotation.py`; `"/Users/dbg/code/fin-tracker-ui/.venv/bin/ruff" check --select E9,F63,F7,F82 app/views/SectorRotation.py tests/test_sector_rotation.py`.
+- Status: completed locally, uncommitted.
+
 ## 2026-05-18 10:40 - Expand Sector Rotation Universes
 
 - Goal: Fill sector-rotation gaps by covering all 11 SPDR sectors, adding broader US industry ETFs, and adding a complete LSE-listed Europe sector universe.

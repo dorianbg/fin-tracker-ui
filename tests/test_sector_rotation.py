@@ -63,6 +63,7 @@ def test_backtest_applies_signals_after_warmup_and_reports_stats():
 def test_sector_universes_include_complete_spdr_and_lse_europe_sectors():
     spdr = SECTOR_UNIVERSES["US Select Sector SPDRs"]["tickers"]
     lse_europe = SECTOR_UNIVERSES["LSE Europe Sectors"]["tickers"]
+    global_ucits = SECTOR_UNIVERSES["Global UCITS Sector ETFs"]["tickers"]
 
     assert spdr == [
         "XLC",
@@ -79,3 +80,5 @@ def test_sector_universes_include_complete_spdr_and_lse_europe_sectors():
     ]
     assert len(lse_europe) == 11
     assert all(ticker.endswith(".L") for ticker in lse_europe)
+    assert len(global_ucits) == 11
+    assert all(ticker.endswith(".L") for ticker in global_ucits)

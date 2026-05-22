@@ -77,6 +77,23 @@ SECTOR_UNIVERSES = {
             "VNQ",
         ],
     },
+    "Global UCITS Sector ETFs": {
+        "benchmark": "VWRP.L",
+        "cash": "ERNS.L",
+        "tickers": [
+            "WTEL.L",
+            "WCOD.L",
+            "WCOS.L",
+            "WNRG.L",
+            "WFIN.L",
+            "WHEA.L",
+            "WNDU.L",
+            "WTEC.L",
+            "WMAT.L",
+            "DPYG.L",
+            "WUTI.L",
+        ],
+    },
     "Europe iShares MSCI Europe Sectors": {
         "benchmark": "IMEA.L",
         "cash": "ERNS.L",

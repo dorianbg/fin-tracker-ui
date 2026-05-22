@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-05-22 00:00 - Add Global UCITS Sector Rotation Universe
+
+- Changed: Added a complete `Global UCITS Sector ETFs` rotation universe and metadata rows for the missing SPDR MSCI World sector UCITS ETFs.
+- Why: Sector rotation needed a global UCITS alternative, not only US and Europe-specific sector sets.
+- How: Used justETF sector ETF coverage as the source direction, validated Yahoo/LSE symbols with the existing project virtualenv, and used `DPYG.L` as the real estate proxy already present in the universe file.
+- Verified: `"/Users/dbg/code/fin-tracker-ui/.venv/bin/python" -m pytest tests/test_sector_rotation.py`; `"/Users/dbg/code/fin-tracker-ui/.venv/bin/python" -m py_compile app/views/SectorRotation.py tests/test_sector_rotation.py`; `"/Users/dbg/code/fin-tracker-ui/.venv/bin/ruff" check --select E9,F63,F7,F82 app/views/SectorRotation.py tests/test_sector_rotation.py`.
+- Commit: Uncommitted
+
 ## 2026-05-18 10:40 - Expand Sector Rotation Universes
 
 - Changed: Expanded sector rotation with a broader US ETF universe, complete 11-sector Europe/LSE universes, and metadata rows for the missing Europe sector ETFs.

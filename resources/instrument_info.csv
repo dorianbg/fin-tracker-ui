@@ -73,6 +73,16 @@ JEDI.L,VanEck Space Innovators,USD,eq,,Thematic - Space
 AGED.L,iShares Ageing Population,USD,eq,,Thematic - Demographics
 SMH.L,VanEck Semiconductor,USD,eq,,Thematic - Semiconductors
 WENS.L,iShares MSCI World Energy,USD,eq,,Sector - Energy
+WTEL.L,SPDR MSCI World Communication Services UCITS ETF,USD,eq,,Sector - Communication Services
+WCOD.L,SPDR MSCI World Consumer Discretionary UCITS ETF,USD,eq,,Sector - Consumer Discretionary
+WCOS.L,SPDR MSCI World Consumer Staples UCITS ETF,USD,eq,,Sector - Consumer Staples
+WNRG.L,SPDR MSCI World Energy UCITS ETF,USD,eq,,Sector - Energy
+WFIN.L,SPDR MSCI World Financials UCITS ETF,USD,eq,,Sector - Financials
+WHEA.L,SPDR MSCI World Health Care UCITS ETF,USD,eq,,Sector - Healthcare
+WNDU.L,SPDR MSCI World Industrials UCITS ETF,USD,eq,,Sector - Industrials
+WTEC.L,SPDR MSCI World Technology UCITS ETF,USD,eq,,Sector - Technology
+WMAT.L,SPDR MSCI World Materials UCITS ETF,USD,eq,,Sector - Materials
+WUTI.L,SPDR MSCI World Utilities UCITS ETF,USD,eq,,Sector - Utilities
 DOCG.L,L&G Healthcare Tech (Nano),GBP,eq,,Thematic - Healthcare
 ECAR.L,iShares Electric Vehicles & Driving,GBP,eq,,Thematic - EV
 PLAY.L,iShares Digital Entertainment,GBP,eq,,Thematic - Entertainment
