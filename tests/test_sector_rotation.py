@@ -82,3 +82,23 @@ def test_sector_universes_include_complete_spdr_and_lse_europe_sectors():
     assert all(ticker.endswith(".L") for ticker in lse_europe)
     assert len(global_ucits) == 11
     assert all(ticker.endswith(".L") for ticker in global_ucits)
+
+
+def test_normalise_prices_uses_full_ticker_when_available():
+    from app.views.SectorRotation import make_price_matrix
+
+    prices = pd.DataFrame(
+        [
+            {
+                "ticker": "WTEL",
+                "ticker_full": "WTEL.L",
+                "date": "2024-01-02",
+                "price": 100,
+            }
+        ]
+    )
+
+    matrix = make_price_matrix(prices, ["WTEL.L"])
+
+    assert matrix.columns.tolist() == ["WTEL.L"]
+    assert matrix.iloc[0, 0] == 100

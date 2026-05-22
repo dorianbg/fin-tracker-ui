@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-05-22 17:00 - Fix Sector Rotation LSE Ticker Matching
+
+- Changed: `load_prices()` now filters by both stripped `ticker` and full `ticker_full`, returns `ticker_full`, and Sector Rotation normalizes to full symbols when available.
+- Why: The refreshed pipeline/export contained Global UCITS rows, but Sector Rotation requested `.L` symbols while the exported display ticker was stripped, so the app reported missing price history.
+- How: Kept universe definitions unchanged, used `ticker_full` only inside Sector Rotation normalization, and added a regression test for stripped/full ticker matching.
+- Verified: `make pipeline`; `make export`; `"/Users/dbg/code/fin-tracker-ui/.venv/bin/python" -m pytest tests/test_sector_rotation.py`; fixed-code exported-data check confirmed all 11 Global UCITS tickers have rows; `py_compile`; focused `ruff` syntax checks.
+- Commit: Uncommitted
+
 ## 2026-05-22 00:00 - Add Global UCITS Sector Rotation Universe
 
 - Changed: Added a complete `Global UCITS Sector ETFs` rotation universe and metadata rows for the missing SPDR MSCI World sector UCITS ETFs.

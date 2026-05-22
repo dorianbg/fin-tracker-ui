@@ -1,5 +1,15 @@
 # Tasks
 
+## 2026-05-22 17:00 - Fix Sector Rotation LSE Ticker Matching
+
+- Goal: Make Sector Rotation load `.L` universe constituents from exported app data after pipeline/export refresh.
+- Scope: `app/data.py`, `app/views/SectorRotation.py`, `tests/test_sector_rotation.py`, plus tracking updates.
+- Assumptions: Keep Yahoo-compatible `.L` symbols in sector universe definitions; app data may expose stripped `ticker` plus full `ticker_full`.
+- Plan: Reproduce the missing Global UCITS rows, filter price loads by `ticker` or `ticker_full`, normalize Sector Rotation prices to `ticker_full` where available, and add a regression test.
+- Test-first approach: Add a focused test proving `WTEL` plus `WTEL.L` maps into a `.L` price matrix.
+- Verify: `make pipeline`; `make export`; `"/Users/dbg/code/fin-tracker-ui/.venv/bin/python" -m pytest tests/test_sector_rotation.py`; fixed-code exported-data check confirms all 11 Global UCITS tickers have rows; `py_compile`; focused `ruff` syntax checks.
+- Status: completed locally, uncommitted.
+
 ## 2026-05-22 00:00 - Add Global UCITS Sector Rotation Universe
 
 - Goal: Add a complete global sector rotation universe using UCITS ETFs suitable for UK/LSE execution.

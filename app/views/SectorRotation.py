@@ -137,6 +137,8 @@ TRADING_DAYS_PER_YEAR = 252
 
 def normalise_prices(prices: pd.DataFrame) -> pd.DataFrame:
     df = prices.copy()
+    if "ticker_full" in df.columns:
+        df["ticker"] = df["ticker_full"].fillna(df["ticker"])
     df["date"] = pd.to_datetime(df["date"])
     df = df.sort_values(["ticker", "date"])
     df = df.dropna(subset=["ticker", "date", "price"])
@@ -321,7 +323,7 @@ def render():
     with content_col:
         tickers = universe["tickers"]
         all_tickers = tuple(dict.fromkeys(tickers + [benchmark, cash]))
-        prices = load_prices(all_tickers)
+        prices = normalise_prices(load_prices(all_tickers))
         available = set(prices["ticker"].unique()) if not prices.empty else set()
         missing = [ticker for ticker in all_tickers if ticker and ticker not in available]
         if missing:

@@ -223,9 +223,9 @@ def load_prices(tickers: tuple = None) -> pd.DataFrame:
     where = ""
     if tickers:
         tickers_str = "','".join(tickers)
-        where = f"WHERE ticker IN ('{tickers_str}')"
+        where = f"WHERE ticker IN ('{tickers_str}') OR ticker_full IN ('{tickers_str}')"
     query = f"""
-        SELECT ticker, date, price, description, fund_type
+        SELECT ticker, ticker_full, date, price, description, fund_type
         FROM {di.px_tbl}
         {where}
         ORDER BY date ASC
