@@ -8,7 +8,7 @@
 - Plan: Reproduce the missing Global UCITS rows, filter price loads by `ticker` or `ticker_full`, normalize Sector Rotation prices to `ticker_full` where available, and add a regression test.
 - Test-first approach: Add a focused test proving `WTEL` plus `WTEL.L` maps into a `.L` price matrix.
 - Verify: `make pipeline`; `make export`; `"/Users/dbg/code/fin-tracker-ui/.venv/bin/python" -m pytest tests/test_sector_rotation.py`; fixed-code exported-data check confirms all 11 Global UCITS tickers have rows; `py_compile`; focused `ruff` syntax checks.
-- Status: completed locally, uncommitted.
+- Status: completed in commit `a59f0f5`.
 
 ## 2026-05-22 00:00 - Add Global UCITS Sector Rotation Universe
 

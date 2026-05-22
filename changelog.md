@@ -6,7 +6,7 @@
 - Why: The refreshed pipeline/export contained Global UCITS rows, but Sector Rotation requested `.L` symbols while the exported display ticker was stripped, so the app reported missing price history.
 - How: Kept universe definitions unchanged, used `ticker_full` only inside Sector Rotation normalization, and added a regression test for stripped/full ticker matching.
 - Verified: `make pipeline`; `make export`; `"/Users/dbg/code/fin-tracker-ui/.venv/bin/python" -m pytest tests/test_sector_rotation.py`; fixed-code exported-data check confirmed all 11 Global UCITS tickers have rows; `py_compile`; focused `ruff` syntax checks.
-- Commit: Uncommitted
+- Commit: `a59f0f5`
 
 ## 2026-05-22 00:00 - Add Global UCITS Sector Rotation Universe
 
