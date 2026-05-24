@@ -79,7 +79,9 @@ def exchange_label(ticker_full: str) -> str:
 
 def build_email_body(alerts: pd.DataFrame, prices: pd.DataFrame) -> str:
     lines = ["Fresh breakout alerts", ""]
+    rank = 0
     for row in alerts.itertuples(index=False):
+        rank += 1
         history = prices[prices["ticker"] == row.ticker].sort_values("date")
         ticker_full = (
             str(history["ticker_full"].iloc[-1])
@@ -100,7 +102,7 @@ def build_email_body(alerts: pd.DataFrame, prices: pd.DataFrame) -> str:
             if value is not None
         )
         lines.append(
-            f"ALERT: {row.ticker} - {row.description}\n"
+            f"ALERT #{rank} (Score {row.breakout_score:.1f}): {row.ticker} - {row.description}\n"
             f"Exchange: {exchange} ({ticker_full}).\n"
             f"Reason: close crossed prior 30-day resistance and remains controlled "
             f"({row.breakout_extension_adr:.2f} ADR above breakout, "
@@ -116,7 +118,9 @@ def build_email_html(
     alerts: pd.DataFrame, prices: pd.DataFrame, content_ids: dict[str, str]
 ) -> str:
     blocks = ["<h2>Fresh breakout alerts</h2>"]
+    rank = 0
     for row in alerts.itertuples(index=False):
+        rank += 1
         history = prices[prices["ticker"] == row.ticker].sort_values("date")
         ticker_full = (
             str(history["ticker_full"].iloc[-1])
@@ -147,7 +151,7 @@ def build_email_html(
         blocks.append(
             f"""
             <section style="margin:0 0 28px 0; font-family:Arial, sans-serif;">
-              <h3 style="margin-bottom:6px;">ALERT: {row.ticker} - {row.description}</h3>
+              <h3 style="margin-bottom:6px;">ALERT #{rank} (Score {row.breakout_score:.1f}): {row.ticker} - {row.description}</h3>
               <p><strong>Exchange:</strong> {exchange} ({ticker_full}).</p>
               <p><strong>Reason:</strong> close crossed prior 30-day resistance ({row.breakout_extension_adr:.2f} ADR above breakout, {row.extension_adr:.1f} ADR from 200MA &gt;= {row.ma200:.0f}).</p>
               <p><strong>Trigger:</strong> native close {row.price:.2f} &gt; breakout level {row.breakout_level:.2f}.</p>

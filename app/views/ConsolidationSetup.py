@@ -198,6 +198,12 @@ def scan_breakout_triggers(
         if breakout_extension_adr > max_breakout_extension_adr:
             continue
 
+        breakout_score = (
+            ma_slope_adr
+            + max(max_breakout_extension_adr - breakout_extension_adr, 0)
+            + max(max_extension_adr - distance_from_ma_adr, 0) * 0.5
+        )
+
         rows.append(
             {
                 "ticker": ticker,
@@ -211,6 +217,7 @@ def scan_breakout_triggers(
                 "ma200": latest_ma,
                 "ma200_slope_adr": ma_slope_adr,
                 "adr20": latest_adr,
+                "breakout_score": breakout_score,
             }
         )
 
@@ -218,7 +225,7 @@ def scan_breakout_triggers(
         return pd.DataFrame()
     return (
         pd.DataFrame(rows)
-        .sort_values("breakout_extension_adr", ascending=True)
+        .sort_values("breakout_score", ascending=False)
         .reset_index(drop=True)
     )
 
