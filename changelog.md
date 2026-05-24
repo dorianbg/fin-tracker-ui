@@ -1,5 +1,29 @@
 # Changelog
 
+## 2026-05-23 00:00 - Add Bull Consolidation Setup Scanner
+
+- Changed: Added a `Consolidation` dashboard tab that scans stocks and ETFs for bull-regime consolidation setups using ADR-normalized extension, range compression, and distance-to-breakout metrics.
+- Why: The requested strategy needs candidates that are in a bull market, not too far from average movement, have consolidated, and are not already breaking out.
+- How: Implemented pure scanner logic in `app/views/ConsolidationSetup.py`, loaded OHLC fields from the exported prices table, excluded non-bull/overextended/already-broken-out assets, and wired the tab into `app/PerformanceTable.py`.
+- Verified: `"/Users/dbg/code/fin-tracker-ui/.venv/bin/python" -m pytest tests/test_consolidation_setup.py`; `"/Users/dbg/code/fin-tracker-ui/.venv/bin/python" -m py_compile app/views/ConsolidationSetup.py app/PerformanceTable.py tests/test_consolidation_setup.py`; `"/Users/dbg/code/fin-tracker-ui/.venv/bin/ruff" check --select E9,F63,F7,F82 app/views/ConsolidationSetup.py app/PerformanceTable.py tests/test_consolidation_setup.py`.
+- Commit: Uncommitted
+
+## 2026-05-23 00:00 - Add Breakout Email Alerts
+
+- Changed: Added fresh breakout detection and `make breakout-alerts` to send SMTP email alerts when assets cross prior consolidation resistance.
+- Why: Pre-breakout scans are useful for watchlists, but actual breakout execution needs an alert when resistance is crossed.
+- How: Added `scan_breakout_triggers()`, a stdlib SMTP email script using environment variables, and a regression test for a fresh resistance cross.
+- Verified: focused scanner tests, compile checks, and syntax-critical ruff checks.
+- Commit: Uncommitted
+
+## 2026-05-23 00:00 - Schedule Breakout Email Alerts
+
+- Changed: Added a `launchd` job definition and `make install-breakout-alerts` target to run pipeline, export, and breakout alerts at 22:15 on weekdays.
+- Why: Breakout alerts should arrive automatically after data is refreshed, not require manual command execution.
+- How: Added `scripts/run_breakout_alerts.sh` and `scripts/com.fintracker.breakout-alerts.plist` with logs under `~/Library/Logs`.
+- Verified: pending install.
+- Commit: Uncommitted
+
 ## 2026-05-22 17:00 - Fix Sector Rotation LSE Ticker Matching
 
 - Changed: `load_prices()` now filters by both stripped `ticker` and full `ticker_full`, returns `ticker_full`, and Sector Rotation normalizes to full symbols when available.

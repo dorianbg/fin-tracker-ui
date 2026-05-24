@@ -8,7 +8,9 @@ data_dir = "data"
 if not os.path.exists(data_dir):
     os.makedirs(data_dir)
 duckdb_file = os.path.join(os.path.dirname(__file__), "..", "duckdb.db")
-perf_view_file = os.path.join(os.path.dirname(__file__), "..", "resources", "latest_performance.sql")
+perf_view_file = os.path.join(
+    os.path.dirname(__file__), "..", "resources", "latest_performance.sql"
+)
 
 encrypt_key = os.environ["PARQUET_ENCRYPTION_KEY"]
 add_encrypt_key = f"PRAGMA add_parquet_key('key256', '{encrypt_key}');"
@@ -31,12 +33,18 @@ px_cols = [
 px_export_cols = [
     "ticker",
     "ticker_full",
+    "open_orig",
+    "high_orig",
+    "low_orig",
+    "price_orig",
     "price_open",
     "price_high",
     "price_low",
     "price_close",
     "price",
     "date::date as date",
+    "currency",
+    "currency_converted",
     "description",
     "fund_type",
 ]

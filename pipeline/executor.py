@@ -45,10 +45,26 @@ def _normalize_yfinance_df(df: pd.DataFrame, ticker_full: str) -> pd.DataFrame:
     out = df.reset_index()
     out["ticker"] = ticker_full.split(".")[0]
     out["ticker_full"] = ticker_full
-    out.rename(columns={x: str(x).lower().replace(" ", "_") for x in out.columns}, inplace=True)
+    out.rename(
+        columns={x: str(x).lower().replace(" ", "_") for x in out.columns}, inplace=True
+    )
     for column in ["dividends", "stock_splits"]:
         if column not in out.columns:
             out[column] = 0.0
+    out = repair_invalid_ohlc(out)
+    return out
+
+
+def repair_invalid_ohlc(df: pd.DataFrame) -> pd.DataFrame:
+    """Replace impossible zero OHLC fields with close when close is valid."""
+    if df.empty or "close" not in df.columns:
+        return df
+    out = df.copy()
+    valid_close = out["close"].notna() & (out["close"] > 0)
+    for column in ["open", "high", "low"]:
+        if column in out.columns:
+            invalid = valid_close & (out[column].isna() | (out[column] <= 0))
+            out.loc[invalid, column] = out.loc[invalid, "close"]
     return out
 
 
@@ -160,7 +176,9 @@ def delete_existing_data(conn, ticker_full: str) -> bool:
     return True
 
 
-def execute_job(conn, job: JobDef, args, downloaded_data: pd.DataFrame | None = None) -> pd.DataFrame:
+def execute_job(
+    conn, job: JobDef, args, downloaded_data: pd.DataFrame | None = None
+) -> pd.DataFrame:
     """Download data for a single ticker and handle dividend-triggered rewrites."""
     fmt = "%Y%m%d"
     start_date_str = job.start_date.strftime(fmt)
@@ -179,7 +197,9 @@ def execute_job(conn, job: JobDef, args, downloaded_data: pd.DataFrame | None = 
     )
     Path(tmp_path).parent.mkdir(parents=True, exist_ok=True)
 
-    new_data = downloaded_data if downloaded_data is not None else get_transformed_df(job=job)
+    new_data = (
+        downloaded_data if downloaded_data is not None else get_transformed_df(job=job)
+    )
 
     if args.rewrite_all and args.skip_backup:
         delete_existing_data(conn, ticker_full=job.ticker_full)
@@ -200,6 +220,7 @@ def execute_job(conn, job: JobDef, args, downloaded_data: pd.DataFrame | None = 
     )
 
     if not new_data.empty:
+        new_data = repair_invalid_ohlc(new_data)
         csv_path = add_csv_ext(tmp_path)
         pickle_path = add_pickle_ext(tmp_path)
         new_data.to_csv(csv_path)
@@ -251,7 +272,11 @@ if __name__ == "__main__":
             downloaded = download_jobs(jobs)
             for job in jobs:
                 current_job = job
-                dfs_to_insert.append(execute_job(duckdb_conn, current_job, args, downloaded.get(job.ticker_full)))
+                dfs_to_insert.append(
+                    execute_job(
+                        duckdb_conn, current_job, args, downloaded.get(job.ticker_full)
+                    )
+                )
     except Exception as e:
         logging.error(f"Exception {e} with job {current_job}\n{traceback.format_exc()}")
     finally:

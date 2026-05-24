@@ -1,5 +1,33 @@
 # Tasks
 
+## 2026-05-23 00:00 - Add Bull Consolidation Setup Scanner
+
+- Goal: Add a stock/ETF strategy scanner for bull-regime assets that are not overextended, have consolidated, and are near but not through breakout resistance.
+- Scope: `app/views/ConsolidationSetup.py`, `app/PerformanceTable.py`, `tests/test_consolidation_setup.py`, plus tracking updates.
+- Assumptions: Use the Reddit strategy notes as source direction: separate regime detection from trade filtering, classify bull regime with 200-day slope plus ADR band, use ADR units for extension and breakout distance, and exclude assets already breaking out.
+- Plan: Add pure scanner logic with tests, query OHLC data from exported app prices, add a Streamlit tab with tunable thresholds, and verify focused tests/checks.
+- Test-first approach: Add synthetic tests for a valid bull consolidation, an already-broken-out asset, and a non-bull asset.
+- Verify: `"/Users/dbg/code/fin-tracker-ui/.venv/bin/python" -m pytest tests/test_consolidation_setup.py`; `"/Users/dbg/code/fin-tracker-ui/.venv/bin/python" -m py_compile app/views/ConsolidationSetup.py app/PerformanceTable.py tests/test_consolidation_setup.py`; `"/Users/dbg/code/fin-tracker-ui/.venv/bin/ruff" check --select E9,F63,F7,F82 app/views/ConsolidationSetup.py app/PerformanceTable.py tests/test_consolidation_setup.py`.
+- Status: completed locally, uncommitted.
+
+## 2026-05-23 00:00 - Add Breakout Email Alerts
+
+- Goal: Send email when a stock/ETF breaks out above prior consolidation resistance.
+- Scope: `app/views/ConsolidationSetup.py`, `scripts/send_breakout_alerts.py`, `Makefile`, `tests/test_consolidation_setup.py`, plus tracking updates.
+- Assumptions: Use runtime SMTP environment variables and do not commit secrets; only email when fresh breakout triggers exist.
+- Plan: Add a pure breakout trigger scanner, add an email script, expose it through `make breakout-alerts`, and verify focused tests/checks.
+- Verify: focused scanner tests, compile checks, and syntax-critical ruff checks.
+- Status: completed locally, uncommitted.
+
+## 2026-05-23 00:00 - Schedule Breakout Email Alerts
+
+- Goal: Run pipeline/export and send breakout email alerts automatically after market close on weekdays.
+- Scope: `scripts/run_breakout_alerts.sh`, `scripts/com.fintracker.breakout-alerts.plist`, `Makefile`, plus tracking updates.
+- Assumptions: macOS `launchd` is acceptable; schedule defaults to Monday-Friday at 22:15 local time.
+- Plan: Add a wrapper script, launchd plist, and `make install-breakout-alerts` target.
+- Verify: compile/check changed alert script and install launch agent.
+- Status: completed locally, uncommitted.
+
 ## 2026-05-22 17:00 - Fix Sector Rotation LSE Ticker Matching
 
 - Goal: Make Sector Rotation load `.L` universe constituents from exported app data after pipeline/export refresh.

@@ -6,7 +6,7 @@ LOG_FILE    := $(LOG_DIR)/fintracker.log
 # Paths needed for cron (which has minimal PATH)
 export PATH := /opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$(PATH)
 
-.PHONY: pipeline pipeline-rewrite pipeline-postgres export raa-holdings ui allocator allocator-v1 test cron clean
+.PHONY: pipeline pipeline-rewrite pipeline-postgres export raa-holdings breakout-alerts install-breakout-alerts ui allocator allocator-v1 test cron clean
 
 # ── Tests ──
 
@@ -31,6 +31,16 @@ export:
 
 raa-holdings:
 	uv run python scripts/download_raa_holdings.py
+
+breakout-alerts:
+	PYTHONPATH=$(PYTHONPATH) uv run python scripts/send_breakout_alerts.py
+
+install-breakout-alerts:
+	chmod +x scripts/run_breakout_alerts.sh
+	mkdir -p $(HOME)/Library/LaunchAgents $(LOG_DIR)
+	cp scripts/com.fintracker.breakout-alerts.plist $(HOME)/Library/LaunchAgents/com.fintracker.breakout-alerts.plist
+	launchctl unload $(HOME)/Library/LaunchAgents/com.fintracker.breakout-alerts.plist 2>/dev/null || true
+	launchctl load $(HOME)/Library/LaunchAgents/com.fintracker.breakout-alerts.plist
 
 # ── Streamlit UI ──
 

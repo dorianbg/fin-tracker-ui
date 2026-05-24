@@ -25,6 +25,7 @@ from utils import correlation_matrix
 
 import views.DailySummary as DailySummary
 import views.PullbackScanner as PullbackScanner
+import views.ConsolidationSetup as ConsolidationSetup
 import views.TodaysCrossings as TodaysCrossings
 import views.RelativeStrength as RelativeStrength
 import views.FactorDashboard as FactorDashboard
@@ -82,7 +83,11 @@ ACTION_PRIORITY = {
 def build_signal_candidates(df: pd.DataFrame) -> pd.DataFrame:
     required = {"description", "ticker", "r_1d", "r_1w", "r_1mo", "vol_1mo", "vol_1y"}
     trend_cols = {"ma_21", "ma_63", "ma_126", "ma_252", "drawdown_52w"}
-    if df.empty or not required.issubset(df.columns) or not trend_cols.issubset(df.columns):
+    if (
+        df.empty
+        or not required.issubset(df.columns)
+        or not trend_cols.issubset(df.columns)
+    ):
         return pd.DataFrame()
 
     signals = df.copy()
@@ -122,16 +127,16 @@ def build_signal_candidates(df: pd.DataFrame) -> pd.DataFrame:
     )
 
     breakout_watch = signals[
-        (signals["r_1w"] > 0)
-        & (signals["r_1mo"] > 0)
-        & (signals["vol_ratio"] >= 1.1)
+        (signals["r_1w"] > 0) & (signals["r_1mo"] > 0) & (signals["vol_ratio"] >= 1.1)
     ].copy()
     if not breakout_watch.empty and "ma_21" in breakout_watch.columns:
         confirmed = breakout_watch[breakout_watch["ma_21"] > 0].copy()
         if not confirmed.empty:
             breakout_watch = confirmed
     if not breakout_watch.empty:
-        breakout_watch["breakout_score"] = breakout_watch["vol_ratio"] * breakout_watch["r_1w"]
+        breakout_watch["breakout_score"] = (
+            breakout_watch["vol_ratio"] * breakout_watch["r_1w"]
+        )
     append_actions(
         breakout_watch,
         "Breakout Watch",
@@ -163,9 +168,9 @@ def build_signal_candidates(df: pd.DataFrame) -> pd.DataFrame:
             & ((signals["r_1w"] - benchmark["r_1w"]) < 0)
         ].copy()
         if not trim_watch.empty:
-            trim_watch["trim_score"] = -(
-                trim_watch["r_1w"] - benchmark["r_1w"]
-            ) * (trim_watch["r_1y"] - benchmark["r_1y"])
+            trim_watch["trim_score"] = -(trim_watch["r_1w"] - benchmark["r_1w"]) * (
+                trim_watch["r_1y"] - benchmark["r_1y"]
+            )
         append_actions(
             trim_watch,
             "Trim Watch",
@@ -218,33 +223,64 @@ def build_action_list(df: pd.DataFrame) -> pd.DataFrame:
     action_df["Backtest Edge"] = ""
 
     buy_mask = action_df["Action"] == "Buy Watch"
-    buy_confirmed = buy_mask & (action_df["r_1d"] > 0) & (action_df["r_1w"] > 0) & (action_df["ma_63"] > -3)
+    buy_confirmed = (
+        buy_mask
+        & (action_df["r_1d"] > 0)
+        & (action_df["r_1w"] > 0)
+        & (action_df["ma_63"] > -3)
+    )
     action_df.loc[buy_mask, "Decision"] = "Wait For Reclaim"
     action_df.loc[buy_confirmed, "Decision"] = "Buy Candidate"
-    action_df.loc[buy_mask, "Entry Rule"] = "Buy only after bounce holds and MA63 remains intact"
+    action_df.loc[buy_mask, "Entry Rule"] = (
+        "Buy only after bounce holds and MA63 remains intact"
+    )
     action_df.loc[buy_mask, "Invalidation"] = "MA63 < -3 or drawdown <= -25"
-    action_df.loc[buy_mask, "Exit Plan"] = "Failed bounce timeout, MA63 stop, hard drawdown stop"
-    action_df.loc[buy_mask, "Review Trigger"] = "Recheck if MA21 is not reclaimed within 10 trading days"
+    action_df.loc[buy_mask, "Exit Plan"] = (
+        "Failed bounce timeout, MA63 stop, hard drawdown stop"
+    )
+    action_df.loc[buy_mask, "Review Trigger"] = (
+        "Recheck if MA21 is not reclaimed within 10 trading days"
+    )
     action_df.loc[buy_mask, "Backtest Edge"] = "Simulated as long entry below"
 
     breakout_mask = action_df["Action"] == "Breakout Watch"
-    breakout_confirmed = breakout_mask & (action_df["ma_21"] > 0) & (action_df["ma_63"] > 0)
+    breakout_confirmed = (
+        breakout_mask & (action_df["ma_21"] > 0) & (action_df["ma_63"] > 0)
+    )
     action_df.loc[breakout_mask, "Decision"] = "Wait For Confirmation"
     action_df.loc[breakout_confirmed, "Decision"] = "Buy Candidate"
-    action_df.loc[breakout_mask, "Entry Rule"] = "Buy only while MA21 and MA63 stay positive"
-    action_df.loc[breakout_mask, "Invalidation"] = "MA63 < -3 or failed upside follow-through"
-    action_df.loc[breakout_mask, "Exit Plan"] = "MA63 trend stop or profit protection after MA21 loss"
-    action_df.loc[breakout_mask, "Review Trigger"] = "Recheck on MA21 loss after an 8%+ move"
+    action_df.loc[breakout_mask, "Entry Rule"] = (
+        "Buy only while MA21 and MA63 stay positive"
+    )
+    action_df.loc[breakout_mask, "Invalidation"] = (
+        "MA63 < -3 or failed upside follow-through"
+    )
+    action_df.loc[breakout_mask, "Exit Plan"] = (
+        "MA63 trend stop or profit protection after MA21 loss"
+    )
+    action_df.loc[breakout_mask, "Review Trigger"] = (
+        "Recheck on MA21 loss after an 8%+ move"
+    )
     action_df.loc[breakout_mask, "Backtest Edge"] = "Simulated as long entry below"
 
     capitulation_mask = action_df["Action"] == "Capitulation Watch"
-    capitulation_bounce = capitulation_mask & ((action_df["r_1d"] > 0) | (action_df["r_1w"] > 0))
+    capitulation_bounce = capitulation_mask & (
+        (action_df["r_1d"] > 0) | (action_df["r_1w"] > 0)
+    )
     action_df.loc[capitulation_mask, "Decision"] = "Avoid Until Bounce"
     action_df.loc[capitulation_bounce, "Decision"] = "Speculative Bounce Candidate"
-    action_df.loc[capitulation_mask, "Entry Rule"] = "Buy only after positive 1D/1W bounce confirmation"
-    action_df.loc[capitulation_mask, "Invalidation"] = "No bounce after timeout or drawdown <= -25"
-    action_df.loc[capitulation_mask, "Exit Plan"] = "Quick no-bounce exit or hard drawdown stop"
-    action_df.loc[capitulation_mask, "Review Trigger"] = "Treat as tactical until MA21 recovers"
+    action_df.loc[capitulation_mask, "Entry Rule"] = (
+        "Buy only after positive 1D/1W bounce confirmation"
+    )
+    action_df.loc[capitulation_mask, "Invalidation"] = (
+        "No bounce after timeout or drawdown <= -25"
+    )
+    action_df.loc[capitulation_mask, "Exit Plan"] = (
+        "Quick no-bounce exit or hard drawdown stop"
+    )
+    action_df.loc[capitulation_mask, "Review Trigger"] = (
+        "Treat as tactical until MA21 recovers"
+    )
     action_df.loc[capitulation_mask, "Backtest Edge"] = "Simulated as long entry below"
 
     trim_mask = action_df["Action"] == "Trim Watch"
@@ -252,16 +288,26 @@ def build_action_list(df: pd.DataFrame) -> pd.DataFrame:
     action_df.loc[trim_mask, "Entry Rule"] = "Do not add; review existing position size"
     action_df.loc[trim_mask, "Invalidation"] = "Relative strength recovers vs benchmark"
     action_df.loc[trim_mask, "Exit Plan"] = "Trim if weakness persists or MA63 is lost"
-    action_df.loc[trim_mask, "Review Trigger"] = "Check 1W/1M relative strength vs benchmark"
+    action_df.loc[trim_mask, "Review Trigger"] = (
+        "Check 1W/1M relative strength vs benchmark"
+    )
     action_df.loc[trim_mask, "Backtest Edge"] = "Risk overlay, not long-entry simulated"
 
     short_mask = action_df["Action"] == "Short Monitor"
     action_df.loc[short_mask, "Decision"] = "Risk Review"
-    action_df.loc[short_mask, "Entry Rule"] = "Do not add longs while MA21 and MA63 are broken"
+    action_df.loc[short_mask, "Entry Rule"] = (
+        "Do not add longs while MA21 and MA63 are broken"
+    )
     action_df.loc[short_mask, "Invalidation"] = "MA21/MA63 recovery"
-    action_df.loc[short_mask, "Exit Plan"] = "Reduce/hedge if breakdown extends below MA126"
-    action_df.loc[short_mask, "Review Trigger"] = "Watch failed bounces and stop-loss levels"
-    action_df.loc[short_mask, "Backtest Edge"] = "Risk overlay, not long-entry simulated"
+    action_df.loc[short_mask, "Exit Plan"] = (
+        "Reduce/hedge if breakdown extends below MA126"
+    )
+    action_df.loc[short_mask, "Review Trigger"] = (
+        "Watch failed bounces and stop-loss levels"
+    )
+    action_df.loc[short_mask, "Backtest Edge"] = (
+        "Risk overlay, not long-entry simulated"
+    )
 
     output_cols = {
         "description": "Instrument",
@@ -375,9 +421,7 @@ def render_today_action_list(df: pd.DataFrame):
             "Price (90d)": st.column_config.LineChartColumn(
                 "Price (90d)", width="small"
             ),
-            "Price (1y)": st.column_config.LineChartColumn(
-                "Price (1y)", width="small"
-            )
+            "Price (1y)": st.column_config.LineChartColumn("Price (1y)", width="small"),
         },
     )
 
@@ -404,15 +448,19 @@ def load_signal_backtest_data(fund_types: tuple[str, ...], years: int) -> pd.Dat
         return pd.DataFrame()
 
     tickers_str = "','".join(tickers)
-    price_df = get_conn().execute(
-        f"""
+    price_df = (
+        get_conn()
+        .execute(
+            f"""
         SELECT ticker, date, price AS px_price
         FROM {di.px_tbl}
         WHERE ticker IN ('{tickers_str}')
           AND date >= '{start_date.isoformat()}'
         ORDER BY ticker, date
         """
-    ).df()
+        )
+        .df()
+    )
     if price_df.empty:
         return pd.DataFrame()
 
@@ -469,7 +517,10 @@ def simulate_signal_trades(
         entry_date = entry.date
         if ticker not in data_by_ticker:
             continue
-        if ticker in open_until_by_ticker and entry_date <= open_until_by_ticker[ticker]:
+        if (
+            ticker in open_until_by_ticker
+            and entry_date <= open_until_by_ticker[ticker]
+        ):
             continue
 
         ticker_df = data_by_ticker[ticker]
@@ -496,7 +547,11 @@ def simulate_signal_trades(
                 exit_row = row
                 exit_reason = "Hard drawdown stop"
                 break
-            if signal_name == "Buy Watch" and hold_days >= failed_bounce_days and row["ma_21"] < 0:
+            if (
+                signal_name == "Buy Watch"
+                and hold_days >= failed_bounce_days
+                and row["ma_21"] < 0
+            ):
                 exit_row = row
                 exit_reason = "Failed bounce"
                 break
@@ -504,11 +559,19 @@ def simulate_signal_trades(
                 exit_row = row
                 exit_reason = "MA63 trend stop"
                 break
-            if signal_name == "Breakout Watch" and current_return > 8 and row["ma_21"] < 0:
+            if (
+                signal_name == "Breakout Watch"
+                and current_return > 8
+                and row["ma_21"] < 0
+            ):
                 exit_row = row
                 exit_reason = "Profit protection"
                 break
-            if signal_name == "Capitulation Watch" and hold_days >= failed_bounce_days and row["r_1w"] <= 0:
+            if (
+                signal_name == "Capitulation Watch"
+                and hold_days >= failed_bounce_days
+                and row["r_1w"] <= 0
+            ):
                 exit_row = row
                 exit_reason = "No bounce confirmation"
                 break
@@ -531,7 +594,9 @@ def simulate_signal_trades(
                 "Exit Price": exit_row["price"],
                 "Return": trade_return,
                 "Benchmark Return": bm_return,
-                "Relative Return": trade_return - bm_return if not pd.isna(bm_return) else np.nan,
+                "Relative Return": trade_return - bm_return
+                if not pd.isna(bm_return)
+                else np.nan,
                 "Hold Days": (exit_row["date"] - entry_row["date"]).days,
                 "Exit Reason": exit_reason,
                 "Entry Score": entry.Score,
@@ -603,7 +668,9 @@ def render_signal_backtest(fund_types: list[str]):
         "Worst": trades["Return"].min(),
     }
     metric_cols = st.columns(len(metric_values))
-    for metric_col, (label, value) in zip(metric_cols, metric_values.items(), strict=False):
+    for metric_col, (label, value) in zip(
+        metric_cols, metric_values.items(), strict=False
+    ):
         with metric_col:
             if label == "Trades":
                 st.metric(label, int(value))
@@ -664,9 +731,13 @@ def render_signal_backtest(fund_types: list[str]):
         hide_index=True,
         height=450,
         column_config={
-            "Price (90d)": st.column_config.LineChartColumn("Price (90d)", width="small"),
+            "Price (90d)": st.column_config.LineChartColumn(
+                "Price (90d)", width="small"
+            ),
             "Price (1y)": st.column_config.LineChartColumn("Price (1y)", width="small"),
-            "Return": st.column_config.NumberColumn("Return", format="%.2f%%", width="small"),
+            "Return": st.column_config.NumberColumn(
+                "Return", format="%.2f%%", width="small"
+            ),
             "Benchmark Return": st.column_config.NumberColumn(
                 "Benchmark Return", format="%.2f%%", width="small"
             ),
@@ -705,7 +776,9 @@ def render_action_screens(df: pd.DataFrame):
         return
 
     signal_df = df.copy()
-    signal_df["vol_ratio"] = signal_df["vol_1mo"] / signal_df["vol_1y"].replace(0, np.nan)
+    signal_df["vol_ratio"] = signal_df["vol_1mo"] / signal_df["vol_1y"].replace(
+        0, np.nan
+    )
     drawdown_col = "drawdown_52w" if "drawdown_52w" in signal_df.columns else "ma_252"
 
     st.markdown("---")
@@ -773,7 +846,9 @@ def render_action_screens(df: pd.DataFrame):
             )
             cap = cap_pool.copy()
         cap["bounce_starting"] = cap["r_1w"] > 0
-        cap = cap.sort_values("severity", ascending=False).head(20).reset_index(drop=True)
+        cap = (
+            cap.sort_values("severity", ascending=False).head(20).reset_index(drop=True)
+        )
 
         if cap.empty:
             st.info("No downside stress candidates available for the current universe.")
@@ -799,7 +874,9 @@ def render_action_screens(df: pd.DataFrame):
             st.dataframe(
                 cap[cap_cols].style.format(
                     formatter="{:.2f}",
-                    subset=[c for c in cap_cols if pd.api.types.is_numeric_dtype(cap[c])],
+                    subset=[
+                        c for c in cap_cols if pd.api.types.is_numeric_dtype(cap[c])
+                    ],
                 ),
                 hide_index=True,
                 height=400,
@@ -809,7 +886,7 @@ def render_action_screens(df: pd.DataFrame):
                     ),
                     "Price (1y)": st.column_config.LineChartColumn(
                         "Price (1y)", width="small"
-                    )
+                    ),
                 },
             )
 
@@ -870,14 +947,16 @@ def render_action_screens(df: pd.DataFrame):
                     ),
                     "Price (1y)": st.column_config.LineChartColumn(
                         "Price (1y)", width="small"
-                    )
+                    ),
                 },
             )
+
 
 (
     tab_today,
     tab_perf,
     tab_pullback,
+    tab_consolidation,
     tab_crossings,
     tab_daily,
     tab_rs,
@@ -890,23 +969,26 @@ def render_action_screens(df: pd.DataFrame):
     tab_robotics,
     tab_allocator,
     tab_raam,
-) = st.tabs([
-    "Today",
-    "Performance",
-    "Pullback",
-    "Crossings",
-    "Daily Summary",
-    "Relative Strength",
-    "Rotation",
-    "Sector Rotation",
-    "Cross-Asset",
-    "Factors",
-    "Charts",
-    "Correlation",
-    "Robotics",
-    "Allocator",
-    "RAAM Strategy",
-])
+) = st.tabs(
+    [
+        "Today",
+        "Performance",
+        "Pullback",
+        "Consolidation",
+        "Crossings",
+        "Daily Summary",
+        "Relative Strength",
+        "Rotation",
+        "Sector Rotation",
+        "Cross-Asset",
+        "Factors",
+        "Charts",
+        "Correlation",
+        "Robotics",
+        "Allocator",
+        "RAAM Strategy",
+    ]
+)
 
 with tab_today:
     render_today_tab()
@@ -964,7 +1046,11 @@ with tab_perf:
                         value=0,
                     )
                 )
-        if len(custom_weights) and sum(custom_weights) > 0 and sum(custom_weights) != 100:
+        if (
+            len(custom_weights)
+            and sum(custom_weights) > 0
+            and sum(custom_weights) != 100
+        ):
             st.warning(
                 f"Custom weights must add up to 100% - current is {sum(custom_weights)}%"
             )
@@ -1007,11 +1093,19 @@ with tab_perf:
         )
         narrow_cols = {
             "description": st.column_config.TextColumn("description", width="medium"),
-            "Price (90d)": st.column_config.LineChartColumn("Price (90d)", width="small"),
+            "Price (90d)": st.column_config.LineChartColumn(
+                "Price (90d)", width="small"
+            ),
             "Price (1y)": st.column_config.LineChartColumn("Price (1y)", width="small"),
             **{
                 c: st.column_config.NumberColumn(label=c, width="small")
-                for c in ("drawdown_52w", "drawdown_3y", "range_pos_52w", "range_pos_104w", "range_pos_156w")
+                for c in (
+                    "drawdown_52w",
+                    "drawdown_3y",
+                    "range_pos_52w",
+                    "range_pos_104w",
+                    "range_pos_156w",
+                )
                 if c in df.columns
             },
         }
@@ -1054,6 +1148,9 @@ with tab_perf:
 
 with tab_pullback:
     PullbackScanner.render()
+
+with tab_consolidation:
+    ConsolidationSetup.render()
 
 with tab_crossings:
     TodaysCrossings.render()
