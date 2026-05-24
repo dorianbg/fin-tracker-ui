@@ -103,7 +103,8 @@ def build_email_body(alerts: pd.DataFrame, prices: pd.DataFrame) -> str:
             f"ALERT: {row.ticker} - {row.description}\n"
             f"Exchange: {exchange} ({ticker_full}).\n"
             f"Reason: close crossed prior 30-day resistance and remains controlled "
-            f"({row.breakout_extension_adr:.2f} ADR above breakout).\n"
+            f"({row.breakout_extension_adr:.2f} ADR above breakout, "
+            f"{row.extension_adr:.1f} ADR from 200MA &gt;= {row.ma200:.0f}).\n"
             f"Trigger: native close {row.price:.2f} > breakout level {row.breakout_level:.2f}.\n"
             f"Performance: {perf_text or 'not enough history'}.\n"
             f"Charts: 1Y trigger and 3Y context below.\n"
@@ -148,7 +149,7 @@ def build_email_html(
             <section style="margin:0 0 28px 0; font-family:Arial, sans-serif;">
               <h3 style="margin-bottom:6px;">ALERT: {row.ticker} - {row.description}</h3>
               <p><strong>Exchange:</strong> {exchange} ({ticker_full}).</p>
-              <p><strong>Reason:</strong> close crossed prior 30-day resistance and remains controlled ({row.breakout_extension_adr:.2f} ADR above breakout).</p>
+              <p><strong>Reason:</strong> close crossed prior 30-day resistance ({row.breakout_extension_adr:.2f} ADR above breakout, {row.extension_adr:.1f} ADR from 200MA &gt;= {row.ma200:.0f}).</p>
               <p><strong>Trigger:</strong> native close {row.price:.2f} &gt; breakout level {row.breakout_level:.2f}.</p>
               <p><strong>Performance:</strong> {perf_text or "not enough history"}.</p>
               {chart_html}
@@ -321,10 +322,15 @@ def send_email(
 def main() -> None:
     load_env_file()
     max_extension = float(os.environ.get("BREAKOUT_MAX_EXTENSION_ADR", "1.5"))
+    max_ma_extension = float(os.environ.get("BREAKOUT_MAX_MA_EXTENSION_ADR", "8.0"))
     max_items = int(os.environ.get("BREAKOUT_ALERT_MAX_ITEMS", "0"))
     chart_years = float(os.environ.get("BREAKOUT_ALERT_CHART_YEARS", "1"))
     prices = load_price_history_cli()
-    alerts = scan_breakout_triggers(prices, max_breakout_extension_adr=max_extension)
+    alerts = scan_breakout_triggers(
+        prices,
+        max_breakout_extension_adr=max_extension,
+        max_extension_adr=max_ma_extension,
+    )
     if alerts.empty:
         print("No fresh breakout alerts.")
         return

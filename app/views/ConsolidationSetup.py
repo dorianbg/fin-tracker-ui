@@ -139,8 +139,9 @@ def scan_breakout_triggers(
     slope_window: int = 20,
     consolidation_window: int = 30,
     max_breakout_extension_adr: float = 1.5,
+    max_extension_adr: float = 8.0,
 ) -> pd.DataFrame:
-    """Return fresh breakouts above prior consolidation resistance."""
+    """Return fresh breakouts above prior consolidation resistance that are not overextended."""
     required = {"ticker", "date", "price", "price_high", "price_low"}
     if prices.empty or not required.issubset(prices.columns):
         return pd.DataFrame()
@@ -188,8 +189,11 @@ def scan_breakout_triggers(
         upper_band = latest_ma + latest_adr
         is_bull = latest_price > upper_band and ma_slope_adr > 0
         crossed_today = previous_price <= latest_resistance < latest_price
+        distance_from_ma_adr = (latest_price - latest_ma) / latest_adr
         breakout_extension_adr = (latest_price - latest_resistance) / latest_adr
         if not is_bull or not crossed_today:
+            continue
+        if distance_from_ma_adr > max_extension_adr:
             continue
         if breakout_extension_adr > max_breakout_extension_adr:
             continue
@@ -203,6 +207,8 @@ def scan_breakout_triggers(
                 "price": latest_price,
                 "breakout_level": latest_resistance,
                 "breakout_extension_adr": breakout_extension_adr,
+                "extension_adr": distance_from_ma_adr,
+                "ma200": latest_ma,
                 "ma200_slope_adr": ma_slope_adr,
                 "adr20": latest_adr,
             }
