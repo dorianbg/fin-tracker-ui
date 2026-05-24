@@ -77,7 +77,9 @@ def exchange_label(ticker_full: str) -> str:
     return "US exchange"
 
 
-def build_email_body(alerts: pd.DataFrame, prices: pd.DataFrame) -> str:
+def build_email_body(
+    alerts: pd.DataFrame, prices: pd.DataFrame, vol_map: dict[str, float]
+) -> str:
     lines = ["Fresh breakout alerts", ""]
     rank = 0
     for row in alerts.itertuples(index=False):
@@ -89,6 +91,11 @@ def build_email_body(alerts: pd.DataFrame, prices: pd.DataFrame) -> str:
             else row.ticker
         )
         exchange = exchange_label(ticker_full)
+        adr_pct = (row.adr20 / row.price * 100) if row.price > 0 else 0
+        vol_1y = vol_map.get(row.ticker)
+        sizing = f"ADR: {row.adr20:.2f} ({adr_pct:.1f}% of price)"
+        if vol_1y is not None:
+            sizing += f"  |  Vol 1Y: {vol_1y:.1f}%"
         perf = {
             "1W": _period_return(history, 5),
             "1M": _period_return(history, 21),
@@ -109,13 +116,17 @@ def build_email_body(alerts: pd.DataFrame, prices: pd.DataFrame) -> str:
             f"{row.extension_adr:.1f} ADR from 200MA &gt;= {row.ma200:.0f}).\n"
             f"Trigger: native close {row.price:.2f} > breakout level {row.breakout_level:.2f}.\n"
             f"Performance: {perf_text or 'not enough history'}.\n"
+            f"Volatility: {sizing}.\n"
             f"Charts: 1Y trigger and 3Y context below.\n"
         )
     return "\n".join(lines)
 
 
 def build_email_html(
-    alerts: pd.DataFrame, prices: pd.DataFrame, content_ids: dict[str, str]
+    alerts: pd.DataFrame,
+    prices: pd.DataFrame,
+    content_ids: dict[str, str],
+    vol_map: dict[str, float],
 ) -> str:
     blocks = ["<h2>Fresh breakout alerts</h2>"]
     rank = 0
@@ -128,6 +139,11 @@ def build_email_html(
             else row.ticker
         )
         exchange = exchange_label(ticker_full)
+        adr_pct = (row.adr20 / row.price * 100) if row.price > 0 else 0
+        vol_1y = vol_map.get(row.ticker)
+        sizing = f"ADR: {row.adr20:.2f} ({adr_pct:.1f}% of price)"
+        if vol_1y is not None:
+            sizing += f"  |  Vol 1Y: {vol_1y:.1f}%"
         perf = {
             "1W": _period_return(history, 5),
             "1M": _period_return(history, 21),
@@ -156,6 +172,7 @@ def build_email_html(
               <p><strong>Reason:</strong> close crossed prior 30-day resistance ({row.breakout_extension_adr:.2f} ADR above breakout, {row.extension_adr:.1f} ADR from 200MA &gt;= {row.ma200:.0f}).</p>
               <p><strong>Trigger:</strong> native close {row.price:.2f} &gt; breakout level {row.breakout_level:.2f}.</p>
               <p><strong>Performance:</strong> {perf_text or "not enough history"}.</p>
+              <p><strong>Volatility:</strong> {sizing}.</p>
               {chart_html}
             </section>
             """
@@ -183,6 +200,17 @@ def load_price_history_cli() -> pd.DataFrame:
         df = conn.execute(query).df()
     df["date"] = pd.to_datetime(df["date"], format="%Y-%m-%d")
     return df
+
+
+def load_volatility_map() -> dict[str, float]:
+    query = """
+        SELECT ticker, vol_1y
+        FROM latest_performance
+        WHERE rown = 1 AND vol_1y IS NOT NULL
+    """
+    with duckdb.connect(str(DB_FILE), read_only=True) as conn:
+        rows = conn.execute(query).fetchall()
+    return {ticker: float(vol) for ticker, vol in rows if vol is not None}
 
 
 def chart_breakouts(
@@ -330,6 +358,7 @@ def main() -> None:
     max_items = int(os.environ.get("BREAKOUT_ALERT_MAX_ITEMS", "0"))
     chart_years = float(os.environ.get("BREAKOUT_ALERT_CHART_YEARS", "1"))
     prices = load_price_history_cli()
+    vol_map = load_volatility_map()
     alerts = scan_breakout_triggers(
         prices,
         max_breakout_extension_adr=max_extension,
@@ -341,7 +370,7 @@ def main() -> None:
 
     if max_items > 0:
         alerts = alerts.head(max_items).copy()
-    body = build_email_body(alerts, prices)
+    body = build_email_body(alerts, prices, vol_map)
     print(body)
     with tempfile.TemporaryDirectory() as tmp_dir:
         trigger_charts = chart_breakouts(
@@ -355,7 +384,7 @@ def main() -> None:
         content_ids = {
             key: make_msgid(domain="fintracker.local")[1:-1] for key in chart_by_key
         }
-        html = build_email_html(alerts, prices, content_ids)
+        html = build_email_html(alerts, prices, content_ids, vol_map)
         inline_images = {
             content_ids[key]: path
             for key, path in chart_by_key.items()
