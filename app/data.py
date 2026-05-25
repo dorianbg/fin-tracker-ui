@@ -57,7 +57,7 @@ def get_conn() -> duckdb.DuckDBPyConnection:
     if _conn is not None:
         return _conn
     else:
-        return init_conn(duckdb_file)
+        return init_conn(_resolve_db_path())
 
 
 @st.cache_data
