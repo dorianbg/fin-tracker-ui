@@ -27,15 +27,17 @@ cd app
 streamlit run PerformanceTable.py
 ```
 
-**Required env var**: `PARQUET_ENCRYPTION_KEY`
+**Required env var**: None (reads from `duckdb.db` directly). For remote access, set `DUCKDB_REMOTE_HOST` and `QUACK_AUTH_TOKEN`.
 
 ## Agent Workflow
 
 For non-trivial code changes, create and work in a separate git worktree before editing. This is required when the current tree is dirty, the task is risky, or concurrent work may be happening. Edit in place only for trivial changes or when the user explicitly asks to use the current branch/worktree.
 
+**Commits:** NEVER commit without asking first. Even if encouraged ("we could commit this"), ask for explicit confirmation before running `git commit`.
+
 ## Data Loading
 
-On first load, `duckdb_importer.run()` exports DuckDB views to encrypted Parquet files in `app/data/`. The UI reads Parquet into an in-memory DuckDB connection via `data.get_conn()`.
+The app reads directly from `duckdb.db` via `data.get_conn()`. SQL views (`total_return`, `latest_performance`, `latest_performance_sharpe`) are created by the pipeline and must exist in the database.
 
 ## Column Constants (from `duckdb_importer.py`)
 
@@ -77,3 +79,5 @@ On first load, `duckdb_importer.run()` exports DuckDB views to encrypted Parquet
 |----------|-------------|---------|
 | `PARQUET_ENCRYPTION_KEY` | UI (`duckdb_importer.py`) | Encrypt/decrypt Parquet files |
 | `POSTGRES_HOST` / `POSTGRES_PORT` / etc. | Pipeline (`make pipeline-postgres`) | Postgres upload (optional) |
+| `DUCKDB_REMOTE_HOST` | UI, alerts | Connect to remote DuckDB via Quack |
+| `QUACK_AUTH_TOKEN` | UI, alerts | Auth token for Quack server |

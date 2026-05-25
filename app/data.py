@@ -34,24 +34,20 @@ def _resolve_db_path() -> str:
 def init_conn(db_path: str) -> duckdb.DuckDBPyConnection:
     global _conn
     is_remote = db_path.startswith("quack:")
-    _conn = duckdb.connect(
-        database=":memory:" if is_remote else db_path, read_only=True
-    )
+    _conn = duckdb.connect(database=":memory:")
 
     if is_remote:
         token = os.environ.get("QUACK_AUTH_TOKEN", "fintracker-quack-token-2026")
         _conn.execute(f"ATTACH '{db_path}' AS remote_db (TOKEN '{token}')")
-        # View aliases pointing at the remote catalog
+        _conn.execute("CREATE VIEW prices AS SELECT * FROM remote_db.total_return")
         _conn.execute(
-            "CREATE OR REPLACE VIEW prices AS SELECT * FROM remote_db.total_return"
-        )
-        _conn.execute(
-            "CREATE OR REPLACE VIEW performance AS SELECT * FROM remote_db.latest_performance_sharpe"
+            "CREATE VIEW performance AS SELECT * FROM remote_db.latest_performance_sharpe"
         )
     else:
-        _conn.execute("CREATE OR REPLACE VIEW prices AS SELECT * FROM total_return")
+        _conn.execute(f"ATTACH '{db_path}' AS local_db (READ_ONLY)")
+        _conn.execute("CREATE VIEW prices AS SELECT * FROM local_db.total_return")
         _conn.execute(
-            "CREATE OR REPLACE VIEW performance AS SELECT * FROM latest_performance_sharpe"
+            "CREATE VIEW performance AS SELECT * FROM local_db.latest_performance_sharpe"
         )
     return _conn
 
