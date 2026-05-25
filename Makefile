@@ -6,7 +6,7 @@ LOG_FILE    := $(LOG_DIR)/fintracker.log
 # Paths needed for cron (which has minimal PATH)
 export PATH := /opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$(PATH)
 
-.PHONY: pipeline pipeline-rewrite pipeline-postgres export raa-holdings breakout-alerts install-breakout-alerts ui allocator allocator-v1 test cron clean
+.PHONY: pipeline pipeline-rewrite pipeline-postgres export raa-holdings breakout-alerts install-breakout-alerts deploy-breakout-alerts ui allocator allocator-v1 test cron clean
 
 # ── Tests ──
 
@@ -65,6 +65,21 @@ cron:
 	git add app/data >> $(LOG_FILE) 2>&1 || true
 	git diff --cached --quiet || git commit -m "Automated data update on $$(date +'%Y-%m-%d')" >> $(LOG_FILE) 2>&1
 	git push -u origin main >> $(LOG_FILE) 2>&1 || true
+
+# ── Deploy to macmini ──
+
+MACMINI_HOST ?= macmini
+MACMINI_PATH ?= ~/fin-tracker-ui
+
+deploy-breakout-alerts:
+	ssh $(MACMINI_HOST) "mkdir -p $(MACMINI_PATH)"
+	rsync -avz --exclude '.venv' --exclude '.git' --exclude '__pycache__' --exclude 'storage' \
+		./ $(MACMINI_HOST):$(MACMINI_PATH)/
+	@echo "=== Run these commands on macmini ==="
+	@echo "cd $(MACMINI_PATH)"
+	@echo "uv sync"
+	@echo "cp .env.example .env  # then edit SMTP_PASSWORD"
+	@echo "make install-breakout-alerts"
 
 # ── Utilities ──
 
