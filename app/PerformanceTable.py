@@ -1,6 +1,5 @@
 import datetime
 import platform
-import time
 
 import numpy as np
 import pandas as pd
@@ -44,31 +43,6 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed",
 )
-
-st.markdown(
-    """
-        <style>
-               .block-container {
-                    padding-top: 4rem;
-                    padding-bottom: 1rem;
-                    padding-left: 2rem;
-                    padding-right: 2rem;
-                }
-        </style>
-        """,
-    unsafe_allow_html=True,
-)
-
-
-@st.cache_resource
-def run_import_one_off():
-    if platform.system() == "Darwin":
-        with st.spinner("Processing"):
-            di.run()
-            time.sleep(1)
-
-
-run_import_one_off()
 
 
 ACTION_PRIORITY = {

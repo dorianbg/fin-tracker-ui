@@ -1,5 +1,7 @@
 import logging
+import os
 from datetime import datetime
+from pathlib import Path
 
 import duckdb
 import numpy as np
@@ -12,7 +14,8 @@ import duckdb_importer as di
 
 logging.getLogger("streamlit.runtime.caching.cache_data_api").setLevel(logging.ERROR)
 
-duckdb_file: str = ":memory:"
+_DEFAULT_DUCKDB_PATH = os.path.join(os.path.dirname(__file__), "..", "duckdb.db")
+duckdb_file: str = os.environ.get("DUCKDB_PATH", _DEFAULT_DUCKDB_PATH)
 _conn: duckdb.DuckDBPyConnection = None
 
 # Constants for Sharpe ratio calculation
@@ -20,16 +23,24 @@ risk_free_rate = config.RISK_FREE_RATE
 sharpe_col_suffix = "_s"
 
 
-def init_conn(file_name: str) -> duckdb.DuckDBPyConnection:
+def _resolve_db_path() -> str:
+    """Resolve the DuckDB database path, handling remote host if configured."""
+    remote_host = os.environ.get("DUCKDB_REMOTE_HOST", "")
+    if remote_host:
+        remote_port = os.environ.get("DUCKDB_REMOTE_PORT", "4219")
+        remote_db = os.environ.get("DUCKDB_REMOTE_DATABASE", _DEFAULT_DUCKDB_PATH)
+        return f"host={remote_host} port={remote_port} database={remote_db} type=duckdb"
+    return duckdb_file
+
+
+def init_conn(db_path: str) -> duckdb.DuckDBPyConnection:
     global _conn
-    _conn = duckdb.connect(database=file_name)
-
-    def _load_pq(tbl, file, enc):
-        return f"CREATE TEMP TABLE {tbl} AS SELECT * FROM read_parquet('{file}', encryption_config = {enc})"
-
-    _conn.execute(f"{di.add_encrypt_key}")
-    _conn.execute(_load_pq(di.px_tbl, di.px_pq_file, di.encrypt_conf))
-    _conn.execute(_load_pq(di.perf_tbl, di.perf_pq_file, di.encrypt_conf))
+    _conn = duckdb.connect(database=_resolve_db_path(), read_only=True)
+    # View aliases for existing code that queries 'prices' and 'performance'
+    _conn.execute("CREATE OR REPLACE VIEW prices AS SELECT * FROM total_return")
+    _conn.execute(
+        "CREATE OR REPLACE VIEW performance AS SELECT * FROM latest_performance_sharpe"
+    )
     return _conn
 
 
@@ -318,7 +329,9 @@ def create_perf_table(df):
 # ── Shared sidebar / filter helpers ──
 
 
-def fund_type_sidebar(default: list[str] | None = None, key: str | None = None) -> list[str]:
+def fund_type_sidebar(
+    default: list[str] | None = None, key: str | None = None
+) -> list[str]:
     """Render the fund-type multiselect inline and return the selection."""
     if default is None:
         default = ["eq"]
@@ -376,7 +389,7 @@ def add_sparkline_column(
     tickers = tuple(df["ticker"].unique())
     sparklines = get_sparkline_data(tickers, days=days)
     # Use [] for missing tickers so pyarrow encodes this as list<float64>, not string
-    df[col_name] = df["ticker"].map(sparklines).apply(
-        lambda x: x if isinstance(x, list) else []
+    df[col_name] = (
+        df["ticker"].map(sparklines).apply(lambda x: x if isinstance(x, list) else [])
     )
     return df

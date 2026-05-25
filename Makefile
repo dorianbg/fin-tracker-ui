@@ -6,7 +6,7 @@ LOG_FILE    := $(LOG_DIR)/fintracker.log
 # Paths needed for cron (which has minimal PATH)
 export PATH := /opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$(PATH)
 
-.PHONY: pipeline pipeline-rewrite pipeline-postgres export raa-holdings breakout-alerts install-breakout-alerts install-streamlit deploy-breakout-alerts ui allocator allocator-v1 test cron clean
+.PHONY: pipeline pipeline-rewrite pipeline-postgres export raa-holdings breakout-alerts install-breakout-alerts install-streamlit install-duckdb-server deploy-breakout-alerts ui allocator allocator-v1 test cron clean
 
 # ── Tests ──
 
@@ -47,6 +47,12 @@ install-streamlit:
 	cp scripts/com.fintracker.streamlit.plist $(HOME)/Library/LaunchAgents/com.fintracker.streamlit.plist
 	launchctl unload $(HOME)/Library/LaunchAgents/com.fintracker.streamlit.plist 2>/dev/null || true
 	launchctl load $(HOME)/Library/LaunchAgents/com.fintracker.streamlit.plist
+
+install-duckdb-server:
+	mkdir -p $(HOME)/Library/LaunchAgents $(LOG_DIR)
+	cp scripts/com.fintracker.duckdb-server.plist $(HOME)/Library/LaunchAgents/com.fintracker.duckdb-server.plist
+	launchctl unload $(HOME)/Library/LaunchAgents/com.fintracker.duckdb-server.plist 2>/dev/null || true
+	launchctl load $(HOME)/Library/LaunchAgents/com.fintracker.duckdb-server.plist
 
 # ── Streamlit UI ──
 
