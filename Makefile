@@ -49,6 +49,7 @@ install-streamlit:
 	launchctl load $(HOME)/Library/LaunchAgents/com.fintracker.streamlit.plist
 
 install-duckdb-server:
+	chmod +x scripts/run_quack_server.sh
 	mkdir -p $(HOME)/Library/LaunchAgents $(LOG_DIR)
 	cp scripts/com.fintracker.duckdb-server.plist $(HOME)/Library/LaunchAgents/com.fintracker.duckdb-server.plist
 	launchctl unload $(HOME)/Library/LaunchAgents/com.fintracker.duckdb-server.plist 2>/dev/null || true
@@ -91,8 +92,9 @@ deploy-breakout-alerts:
 	@echo "cd $(MACMINI_PATH)"
 	@echo "uv sync"
 	@echo "cp .env.example .env  # then edit SMTP_PASSWORD"
+	@echo "make install-duckdb-server   # quack server on port 9494"
 	@echo "make install-breakout-alerts"
-	@echo "make install-streamlit   # to run the dashboard persistently"
+	@echo "make install-streamlit       # dashboard, connect via DUCKDB_REMOTE_HOST=macmini"
 
 # ── Utilities ──
 

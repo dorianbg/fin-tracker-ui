@@ -25,6 +25,8 @@
   <dict>
     <key>PYTHONPATH</key>
     <string>/Users/dbg/code/fin-tracker-ui</string>
+    <key>PATH</key>
+    <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
   </dict>
 
   <key>RunAtLoad</key>

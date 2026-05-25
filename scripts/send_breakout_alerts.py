@@ -181,35 +181,45 @@ def build_email_html(
 
 
 def load_price_history_cli() -> pd.DataFrame:
-    query = """
-        SELECT
-            ticker,
-            ticker_full,
-            date,
-            open_orig AS price_open,
-            high_orig AS price_high,
-            low_orig AS price_low,
-            price_orig AS price,
-            description,
-            fund_type,
-            currency
-        FROM total_return
-        ORDER BY ticker, date
-    """
-    with duckdb.connect(str(DB_FILE), read_only=True) as conn:
-        df = conn.execute(query).df()
+    remote_host = os.environ.get("DUCKDB_REMOTE_HOST", "")
+    if remote_host:
+        token = os.environ.get("QUACK_AUTH_TOKEN", "fintracker-quack-token-2026")
+        conn = duckdb.connect(":memory:")
+        conn.execute(
+            f"ATTACH 'quack:{remote_host}:9494' AS r (TOKEN '{token}', DISABLE_SSL true)"
+        )
+        query = """
+            SELECT ticker, ticker_full, date,
+                   open_orig AS price_open, high_orig AS price_high, low_orig AS price_low,
+                   price_orig AS price, description, fund_type, currency
+            FROM r.total_return ORDER BY ticker, date
+        """
+    else:
+        conn = duckdb.connect(str(DB_FILE), read_only=True)
+        query = """
+            SELECT ticker, ticker_full, date,
+                   open_orig AS price_open, high_orig AS price_high, low_orig AS price_low,
+                   price_orig AS price, description, fund_type, currency
+            FROM total_return ORDER BY ticker, date
+        """
+    df = conn.execute(query).df()
     df["date"] = pd.to_datetime(df["date"], format="%Y-%m-%d")
     return df
 
 
 def load_volatility_map() -> dict[str, float]:
-    query = """
-        SELECT ticker, vol_1y
-        FROM latest_performance
-        WHERE rown = 1 AND vol_1y IS NOT NULL
-    """
-    with duckdb.connect(str(DB_FILE), read_only=True) as conn:
-        rows = conn.execute(query).fetchall()
+    remote_host = os.environ.get("DUCKDB_REMOTE_HOST", "")
+    if remote_host:
+        token = os.environ.get("QUACK_AUTH_TOKEN", "fintracker-quack-token-2026")
+        conn = duckdb.connect(":memory:")
+        conn.execute(
+            f"ATTACH 'quack:{remote_host}:9494' AS r (TOKEN '{token}', DISABLE_SSL true)"
+        )
+        query = "SELECT ticker, vol_1y FROM r.latest_performance WHERE rown = 1 AND vol_1y IS NOT NULL"
+    else:
+        conn = duckdb.connect(str(DB_FILE), read_only=True)
+        query = "SELECT ticker, vol_1y FROM latest_performance WHERE rown = 1 AND vol_1y IS NOT NULL"
+    rows = conn.execute(query).fetchall()
     return {ticker: float(vol) for ticker, vol in rows if vol is not None}
 
 

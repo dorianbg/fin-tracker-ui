@@ -24,23 +24,35 @@ sharpe_col_suffix = "_s"
 
 
 def _resolve_db_path() -> str:
-    """Resolve the DuckDB database path, handling remote host if configured."""
+    """Resolve the DuckDB database path, handling remote Quack server if configured."""
     remote_host = os.environ.get("DUCKDB_REMOTE_HOST", "")
     if remote_host:
-        remote_port = os.environ.get("DUCKDB_REMOTE_PORT", "4219")
-        remote_db = os.environ.get("DUCKDB_REMOTE_DATABASE", _DEFAULT_DUCKDB_PATH)
-        return f"host={remote_host} port={remote_port} database={remote_db} type=duckdb"
+        return f"quack:{remote_host}:9494"
     return duckdb_file
 
 
 def init_conn(db_path: str) -> duckdb.DuckDBPyConnection:
     global _conn
-    _conn = duckdb.connect(database=_resolve_db_path(), read_only=True)
-    # View aliases for existing code that queries 'prices' and 'performance'
-    _conn.execute("CREATE OR REPLACE VIEW prices AS SELECT * FROM total_return")
-    _conn.execute(
-        "CREATE OR REPLACE VIEW performance AS SELECT * FROM latest_performance_sharpe"
+    is_remote = db_path.startswith("quack:")
+    _conn = duckdb.connect(
+        database=":memory:" if is_remote else db_path, read_only=True
     )
+
+    if is_remote:
+        token = os.environ.get("QUACK_AUTH_TOKEN", "fintracker-quack-token-2026")
+        _conn.execute(f"ATTACH '{db_path}' AS remote_db (TOKEN '{token}')")
+        # View aliases pointing at the remote catalog
+        _conn.execute(
+            "CREATE OR REPLACE VIEW prices AS SELECT * FROM remote_db.total_return"
+        )
+        _conn.execute(
+            "CREATE OR REPLACE VIEW performance AS SELECT * FROM remote_db.latest_performance_sharpe"
+        )
+    else:
+        _conn.execute("CREATE OR REPLACE VIEW prices AS SELECT * FROM total_return")
+        _conn.execute(
+            "CREATE OR REPLACE VIEW performance AS SELECT * FROM latest_performance_sharpe"
+        )
     return _conn
 
 
