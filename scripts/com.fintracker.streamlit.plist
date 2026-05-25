@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.fintracker.streamlit</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/opt/homebrew/bin/uv</string>
+    <string>run</string>
+    <string>streamlit</string>
+    <string>run</string>
+    <string>PerformanceTable.py</string>
+    <string>--server.port</string>
+    <string>8501</string>
+    <string>--server.headless</string>
+    <string>true</string>
+  </array>
+
+  <key>WorkingDirectory</key>
+  <string>/Users/dbg/code/fin-tracker-ui/app</string>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PYTHONPATH</key>
+    <string>/Users/dbg/code/fin-tracker-ui</string>
+    <key>PARQUET_ENCRYPTION_KEY</key>
+    <string></string>
+  </dict>
+
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+
+  <key>StandardOutPath</key>
+  <string>/Users/dbg/Library/Logs/fintracker-streamlit.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/dbg/Library/Logs/fintracker-streamlit.err.log</string>
+</dict>
+</plist>

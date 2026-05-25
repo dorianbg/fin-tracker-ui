@@ -6,7 +6,7 @@ LOG_FILE    := $(LOG_DIR)/fintracker.log
 # Paths needed for cron (which has minimal PATH)
 export PATH := /opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$(PATH)
 
-.PHONY: pipeline pipeline-rewrite pipeline-postgres export raa-holdings breakout-alerts install-breakout-alerts deploy-breakout-alerts ui allocator allocator-v1 test cron clean
+.PHONY: pipeline pipeline-rewrite pipeline-postgres export raa-holdings breakout-alerts install-breakout-alerts install-streamlit deploy-breakout-alerts ui allocator allocator-v1 test cron clean
 
 # ── Tests ──
 
@@ -41,6 +41,12 @@ install-breakout-alerts:
 	cp scripts/com.fintracker.breakout-alerts.plist $(HOME)/Library/LaunchAgents/com.fintracker.breakout-alerts.plist
 	launchctl unload $(HOME)/Library/LaunchAgents/com.fintracker.breakout-alerts.plist 2>/dev/null || true
 	launchctl load $(HOME)/Library/LaunchAgents/com.fintracker.breakout-alerts.plist
+
+install-streamlit:
+	mkdir -p $(HOME)/Library/LaunchAgents $(LOG_DIR)
+	cp scripts/com.fintracker.streamlit.plist $(HOME)/Library/LaunchAgents/com.fintracker.streamlit.plist
+	launchctl unload $(HOME)/Library/LaunchAgents/com.fintracker.streamlit.plist 2>/dev/null || true
+	launchctl load $(HOME)/Library/LaunchAgents/com.fintracker.streamlit.plist
 
 # ── Streamlit UI ──
 
@@ -80,6 +86,7 @@ deploy-breakout-alerts:
 	@echo "uv sync"
 	@echo "cp .env.example .env  # then edit SMTP_PASSWORD"
 	@echo "make install-breakout-alerts"
+	@echo "make install-streamlit   # to run the dashboard persistently"
 
 # ── Utilities ──
 
