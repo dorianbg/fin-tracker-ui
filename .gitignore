@@ -120,3 +120,6 @@ pipeline/logs/
 
 # Data files (too large for GitHub)
 *.parquet
+
+# macOS
+.DS_Store
