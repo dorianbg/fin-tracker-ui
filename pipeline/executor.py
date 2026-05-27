@@ -68,13 +68,15 @@ def repair_invalid_ohlc(df: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
-def download_jobs(jobs: list[JobDef]) -> dict[str, pd.DataFrame]:
-    """Download all job ranges in one yfinance request and split by ticker/job."""
-    if not jobs:
+BATCH_SIZE = 50
+
+
+def _download_batch(
+    tickers: list[str], start: str, end: str
+) -> dict[str, pd.DataFrame]:
+    """Download one batch of tickers, returning {ticker_full: DataFrame}."""
+    if not tickers:
         return {}
-    start = min(job.start_date for job in jobs).strftime(date_fmt)
-    end = max(job.end_date for job in jobs).strftime(date_fmt)
-    tickers = [job.ticker_full for job in jobs]
     raw = yf.download(
         tickers,
         interval="1d",
@@ -86,29 +88,46 @@ def download_jobs(jobs: list[JobDef]) -> dict[str, pd.DataFrame]:
         threads=True,
     )
     if raw.empty:
-        return {job.ticker_full: pd.DataFrame() for job in jobs}
+        return {t: pd.DataFrame() for t in tickers}
 
     out = {}
-    for job in jobs:
+    for t in tickers:
         if isinstance(raw.columns, pd.MultiIndex):
             try:
-                ticker_df = raw.xs(job.ticker_full, axis=1, level=1, drop_level=True)
+                ticker_df = raw.xs(t, axis=1, level=1, drop_level=True)
             except KeyError:
-                out[job.ticker_full] = pd.DataFrame()
+                out[t] = pd.DataFrame()
                 continue
         else:
             ticker_df = raw
-
         ticker_df = ticker_df.dropna(how="all")
         if ticker_df.empty:
-            out[job.ticker_full] = pd.DataFrame()
-            continue
-        start_ts = pd.Timestamp(job.start_date).tz_localize(None)
-        end_ts = pd.Timestamp(job.end_date).tz_localize(None)
-        idx = pd.to_datetime(ticker_df.index).tz_localize(None)
-        ticker_df = ticker_df.loc[(idx >= start_ts) & (idx < end_ts)]
-        out[job.ticker_full] = _normalize_yfinance_df(ticker_df, job.ticker_full)
+            out[t] = pd.DataFrame()
+        else:
+            idx = pd.to_datetime(ticker_df.index).tz_localize(None)
+            ticker_df = ticker_df.loc[
+                (idx >= pd.Timestamp(start).tz_localize(None))
+                & (idx < pd.Timestamp(end).tz_localize(None))
+            ]
+            out[t] = _normalize_yfinance_df(ticker_df, t)
     return out
+
+
+def download_jobs(jobs: list[JobDef]) -> dict[str, pd.DataFrame]:
+    """Download all job ranges in small yfinance batches and split by ticker/job."""
+    if not jobs:
+        return {}
+    start = min(job.start_date for job in jobs).strftime(date_fmt)
+    end = max(job.end_date for job in jobs).strftime(date_fmt)
+    tickers = [job.ticker_full for job in jobs]
+
+    result = {}
+    for i in range(0, len(tickers), BATCH_SIZE):
+        batch = tickers[i : i + BATCH_SIZE]
+        result.update(_download_batch(batch, start, end))
+        if i + BATCH_SIZE < len(tickers):
+            time.sleep(1)
+    return result
 
 
 def upload_data_to_postgres(conn):
