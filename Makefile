@@ -6,7 +6,7 @@ LOG_FILE    := $(LOG_DIR)/fintracker.log
 # Paths needed for cron (which has minimal PATH)
 export PATH := /opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$(PATH)
 
-.PHONY: pipeline pipeline-rewrite pipeline-postgres export raa-holdings breakout-alerts install-breakout-alerts install-streamlit install-duckdb-server deploy-breakout-alerts ui allocator allocator-v1 test cron clean
+.PHONY: pipeline pipeline-rewrite pipeline-postgres export raa-holdings breakout-alerts strategy-alerts install-streamlit deploy-breakout-alerts ui allocator allocator-v1 test cron clean
 
 # ── Tests ──
 
@@ -33,27 +33,16 @@ raa-holdings:
 	uv run python scripts/download_raa_holdings.py
 
 breakout-alerts:
-	PYTHONPATH=$(PYTHONPATH) uv run python scripts/send_breakout_alerts.py
+	PYTHONPATH=$(PYTHONPATH) uv run python scripts/send_breakout_alerts.py --session $${SESSION:-all} $${ARGS:-}
 
-install-breakout-alerts:
-	chmod +x scripts/run_breakout_alerts.sh
-	mkdir -p $(HOME)/Library/LaunchAgents $(LOG_DIR)
-	cp scripts/com.fintracker.breakout-alerts.plist $(HOME)/Library/LaunchAgents/com.fintracker.breakout-alerts.plist
-	launchctl unload $(HOME)/Library/LaunchAgents/com.fintracker.breakout-alerts.plist 2>/dev/null || true
-	launchctl load $(HOME)/Library/LaunchAgents/com.fintracker.breakout-alerts.plist
+strategy-alerts:
+	PYTHONPATH=$(PYTHONPATH) uv run python scripts/send_strategy_alerts.py --session $${SESSION:-all} $${ARGS:-}
 
 install-streamlit:
 	mkdir -p $(HOME)/Library/LaunchAgents $(LOG_DIR)
 	cp scripts/com.fintracker.streamlit.plist $(HOME)/Library/LaunchAgents/com.fintracker.streamlit.plist
 	launchctl unload $(HOME)/Library/LaunchAgents/com.fintracker.streamlit.plist 2>/dev/null || true
 	launchctl load $(HOME)/Library/LaunchAgents/com.fintracker.streamlit.plist
-
-install-duckdb-server:
-	chmod +x scripts/run_quack_server.sh
-	mkdir -p $(HOME)/Library/LaunchAgents $(LOG_DIR)
-	cp scripts/com.fintracker.duckdb-server.plist $(HOME)/Library/LaunchAgents/com.fintracker.duckdb-server.plist
-	launchctl unload $(HOME)/Library/LaunchAgents/com.fintracker.duckdb-server.plist 2>/dev/null || true
-	launchctl load $(HOME)/Library/LaunchAgents/com.fintracker.duckdb-server.plist
 
 # ── Streamlit UI ──
 
@@ -92,9 +81,8 @@ deploy-breakout-alerts:
 	@echo "cd $(MACMINI_PATH)"
 	@echo "uv sync"
 	@echo "cp .env.example .env  # then edit SMTP_PASSWORD"
-	@echo "make install-duckdb-server   # quack server on port 9494"
-	@echo "make install-breakout-alerts"
-	@echo "make install-streamlit       # dashboard, connect via DUCKDB_REMOTE_HOST=macmini"
+	@echo "Ensure existing cron schedules call: scripts/run_strategy_alerts.sh us and scripts/run_strategy_alerts.sh eu"
+	@echo "make install-streamlit       # dashboard reads local duckdb.db"
 
 # ── Utilities ──
 

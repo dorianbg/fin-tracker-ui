@@ -25,6 +25,17 @@ from data import (
     add_sparkline_column,
 )
 
+try:
+    from strategy_scanners import (
+        scan_laggard_awakening,
+        scan_laggard_breakout_confirmations,
+    )
+except ModuleNotFoundError:
+    from app.strategy_scanners import (
+        scan_laggard_awakening,
+        scan_laggard_breakout_confirmations,
+    )
+
 
 def render():
     st.title("🔄 Laggard Breakout Scanner")
@@ -210,16 +221,15 @@ def render():
             f"**positive {rs_awakening} relative strength** vs the benchmark."
         )
 
-        # Find laggards
-        laggards = df[
-            (df[f"rs_{laggard_period}"] <= -underperf_threshold)
-            & (df[laggard_col].abs() <= max_abs_return)
-            & (df["ticker"] != benchmark_ticker)
-        ].copy()
-
-        # Split into awakening vs still sleeping
-        awakening = laggards[laggards[f"rs_{rs_awakening}"] > 0].copy()
-        sleeping = laggards[laggards[f"rs_{rs_awakening}"] <= 0].copy()
+        awakening, sleeping = scan_laggard_awakening(
+            df,
+            benchmark_ticker=benchmark_ticker,
+            laggard_period=laggard_period,
+            awakening_period=rs_awakening,
+            underperf_threshold=underperf_threshold,
+            max_abs_return=max_abs_return,
+        )
+        laggards = pd.concat([awakening, sleeping], ignore_index=True)
 
         if awakening.empty and laggards.empty:
             st.info(
@@ -227,13 +237,7 @@ def render():
                 f"{laggard_period}. Try lowering the threshold."
             )
         else:
-            # Awakening score: how strong is the short-term RS relative to the long-term RS deficit
             if not awakening.empty:
-                awakening["awakening_score"] = awakening[f"rs_{rs_awakening}"] * (
-                    -awakening[f"rs_{laggard_period}"]
-                )
-                awakening = awakening.sort_values("awakening_score", ascending=False)
-
                 st.subheader(f"🟢 Awakening ({len(awakening)} instruments)")
                 st.markdown(
                     "These laggards are now **outperforming** the benchmark short-term. "
@@ -419,25 +423,11 @@ def render():
         )
 
         if not laggards.empty:
-            # Laggards now above their 21-day MA AND showing positive short-term RS
-            confirmed = laggards[
-                (laggards["ma_21"] > 0) & (laggards[f"rs_{rs_awakening}"] > 0)
-            ].copy()
+            confirmed = scan_laggard_breakout_confirmations(
+                laggards, awakening_period=rs_awakening
+            )
 
             if not confirmed.empty:
-                # Add MA cross status flags
-                confirmed["above_63d"] = confirmed["ma_63"] > 0
-                confirmed["above_252d"] = confirmed["ma_252"] > 0
-
-                # Score: count how many MAs the instrument is above
-                confirmed["ma_cross_count"] = (
-                    (confirmed["ma_21"] > 0).astype(int)
-                    + (confirmed["ma_63"] > 0).astype(int)
-                    + (confirmed["ma_126"] > 0).astype(int)
-                    + (confirmed["ma_252"] > 0).astype(int)
-                )
-                confirmed = confirmed.sort_values("ma_cross_count", ascending=False)
-
                 st.markdown(
                     f"**{len(confirmed)}** laggards with positive RS and above 21d MA:"
                 )

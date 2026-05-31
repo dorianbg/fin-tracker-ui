@@ -1,5 +1,87 @@
 # Tasks
 
+## 2026-05-30 07:30 - Block Alert Emails On Stale Data
+
+- Goal: Prevent live alert emails from being sent unless the alert data date is today, while preserving explicit testing/development escape hatches.
+- Scope: alert freshness helper, breakout and strategy send scripts, env example, tests, and tracking updates.
+- Assumptions: `--dry-run` should bypass freshness for strategy development; live sends can bypass only with `--allow-stale-data` or `FINTRACKER_ALLOW_STALE_ALERTS=1`.
+- Plan: Add a reusable freshness guard, call it before emails/state saves, add CLI/env overrides, and test stale blocking plus dry-run/development bypasses.
+- Verify: freshness/alert focused tests; Ruff error checks; Python compile checks; alert runner syntax check; full test suite run documents unrelated existing construction/strategy failures.
+- Status: completed locally, uncommitted.
+
+## 2026-05-30 00:00 - Share Alert Scanner Logic With Dashboard Views
+
+- Goal: Remove duplicated alert strategy rules by sharing pure scanner functions between strategy emails and the Streamlit dashboard pages.
+- Scope: `app/strategy_scanners.py`, alert signal builders, affected Streamlit views, focused tests, and tracking updates.
+- Assumptions: Dashboard UI behavior should stay the same; scanner/filter/scoring logic should become reusable and testable; chart/email rendering stays separate.
+- Plan: Extract pure scanners, replace duplicated view/alert logic with calls to those scanners, add regression tests proving alert wrappers use shared scanners, and run focused checks.
+- Verify: focused alert/consolidation/sector tests; Ruff error checks; Python compile checks; wrapper syntax check; app-directory import check for affected views; alert script import smoke check. Full test suite run documents unrelated existing construction/strategy failures.
+- Status: completed locally, uncommitted.
+
+## 2026-05-29 13:25 - Use Existing Cron For Strategy Alerts
+
+- Goal: Remove launchd strategy alert scheduling and rely on the existing cron schedules.
+- Scope: strategy alert schedule files, Makefile install target, tracking updates.
+- Assumptions: Cron schedules already exist outside the repo; the repo only needs to provide `scripts/run_strategy_alerts.sh us|eu` and `make strategy-alerts`/`make breakout-alerts` targets.
+- Plan: Delete strategy alert `.plist` files, remove the strategy alert install target, and update deploy guidance to point existing cron at the runner script.
+- Verify: `zsh -n scripts/run_strategy_alerts.sh`; focused alert tests.
+- Status: completed locally, uncommitted.
+
+## 2026-05-29 13:05 - Revert To Local DuckDB File
+
+- Goal: Remove Quack/remote DuckDB server usage and make UI/alerts/pipeline use the local `duckdb.db` file directly.
+- Scope: app data connection, alert scripts/wrapper, launchd/Makefile/deploy instructions, Quack server files, tracking updates.
+- Assumptions: All runtime processes can access the local `duckdb.db` file; no remote Quack server is needed.
+- Plan: Delete Quack launch agent/script, remove `install-duckdb-server`, remove `DUCKDB_REMOTE_HOST` code paths, simplify strategy alert runner, and unload/remove the installed stale launch agent.
+- Verify: grep for Quack/remote references, Python compile checks, shell syntax check, focused alert tests, and read-only local DB connect count check.
+- Status: completed locally, uncommitted.
+
+## 2026-05-29 11:25 - Expand Large/Mid Cap Stock Universe
+
+- Goal: Add systematic large and mid cap stock coverage so momentum/turnaround alerts scan beyond the existing thematic watchlists.
+- Scope: `resources/instrument_info.csv`, tracking updates.
+- Assumptions: Add missing S&P 500, S&P MidCap 400, FTSE 100, and Euro Stoxx 50 constituents; keep existing manually curated rows and skip duplicate tickers.
+- Plan: Fetch public constituent tables, normalize Yahoo tickers (`.` to `-` for US classes, `.L` for FTSE, native suffixes for Euro Stoxx), append missing rows with `fund_type=stock`, and validate no duplicate tickers.
+- Verify: CSV parse/duplicate check; `PYTHONPATH=. uv run python -m pytest tests/test_strategy_alerts.py tests/test_consolidation_setup.py -q`.
+- Status: completed locally, uncommitted.
+
+## 2026-05-29 10:30 - Add Momentum Breakout Alert
+
+- Goal: Keep the focused turnaround alert and add a broader watchlist for stocks/ETFs making 4/8/12-week local highs, split into recovery breakouts and tight base breakouts near highs.
+- Scope: `app/alerts/signals.py`, `tests/test_strategy_alerts.py`, tracking updates.
+- Assumptions: The focused `turnaround` alert should include names within 2% of 4/8/12W local highs while still more than 10% below 52W highs; broader recovery breakouts are local highs still more than 10% below 52W or 104W highs; base breakouts are local highs within 10% of 52W highs after a tight 20D range and non-expanding short-term volatility.
+- Plan: Restore and widen `turnaround` as a focused near-local-high recovery alert; add helper metrics for local-high windows, 20D range, and 104W drawdown; classify broader `momentum_breakout` signals as `Recovery breakout` or `Base breakout near highs`; include the metrics in email summaries.
+- Verify: `PYTHONPATH=. uv run python -m pytest tests/test_strategy_alerts.py tests/test_consolidation_setup.py -q`; `PYTHONPATH=. uv run python -m py_compile app/alerts/signals.py scripts/send_strategy_alerts.py`; `zsh -n scripts/run_strategy_alerts.sh`; dry-run `scripts/send_strategy_alerts.py --session us --strategy momentum_breakout --dry-run --max-items 5`.
+- Status: completed locally, uncommitted.
+
+## 2026-05-27 00:00 - Add Strategy Email Alerts
+
+- Goal: Send separate beautiful pre-market emails for active FinTracker strategies, with both changes and active-signal versions, while keeping RAAM excluded.
+- Scope: alert helper modules/scripts, launchd scheduling, Makefile targets, tests, and tracking updates.
+- Assumptions: Use the same SMTP recipients as breakout alerts; default strategy presets can be refined after observing live emails; `.L` instruments are EU/UK-session alerts and non-`.L` instruments are US-session alerts.
+- Plan: Add pure signal builders, reusable email/state helpers, a strategy alert CLI with session filtering and dry-run support, update scheduling targets, and verify focused tests/checks.
+- Test-first approach: Add focused unit tests for session classification/filtering, change detection, and representative strategy signal extraction.
+- Verify: `uv run python -m pytest tests/test_strategy_alerts.py tests/test_consolidation_setup.py`; `uv run python -m py_compile app/alerts/session.py app/alerts/state.py app/alerts/email.py app/alerts/signals.py scripts/send_strategy_alerts.py scripts/send_breakout_alerts.py`; `uv run ruff check --select E9,F63,F7,F82 app/alerts scripts/send_strategy_alerts.py scripts/send_breakout_alerts.py tests/test_strategy_alerts.py`; `zsh -n` wrapper checks; plist parse checks. Full `uv run python -m pytest tests/` still has pre-existing allocator/strategy failures unrelated to alerts.
+- Status: completed locally, uncommitted.
+
+## 2026-05-27 00:00 - Run Alerts On Mac Mini
+
+- Goal: Ensure the scheduled alert jobs are installed and run from the mac mini deployment checkout.
+- Scope: alert launch agents and deploy instructions.
+- Assumptions: `make deploy-breakout-alerts` syncs this repo to `~/fin-tracker-ui` on the mac mini, so launch agents should execute from that path.
+- Plan: Point alert plists at `$HOME/fin-tracker-ui` and update deploy guidance to install combined strategy alerts.
+- Verify: plist parse checks and `make -n deploy-breakout-alerts install-strategy-alerts` syntax checks; deployed via `make deploy-breakout-alerts`; installed launch agents on mac mini; ran EU and US alert batches once; verified `com.fintracker.strategy-alerts.eu/us` are loaded and alert state files were written.
+- Status: completed locally, uncommitted.
+
+## 2026-05-27 00:00 - Stop Duplicate Alert Scheduling
+
+- Goal: Stop duplicate/undesired alert emails immediately and prevent old breakout scheduling from coexisting with combined alert scheduling.
+- Scope: mac mini launchctl state and `Makefile` install target.
+- Assumptions: No alert agents should remain loaded until the email format is corrected.
+- Plan: Unload EU/US strategy alert agents and the standalone breakout alert agent; make strategy alert installation unload the old breakout agent defensively.
+- Verify: `launchctl list | grep fintracker` should show no alert agents.
+- Status: completed locally, uncommitted.
+
 ## 2026-05-23 00:00 - Add Bull Consolidation Setup Scanner
 
 - Goal: Add a stock/ETF strategy scanner for bull-regime assets that are not overextended, have consolidated, and are near but not through breakout resistance.

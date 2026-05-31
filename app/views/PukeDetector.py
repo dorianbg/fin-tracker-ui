@@ -13,6 +13,11 @@ import plotly.express as px
 import duckdb_importer as di
 from data import get_conn
 
+try:
+    from strategy_scanners import scan_puke_buy_candidates, scan_puke_capitulation
+except ModuleNotFoundError:
+    from app.strategy_scanners import scan_puke_buy_candidates, scan_puke_capitulation
+
 
 def render():
     st.title("🌋 Puke Detector")
@@ -395,29 +400,14 @@ def render():
             "Full-blown capitulation pattern."
         )
 
-        # 1. Strict Filter
-        mask_strict = df["vol_ratio"] >= vol_ratio_threshold
-        if drawdown_col in df.columns:
-            mask_strict = mask_strict & (df[drawdown_col] <= drawdown_threshold)
-        else:
-            mask_strict = mask_strict & (df["ma_252"] <= drawdown_threshold)
-
-        cap_strict = df[mask_strict].copy()
-
-        # 2. Relaxed Filter (Watchlist)
-        # relax vol ratio by 20% and drawdown by 25% (or 5% absolute if drawdown is small)
         vol_relaxed = max(0.8, vol_ratio_threshold * 0.8)
         dd_relaxed = min(-5.0, drawdown_threshold * 0.75)
-
-        mask_relaxed = (df["vol_ratio"] >= vol_relaxed) & (
-            ~mask_strict
-        )  # strict ones are already in strict
-        if drawdown_col in df.columns:
-            mask_relaxed = mask_relaxed & (df[drawdown_col] <= dd_relaxed)
-        else:
-            mask_relaxed = mask_relaxed & (df["ma_252"] <= dd_relaxed)
-
-        cap_watchlist = df[mask_relaxed].copy()
+        cap_strict, cap_watchlist = scan_puke_capitulation(
+            df,
+            vol_ratio_threshold=vol_ratio_threshold,
+            drawdown_threshold=drawdown_threshold,
+            drawdown_col=drawdown_col,
+        )
 
         # ─── DISPLAY LOGIC ───
 
@@ -435,20 +425,6 @@ def render():
                 cols.append(drawdown_col)
             cols += ["ma_252", "r_1w", "r_1mo", "r_3mo", "severity", "bounce_starting"]
             return [c for c in cols if c in dframe.columns]
-
-        # Calculate severity/bounce for both
-        for c_df in [cap_strict, cap_watchlist]:
-            if not c_df.empty:
-                dd_val = (
-                    c_df[drawdown_col]
-                    if drawdown_col in c_df.columns
-                    else c_df["ma_252"]
-                )
-                c_df["severity"] = (-dd_val) * c_df["vol_ratio"]
-                c_df["bounce_starting"] = c_df["r_1w"] > 0
-                c_df.sort_values(
-                    "severity", ascending=False, inplace=True, ignore_index=True
-                )
 
         active_cap = pd.DataFrame()
 
@@ -641,14 +617,12 @@ def render():
             # If we are showing Strict, but there are bouncing Watchlist items, maybe include them?
             # Let's stick to the active pool to avoid confusion, separate tiers is cleaner.
 
-            buys = pool[pool["bounce_starting"]].copy()
+            buys = scan_puke_buy_candidates(pool)
 
             if buys.empty:
                 if active_cap is cap_strict and not cap_watchlist.empty:
                     # Strict has no bounces. Check Watchlist for bounces?
-                    watchlist_buys = cap_watchlist[
-                        cap_watchlist["bounce_starting"]
-                    ].copy()
+                    watchlist_buys = scan_puke_buy_candidates(cap_watchlist)
                     if not watchlist_buys.empty:
                         st.info(
                             "No strict candidates bouncing yet, but these **Watchlist** items are bouncing:"

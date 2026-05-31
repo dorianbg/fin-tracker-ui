@@ -47,25 +47,10 @@ st.set_page_config(
 
 @st.cache_resource(show_spinner="Loading data...")
 def preload_data():
-    """Eagerly load data on startup — essential for remote Quack connections."""
-    import os
-
-    # ── Connect ──
+    """Eagerly initialise the local DuckDB connection on startup."""
     from data import get_conn
 
     get_conn()
-
-    if not os.environ.get("DUCKDB_REMOTE_HOST"):
-        return
-
-    # ── Warm caches for all tabs (remote is slow, local is instant) ──
-    import duckdb_importer as di
-    from data import get_data, create_query, load_prices, load_latest_perf
-
-    get_data(create_query(table=di.perf_tbl, show_returns=True, vol_adjust=True))
-    get_data(create_query(table=di.px_tbl))
-    load_prices()  # SectorRotation, Consolidation, Charts
-    load_latest_perf()  # LaggardBreakout, BreakoutScanner, Robotics
 
 
 preload_data()

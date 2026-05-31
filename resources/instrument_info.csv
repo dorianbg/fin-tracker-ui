@@ -222,8 +222,6 @@ IHI,iShares U.S. Medical Devices ETF,USD,eq,,Thematic - Healthcare
 GNOM,Global X Genomics & Biotechnology ETF,USD,eq,,Thematic - Genomics
 MOO,VanEck Agribusiness ETF,USD,eq,,Sector - Agriculture
 WOOD,iShares Global Timber & Forestry ETF,USD,eq,,Sector - Timber
-
-
 NVDA,NVIDIA,USD,stock,,Thematic - AI
 PLTR,Palantir Technologies,USD,stock,,Thematic - AI
 AI,C3.ai,USD,stock,,Thematic - AI
@@ -478,3 +476,920 @@ EMXC,iShares MSCI Emerging Markets ex-China ETF,USD,eq,,Equity - EM
 SPY,SPDR S&P 500 ETF Trust,USD,eq,,Equity - US Large Cap
 VCIT,Vanguard Intermediate-Term Corporate Bond ETF,USD,bonds-corp,,Bond - Corporate
 BIL,SPDR Bloomberg 1-3 Month T-Bill ETF,USD,bonds,,Bond - Cash
+AOS,A. O. Smith,USD,stock,,Index - S&P 500 - Industrials
+ACN,Accenture,USD,stock,,Index - S&P 500 - Information Technology
+AES,AES Corporation,USD,stock,,Index - S&P 500 - Utilities
+AFL,Aflac,USD,stock,,Index - S&P 500 - Financials
+A,Agilent Technologies,USD,stock,,Index - S&P 500 - Health Care
+ABNB,Airbnb,USD,stock,,Index - S&P 500 - Consumer Discretionary
+AKAM,Akamai Technologies,USD,stock,,Index - S&P 500 - Information Technology
+ARE,Alexandria Real Estate Equities,USD,stock,,Index - S&P 500 - Real Estate
+ALGN,Align Technology,USD,stock,,Index - S&P 500 - Health Care
+ALLE,Allegion,USD,stock,,Index - S&P 500 - Industrials
+LNT,Alliant Energy,USD,stock,,Index - S&P 500 - Utilities
+ALL,Allstate,USD,stock,,Index - S&P 500 - Financials
+GOOG,Alphabet Inc. (Class C),USD,stock,,Index - S&P 500 - Communication Services
+MO,Altria,USD,stock,,Index - S&P 500 - Consumer Staples
+AMCR,Amcor,USD,stock,,Index - S&P 500 - Materials
+AEE,Ameren,USD,stock,,Index - S&P 500 - Utilities
+AEP,American Electric Power,USD,stock,,Index - S&P 500 - Utilities
+AXP,American Express,USD,stock,,Index - S&P 500 - Financials
+AMP,Ameriprise Financial,USD,stock,,Index - S&P 500 - Financials
+AME,Ametek,USD,stock,,Index - S&P 500 - Industrials
+APH,Amphenol,USD,stock,,Index - S&P 500 - Information Technology
+ADI,Analog Devices,USD,stock,,Index - S&P 500 - Information Technology
+AON,Aon plc,USD,stock,,Index - S&P 500 - Financials
+APA,APA Corporation,USD,stock,,Index - S&P 500 - Energy
+APO,Apollo Global Management,USD,stock,,Index - S&P 500 - Financials
+APP,AppLovin,USD,stock,,Index - S&P 500 - Information Technology
+APTV,Aptiv,USD,stock,,Index - S&P 500 - Consumer Discretionary
+ACGL,Arch Capital Group,USD,stock,,Index - S&P 500 - Financials
+ARES,Ares Management,USD,stock,,Index - S&P 500 - Financials
+ANET,Arista Networks,USD,stock,,Index - S&P 500 - Information Technology
+AJG,Arthur J. Gallagher & Co.,USD,stock,,Index - S&P 500 - Financials
+AIZ,Assurant,USD,stock,,Index - S&P 500 - Financials
+ATO,Atmos Energy,USD,stock,,Index - S&P 500 - Utilities
+ADSK,Autodesk,USD,stock,,Index - S&P 500 - Information Technology
+ADP,Automatic Data Processing,USD,stock,,Index - S&P 500 - Industrials
+AZO,AutoZone,USD,stock,,Index - S&P 500 - Consumer Discretionary
+AVB,AvalonBay Communities,USD,stock,,Index - S&P 500 - Real Estate
+AVY,Avery Dennison,USD,stock,,Index - S&P 500 - Materials
+AXON,Axon Enterprise,USD,stock,,Index - S&P 500 - Industrials
+BKR,Baker Hughes,USD,stock,,Index - S&P 500 - Energy
+BALL,Ball Corporation,USD,stock,,Index - S&P 500 - Materials
+BAX,Baxter International,USD,stock,,Index - S&P 500 - Health Care
+BDX,Becton Dickinson,USD,stock,,Index - S&P 500 - Health Care
+BBY,Best Buy,USD,stock,,Index - S&P 500 - Consumer Discretionary
+TECH,Bio-Techne,USD,stock,,Index - S&P 500 - Health Care
+BLK,BlackRock,USD,stock,,Index - S&P 500 - Financials
+BX,Blackstone Inc.,USD,stock,,Index - S&P 500 - Financials
+XYZ,"Block, Inc.",USD,stock,,Index - S&P 500 - Financials
+BNY,BNY Mellon,USD,stock,,Index - S&P 500 - Financials
+BKNG,Booking Holdings,USD,stock,,Index - S&P 500 - Consumer Discretionary
+BMY,Bristol Myers Squibb,USD,stock,,Index - S&P 500 - Health Care
+BR,Broadridge Financial Solutions,USD,stock,,Index - S&P 500 - Industrials
+BRO,Brown & Brown,USD,stock,,Index - S&P 500 - Financials
+BF-B,Brown–Forman,USD,stock,,Index - S&P 500 - Consumer Staples
+BLDR,Builders FirstSource,USD,stock,,Index - S&P 500 - Industrials
+BG,Bunge Global,USD,stock,,Index - S&P 500 - Consumer Staples
+BXP,"BXP, Inc.",USD,stock,,Index - S&P 500 - Real Estate
+CHRW,C.H. Robinson,USD,stock,,Index - S&P 500 - Industrials
+CDNS,Cadence Design Systems,USD,stock,,Index - S&P 500 - Information Technology
+CPT,Camden Property Trust,USD,stock,,Index - S&P 500 - Real Estate
+CPB,Campbell's Company (The),USD,stock,,Index - S&P 500 - Consumer Staples
+COF,Capital One,USD,stock,,Index - S&P 500 - Financials
+CAH,Cardinal Health,USD,stock,,Index - S&P 500 - Health Care
+CCL,Carnival Corporation,USD,stock,,Index - S&P 500 - Consumer Discretionary
+CARR,Carrier Global,USD,stock,,Index - S&P 500 - Industrials
+CVNA,Carvana,USD,stock,,Index - S&P 500 - Consumer Discretionary
+CASY,Casey's,USD,stock,,Index - S&P 500 - Consumer Staples
+CBOE,Cboe Global Markets,USD,stock,,Index - S&P 500 - Financials
+CBRE,CBRE Group,USD,stock,,Index - S&P 500 - Real Estate
+CDW,CDW Corporation,USD,stock,,Index - S&P 500 - Information Technology
+COR,Cencora,USD,stock,,Index - S&P 500 - Health Care
+CNC,Centene Corporation,USD,stock,,Index - S&P 500 - Health Care
+CNP,CenterPoint Energy,USD,stock,,Index - S&P 500 - Utilities
+CF,CF Industries,USD,stock,,Index - S&P 500 - Materials
+CRL,Charles River Laboratories,USD,stock,,Index - S&P 500 - Health Care
+SCHW,Charles Schwab Corporation,USD,stock,,Index - S&P 500 - Financials
+CHTR,Charter Communications,USD,stock,,Index - S&P 500 - Communication Services
+CMG,Chipotle Mexican Grill,USD,stock,,Index - S&P 500 - Consumer Discretionary
+CB,Chubb Limited,USD,stock,,Index - S&P 500 - Financials
+CHD,Church & Dwight,USD,stock,,Index - S&P 500 - Consumer Staples
+CIEN,Ciena,USD,stock,,Index - S&P 500 - Information Technology
+CI,Cigna,USD,stock,,Index - S&P 500 - Health Care
+CINF,Cincinnati Financial,USD,stock,,Index - S&P 500 - Financials
+CTAS,Cintas,USD,stock,,Index - S&P 500 - Industrials
+CSCO,Cisco,USD,stock,,Index - S&P 500 - Information Technology
+CFG,Citizens Financial Group,USD,stock,,Index - S&P 500 - Financials
+CLX,Clorox,USD,stock,,Index - S&P 500 - Consumer Staples
+CME,CME Group,USD,stock,,Index - S&P 500 - Financials
+CMS,CMS Energy,USD,stock,,Index - S&P 500 - Utilities
+CTSH,Cognizant,USD,stock,,Index - S&P 500 - Information Technology
+COHR,Coherent Corp.,USD,stock,,Index - S&P 500 - Information Technology
+COIN,Coinbase,USD,stock,,Index - S&P 500 - Financials
+CL,Colgate-Palmolive,USD,stock,,Index - S&P 500 - Consumer Staples
+FIX,Comfort Systems USA,USD,stock,,Index - S&P 500 - Industrials
+CAG,Conagra Brands,USD,stock,,Index - S&P 500 - Consumer Staples
+ED,Consolidated Edison,USD,stock,,Index - S&P 500 - Utilities
+STZ,Constellation Brands,USD,stock,,Index - S&P 500 - Consumer Staples
+COO,Cooper Companies (The),USD,stock,,Index - S&P 500 - Health Care
+CPRT,Copart,USD,stock,,Index - S&P 500 - Industrials
+GLW,Corning Inc.,USD,stock,,Index - S&P 500 - Information Technology
+CPAY,Corpay,USD,stock,,Index - S&P 500 - Financials
+CTVA,Corteva,USD,stock,,Index - S&P 500 - Materials
+CSGP,CoStar Group,USD,stock,,Index - S&P 500 - Real Estate
+CRH,CRH plc,USD,stock,,Index - S&P 500 - Materials
+CCI,Crown Castle,USD,stock,,Index - S&P 500 - Real Estate
+CSX,CSX Corporation,USD,stock,,Index - S&P 500 - Industrials
+CMI,Cummins,USD,stock,,Index - S&P 500 - Industrials
+CVS,CVS Health,USD,stock,,Index - S&P 500 - Health Care
+DHR,Danaher Corporation,USD,stock,,Index - S&P 500 - Health Care
+DRI,Darden Restaurants,USD,stock,,Index - S&P 500 - Consumer Discretionary
+DVA,DaVita,USD,stock,,Index - S&P 500 - Health Care
+DECK,Deckers Brands,USD,stock,,Index - S&P 500 - Consumer Discretionary
+DELL,Dell Technologies,USD,stock,,Index - S&P 500 - Information Technology
+DVN,Devon Energy,USD,stock,,Index - S&P 500 - Energy
+DXCM,Dexcom,USD,stock,,Index - S&P 500 - Health Care
+FANG,Diamondback Energy,USD,stock,,Index - S&P 500 - Energy
+DG,Dollar General,USD,stock,,Index - S&P 500 - Consumer Staples
+DLTR,Dollar Tree,USD,stock,,Index - S&P 500 - Consumer Staples
+D,Dominion Energy,USD,stock,,Index - S&P 500 - Utilities
+DPZ,Domino's,USD,stock,,Index - S&P 500 - Consumer Discretionary
+DASH,DoorDash,USD,stock,,Index - S&P 500 - Consumer Discretionary
+DOV,Dover Corporation,USD,stock,,Index - S&P 500 - Industrials
+DOW,Dow Inc.,USD,stock,,Index - S&P 500 - Materials
+DTE,DTE Energy,USD,stock,,Index - S&P 500 - Utilities
+DD,DuPont,USD,stock,,Index - S&P 500 - Materials
+EBAY,eBay Inc.,USD,stock,,Index - S&P 500 - Consumer Discretionary
+SATS,EchoStar,USD,stock,,Index - S&P 500 - Communication Services
+ECL,Ecolab,USD,stock,,Index - S&P 500 - Materials
+EIX,Edison International,USD,stock,,Index - S&P 500 - Utilities
+ELV,Elevance Health,USD,stock,,Index - S&P 500 - Health Care
+EME,Emcor,USD,stock,,Index - S&P 500 - Industrials
+EMR,Emerson Electric,USD,stock,,Index - S&P 500 - Industrials
+ETR,Entergy,USD,stock,,Index - S&P 500 - Utilities
+EOG,EOG Resources,USD,stock,,Index - S&P 500 - Energy
+EPAM,EPAM Systems,USD,stock,,Index - S&P 500 - Information Technology
+EQT,EQT Corporation,USD,stock,,Index - S&P 500 - Energy
+EFX,Equifax,USD,stock,,Index - S&P 500 - Industrials
+EQR,Equity Residential,USD,stock,,Index - S&P 500 - Real Estate
+ERIE,Erie Indemnity,USD,stock,,Index - S&P 500 - Financials
+ESS,Essex Property Trust,USD,stock,,Index - S&P 500 - Real Estate
+EL,Estée Lauder Companies (The),USD,stock,,Index - S&P 500 - Consumer Staples
+EG,Everest Group,USD,stock,,Index - S&P 500 - Financials
+EVRG,Evergy,USD,stock,,Index - S&P 500 - Utilities
+ES,Eversource Energy,USD,stock,,Index - S&P 500 - Utilities
+EXC,Exelon,USD,stock,,Index - S&P 500 - Utilities
+EXE,Expand Energy,USD,stock,,Index - S&P 500 - Energy
+EXPE,Expedia Group,USD,stock,,Index - S&P 500 - Consumer Discretionary
+EXPD,Expeditors International,USD,stock,,Index - S&P 500 - Industrials
+EXR,Extra Space Storage,USD,stock,,Index - S&P 500 - Real Estate
+FFIV,"F5, Inc.",USD,stock,,Index - S&P 500 - Information Technology
+FDS,FactSet,USD,stock,,Index - S&P 500 - Financials
+FICO,Fair Isaac,USD,stock,,Index - S&P 500 - Information Technology
+FAST,Fastenal,USD,stock,,Index - S&P 500 - Industrials
+FRT,Federal Realty Investment Trust,USD,stock,,Index - S&P 500 - Real Estate
+FIS,Fidelity National Information Services,USD,stock,,Index - S&P 500 - Financials
+FITB,Fifth Third Bancorp,USD,stock,,Index - S&P 500 - Financials
+FE,FirstEnergy,USD,stock,,Index - S&P 500 - Utilities
+FISV,Fiserv,USD,stock,,Index - S&P 500 - Financials
+F,Ford Motor Company,USD,stock,,Index - S&P 500 - Consumer Discretionary
+FTV,Fortive,USD,stock,,Index - S&P 500 - Industrials
+FOXA,Fox Corporation (Class A),USD,stock,,Index - S&P 500 - Communication Services
+FOX,Fox Corporation (Class B),USD,stock,,Index - S&P 500 - Communication Services
+BEN,Franklin Resources,USD,stock,,Index - S&P 500 - Financials
+GRMN,Garmin,USD,stock,,Index - S&P 500 - Consumer Discretionary
+IT,Gartner,USD,stock,,Index - S&P 500 - Information Technology
+GEHC,GE HealthCare,USD,stock,,Index - S&P 500 - Health Care
+GEN,Gen Digital,USD,stock,,Index - S&P 500 - Information Technology
+GNRC,Generac,USD,stock,,Index - S&P 500 - Industrials
+GIS,General Mills,USD,stock,,Index - S&P 500 - Consumer Staples
+GM,General Motors,USD,stock,,Index - S&P 500 - Consumer Discretionary
+GPC,Genuine Parts Company,USD,stock,,Index - S&P 500 - Consumer Discretionary
+GPN,Global Payments,USD,stock,,Index - S&P 500 - Financials
+GL,Globe Life,USD,stock,,Index - S&P 500 - Financials
+GDDY,GoDaddy,USD,stock,,Index - S&P 500 - Information Technology
+HAL,Halliburton,USD,stock,,Index - S&P 500 - Energy
+HIG,Hartford (The),USD,stock,,Index - S&P 500 - Financials
+HAS,Hasbro,USD,stock,,Index - S&P 500 - Consumer Discretionary
+HCA,HCA Healthcare,USD,stock,,Index - S&P 500 - Health Care
+DOC,Healthpeak Properties,USD,stock,,Index - S&P 500 - Real Estate
+HSIC,Henry Schein,USD,stock,,Index - S&P 500 - Health Care
+HSY,Hershey Company (The),USD,stock,,Index - S&P 500 - Consumer Staples
+HPE,Hewlett Packard Enterprise,USD,stock,,Index - S&P 500 - Information Technology
+HLT,Hilton Worldwide,USD,stock,,Index - S&P 500 - Consumer Discretionary
+HRL,Hormel Foods,USD,stock,,Index - S&P 500 - Consumer Staples
+HST,Host Hotels & Resorts,USD,stock,,Index - S&P 500 - Real Estate
+HWM,Howmet Aerospace,USD,stock,,Index - S&P 500 - Industrials
+HPQ,HP Inc.,USD,stock,,Index - S&P 500 - Information Technology
+HUBB,Hubbell Incorporated,USD,stock,,Index - S&P 500 - Industrials
+HUM,Humana,USD,stock,,Index - S&P 500 - Health Care
+HBAN,Huntington Bancshares,USD,stock,,Index - S&P 500 - Financials
+HII,Huntington Ingalls Industries,USD,stock,,Index - S&P 500 - Industrials
+IBM,IBM,USD,stock,,Index - S&P 500 - Information Technology
+IEX,IDEX Corporation,USD,stock,,Index - S&P 500 - Industrials
+IDXX,Idexx Laboratories,USD,stock,,Index - S&P 500 - Health Care
+ITW,Illinois Tool Works,USD,stock,,Index - S&P 500 - Industrials
+INCY,Incyte,USD,stock,,Index - S&P 500 - Health Care
+IR,Ingersoll Rand,USD,stock,,Index - S&P 500 - Industrials
+PODD,Insulet Corporation,USD,stock,,Index - S&P 500 - Health Care
+IBKR,Interactive Brokers,USD,stock,,Index - S&P 500 - Financials
+ICE,Intercontinental Exchange,USD,stock,,Index - S&P 500 - Financials
+IFF,International Flavors & Fragrances,USD,stock,,Index - S&P 500 - Materials
+IP,International Paper,USD,stock,,Index - S&P 500 - Materials
+INTU,Intuit,USD,stock,,Index - S&P 500 - Information Technology
+IVZ,Invesco,USD,stock,,Index - S&P 500 - Financials
+INVH,Invitation Homes,USD,stock,,Index - S&P 500 - Real Estate
+IQV,IQVIA,USD,stock,,Index - S&P 500 - Health Care
+IRM,Iron Mountain,USD,stock,,Index - S&P 500 - Real Estate
+JBHT,J.B. Hunt,USD,stock,,Index - S&P 500 - Industrials
+JBL,Jabil,USD,stock,,Index - S&P 500 - Information Technology
+JKHY,Jack Henry & Associates,USD,stock,,Index - S&P 500 - Financials
+J,Jacobs Solutions,USD,stock,,Index - S&P 500 - Industrials
+JCI,Johnson Controls,USD,stock,,Index - S&P 500 - Industrials
+KVUE,Kenvue,USD,stock,,Index - S&P 500 - Consumer Staples
+KDP,Keurig Dr Pepper,USD,stock,,Index - S&P 500 - Consumer Staples
+KEY,KeyCorp,USD,stock,,Index - S&P 500 - Financials
+KEYS,Keysight Technologies,USD,stock,,Index - S&P 500 - Information Technology
+KMB,Kimberly-Clark,USD,stock,,Index - S&P 500 - Consumer Staples
+KIM,Kimco Realty,USD,stock,,Index - S&P 500 - Real Estate
+KMI,Kinder Morgan,USD,stock,,Index - S&P 500 - Energy
+KKR,KKR & Co.,USD,stock,,Index - S&P 500 - Financials
+KLAC,KLA Corporation,USD,stock,,Index - S&P 500 - Information Technology
+KHC,Kraft Heinz,USD,stock,,Index - S&P 500 - Consumer Staples
+KR,Kroger,USD,stock,,Index - S&P 500 - Consumer Staples
+LHX,L3Harris,USD,stock,,Index - S&P 500 - Industrials
+LH,Labcorp,USD,stock,,Index - S&P 500 - Health Care
+LVS,Las Vegas Sands,USD,stock,,Index - S&P 500 - Consumer Discretionary
+LDOS,Leidos,USD,stock,,Index - S&P 500 - Industrials
+LII,Lennox International,USD,stock,,Index - S&P 500 - Industrials
+LYV,Live Nation Entertainment,USD,stock,,Index - S&P 500 - Communication Services
+L,Loews Corporation,USD,stock,,Index - S&P 500 - Financials
+LULU,Lululemon Athletica,USD,stock,,Index - S&P 500 - Consumer Discretionary
+LITE,Lumentum,USD,stock,,Index - S&P 500 - Information Technology
+LYB,LyondellBasell,USD,stock,,Index - S&P 500 - Materials
+MTB,M&T Bank,USD,stock,,Index - S&P 500 - Financials
+MPC,Marathon Petroleum,USD,stock,,Index - S&P 500 - Energy
+MAR,Marriott International,USD,stock,,Index - S&P 500 - Consumer Discretionary
+MRSH,Marsh McLennan,USD,stock,,Index - S&P 500 - Financials
+MLM,Martin Marietta Materials,USD,stock,,Index - S&P 500 - Materials
+MAS,Masco,USD,stock,,Index - S&P 500 - Industrials
+MKC,McCormick & Company,USD,stock,,Index - S&P 500 - Consumer Staples
+MCK,McKesson Corporation,USD,stock,,Index - S&P 500 - Health Care
+MET,MetLife,USD,stock,,Index - S&P 500 - Financials
+MTD,Mettler Toledo,USD,stock,,Index - S&P 500 - Health Care
+MGM,MGM Resorts,USD,stock,,Index - S&P 500 - Consumer Discretionary
+MCHP,Microchip Technology,USD,stock,,Index - S&P 500 - Information Technology
+MAA,Mid-America Apartment Communities,USD,stock,,Index - S&P 500 - Real Estate
+TAP,Molson Coors Beverage Company,USD,stock,,Index - S&P 500 - Consumer Staples
+MDLZ,Mondelez International,USD,stock,,Index - S&P 500 - Consumer Staples
+MPWR,Monolithic Power Systems,USD,stock,,Index - S&P 500 - Information Technology
+MNST,Monster Beverage,USD,stock,,Index - S&P 500 - Consumer Staples
+MCO,Moody's Corporation,USD,stock,,Index - S&P 500 - Financials
+MSI,Motorola Solutions,USD,stock,,Index - S&P 500 - Information Technology
+MSCI,MSCI Inc.,USD,stock,,Index - S&P 500 - Financials
+NDAQ,"Nasdaq, Inc.",USD,stock,,Index - S&P 500 - Financials
+NTAP,NetApp,USD,stock,,Index - S&P 500 - Information Technology
+NWSA,News Corp (Class A),USD,stock,,Index - S&P 500 - Communication Services
+NWS,News Corp (Class B),USD,stock,,Index - S&P 500 - Communication Services
+NI,NiSource,USD,stock,,Index - S&P 500 - Utilities
+NDSN,Nordson Corporation,USD,stock,,Index - S&P 500 - Industrials
+NSC,Norfolk Southern,USD,stock,,Index - S&P 500 - Industrials
+NTRS,Northern Trust,USD,stock,,Index - S&P 500 - Financials
+NCLH,Norwegian Cruise Line Holdings,USD,stock,,Index - S&P 500 - Consumer Discretionary
+NRG,NRG Energy,USD,stock,,Index - S&P 500 - Utilities
+NUE,Nucor,USD,stock,,Index - S&P 500 - Materials
+NXPI,NXP Semiconductors,USD,stock,,Index - S&P 500 - Information Technology
+ORLY,O’Reilly Automotive,USD,stock,,Index - S&P 500 - Consumer Discretionary
+ODFL,Old Dominion,USD,stock,,Index - S&P 500 - Industrials
+OMC,Omnicom Group,USD,stock,,Index - S&P 500 - Communication Services
+ON,ON Semiconductor,USD,stock,,Index - S&P 500 - Information Technology
+OKE,Oneok,USD,stock,,Index - S&P 500 - Energy
+OTIS,Otis Worldwide,USD,stock,,Index - S&P 500 - Industrials
+PCAR,Paccar,USD,stock,,Index - S&P 500 - Industrials
+PKG,Packaging Corporation of America,USD,stock,,Index - S&P 500 - Materials
+PSKY,Paramount Skydance Corporation,USD,stock,,Index - S&P 500 - Communication Services
+PH,Parker Hannifin,USD,stock,,Index - S&P 500 - Industrials
+PAYX,Paychex,USD,stock,,Index - S&P 500 - Industrials
+PNR,Pentair,USD,stock,,Index - S&P 500 - Industrials
+PCG,PG&E Corporation,USD,stock,,Index - S&P 500 - Utilities
+PM,Philip Morris International,USD,stock,,Index - S&P 500 - Consumer Staples
+PSX,Phillips 66,USD,stock,,Index - S&P 500 - Energy
+PNW,Pinnacle West Capital,USD,stock,,Index - S&P 500 - Utilities
+PNC,PNC Financial Services,USD,stock,,Index - S&P 500 - Financials
+POOL,Pool Corporation,USD,stock,,Index - S&P 500 - Consumer Discretionary
+PPG,PPG Industries,USD,stock,,Index - S&P 500 - Materials
+PPL,PPL Corporation,USD,stock,,Index - S&P 500 - Utilities
+PFG,Principal Financial Group,USD,stock,,Index - S&P 500 - Financials
+PGR,Progressive Corporation,USD,stock,,Index - S&P 500 - Financials
+PRU,Prudential Financial,USD,stock,,Index - S&P 500 - Financials
+PTC,PTC Inc.,USD,stock,,Index - S&P 500 - Information Technology
+PSA,Public Storage,USD,stock,,Index - S&P 500 - Real Estate
+PHM,PulteGroup,USD,stock,,Index - S&P 500 - Consumer Discretionary
+PWR,Quanta Services,USD,stock,,Index - S&P 500 - Industrials
+DGX,Quest Diagnostics,USD,stock,,Index - S&P 500 - Health Care
+Q,Qnity Electronics,USD,stock,,Index - S&P 500 - Information Technology
+RL,Ralph Lauren Corporation,USD,stock,,Index - S&P 500 - Consumer Discretionary
+RJF,Raymond James Financial,USD,stock,,Index - S&P 500 - Financials
+O,Realty Income,USD,stock,,Index - S&P 500 - Real Estate
+REG,Regency Centers,USD,stock,,Index - S&P 500 - Real Estate
+RF,Regions Financial Corporation,USD,stock,,Index - S&P 500 - Financials
+RSG,Republic Services,USD,stock,,Index - S&P 500 - Industrials
+RMD,ResMed,USD,stock,,Index - S&P 500 - Health Care
+RVTY,Revvity,USD,stock,,Index - S&P 500 - Health Care
+HOOD,Robinhood Markets,USD,stock,,Index - S&P 500 - Financials
+ROK,Rockwell Automation,USD,stock,,Index - S&P 500 - Industrials
+ROL,"Rollins, Inc.",USD,stock,,Index - S&P 500 - Industrials
+ROP,Roper Technologies,USD,stock,,Index - S&P 500 - Information Technology
+ROST,Ross Stores,USD,stock,,Index - S&P 500 - Consumer Discretionary
+RCL,Royal Caribbean Group,USD,stock,,Index - S&P 500 - Consumer Discretionary
+SPGI,S&P Global,USD,stock,,Index - S&P 500 - Financials
+SNDK,Sandisk,USD,stock,,Index - S&P 500 - Information Technology
+SBAC,SBA Communications,USD,stock,,Index - S&P 500 - Real Estate
+SLB,Schlumberger,USD,stock,,Index - S&P 500 - Energy
+STX,Seagate Technology,USD,stock,,Index - S&P 500 - Information Technology
+SRE,Sempra,USD,stock,,Index - S&P 500 - Utilities
+SPG,Simon Property Group,USD,stock,,Index - S&P 500 - Real Estate
+SWKS,Skyworks Solutions,USD,stock,,Index - S&P 500 - Information Technology
+SJM,J.M. Smucker Company (The),USD,stock,,Index - S&P 500 - Consumer Staples
+SW,Smurfit Westrock,USD,stock,,Index - S&P 500 - Materials
+SNA,Snap-on,USD,stock,,Index - S&P 500 - Industrials
+SOLV,Solventum,USD,stock,,Index - S&P 500 - Health Care
+LUV,Southwest Airlines,USD,stock,,Index - S&P 500 - Industrials
+SWK,Stanley Black & Decker,USD,stock,,Index - S&P 500 - Industrials
+STT,State Street Corporation,USD,stock,,Index - S&P 500 - Financials
+STLD,Steel Dynamics,USD,stock,,Index - S&P 500 - Materials
+STE,Steris,USD,stock,,Index - S&P 500 - Health Care
+SMCI,Supermicro,USD,stock,,Index - S&P 500 - Information Technology
+SYF,Synchrony Financial,USD,stock,,Index - S&P 500 - Financials
+SNPS,Synopsys,USD,stock,,Index - S&P 500 - Information Technology
+SYY,Sysco,USD,stock,,Index - S&P 500 - Consumer Staples
+TROW,T. Rowe Price,USD,stock,,Index - S&P 500 - Financials
+TPR,"Tapestry, Inc.",USD,stock,,Index - S&P 500 - Consumer Discretionary
+TRGP,Targa Resources,USD,stock,,Index - S&P 500 - Energy
+TGT,Target Corporation,USD,stock,,Index - S&P 500 - Consumer Staples
+TEL,TE Connectivity,USD,stock,,Index - S&P 500 - Information Technology
+TDY,Teledyne Technologies,USD,stock,,Index - S&P 500 - Information Technology
+TER,Teradyne,USD,stock,,Index - S&P 500 - Information Technology
+TXN,Texas Instruments,USD,stock,,Index - S&P 500 - Information Technology
+TPL,Texas Pacific Land Corporation,USD,stock,,Index - S&P 500 - Energy
+TXT,Textron,USD,stock,,Index - S&P 500 - Industrials
+TMO,Thermo Fisher Scientific,USD,stock,,Index - S&P 500 - Health Care
+TJX,TJX Companies,USD,stock,,Index - S&P 500 - Consumer Discretionary
+TKO,TKO Group Holdings,USD,stock,,Index - S&P 500 - Communication Services
+TTD,Trade Desk (The),USD,stock,,Index - S&P 500 - Communication Services
+TSCO,Tractor Supply,USD,stock,,Index - S&P 500 - Consumer Discretionary
+TT,Trane Technologies,USD,stock,,Index - S&P 500 - Industrials
+TDG,TransDigm Group,USD,stock,,Index - S&P 500 - Industrials
+TRV,Travelers Companies (The),USD,stock,,Index - S&P 500 - Financials
+TRMB,Trimble Inc.,USD,stock,,Index - S&P 500 - Information Technology
+TFC,Truist Financial,USD,stock,,Index - S&P 500 - Financials
+TYL,Tyler Technologies,USD,stock,,Index - S&P 500 - Information Technology
+TSN,Tyson Foods,USD,stock,,Index - S&P 500 - Consumer Staples
+USB,U.S. Bancorp,USD,stock,,Index - S&P 500 - Financials
+UBER,Uber,USD,stock,,Index - S&P 500 - Industrials
+UDR,"UDR, Inc.",USD,stock,,Index - S&P 500 - Real Estate
+ULTA,Ulta Beauty,USD,stock,,Index - S&P 500 - Consumer Discretionary
+UNP,Union Pacific Corporation,USD,stock,,Index - S&P 500 - Industrials
+URI,United Rentals,USD,stock,,Index - S&P 500 - Industrials
+UNH,UnitedHealth Group,USD,stock,,Index - S&P 500 - Health Care
+UHS,Universal Health Services,USD,stock,,Index - S&P 500 - Health Care
+VLO,Valero Energy,USD,stock,,Index - S&P 500 - Energy
+VEEV,Veeva Systems,USD,stock,,Index - S&P 500 - Health Care
+VTR,Ventas,USD,stock,,Index - S&P 500 - Real Estate
+VLTO,Veralto,USD,stock,,Index - S&P 500 - Industrials
+VRSN,Verisign,USD,stock,,Index - S&P 500 - Information Technology
+VRSK,Verisk Analytics,USD,stock,,Index - S&P 500 - Industrials
+VRT,Vertiv,USD,stock,,Index - S&P 500 - Industrials
+VTRS,Viatris,USD,stock,,Index - S&P 500 - Health Care
+VICI,Vici Properties,USD,stock,,Index - S&P 500 - Real Estate
+VMC,Vulcan Materials Company,USD,stock,,Index - S&P 500 - Materials
+WRB,W. R. Berkley Corporation,USD,stock,,Index - S&P 500 - Financials
+GWW,W. W. Grainger,USD,stock,,Index - S&P 500 - Industrials
+WAB,Wabtec,USD,stock,,Index - S&P 500 - Industrials
+WBD,Warner Bros. Discovery,USD,stock,,Index - S&P 500 - Communication Services
+WM,Waste Management,USD,stock,,Index - S&P 500 - Industrials
+WAT,Waters Corporation,USD,stock,,Index - S&P 500 - Health Care
+WEC,WEC Energy Group,USD,stock,,Index - S&P 500 - Utilities
+WELL,Welltower,USD,stock,,Index - S&P 500 - Real Estate
+WST,West Pharmaceutical Services,USD,stock,,Index - S&P 500 - Health Care
+WDC,Western Digital,USD,stock,,Index - S&P 500 - Information Technology
+WY,Weyerhaeuser,USD,stock,,Index - S&P 500 - Real Estate
+WSM,"Williams-Sonoma, Inc.",USD,stock,,Index - S&P 500 - Consumer Discretionary
+WMB,Williams Companies,USD,stock,,Index - S&P 500 - Energy
+WTW,Willis Towers Watson,USD,stock,,Index - S&P 500 - Financials
+WDAY,"Workday, Inc.",USD,stock,,Index - S&P 500 - Information Technology
+WYNN,Wynn Resorts,USD,stock,,Index - S&P 500 - Consumer Discretionary
+XEL,Xcel Energy,USD,stock,,Index - S&P 500 - Utilities
+YUM,Yum! Brands,USD,stock,,Index - S&P 500 - Consumer Discretionary
+ZBH,Zimmer Biomet,USD,stock,,Index - S&P 500 - Health Care
+ZTS,Zoetis,USD,stock,,Index - S&P 500 - Health Care
+AA,Alcoa,USD,stock,,Index - S&P 400 - Materials
+AAL,American Airlines Group,USD,stock,,Index - S&P 400 - Industrials
+AAON,AAON,USD,stock,,Index - S&P 400 - Industrials
+ACI,Albertsons,USD,stock,,Index - S&P 400 - Consumer Staples
+ACM,AECOM,USD,stock,,Index - S&P 400 - Industrials
+ADC,Agree Realty,USD,stock,,Index - S&P 400 - Real Estate
+AEIS,Advanced Energy,USD,stock,,Index - S&P 400 - Information Technology
+AFG,American Financial Group,USD,stock,,Index - S&P 400 - Financials
+AGCO,AGCO,USD,stock,,Index - S&P 400 - Industrials
+AHR,American Healthcare REIT,USD,stock,,Index - S&P 400 - Real Estate
+AIT,Applied Industrial Technologies,USD,stock,,Index - S&P 400 - Industrials
+ALGM,Allegro MicroSystems,USD,stock,,Index - S&P 400 - Information Technology
+ALK,Alaska Air Group,USD,stock,,Index - S&P 400 - Industrials
+ALLY,Ally Financial,USD,stock,,Index - S&P 400 - Financials
+ALV,Autoliv,USD,stock,,Index - S&P 400 - Consumer Discretionary
+AM,Antero Midstream,USD,stock,,Index - S&P 400 - Energy
+AMG,Affiliated Managers Group,USD,stock,,Index - S&P 400 - Financials
+AMH,American Homes 4 Rent,USD,stock,,Index - S&P 400 - Real Estate
+AMKR,Amkor Technology,USD,stock,,Index - S&P 400 - Information Technology
+AN,AutoNation,USD,stock,,Index - S&P 400 - Consumer Discretionary
+ANF,Abercrombie & Fitch,USD,stock,,Index - S&P 400 - Consumer Discretionary
+APG,APi Group,USD,stock,,Index - S&P 400 - Industrials
+APPF,AppFolio,USD,stock,,Index - S&P 400 - Information Technology
+AR,Antero Resources,USD,stock,,Index - S&P 400 - Energy
+ARMK,Aramark,USD,stock,,Index - S&P 400 - Consumer Discretionary
+ARW,Arrow Electronics,USD,stock,,Index - S&P 400 - Information Technology
+ARWR,Arrowhead Pharmaceuticals,USD,stock,,Index - S&P 400 - Health Care
+ASB,Associated Bank,USD,stock,,Index - S&P 400 - Financials
+ASH,Ashland Global,USD,stock,,Index - S&P 400 - Materials
+ATI,ATI Inc.,USD,stock,,Index - S&P 400 - Industrials
+ATR,AptarGroup,USD,stock,,Index - S&P 400 - Materials
+AVAV,AeroVironment,USD,stock,,Index - S&P 400 - Industrials
+AVNT,Avient,USD,stock,,Index - S&P 400 - Materials
+AVT,Avnet,USD,stock,,Index - S&P 400 - Information Technology
+AVTR,Avantor,USD,stock,,Index - S&P 400 - Health Care
+AXTA,Axalta,USD,stock,,Index - S&P 400 - Materials
+AYI,Acuity Brands,USD,stock,,Index - S&P 400 - Industrials
+BAH,Booz Allen Hamilton,USD,stock,,Index - S&P 400 - Industrials
+BBWI,"Bath & Body Works, Inc.",USD,stock,,Index - S&P 400 - Consumer Discretionary
+BC,Brunswick,USD,stock,,Index - S&P 400 - Consumer Discretionary
+BCO,Brink's,USD,stock,,Index - S&P 400 - Industrials
+BDC,Belden Inc.,USD,stock,,Index - S&P 400 - Information Technology
+BHF,Brighthouse Financial,USD,stock,,Index - S&P 400 - Financials
+BILL,Bill Holdings,USD,stock,,Index - S&P 400 - Information Technology
+BIO,Bio-Rad Laboratories,USD,stock,,Index - S&P 400 - Health Care
+BJ,BJ's Wholesale Club,USD,stock,,Index - S&P 400 - Consumer Staples
+BKH,Black Hills Corporation,USD,stock,,Index - S&P 400 - Utilities
+BLD,TopBuild Corp.,USD,stock,,Index - S&P 400 - Consumer Discretionary
+BLKB,Blackbaud,USD,stock,,Index - S&P 400 - Information Technology
+BMRN,BioMarin Pharmaceutical,USD,stock,,Index - S&P 400 - Health Care
+BRBR,BellRing Brands,USD,stock,,Index - S&P 400 - Consumer Staples
+BRKR,Bruker,USD,stock,,Index - S&P 400 - Health Care
+BROS,Dutch Bros Inc.,USD,stock,,Index - S&P 400 - Consumer Discretionary
+BRX,Brixmor Property Group,USD,stock,,Index - S&P 400 - Real Estate
+BSY,Bentley Systems,USD,stock,,Index - S&P 400 - Information Technology
+BURL,Burlington Stores,USD,stock,,Index - S&P 400 - Consumer Discretionary
+BWA,BorgWarner,USD,stock,,Index - S&P 400 - Consumer Discretionary
+BYD,Boyd Gaming,USD,stock,,Index - S&P 400 - Consumer Discretionary
+CACI,CACI International,USD,stock,,Index - S&P 400 - Industrials
+CAR,Avis Budget Group,USD,stock,,Index - S&P 400 - Industrials
+CART,Maplebear Inc.,USD,stock,,Index - S&P 400 - Consumer Staples
+CAVA,Cava Group,USD,stock,,Index - S&P 400 - Consumer Discretionary
+CBSH,Commerce Bancshares,USD,stock,,Index - S&P 400 - Financials
+CBT,Cabot Corp,USD,stock,,Index - S&P 400 - Materials
+CCK,Crown Holdings,USD,stock,,Index - S&P 400 - Materials
+CDP,COPT Defense Properties,USD,stock,,Index - S&P 400 - Real Estate
+CELH,Celsius Holdings,USD,stock,,Index - S&P 400 - Consumer Staples
+CFR,Frost Bank,USD,stock,,Index - S&P 400 - Financials
+CG,Carlyle Group (The),USD,stock,,Index - S&P 400 - Financials
+CHDN,Churchill Downs Inc.,USD,stock,,Index - S&P 400 - Consumer Discretionary
+CHE,Chemed Corp.,USD,stock,,Index - S&P 400 - Health Care
+CHH,Choice Hotels,USD,stock,,Index - S&P 400 - Consumer Discretionary
+CHRD,Chord Energy,USD,stock,,Index - S&P 400 - Energy
+CHWY,Chewy,USD,stock,,Index - S&P 400 - Consumer Discretionary
+CLF,Cleveland-Cliffs,USD,stock,,Index - S&P 400 - Materials
+CLH,Clean Harbors,USD,stock,,Index - S&P 400 - Industrials
+CMC,Commercial Metals,USD,stock,,Index - S&P 400 - Materials
+CNH,CNH Industrial,USD,stock,,Index - S&P 400 - Industrials
+CNM,Core & Main,USD,stock,,Index - S&P 400 - Industrials
+CNO,CNO Financial Group,USD,stock,,Index - S&P 400 - Financials
+CNX,CNX Resources,USD,stock,,Index - S&P 400 - Energy
+CNXC,Concentrix,USD,stock,,Index - S&P 400 - Industrials
+COKE,Coca-Cola Consolidated,USD,stock,,Index - S&P 400 - Consumer Staples
+COLB,Columbia Banking System,USD,stock,,Index - S&P 400 - Financials
+COLM,Columbia Sportswear,USD,stock,,Index - S&P 400 - Consumer Discretionary
+COTY,Coty,USD,stock,,Index - S&P 400 - Consumer Staples
+CPRI,Capri Holdings,USD,stock,,Index - S&P 400 - Consumer Discretionary
+CR,Crane,USD,stock,,Index - S&P 400 - Industrials
+CRBG,Corebridge Financial,USD,stock,,Index - S&P 400 - Financials
+CROX,Crocs,USD,stock,,Index - S&P 400 - Consumer Discretionary
+CRS,Carpenter Technology,USD,stock,,Index - S&P 400 - Industrials
+CRUS,Cirrus Logic,USD,stock,,Index - S&P 400 - Information Technology
+CSL,Carlisle Companies,USD,stock,,Index - S&P 400 - Industrials
+CTRE,CareTrust REIT,USD,stock,,Index - S&P 400 - Real Estate
+CUBE,CubeSmart,USD,stock,,Index - S&P 400 - Real Estate
+CUZ,Cousins Properties,USD,stock,,Index - S&P 400 - Real Estate
+CVLT,CommVault Systems,USD,stock,,Index - S&P 400 - Information Technology
+CXT,Crane NXT,USD,stock,,Index - S&P 400 - Information Technology
+CYTK,Cytokinetics,USD,stock,,Index - S&P 400 - Health Care
+DAR,Darling Ingredients,USD,stock,,Index - S&P 400 - Consumer Staples
+DBX,Dropbox,USD,stock,,Index - S&P 400 - Information Technology
+DCI,Donaldson Company,USD,stock,,Index - S&P 400 - Industrials
+DINO,HF Sinclair,USD,stock,,Index - S&P 400 - Energy
+DKS,Dick's Sporting Goods,USD,stock,,Index - S&P 400 - Consumer Discretionary
+DLB,Dolby,USD,stock,,Index - S&P 400 - Information Technology
+DOCN,DigitalOcean,USD,stock,,Index - S&P 400 - Information Technology
+DOCS,Doximity,USD,stock,,Index - S&P 400 - Health Care
+DOCU,Docusign,USD,stock,,Index - S&P 400 - Information Technology
+DT,Dynatrace,USD,stock,,Index - S&P 400 - Information Technology
+DTM,DT Midstream,USD,stock,,Index - S&P 400 - Energy
+DUOL,Duolingo,USD,stock,,Index - S&P 400 - Consumer Discretionary
+DY,Dycom Industries,USD,stock,,Index - S&P 400 - Industrials
+EEFT,Euronet Worldwide,USD,stock,,Index - S&P 400 - Financials
+EGP,EastGroup Properties,USD,stock,,Index - S&P 400 - Real Estate
+EHC,Encompass Health,USD,stock,,Index - S&P 400 - Health Care
+ELAN,Elanco,USD,stock,,Index - S&P 400 - Health Care
+ELF,e.l.f. Beauty,USD,stock,,Index - S&P 400 - Consumer Staples
+ELS,Equity Lifestyle Properties,USD,stock,,Index - S&P 400 - Real Estate
+ENS,EnerSys,USD,stock,,Index - S&P 400 - Industrials
+ENSG,Ensign Group,USD,stock,,Index - S&P 400 - Health Care
+ENTG,Entegris,USD,stock,,Index - S&P 400 - Information Technology
+EPR,EPR Properties,USD,stock,,Index - S&P 400 - Real Estate
+EQH,Equitable Holdings,USD,stock,,Index - S&P 400 - Financials
+ESAB,ESAB,USD,stock,,Index - S&P 400 - Industrials
+ESNT,Essent Group Ltd.,USD,stock,,Index - S&P 400 - Financials
+EVR,Evercore,USD,stock,,Index - S&P 400 - Financials
+EWBC,East West Bancorp,USD,stock,,Index - S&P 400 - Financials
+EXEL,Exelixis,USD,stock,,Index - S&P 400 - Health Care
+EXLS,EXL Service,USD,stock,,Index - S&P 400 - Industrials
+EXP,Eagle Materials,USD,stock,,Index - S&P 400 - Materials
+EXPO,"Exponent, Inc.",USD,stock,,Index - S&P 400 - Industrials
+FAF,First American Financial Corporation,USD,stock,,Index - S&P 400 - Financials
+FBIN,Fortune Brands Innovations,USD,stock,,Index - S&P 400 - Industrials
+FCFS,FirstCash,USD,stock,,Index - S&P 400 - Financials
+FCN,FTI Consulting,USD,stock,,Index - S&P 400 - Industrials
+FFIN,First Financial Bankshares,USD,stock,,Index - S&P 400 - Financials
+FHI,Federated Hermes,USD,stock,,Index - S&P 400 - Financials
+FHN,First Horizon,USD,stock,,Index - S&P 400 - Financials
+FIVE,Five Below,USD,stock,,Index - S&P 400 - Consumer Discretionary
+FLEX,Flex Ltd.,USD,stock,,Index - S&P 400 - Information Technology
+FLG,Flagstar Bank,USD,stock,,Index - S&P 400 - Financials
+FLS,Flowserve,USD,stock,,Index - S&P 400 - Industrials
+FN,Fabrinet,USD,stock,,Index - S&P 400 - Information Technology
+FNB,FNB Corporation,USD,stock,,Index - S&P 400 - Financials
+FND,Floor & Decor,USD,stock,,Index - S&P 400 - Consumer Discretionary
+FNF,Fidelity National Financial,USD,stock,,Index - S&P 400 - Financials
+FOUR,Shift4,USD,stock,,Index - S&P 400 - Financials
+FR,First Industrial Realty Trust,USD,stock,,Index - S&P 400 - Real Estate
+FTI,TechnipFMC,USD,stock,,Index - S&P 400 - Energy
+G,Genpact,USD,stock,,Index - S&P 400 - Industrials
+GAP,Gap Inc.,USD,stock,,Index - S&P 400 - Consumer Discretionary
+GATX,GATX,USD,stock,,Index - S&P 400 - Industrials
+GBCI,Glacier Bancorp,USD,stock,,Index - S&P 400 - Financials
+GEF,"Greif, Inc.",USD,stock,,Index - S&P 400 - Materials
+GGG,Graco Inc.,USD,stock,,Index - S&P 400 - Industrials
+GHC,Graham Holdings,USD,stock,,Index - S&P 400 - Consumer Discretionary
+GLPI,Gaming and Leisure Properties,USD,stock,,Index - S&P 400 - Real Estate
+GME,GameStop,USD,stock,,Index - S&P 400 - Consumer Discretionary
+GMED,Globus Medical,USD,stock,,Index - S&P 400 - Health Care
+GNTX,Gentex,USD,stock,,Index - S&P 400 - Consumer Discretionary
+GPK,Graphic Packaging,USD,stock,,Index - S&P 400 - Materials
+GT,Goodyear Tire & Rubber,USD,stock,,Index - S&P 400 - Consumer Discretionary
+GTLS,Chart Industries,USD,stock,,Index - S&P 400 - Industrials
+GWRE,Guidewire Software,USD,stock,,Index - S&P 400 - Information Technology
+GXO,GXO Logistics,USD,stock,,Index - S&P 400 - Industrials
+H,Hyatt,USD,stock,,Index - S&P 400 - Consumer Discretionary
+HAE,Haemonetics,USD,stock,,Index - S&P 400 - Health Care
+HALO,Halozyme,USD,stock,,Index - S&P 400 - Health Care
+HGV,Hilton Grand Vacations,USD,stock,,Index - S&P 400 - Consumer Discretionary
+HIMS,Hims & Hers Health,USD,stock,,Index - S&P 400 - Health Care
+HL,Hecla Mining,USD,stock,,Index - S&P 400 - Materials
+HLI,Houlihan Lokey,USD,stock,,Index - S&P 400 - Financials
+HLNE,Hamilton Lane,USD,stock,,Index - S&P 400 - Financials
+HOG,Harley-Davidson,USD,stock,,Index - S&P 400 - Consumer Discretionary
+HOMB,Home BancShares,USD,stock,,Index - S&P 400 - Financials
+HQY,HealthEquity,USD,stock,,Index - S&P 400 - Health Care
+HR,Healthcare Realty Trust,USD,stock,,Index - S&P 400 - Real Estate
+HRB,H&R Block,USD,stock,,Index - S&P 400 - Consumer Discretionary
+HWC,Hancock Whitney,USD,stock,,Index - S&P 400 - Financials
+HXL,Hexcel,USD,stock,,Index - S&P 400 - Industrials
+IBOC,Intl Bancshares Corp,USD,stock,,Index - S&P 400 - Financials
+IDA,Idacorp,USD,stock,,Index - S&P 400 - Utilities
+IDCC,InterDigital,USD,stock,,Index - S&P 400 - Information Technology
+INGR,Ingredion,USD,stock,,Index - S&P 400 - Consumer Staples
+IPGP,IPG Photonics,USD,stock,,Index - S&P 400 - Information Technology
+IRT,IRT Living,USD,stock,,Index - S&P 400 - Real Estate
+ITT,ITT Inc.,USD,stock,,Index - S&P 400 - Industrials
+JAZZ,Jazz Pharmaceuticals,USD,stock,,Index - S&P 400 - Health Care
+JEF,Jefferies,USD,stock,,Index - S&P 400 - Financials
+JHG,Janus Henderson,USD,stock,,Index - S&P 400 - Financials
+JLL,Jones Lang LaSalle,USD,stock,,Index - S&P 400 - Real Estate
+KBH,KB Home,USD,stock,,Index - S&P 400 - Consumer Discretionary
+KBR,"KBR, Inc.",USD,stock,,Index - S&P 400 - Industrials
+KD,Kyndryl,USD,stock,,Index - S&P 400 - Information Technology
+KEX,Kirby Corporation,USD,stock,,Index - S&P 400 - Industrials
+KNF,Knife River Corporation,USD,stock,,Index - S&P 400 - Materials
+KNSL,Kinsale Capital Group,USD,stock,,Index - S&P 400 - Financials
+KNX,Knight-Swift,USD,stock,,Index - S&P 400 - Industrials
+KRC,Kilroy Realty Corp,USD,stock,,Index - S&P 400 - Real Estate
+KRG,Kite Realty Group Trust,USD,stock,,Index - S&P 400 - Real Estate
+KTOS,Kratos Defense & Security Solutions,USD,stock,,Index - S&P 400 - Industrials
+LAD,Lithia Motors,USD,stock,,Index - S&P 400 - Consumer Discretionary
+LAMR,Lamar Advertising Company,USD,stock,,Index - S&P 400 - Real Estate
+LEA,Lear,USD,stock,,Index - S&P 400 - Consumer Discretionary
+LECO,Lincoln Electric,USD,stock,,Index - S&P 400 - Industrials
+LFUS,Littelfuse,USD,stock,,Index - S&P 400 - Information Technology
+LIVN,LivaNova,USD,stock,,Index - S&P 400 - Health Care
+LNTH,Lantheus Holdings,USD,stock,,Index - S&P 400 - Health Care
+LOPE,Grand Canyon Education,USD,stock,,Index - S&P 400 - Consumer Discretionary
+LPX,Louisiana-Pacific,USD,stock,,Index - S&P 400 - Materials
+LSTR,Landstar System,USD,stock,,Index - S&P 400 - Industrials
+M,Macy's,USD,stock,,Index - S&P 400 - Consumer Discretionary
+MANH,Manhattan Associates,USD,stock,,Index - S&P 400 - Information Technology
+MASI,Masimo,USD,stock,,Index - S&P 400 - Health Care
+MAT,Mattel,USD,stock,,Index - S&P 400 - Consumer Discretionary
+MEDP,Medpace,USD,stock,,Index - S&P 400 - Health Care
+MIDD,Middleby,USD,stock,,Index - S&P 400 - Industrials
+MKSI,MKS Instruments,USD,stock,,Index - S&P 400 - Information Technology
+MLI,Mueller Industries,USD,stock,,Index - S&P 400 - Industrials
+MMS,Maximus Inc.,USD,stock,,Index - S&P 400 - Industrials
+MOG-A,Moog Inc.,USD,stock,,Index - S&P 400 - Industrials
+MORN,"Morningstar, Inc.",USD,stock,,Index - S&P 400 - Financials
+MP,MP Materials,USD,stock,,Index - S&P 400 - Materials
+MSA,MSA Safety,USD,stock,,Index - S&P 400 - Industrials
+MSM,MSC Industrial Direct,USD,stock,,Index - S&P 400 - Industrials
+MTDR,Matador Resources,USD,stock,,Index - S&P 400 - Energy
+MTG,MGIC Investment Corporation,USD,stock,,Index - S&P 400 - Financials
+MTN,Vail Resorts,USD,stock,,Index - S&P 400 - Consumer Discretionary
+MTSI,MACOM Technology Solutions,USD,stock,,Index - S&P 400 - Information Technology
+MTZ,MasTec,USD,stock,,Index - S&P 400 - Industrials
+MUR,Murphy Oil,USD,stock,,Index - S&P 400 - Energy
+MUSA,Murphy USA,USD,stock,,Index - S&P 400 - Consumer Discretionary
+MZTI,The Marzetti Company,USD,stock,,Index - S&P 400 - Consumer Staples
+NBIX,Neurocrine Biosciences,USD,stock,,Index - S&P 400 - Health Care
+NEU,NewMarket Corporation,USD,stock,,Index - S&P 400 - Materials
+NFG,National Fuel Gas,USD,stock,,Index - S&P 400 - Utilities
+NJR,New Jersey Resources,USD,stock,,Index - S&P 400 - Utilities
+NLY,Annaly Capital Management,USD,stock,,Index - S&P 400 - Financials
+NNN,NNN Reit,USD,stock,,Index - S&P 400 - Real Estate
+NOV,NOV Inc.,USD,stock,,Index - S&P 400 - Energy
+NSA,National Storage Affiliates Trust,USD,stock,,Index - S&P 400 - Real Estate
+NTNX,Nutanix,USD,stock,,Index - S&P 400 - Information Technology
+NVST,Envista Holdings,USD,stock,,Index - S&P 400 - Health Care
+NVT,nVent Electric plc,USD,stock,,Index - S&P 400 - Industrials
+NWE,NorthWestern Energy,USD,stock,,Index - S&P 400 - Utilities
+NXST,Nexstar Media Group,USD,stock,,Index - S&P 400 - Communication Services
+NXT,Nextpower,USD,stock,,Index - S&P 400 - Industrials
+NYT,New York Times Company,USD,stock,,Index - S&P 400 - Communication Services
+OC,Owens Corning,USD,stock,,Index - S&P 400 - Industrials
+OGE,OGE Energy,USD,stock,,Index - S&P 400 - Utilities
+OGS,One Gas,USD,stock,,Index - S&P 400 - Utilities
+OHI,Omega Healthcare Investors,USD,stock,,Index - S&P 400 - Real Estate
+OKTA,"Okta, Inc.",USD,stock,,Index - S&P 400 - Information Technology
+OLED,Universal Display,USD,stock,,Index - S&P 400 - Information Technology
+OLLI,Ollie's Bargain Outlet,USD,stock,,Index - S&P 400 - Consumer Discretionary
+OLN,Olin Corporation,USD,stock,,Index - S&P 400 - Materials
+ONB,Old National Bank,USD,stock,,Index - S&P 400 - Financials
+ONTO,Onto Innovation,USD,stock,,Index - S&P 400 - Information Technology
+OPCH,Option Care Health,USD,stock,,Index - S&P 400 - Health Care
+ORA,Ormat Technologies,USD,stock,,Index - S&P 400 - Utilities
+ORI,Old Republic International,USD,stock,,Index - S&P 400 - Financials
+OSK,Oshkosh,USD,stock,,Index - S&P 400 - Industrials
+OVV,Ovintiv,USD,stock,,Index - S&P 400 - Energy
+OZK,Bank OZK,USD,stock,,Index - S&P 400 - Financials
+P,Everpure,USD,stock,,Index - S&P 400 - Information Technology
+PAG,Penske Automotive Group,USD,stock,,Index - S&P 400 - Consumer Discretionary
+PATH,UiPath,USD,stock,,Index - S&P 400 - Information Technology
+PB,Prosperity Bancshares,USD,stock,,Index - S&P 400 - Financials
+PBF,PBF Energy,USD,stock,,Index - S&P 400 - Energy
+PCTY,Paylocity,USD,stock,,Index - S&P 400 - Industrials
+PEGA,Pegasystems,USD,stock,,Index - S&P 400 - Information Technology
+PEN,"Penumbra, Inc.",USD,stock,,Index - S&P 400 - Health Care
+PFGC,Performance Food Group,USD,stock,,Index - S&P 400 - Consumer Staples
+PII,Polaris,USD,stock,,Index - S&P 400 - Consumer Discretionary
+PINS,Pinterest,USD,stock,,Index - S&P 400 - Communication Services
+PK,Park Hotels & Resorts,USD,stock,,Index - S&P 400 - Real Estate
+PLNT,Planet Fitness,USD,stock,,Index - S&P 400 - Consumer Discretionary
+PNFP,Pinnacle Financial Partners,USD,stock,,Index - S&P 400 - Financials
+POR,Portland General Electric,USD,stock,,Index - S&P 400 - Utilities
+POST,Post Holdings,USD,stock,,Index - S&P 400 - Consumer Staples
+PPC,Pilgrim's Pride,USD,stock,,Index - S&P 400 - Consumer Staples
+PR,Permian Resources,USD,stock,,Index - S&P 400 - Energy
+PRI,Primerica,USD,stock,,Index - S&P 400 - Financials
+PSN,Parsons Corporation,USD,stock,,Index - S&P 400 - Industrials
+PVH,PVH Corp.,USD,stock,,Index - S&P 400 - Consumer Discretionary
+QLYS,Qualys,USD,stock,,Index - S&P 400 - Information Technology
+R,Ryder,USD,stock,,Index - S&P 400 - Industrials
+RBA,RB Global,USD,stock,,Index - S&P 400 - Industrials
+RBC,RBC Bearings,USD,stock,,Index - S&P 400 - Industrials
+REXR,Rexford Industrial Realty,USD,stock,,Index - S&P 400 - Real Estate
+RGA,Reinsurance Group of America,USD,stock,,Index - S&P 400 - Financials
+RGEN,Repligen,USD,stock,,Index - S&P 400 - Health Care
+RGLD,Royal Gold,USD,stock,,Index - S&P 400 - Materials
+RH,RH,USD,stock,,Index - S&P 400 - Consumer Discretionary
+RLI,RLI Corp.,USD,stock,,Index - S&P 400 - Financials
+RMBS,Rambus,USD,stock,,Index - S&P 400 - Information Technology
+RNR,RenaissanceRe,USD,stock,,Index - S&P 400 - Financials
+ROIV,Roivant Sciences,USD,stock,,Index - S&P 400 - Health Care
+RPM,RPM International,USD,stock,,Index - S&P 400 - Materials
+RRC,Range Resources,USD,stock,,Index - S&P 400 - Energy
+RRX,Regal Rexnord,USD,stock,,Index - S&P 400 - Industrials
+RS,"Reliance, Inc.",USD,stock,,Index - S&P 400 - Materials
+RYAN,Ryan Specialty,USD,stock,,Index - S&P 400 - Financials
+RYN,Rayonier,USD,stock,,Index - S&P 400 - Real Estate
+SAIA,Saia,USD,stock,,Index - S&P 400 - Industrials
+SAIC,Science Applications Intl Corp,USD,stock,,Index - S&P 400 - Industrials
+SAM,Boston Beer Company,USD,stock,,Index - S&P 400 - Consumer Staples
+SARO,StandardAero,USD,stock,,Index - S&P 400 - Industrials
+SBRA,Sabra Health Care REIT,USD,stock,,Index - S&P 400 - Real Estate
+SCI,Service Corp Intl,USD,stock,,Index - S&P 400 - Consumer Discretionary
+SEIC,SEI Investments Company,USD,stock,,Index - S&P 400 - Financials
+SF,Stifel,USD,stock,,Index - S&P 400 - Financials
+SFM,Sprouts Farmers Market,USD,stock,,Index - S&P 400 - Consumer Staples
+SGI,Somnigroup International,USD,stock,,Index - S&P 400 - Consumer Discretionary
+SHC,Sotera Health,USD,stock,,Index - S&P 400 - Health Care
+SIGI,Selective Insurance Group,USD,stock,,Index - S&P 400 - Financials
+SITM,SiTime,USD,stock,,Index - S&P 400 - Information Technology
+SLAB,Silicon Labs,USD,stock,,Index - S&P 400 - Information Technology
+SLGN,Silgan Holdings,USD,stock,,Index - S&P 400 - Materials
+SLM,SLM Corp,USD,stock,,Index - S&P 400 - Financials
+SMG,Scotts Miracle-Gro Company,USD,stock,,Index - S&P 400 - Materials
+SN,SharkNinja,USD,stock,,Index - S&P 400 - Consumer Discretionary
+SNX,TD Synnex,USD,stock,,Index - S&P 400 - Information Technology
+SOLS,Solstice Advanced Materials,USD,stock,,Index - S&P 400 - Materials
+SON,Sonoco,USD,stock,,Index - S&P 400 - Materials
+SPXC,SPX Technologies,USD,stock,,Index - S&P 400 - Industrials
+SR,Spire,USD,stock,,Index - S&P 400 - Utilities
+SSB,South State Bank,USD,stock,,Index - S&P 400 - Financials
+SSD,Simpson Manufacturing,USD,stock,,Index - S&P 400 - Industrials
+ST,Sensata Technologies,USD,stock,,Index - S&P 400 - Industrials
+STAG,STAG Industrial,USD,stock,,Index - S&P 400 - Real Estate
+STRL,Sterling Infrastructure,USD,stock,,Index - S&P 400 - Industrials
+STWD,Starwood Property Trust,USD,stock,,Index - S&P 400 - Financials
+SWX,Southwest Gas Corp,USD,stock,,Index - S&P 400 - Utilities
+SYNA,Synaptics,USD,stock,,Index - S&P 400 - Information Technology
+TCBI,Texas Capital Bancshares,USD,stock,,Index - S&P 400 - Financials
+TEX,Terex,USD,stock,,Index - S&P 400 - Industrials
+THC,Tenet Health,USD,stock,,Index - S&P 400 - Health Care
+THG,Hanover Insurance,USD,stock,,Index - S&P 400 - Financials
+THO,Thor Industries,USD,stock,,Index - S&P 400 - Consumer Discretionary
+TKR,Timken,USD,stock,,Index - S&P 400 - Industrials
+TMHC,Taylor Morrison,USD,stock,,Index - S&P 400 - Consumer Discretionary
+TNL,Travel + Leisure Co.,USD,stock,,Index - S&P 400 - Consumer Discretionary
+TOL,Toll Brothers,USD,stock,,Index - S&P 400 - Consumer Discretionary
+TREX,Trex,USD,stock,,Index - S&P 400 - Industrials
+TRU,TransUnion,USD,stock,,Index - S&P 400 - Industrials
+TTC,Toro,USD,stock,,Index - S&P 400 - Industrials
+TTEK,Tetra Tech,USD,stock,,Index - S&P 400 - Industrials
+TTMI,TTM Technologies,USD,stock,,Index - S&P 400 - Information Technology
+TWLO,Twilio,USD,stock,,Index - S&P 400 - Information Technology
+TXNM,TXNM Energy,USD,stock,,Index - S&P 400 - Utilities
+TXRH,Texas Roadhouse,USD,stock,,Index - S&P 400 - Consumer Discretionary
+UBSI,United Bankshares,USD,stock,,Index - S&P 400 - Financials
+UFPI,UFP Industries,USD,stock,,Index - S&P 400 - Industrials
+UGI,UGI Corp,USD,stock,,Index - S&P 400 - Utilities
+ULS,UL Solutions,USD,stock,,Index - S&P 400 - Industrials
+UMBF,UMB Financial Corp.,USD,stock,,Index - S&P 400 - Financials
+UNM,Unum,USD,stock,,Index - S&P 400 - Financials
+USFD,US Foods,USD,stock,,Index - S&P 400 - Consumer Staples
+UTHR,United Therapeutics,USD,stock,,Index - S&P 400 - Health Care
+VAL,Valaris,USD,stock,,Index - S&P 400 - Energy
+VC,Visteon,USD,stock,,Index - S&P 400 - Consumer Discretionary
+VFC,VF Corporation,USD,stock,,Index - S&P 400 - Consumer Discretionary
+VICR,Vicor Corporation,USD,stock,,Index - S&P 400 - Industrials
+VLY,Valley Bank,USD,stock,,Index - S&P 400 - Financials
+VMI,Valmont Industries,USD,stock,,Index - S&P 400 - Industrials
+VNO,Vornado Realty Trust,USD,stock,,Index - S&P 400 - Real Estate
+VNOM,Viper Energy,USD,stock,,Index - S&P 400 - Energy
+VNT,Vontier,USD,stock,,Index - S&P 400 - Information Technology
+VOYA,Voya Financial,USD,stock,,Index - S&P 400 - Financials
+VVV,Valvoline,USD,stock,,Index - S&P 400 - Consumer Discretionary
+WAL,Western Alliance Bancorporation,USD,stock,,Index - S&P 400 - Financials
+WBS,Webster Bank,USD,stock,,Index - S&P 400 - Financials
+WCC,WESCO International,USD,stock,,Index - S&P 400 - Industrials
+WEX,WEX Inc.,USD,stock,,Index - S&P 400 - Financials
+WFRD,Weatherford International,USD,stock,,Index - S&P 400 - Energy
+WH,Wyndham Hotels & Resorts,USD,stock,,Index - S&P 400 - Consumer Discretionary
+WHR,Whirlpool Corporation,USD,stock,,Index - S&P 400 - Consumer Discretionary
+WING,Wingstop,USD,stock,,Index - S&P 400 - Consumer Discretionary
+WLK,Westlake Corporation,USD,stock,,Index - S&P 400 - Materials
+WMG,Warner Music Group,USD,stock,,Index - S&P 400 - Communication Services
+WMS,Advanced Drainage Systems,USD,stock,,Index - S&P 400 - Industrials
+WPC,W. P. Carey,USD,stock,,Index - S&P 400 - Real Estate
+WSO,Watsco,USD,stock,,Index - S&P 400 - Industrials
+WTFC,Wintrust Financial,USD,stock,,Index - S&P 400 - Financials
+WTRG,Essential Utilities,USD,stock,,Index - S&P 400 - Utilities
+WTS,Watts Water Technologies,USD,stock,,Index - S&P 400 - Industrials
+WWD,"Woodward, Inc.",USD,stock,,Index - S&P 400 - Industrials
+XPO,"XPO, Inc.",USD,stock,,Index - S&P 400 - Industrials
+XRAY,Dentsply Sirona,USD,stock,,Index - S&P 400 - Health Care
+YETI,Yeti Holdings,USD,stock,,Index - S&P 400 - Consumer Discretionary
+ZION,Zions Bancorporation,USD,stock,,Index - S&P 400 - Financials
+III.L,3i,GBP,stock,,Index - FTSE 100 - Financial Services
+ADM.L,Admiral Group,GBP,stock,,Index - FTSE 100 - Insurance
+AAF.L,Airtel Africa,GBP,stock,,Index - FTSE 100 - Telecommunications Services
+ALW.L,Alliance Witan,GBP,stock,,Index - FTSE 100 - Investment Trusts
+AAL.L,Anglo American plc,GBP,stock,,Index - FTSE 100 - Mining
+ABF.L,Associated British Foods,GBP,stock,,Index - FTSE 100 - Food & Tobacco
+AUTO.L,Autotrader Group,GBP,stock,,Index - FTSE 100 - Media
+AV.L,Aviva,GBP,stock,,Index - FTSE 100 - Life Insurance
+BAB.L,Babcock International,GBP,stock,,Index - FTSE 100 - Aerospace & Defence
+BTRW.L,Barratt Redrow,GBP,stock,,Index - FTSE 100 - Household Goods & Home Construction
+BEZ.L,Beazley,GBP,stock,,Index - FTSE 100 - Insurance
+BKG.L,Berkeley Group Holdings,GBP,stock,,Index - FTSE 100 - Household Goods & Home Construction
+BATS.L,British American Tobacco,GBP,stock,,Index - FTSE 100 - Tobacco
+BLND.L,British Land,GBP,stock,,Index - FTSE 100 - Real Estate
+BT-A.L,BT Group,GBP,stock,,Index - FTSE 100 - Telecommunications Services
+BNZL.L,Bunzl,GBP,stock,,Index - FTSE 100 - Support Services
+BRBY.L,Burberry Group,GBP,stock,,Index - FTSE 100 - Personal Goods
+CNA.L,Centrica,GBP,stock,,Index - FTSE 100 - Multiline Utilities
+CCEP.L,Coca-Cola Europacific Partners,GBP,stock,,Index - FTSE 100 - Beverages
+CCH.L,Coca-Cola HBC,GBP,stock,,Index - FTSE 100 - Beverages
+CPG.L,Compass Group,GBP,stock,,Index - FTSE 100 - Support Services
+CTEC.L,Convatec,GBP,stock,,Index - FTSE 100 - Health Care Equipment & Supplies
+CRDA.L,Croda International,GBP,stock,,Index - FTSE 100 - Chemicals
+DCC.L,DCC plc,GBP,stock,,Index - FTSE 100 - Support Services
+DGE.L,Diageo,GBP,stock,,Index - FTSE 100 - Beverages
+DPLM.L,Diploma,GBP,stock,,Index - FTSE 100 - Industrial Support Services
+EDV.L,Endeavour Mining,GBP,stock,,Index - FTSE 100 - Mining
+ENT.L,Entain,GBP,stock,,Index - FTSE 100 - Travel & Leisure
+EXPN.L,Experian,GBP,stock,,Index - FTSE 100 - Support Services
+FCIT.L,F & C Investment Trust,GBP,stock,,Index - FTSE 100 - Collective Investments
+FRES.L,Fresnillo plc,GBP,stock,,Index - FTSE 100 - Mining
+GAW.L,Games Workshop,GBP,stock,,Index - FTSE 100 - Leisure Goods
+GSK.L,GSK plc,GBP,stock,,Index - FTSE 100 - Pharmaceuticals & Biotechnology
+HLN.L,Haleon,GBP,stock,,Index - FTSE 100 - Pharmaceuticals & Biotechnology
+HLMA.L,Halma plc,GBP,stock,,Index - FTSE 100 - Electronic Equipment & Parts
+HSX.L,Hiscox,GBP,stock,,Index - FTSE 100 - Non-Life Insurance
+HWDN.L,Howdens Joinery,GBP,stock,,Index - FTSE 100 - Homebuilding & Construction Supplies
+ICG.L,ICG,GBP,stock,,Index - FTSE 100 - Financial Services
+IGG.L,IG Group,GBP,stock,,Index - FTSE 100 - Financial Services
+IHG.L,IHG Hotels & Resorts,GBP,stock,,Index - FTSE 100 - Travel & Leisure
+IMI.L,IMI,GBP,stock,,Index - FTSE 100 - Industrial Engineering
+IMB.L,Imperial Brands,GBP,stock,,Index - FTSE 100 - Tobacco
+INF.L,Informa,GBP,stock,,Index - FTSE 100 - Media
+IAG.L,International Airlines Group,GBP,stock,,Index - FTSE 100 - Travel & Leisure
+ITRK.L,Intertek,GBP,stock,,Index - FTSE 100 - Support Services
+JD.L,JD Sports,GBP,stock,,Index - FTSE 100 - General Retailers
+BGEO.L,Lion Finance Group,GBP,stock,,Index - FTSE 100 - Banking Services
+KGF.L,Kingfisher plc,GBP,stock,,Index - FTSE 100 - Retailers
+LAND.L,Land Securities,GBP,stock,,Index - FTSE 100 - Real Estate Investment Trusts
+LGEN.L,Legal & General,GBP,stock,,Index - FTSE 100 - Life Insurance
+LLOY.L,Lloyds Banking Group,GBP,stock,,Index - FTSE 100 - Banks
+LMP.L,LondonMetric Property,GBP,stock,,Index - FTSE 100 - Real Estate Investment Trusts
+LSEG.L,London Stock Exchange Group,GBP,stock,,Index - FTSE 100 - Financial Services
+MNG.L,M&G,GBP,stock,,Index - FTSE 100 - Financial Services
+MKS.L,Marks & Spencer,GBP,stock,,Index - FTSE 100 - Food & Drug Retailing
+MRO.L,Melrose Industries,GBP,stock,,Index - FTSE 100 - Aerospace & Defence
+MTLN.L,Metlen Energy & Metals,GBP,stock,,Index - FTSE 100 - Multiline Utilities
+MNDI.L,Mondi,GBP,stock,,Index - FTSE 100 - Containers & Packaging
+NG.L,National Grid plc,GBP,stock,,Index - FTSE 100 - Multiline Utilities
+NWG.L,NatWest Group,GBP,stock,,Index - FTSE 100 - Banks
+NXT.L,Next plc,GBP,stock,,Index - FTSE 100 - General Retailers
+PSON.L,Pearson plc,GBP,stock,,Index - FTSE 100 - Media
+PSH.L,Pershing Square Holdings,GBP,stock,,Index - FTSE 100 - Financial Services
+PSN.L,Persimmon,GBP,stock,,Index - FTSE 100 - Household Goods & Home Construction
+PCT.L,Polar Capital Technology Trust,GBP,stock,,Index - FTSE 100 - Investment Trusts
+PRU.L,Prudential plc,GBP,stock,,Index - FTSE 100 - Life Insurance
+RKT.L,Reckitt,GBP,stock,,Index - FTSE 100 - Household Goods & Home Construction
+REL.L,RELX,GBP,stock,,Index - FTSE 100 - Media
+RTO.L,Rentokil Initial,GBP,stock,,Index - FTSE 100 - Support Services
+RMV.L,Rightmove,GBP,stock,,Index - FTSE 100 - Media
+RIO.L,Rio Tinto,GBP,stock,,Index - FTSE 100 - Mining
+RR.L,Rolls-Royce Holdings,GBP,stock,,Index - FTSE 100 - Aerospace & Defence
+SGE.L,Sage Group,GBP,stock,,Index - FTSE 100 - Software & Computer Services
+SBRY.L,Sainsbury's,GBP,stock,,Index - FTSE 100 - Food & Drug Retailing
+SDR.L,Schroders,GBP,stock,,Index - FTSE 100 - Financial Services
+SMT.L,Scottish Mortgage Investment Trust,GBP,stock,,Index - FTSE 100 - Collective Investments
+SGRO.L,Segro,GBP,stock,,Index - FTSE 100 - Real Estate Investment Trusts
+SVT.L,Severn Trent,GBP,stock,,Index - FTSE 100 - Multiline Utilities
+SMIN.L,Smiths Group,GBP,stock,,Index - FTSE 100 - General Industrials
+SN.L,Smith & Nephew,GBP,stock,,Index - FTSE 100 - Health Care Equipment & Supplies
+SPX.L,Spirax Group,GBP,stock,,Index - FTSE 100 - Industrial Engineering
+SSE.L,SSE plc,GBP,stock,,Index - FTSE 100 - Electrical Utilities & Independent Power Producers
+STAN.L,Standard Chartered,GBP,stock,,Index - FTSE 100 - Banks
+SDLF.L,Standard Life,GBP,stock,,Index - FTSE 100 - Life Insurance
+STJ.L,St. James's Place,GBP,stock,,Index - FTSE 100 - Financial Services
+TSCO.L,Tesco,GBP,stock,,Index - FTSE 100 - Food & Drug Retailing
+BBOX.L,Tritax Big Box REIT,GBP,stock,,Index - FTSE 100 - Real Estate Investment Trusts
+UU.L,United Utilities,GBP,stock,,Index - FTSE 100 - Multiline Utilities
+VOD.L,Vodafone Group,GBP,stock,,Index - FTSE 100 - Mobile Telecommunications
+WEIR.L,Weir Group,GBP,stock,,Index - FTSE 100 - Industrial Goods And Services
+WTB.L,Whitbread,GBP,stock,,Index - FTSE 100 - Retail Hospitality
+ADS.DE,Adidas,EUR,stock,,Index - Euro Stoxx 50 - Consumer Discretionary
+AD.AS,Ahold Delhaize,EUR,stock,,Index - Euro Stoxx 50 - Consumer Staples
+AI.PA,Air Liquide,EUR,stock,,Index - Euro Stoxx 50 - Materials
+ALV.DE,Allianz,EUR,stock,,Index - Euro Stoxx 50 - Financials
+ABI.BR,Anheuser-Busch InBev,EUR,stock,,Index - Euro Stoxx 50 - Consumer Staples
+ARGX.BR,Argenx,EUR,stock,,Index - Euro Stoxx 50 - Health Care
+ASML.AS,ASML Holding,EUR,stock,,Index - Euro Stoxx 50 - Information Technology
+CS.PA,Axa,EUR,stock,,Index - Euro Stoxx 50 - Financials
+BAS.DE,BASF,EUR,stock,,Index - Euro Stoxx 50 - Materials
+BAYN.DE,Bayer,EUR,stock,,Index - Euro Stoxx 50 - Health Care
+BBVA.MC,BBVA,EUR,stock,,Index - Euro Stoxx 50 - Financials
+SAN.MC,Banco Santander,EUR,stock,,Index - Euro Stoxx 50 - Financials
+BMW.DE,BMW,EUR,stock,,Index - Euro Stoxx 50 - Consumer Discretionary
+BNP.PA,BNP Paribas,EUR,stock,,Index - Euro Stoxx 50 - Financials
+BN.PA,Danone,EUR,stock,,Index - Euro Stoxx 50 - Consumer Staples
+DBK.DE,Deutsche Bank,EUR,stock,,Index - Euro Stoxx 50 - Financials
+DB1.DE,Deutsche Börse,EUR,stock,,Index - Euro Stoxx 50 - Financials
+DHL.DE,Deutsche Post,EUR,stock,,Index - Euro Stoxx 50 - Industrials
+DTE.DE,Deutsche Telekom,EUR,stock,,Index - Euro Stoxx 50 - Communication
+ENEL.MI,Enel,EUR,stock,,Index - Euro Stoxx 50 - Utilities
+ENI.MI,Eni,EUR,stock,,Index - Euro Stoxx 50 - Energy
+EL.PA,EssilorLuxottica,EUR,stock,,Index - Euro Stoxx 50 - Health Care
+RACE.MI,Ferrari,EUR,stock,,Index - Euro Stoxx 50 - Consumer Discretionary
+IBE.MC,Iberdrola,EUR,stock,,Index - Euro Stoxx 50 - Utilities
+ITX.MC,Inditex,EUR,stock,,Index - Euro Stoxx 50 - Consumer Discretionary
+IFX.DE,Infineon Technologies,EUR,stock,,Index - Euro Stoxx 50 - Information Technology
+INGA.AS,ING Group,EUR,stock,,Index - Euro Stoxx 50 - Financials
+ISP.MI,Intesa Sanpaolo,EUR,stock,,Index - Euro Stoxx 50 - Financials
+OR.PA,L'Oréal,EUR,stock,,Index - Euro Stoxx 50 - Consumer Staples
+MBG.DE,Mercedes-Benz Group,EUR,stock,,Index - Euro Stoxx 50 - Consumer Discretionary
+MUV2.DE,Munich Re,EUR,stock,,Index - Euro Stoxx 50 - Financials
+NDA-FI.HE,Nordea,EUR,stock,,Index - Euro Stoxx 50 - Financials
+PRX.AS,Prosus,EUR,stock,,Index - Euro Stoxx 50 - Consumer Discretionary
+SAF.PA,Safran,EUR,stock,,Index - Euro Stoxx 50 - Industrials
+SGO.PA,Saint-Gobain,EUR,stock,,Index - Euro Stoxx 50 - Industrials
+SAN.PA,Sanofi,EUR,stock,,Index - Euro Stoxx 50 - Health Care
+SAP.DE,SAP,EUR,stock,,Index - Euro Stoxx 50 - Information Technology
+SU.PA,Schneider Electric,EUR,stock,,Index - Euro Stoxx 50 - Industrials
+SIE.DE,Siemens,EUR,stock,,Index - Euro Stoxx 50 - Industrials
+ENR.DE,Siemens Energy,EUR,stock,,Index - Euro Stoxx 50 - Industrials
+TTE.PA,TotalEnergies,EUR,stock,,Index - Euro Stoxx 50 - Energy
+DG.PA,Vinci SA,EUR,stock,,Index - Euro Stoxx 50 - Industrials
+UCG.MI,UniCredit,EUR,stock,,Index - Euro Stoxx 50 - Financials
+VOW.DE,Volkswagen Group,EUR,stock,,Index - Euro Stoxx 50 - Consumer Discretionary
+WKL.AS,Wolters Kluwer,EUR,stock,,Index - Euro Stoxx 50 - Industrials

@@ -1,5 +1,77 @@
 # Changelog
 
+## 2026-05-30 07:30 - Block Alert Emails On Stale Data
+
+- Changed: Added a freshness guard so breakout and strategy alert emails only send when loaded data has today's date.
+- Why: Alerts should not email stale signals after a failed or delayed pipeline run.
+- How: Added `app/alerts/freshness.py`, checked data dates before sending/saving alert state, added `--allow-stale-data` and `FINTRACKER_ALLOW_STALE_ALERTS=1` overrides for testing/development, and allowed strategy `--dry-run` to bypass the guard.
+- Verified: `PYTHONPATH=. uv run python -m pytest tests/test_alert_freshness.py tests/test_strategy_alerts.py tests/test_consolidation_setup.py -q`; focused Ruff checks; Python compile checks; `zsh -n scripts/run_strategy_alerts.sh`. Full `PYTHONPATH=. uv run python -m pytest tests/ -q` still has unrelated existing failures in `tests/test_construction.py` and `tests/test_strategy.py`.
+- Commit: Uncommitted
+
+## 2026-05-30 00:00 - Share Alert Scanner Logic With Dashboard Views
+
+- Changed: Extracted duplicated pullback, laggard awakening, puke capitulation, and today's crossing scanner rules into `app/strategy_scanners.py` and updated alerts plus Streamlit views to reuse them.
+- Why: Alert rules should not silently diverge from the dashboard scanners that show the same strategies.
+- How: Moved pure filtering/scoring/event builders out of page-local Streamlit code; kept UI rendering in the view files and alert email formatting in `app/alerts/signals.py`.
+- Verified: `PYTHONPATH=. uv run python -m pytest tests/test_strategy_alerts.py tests/test_consolidation_setup.py tests/test_sector_rotation.py -q`; focused Ruff error checks; Python compile checks; `zsh -n scripts/run_strategy_alerts.sh`; app-directory import check for affected views; alert script import smoke check. Full `PYTHONPATH=. uv run python -m pytest tests/ -q` still has unrelated existing failures in `tests/test_construction.py` and `tests/test_strategy.py`.
+- Commit: Uncommitted
+
+## 2026-05-29 13:25 - Use Existing Cron For Strategy Alerts
+
+- Changed: Removed strategy alert launchd plists and the repo-managed alert schedule installer.
+- Why: Cron schedules already exist, so the repo should provide runnable alert scripts instead of maintaining duplicate scheduling definitions.
+- How: Deleted strategy alert plist templates, removed `make install-strategy-alerts`, and updated deploy guidance to point existing cron schedules at `scripts/run_strategy_alerts.sh us|eu`.
+- Verified: `zsh -n scripts/run_strategy_alerts.sh`; focused alert tests.
+- Commit: Uncommitted
+
+## 2026-05-29 13:05 - Revert To Local DuckDB File
+
+- Changed: Removed Quack/remote DuckDB server usage and reverted UI/alerts to direct local `duckdb.db` access.
+- Why: The local DuckDB file contains the full dataset and avoids launchd/Quack startup failures and DB server lock/restart complexity.
+- How: Deleted Quack launch agent/script, removed `install-duckdb-server`, simplified alert wrapper, removed remote connect branches from app/alert DB readers, and updated deploy guidance.
+- Verified: grep for active Quack/remote references; Python compile checks; `zsh -n scripts/run_strategy_alerts.sh`; focused alert tests; read-only local DB count check.
+- Commit: Uncommitted
+
+## 2026-05-29 11:25 - Expand Large/Mid Cap Stock Universe
+
+- Changed: Added 922 missing large/mid cap stock rows to `resources/instrument_info.csv`: 389 S&P 500, 392 S&P MidCap 400, 91 FTSE 100, and 45 Euro Stoxx 50 constituents.
+- Why: Momentum, turnaround, breakout, and consolidation alerts need a broader stock universe, especially for EU/UK large caps and US mid caps.
+- How: Pulled public index constituent tables, normalized Yahoo-compatible tickers, skipped existing tickers, and tagged rows with index/sector labels.
+- Verified: CSV parse and duplicate check (`1394` unique tickers, no bad rows); `PYTHONPATH=. uv run python -m pytest tests/test_strategy_alerts.py tests/test_consolidation_setup.py -q`.
+- Commit: Uncommitted
+
+## 2026-05-29 10:30 - Add Momentum Breakout Alert
+
+- Changed: Restored and widened the `turnaround` strategy, and added a separate `momentum_breakout` strategy, which detects 4/8/12-week local highs and classifies them as either `Recovery breakout` or `Base breakout near highs`.
+- Why: The alert should surface stocks/ETFs gaining momentum through local highs, either while recovering below prior 52/104-week peaks or while breaking out from tight bases near 52-week highs.
+- How: Kept `turnaround` as a focused recovery alert for names within 2% of 4/8/12W highs and more than 10% below 52W highs; added local-high, 20D range, and 104W drawdown helpers for `momentum_breakout`; added setup classification and email summaries with local-high window, drawdowns, range, and 1W/1M returns; added regression tests covering both setup types and the continued presence of `turnaround`.
+- Verified: `PYTHONPATH=. uv run python -m pytest tests/test_strategy_alerts.py tests/test_consolidation_setup.py -q`; `PYTHONPATH=. uv run python -m py_compile app/alerts/signals.py scripts/send_strategy_alerts.py`; `zsh -n scripts/run_strategy_alerts.sh`; dry-run `PYTHONPATH=. uv run python scripts/send_strategy_alerts.py --session us --strategy momentum_breakout --dry-run --max-items 5`.
+- Commit: Uncommitted
+
+## 2026-05-27 00:00 - Add Strategy Email Alerts
+
+- Changed: Added reusable strategy email alert helpers, a strategy alert CLI, EU/US session filtering, split strategy launch agents, and focused tests.
+- Why: Strategy signals should arrive by email without opening the Streamlit app.
+- How: Reused existing DuckDB data, extracted pure alert signal builders for active non-RAAM strategies, rendered per-strategy changes and active-signal emails, stored previous signal state, and routed `.L` tickers to EU/UK sessions while non-`.L` tickers route to US sessions.
+- Verified: `uv run python -m pytest tests/test_strategy_alerts.py tests/test_consolidation_setup.py`; `uv run python -m py_compile app/alerts/session.py app/alerts/state.py app/alerts/email.py app/alerts/signals.py scripts/send_strategy_alerts.py scripts/send_breakout_alerts.py`; `uv run ruff check --select E9,F63,F7,F82 app/alerts scripts/send_strategy_alerts.py scripts/send_breakout_alerts.py tests/test_strategy_alerts.py`; shell/plist syntax checks. Full test suite still has unrelated existing allocator/strategy failures.
+- Commit: Uncommitted
+
+## 2026-05-27 00:00 - Run Alerts On Mac Mini
+
+- Changed: Pointed alert launch agents at `$HOME/fin-tracker-ui`, updated deployment guidance, deployed to the mac mini, installed the combined strategy alert agents, and ran EU/US alert batches once.
+- Why: Alert launch agents should run from the mac mini deployment checkout, not a local development path.
+- How: Kept the shell wrappers path-relative, changed plist shell commands to `cd "$HOME/fin-tracker-ui"`, and updated `deploy-breakout-alerts` instructions to run `make install-strategy-alerts`.
+- Verified: plist parse checks and `make -n deploy-breakout-alerts install-strategy-alerts` syntax checks; `launchctl list` shows `com.fintracker.strategy-alerts.eu` and `com.fintracker.strategy-alerts.us`; `storage/alerts` contains EU and US state files for all strategy alert types.
+- Commit: Uncommitted
+
+## 2026-05-27 00:00 - Stop Duplicate Alert Scheduling
+
+- Changed: Stopped all mac mini alert launch agents and made `install-strategy-alerts` unload the older standalone breakout agent before loading combined strategy alert agents.
+- Why: Running the standalone breakout schedule alongside the combined alert schedule can send duplicate breakout emails.
+- How: Unloaded `com.fintracker.strategy-alerts.eu`, `com.fintracker.strategy-alerts.us`, and `com.fintracker.breakout-alerts` on the mac mini; added a defensive `launchctl unload` for the breakout plist to the strategy alert install target.
+- Verified: `launchctl list | grep fintracker` on the mac mini shows only `duckdb-server` and `streamlit` after stopping alerts.
+- Commit: Uncommitted
+
 ## 2026-05-23 00:00 - Add Bull Consolidation Setup Scanner
 
 - Changed: Added a `Consolidation` dashboard tab that scans stocks and ETFs for bull-regime consolidation setups using ADR-normalized extension, range compression, and distance-to-breakout metrics.

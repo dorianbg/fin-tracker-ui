@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import smtplib
 import tempfile
+import argparse
 from email.message import EmailMessage
 from email.utils import make_msgid
 from pathlib import Path
@@ -13,6 +14,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 from app.views.ConsolidationSetup import scan_breakout_triggers
+from app.alerts.freshness import assert_fresh_data
+from app.alerts.session import VALID_SESSIONS, filter_by_session, session_label
 
 
 ENV_FILE = Path(__file__).resolve().parents[1] / ".env"
@@ -181,44 +184,21 @@ def build_email_html(
 
 
 def load_price_history_cli() -> pd.DataFrame:
-    remote_host = os.environ.get("DUCKDB_REMOTE_HOST", "")
-    if remote_host:
-        token = os.environ.get("QUACK_AUTH_TOKEN", "fintracker-quack-token-2026")
-        conn = duckdb.connect(":memory:")
-        conn.execute(
-            f"ATTACH 'quack:{remote_host}:9494' AS r (TOKEN '{token}', DISABLE_SSL true)"
-        )
-        query = """
-            SELECT ticker, ticker_full, date,
-                   open_orig AS price_open, high_orig AS price_high, low_orig AS price_low,
-                   price_orig AS price, description, fund_type, currency
-            FROM r.total_return ORDER BY ticker, date
-        """
-    else:
-        conn = duckdb.connect(str(DB_FILE), read_only=True)
-        query = """
-            SELECT ticker, ticker_full, date,
-                   open_orig AS price_open, high_orig AS price_high, low_orig AS price_low,
-                   price_orig AS price, description, fund_type, currency
-            FROM total_return ORDER BY ticker, date
-        """
+    conn = duckdb.connect(str(DB_FILE), read_only=True)
+    query = """
+        SELECT ticker, ticker_full, date,
+               open_orig AS price_open, high_orig AS price_high, low_orig AS price_low,
+               price_orig AS price, description, fund_type, currency
+        FROM total_return ORDER BY ticker, date
+    """
     df = conn.execute(query).df()
     df["date"] = pd.to_datetime(df["date"], format="%Y-%m-%d")
     return df
 
 
 def load_volatility_map() -> dict[str, float]:
-    remote_host = os.environ.get("DUCKDB_REMOTE_HOST", "")
-    if remote_host:
-        token = os.environ.get("QUACK_AUTH_TOKEN", "fintracker-quack-token-2026")
-        conn = duckdb.connect(":memory:")
-        conn.execute(
-            f"ATTACH 'quack:{remote_host}:9494' AS r (TOKEN '{token}', DISABLE_SSL true)"
-        )
-        query = "SELECT ticker, vol_1y FROM r.latest_performance WHERE rown = 1 AND vol_1y IS NOT NULL"
-    else:
-        conn = duckdb.connect(str(DB_FILE), read_only=True)
-        query = "SELECT ticker, vol_1y FROM latest_performance WHERE rown = 1 AND vol_1y IS NOT NULL"
+    conn = duckdb.connect(str(DB_FILE), read_only=True)
+    query = "SELECT ticker, vol_1y FROM latest_performance WHERE rown = 1 AND vol_1y IS NOT NULL"
     rows = conn.execute(query).fetchall()
     return {ticker: float(vol) for ticker, vol in rows if vol is not None}
 
@@ -274,16 +254,18 @@ def chart_breakouts(
 
         alert = alert_by_ticker.loc[ticker]
         returns = {
+            "1W": _period_return(history, 5),
             "1M": _period_return(history, 21),
+            "3M": _period_return(history, 63),
             "6M": _period_return(history, 126),
             "1Y": _period_return(history, 252),
             "3Y": _period_return(history, min(756, len(history) - 1)),
         }
-        return_text = " | ".join(
-            f"{label} {value:+.1f}%"
+        return_lines = [
+            f"{label}: {value:+.1f}%"
             for label, value in returns.items()
             if value is not None
-        )
+        ]
         ax.axhline(
             alert["breakout_level"],
             color="#377eb8",
@@ -291,14 +273,26 @@ def chart_breakouts(
             linewidth=1.2,
             label="Breakout level",
         )
-        if return_text:
+        if return_lines:
+            box_title = "Historical performance"
+            box_text = box_title + "\n" + "   ".join(return_lines[:3])
+            if len(return_lines) > 3:
+                box_text += "\n" + "   ".join(return_lines[3:])
             ax.text(
                 0.01,
                 0.02,
-                return_text,
+                box_text,
                 transform=ax.transAxes,
-                fontsize=9,
-                bbox={"facecolor": "white", "alpha": 0.8, "edgecolor": "#cccccc"},
+                fontsize=10,
+                ha="left",
+                va="bottom",
+                linespacing=1.45,
+                bbox={
+                    "facecolor": "#fff7ed",
+                    "alpha": 0.94,
+                    "edgecolor": "#fb923c",
+                    "boxstyle": "round,pad=0.55",
+                },
             )
         ax.set_title(
             f"{ticker} - {alert['description']} - {chart_years:g}Y {chart_kind}"
@@ -361,13 +355,30 @@ def send_email(
         smtp.send_message(message)
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Send FinTracker breakout alerts.")
+    parser.add_argument("--session", choices=VALID_SESSIONS, default="all")
+    parser.add_argument(
+        "--allow-stale-data",
+        action="store_true",
+        help="Allow sending with non-today data; intended only for testing/development.",
+    )
+    return parser.parse_args()
+
+
 def main() -> None:
+    args = parse_args()
     load_env_file()
     max_extension = float(os.environ.get("BREAKOUT_MAX_EXTENSION_ADR", "1.5"))
     max_ma_extension = float(os.environ.get("BREAKOUT_MAX_MA_EXTENSION_ADR", "8.0"))
     max_items = int(os.environ.get("BREAKOUT_ALERT_MAX_ITEMS", "0"))
     chart_years = float(os.environ.get("BREAKOUT_ALERT_CHART_YEARS", "1"))
-    prices = load_price_history_cli()
+    prices = filter_by_session(load_price_history_cli(), args.session)
+    assert_fresh_data(
+        prices,
+        label=f"breakout alerts ({session_label(args.session)})",
+        allow_stale=args.allow_stale_data,
+    )
     vol_map = load_volatility_map()
     alerts = scan_breakout_triggers(
         prices,
@@ -380,6 +391,7 @@ def main() -> None:
 
     if max_items > 0:
         alerts = alerts.head(max_items).copy()
+    market = session_label(args.session)
     body = build_email_body(alerts, prices, vol_map)
     print(body)
     with tempfile.TemporaryDirectory() as tmp_dir:
@@ -401,7 +413,10 @@ def main() -> None:
             if key in content_ids
         }
         send_email(
-            f"FinTracker breakout alerts: {len(alerts)}", body, html, inline_images
+            f"FinTracker breakout alerts ({market}): {len(alerts)}",
+            body,
+            html,
+            inline_images,
         )
 
 

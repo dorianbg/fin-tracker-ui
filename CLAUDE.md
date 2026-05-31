@@ -27,7 +27,7 @@ cd app
 streamlit run PerformanceTable.py
 ```
 
-**Required env var**: None (reads from `duckdb.db` directly). For remote access, set `DUCKDB_REMOTE_HOST` and `QUACK_AUTH_TOKEN`.
+**Required env var**: None (reads from local `duckdb.db` directly).
 
 ## Agent Workflow
 
@@ -79,5 +79,3 @@ The app reads directly from `duckdb.db` via `data.get_conn()`. SQL views (`total
 |----------|-------------|---------|
 | `PARQUET_ENCRYPTION_KEY` | UI (`duckdb_importer.py`) | Encrypt/decrypt Parquet files |
 | `POSTGRES_HOST` / `POSTGRES_PORT` / etc. | Pipeline (`make pipeline-postgres`) | Postgres upload (optional) |
-| `DUCKDB_REMOTE_HOST` | UI, alerts | Connect to remote DuckDB via Quack |
-| `QUACK_AUTH_TOKEN` | UI, alerts | Auth token for Quack server |

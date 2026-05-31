@@ -15,6 +15,11 @@ import config
 import duckdb_importer as di
 from data import add_sparkline_column, get_conn, fund_type_sidebar, filter_by_fund_type
 
+try:
+    from strategy_scanners import scan_pullbacks
+except ModuleNotFoundError:
+    from app.strategy_scanners import scan_pullbacks
+
 
 def _sparkline_config():
     return {
@@ -202,71 +207,23 @@ def render():
             "It requires the 126-day trend to be intact, filters out deep 52-week drawdowns, and shows only the top-ranked candidates."
         )
 
-        # strong uptrend: above 252-day MA
-        pullbacks = df[df["ma_252"] >= min_uptrend_strength].copy()
-
-        # intermediate trend intact (optional)
-        if require_intermediate_ok:
-            pullbacks = pullbacks[pullbacks["ma_126"] >= 0]
-
-        # pulling back: below selected MA by at least the threshold
-        pullbacks = pullbacks[pullbacks[pullback_ma_col] <= pullback_depth]
+        pullbacks = scan_pullbacks(
+            df,
+            pullback_ma_col=pullback_ma_col,
+            pullback_depth=pullback_depth,
+            min_uptrend_strength=min_uptrend_strength,
+            require_intermediate_ok=require_intermediate_ok,
+            best_only=pullback_mode == "Best only",
+            max_quality_drawdown=max_quality_drawdown,
+            require_bounce=require_bounce,
+            limit=top_pullbacks_n,
+        )
 
         if pullbacks.empty:
             st.info(
                 "No instruments match current filters. Try relaxing the thresholds in the sidebar."
             )
         else:
-            # Quality score favors strong long/intermediate trends, a controlled pullback,
-            # and early bounce signs while penalizing deep drawdowns/breakdowns.
-            pullbacks["bounce_signal"] = pullbacks["r_1w"] > 0
-            pullbacks["bounce_or_stabilizing"] = (pullbacks["r_1d"] > 0) | (
-                pullbacks["r_1w"] > 0
-            )
-            pullbacks["trend_score"] = pullbacks["ma_252"].clip(lower=0) + pullbacks[
-                "ma_126"
-            ].clip(lower=0)
-            pullbacks["pullback_depth_score"] = (-pullbacks[pullback_ma_col]).clip(
-                lower=0, upper=15
-            )
-            pullbacks["bounce_score"] = (
-                pullbacks["bounce_or_stabilizing"].astype(int) * 10
-            )
-            pullbacks["drawdown_penalty"] = (-pullbacks["drawdown_52w"] - 20).clip(
-                lower=0
-            )
-            pullbacks["breakdown_penalty"] = (-pullbacks["ma_63"] - 5).clip(lower=0) + (
-                -pullbacks["ma_126"]
-            ).clip(lower=0)
-            pullbacks["pullback_score"] = pullbacks["ma_252"] * (
-                -pullbacks[pullback_ma_col]
-            )
-            pullbacks["quality_score"] = (
-                pullbacks["trend_score"]
-                + pullbacks["pullback_depth_score"]
-                + pullbacks["bounce_score"]
-                - pullbacks["drawdown_penalty"]
-                - pullbacks["breakdown_penalty"]
-            )
-
-            if pullback_mode == "Best only":
-                pullbacks = pullbacks[
-                    (pullbacks["ma_126"] > 0)
-                    & (pullbacks["drawdown_52w"] >= max_quality_drawdown)
-                ].copy()
-                if require_bounce:
-                    pullbacks = pullbacks[pullbacks["bounce_or_stabilizing"]].copy()
-                pullbacks = pullbacks.sort_values(
-                    "quality_score", ascending=False
-                ).head(top_pullbacks_n)
-            else:
-                # sort by deepest pullback — biggest opportunity first
-                pullbacks = pullbacks.sort_values(pullback_ma_col, ascending=True).head(
-                    top_pullbacks_n
-                )
-
-            pullbacks = pullbacks.reset_index(drop=True)
-
             st.markdown(f"**{len(pullbacks)} candidates found**")
 
             display_cols = [

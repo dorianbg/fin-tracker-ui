@@ -23,32 +23,14 @@ risk_free_rate = config.RISK_FREE_RATE
 sharpe_col_suffix = "_s"
 
 
-def _resolve_db_path() -> str:
-    """Resolve the DuckDB database path, handling remote Quack server if configured."""
-    remote_host = os.environ.get("DUCKDB_REMOTE_HOST", "")
-    if remote_host:
-        return f"quack:{remote_host}:9494"
-    return duckdb_file
-
-
 def init_conn(db_path: str) -> duckdb.DuckDBPyConnection:
     global _conn
-    is_remote = db_path.startswith("quack:")
     _conn = duckdb.connect(database=":memory:")
-
-    if is_remote:
-        token = os.environ.get("QUACK_AUTH_TOKEN", "fintracker-quack-token-2026")
-        _conn.execute(f"ATTACH '{db_path}' AS remote_db (TOKEN '{token}')")
-        _conn.execute("CREATE VIEW prices AS SELECT * FROM remote_db.total_return")
-        _conn.execute(
-            "CREATE VIEW performance AS SELECT * FROM remote_db.latest_performance_sharpe"
-        )
-    else:
-        _conn.execute(f"ATTACH '{db_path}' AS local_db (READ_ONLY)")
-        _conn.execute("CREATE VIEW prices AS SELECT * FROM local_db.total_return")
-        _conn.execute(
-            "CREATE VIEW performance AS SELECT * FROM local_db.latest_performance_sharpe"
-        )
+    _conn.execute(f"ATTACH '{db_path}' AS local_db (READ_ONLY)")
+    _conn.execute("CREATE VIEW prices AS SELECT * FROM local_db.total_return")
+    _conn.execute(
+        "CREATE VIEW performance AS SELECT * FROM local_db.latest_performance_sharpe"
+    )
     return _conn
 
 
@@ -57,7 +39,7 @@ def get_conn() -> duckdb.DuckDBPyConnection:
     if _conn is not None:
         return _conn
     else:
-        return init_conn(_resolve_db_path())
+        return init_conn(duckdb_file)
 
 
 @st.cache_data

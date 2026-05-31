@@ -9,6 +9,21 @@ import plotly.express as px
 
 from data import load_latest_perf, add_sparkline_column
 
+try:
+    from strategy_scanners import (
+        scan_ma_crossovers,
+        scan_new_52w_highs,
+        scan_z_score_spikes,
+        split_latest_two_rows,
+    )
+except ModuleNotFoundError:
+    from app.strategy_scanners import (
+        scan_ma_crossovers,
+        scan_new_52w_highs,
+        scan_z_score_spikes,
+        split_latest_two_rows,
+    )
+
 
 def _add_sparkline_columns(df: pd.DataFrame) -> pd.DataFrame:
     add_sparkline_column(df)
@@ -36,14 +51,7 @@ def render():
         st.warning("No data loaded.")
         st.stop()
 
-    # Split into today (rown=1) and yesterday (rown=2)
-    today = raw[raw["rown"] == 1].copy().drop_duplicates("ticker").set_index("ticker")
-    yesterday = raw[raw["rown"] == 2].copy().drop_duplicates("ticker").set_index("ticker")
-
-    # only keep instruments that have both days
-    common = today.index.intersection(yesterday.index)
-    today = today.loc[common]
-    yesterday = yesterday.loc[common]
+    today, yesterday = split_latest_two_rows(raw)
 
     data_date = today["date"].iloc[0] if "date" in today.columns else "Unknown"
     st.markdown(
@@ -64,11 +72,7 @@ def render():
         # ═══════════════════════════════════════════
         st.header("🏔️ New 52-Week Highs")
 
-        # drawdown_52w = 0 means at 52w high. Was it NOT at high yesterday?
-        new_highs = today[
-            (today["drawdown_52w"] >= -0.5) & (yesterday["drawdown_52w"] < -0.5)
-        ].copy()
-        new_highs["prev_drawdown"] = yesterday.loc[new_highs.index, "drawdown_52w"]
+        new_highs = scan_new_52w_highs(today, yesterday)
 
         if new_highs.empty:
             st.info("No new 52-week highs today.")
@@ -231,40 +235,8 @@ def render():
             "252d MA": "ma_252",
         }
 
-        crossover_events = []
-        for ma_label, ma_col in ma_cols.items():
-            for ticker in common:
-                today_val = today.loc[ticker, ma_col]
-                yest_val = yesterday.loc[ticker, ma_col]
-                if pd.isna(today_val) or pd.isna(yest_val):
-                    continue
-                if today_val > 0 and yest_val <= 0:
-                    crossover_events.append(
-                        {
-                            "Ticker": ticker,
-                            "Instrument": today.loc[ticker, "description"],
-                            "MA": ma_label,
-                            "Direction": "🟢 Crossed ABOVE",
-                            "Today": today_val,
-                            "Yesterday": yest_val,
-                            "1D Return": today.loc[ticker, "r_1d"],
-                        }
-                    )
-                elif today_val < 0 and yest_val >= 0:
-                    crossover_events.append(
-                        {
-                            "Ticker": ticker,
-                            "Instrument": today.loc[ticker, "description"],
-                            "MA": ma_label,
-                            "Direction": "🔴 Crossed BELOW",
-                            "Today": today_val,
-                            "Yesterday": yest_val,
-                            "1D Return": today.loc[ticker, "r_1d"],
-                        }
-                    )
-
-        if crossover_events:
-            cross_df = pd.DataFrame(crossover_events)
+        cross_df = scan_ma_crossovers(today, yesterday)
+        if not cross_df.empty:
             cross_df["ticker"] = cross_df["Ticker"]
             _add_sparkline_columns(cross_df)
 
@@ -363,26 +335,8 @@ def render():
             "Instruments with a z-score > 2 on any lookback — statistically unusual moves."
         )
 
-        z_cols = {"1D Z": "z_1d", "1W Z": "z_1w", "2W Z": "z_2w", "1M Z": "z_1mo"}
-
-        z_events = []
-        for ticker in common:
-            for z_label, z_col in z_cols.items():
-                z_val = today.loc[ticker, z_col]
-                if pd.notna(z_val) and z_val >= z_threshold:
-                    z_events.append(
-                        {
-                            "Ticker": ticker,
-                            "Instrument": today.loc[ticker, "description"],
-                            "Metric": z_label,
-                            "Z-Score": z_val,
-                            "1D Return": today.loc[ticker, "r_1d"],
-                            "1W Return": today.loc[ticker, "r_1w"],
-                        }
-                    )
-
-        if z_events:
-            z_df = pd.DataFrame(z_events).sort_values("Z-Score", ascending=False)
+        z_df = scan_z_score_spikes(today, z_threshold)
+        if not z_df.empty:
             z_df["ticker"] = z_df["Ticker"]
             _add_sparkline_columns(z_df)
 
