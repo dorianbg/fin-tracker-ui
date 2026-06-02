@@ -16,6 +16,12 @@ import pandas as pd
 from app.views.ConsolidationSetup import scan_breakout_triggers
 from app.alerts.freshness import assert_fresh_data
 from app.alerts.session import VALID_SESSIONS, filter_by_session, session_label
+from app.alerts.state import (
+    DEFAULT_STATE_DIR,
+    detect_changes,
+    load_previous,
+    save_current,
+)
 
 
 ENV_FILE = Path(__file__).resolve().parents[1] / ".env"
@@ -389,6 +395,17 @@ def main() -> None:
         print("No fresh breakout alerts.")
         return
 
+    # dedup: skip if identical to last run
+    breakouts = alerts.copy()
+    breakouts["rank"] = range(1, len(breakouts) + 1)
+    breakouts["signal"] = "Fresh resistance breakout"
+    previous = load_previous(DEFAULT_STATE_DIR, "breakout", args.session)
+    changes = detect_changes(breakouts, previous)
+    if changes.empty:
+        print(f"No new breakout changes ({session_label(args.session)}).")
+        return
+    print(f"Sending {len(changes)} breakout changes ({session_label(args.session)}).")
+
     if max_items > 0:
         alerts = alerts.head(max_items).copy()
     market = session_label(args.session)
@@ -418,6 +435,8 @@ def main() -> None:
             html,
             inline_images,
         )
+
+    save_current(DEFAULT_STATE_DIR, "breakout", args.session, breakouts)
 
 
 if __name__ == "__main__":

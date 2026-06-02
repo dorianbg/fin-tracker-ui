@@ -32,18 +32,36 @@ def load_previous(state_dir: Path, strategy_id: str, session: str) -> dict[str, 
 
 
 def save_current(
-    state_dir: Path, strategy_id: str, session: str, signals: pd.DataFrame
+    state_dir: Path,
+    strategy_id: str,
+    session: str,
+    signals: pd.DataFrame,
+    current_date: str | None = None,
 ) -> None:
     state_dir.mkdir(parents=True, exist_ok=True)
+    previous = load_previous(state_dir, strategy_id, session)
     rows = []
     if not signals.empty:
         for i, row in signals.reset_index(drop=True).iterrows():
+            key = signal_key(row)
+            prior = previous.get(key)
+            # Preserve start_date/start_price from prior state; only set on New
+            if prior and prior.get("start_date"):
+                start_date = prior["start_date"]
+                start_price = prior.get("start_price")
+            else:
+                start_date = current_date
+                start_price = row.get("price")
             rows.append(
                 {
-                    "key": signal_key(row),
+                    "key": key,
                     "ticker": row.get("alert_ticker", row.get("ticker", "")),
                     "description": row.get("description", row.get("name", "")),
                     "rank": int(row.get("rank", i + 1)),
+                    "start_date": start_date,
+                    "start_price": float(start_price)
+                    if pd.notna(start_price)
+                    else None,
                 }
             )
     path = state_file(state_dir, strategy_id, session)
@@ -70,6 +88,10 @@ def detect_changes(current: pd.DataFrame, previous: dict[str, dict]) -> pd.DataF
             item = row.to_dict()
             item["change"] = status
             item["rank"] = rank
+            # Attach prior start info so emails can show signal history
+            if prior:
+                item["start_date"] = prior.get("start_date")
+                item["start_price"] = prior.get("start_price")
             rows.append(item)
     for key, prior in previous.items():
         if key not in current_keys:

@@ -28,7 +28,7 @@ def test_assert_fresh_data_allows_today():
 
 
 def test_assert_fresh_data_blocks_stale_send():
-    df = pd.DataFrame({"date": ["2026-05-29"]})
+    df = pd.DataFrame({"date": ["2026-05-20"]})
 
     with pytest.raises(RuntimeError, match="Refusing to send alerts"):
         assert_fresh_data(df, label="alerts", today=date(2026, 5, 30))
@@ -72,7 +72,7 @@ def test_strategy_sender_refuses_stale_data_before_email(monkeypatch):
     )
     monkeypatch.setattr(
         send_strategy_alerts,
-        "_send_formatted",
+        "_send_consolidated",
         lambda *args, **kwargs: pytest.fail("stale data should not send email"),
     )
 

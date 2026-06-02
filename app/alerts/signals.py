@@ -17,6 +17,7 @@ from app.views.SectorRotation import (
 )
 from app.strategy_scanners import (
     scan_laggard_awakening,
+    scan_leaders_weakening,
     scan_pullbacks,
     scan_todays_alert_crossings,
 )
@@ -33,7 +34,13 @@ class StrategySignals:
 def _finalize(df: pd.DataFrame, limit: int) -> pd.DataFrame:
     if df.empty:
         return df.copy()
-    out = add_alert_ticker(df).head(limit).copy().reset_index(drop=True)
+    out = add_alert_ticker(df)
+    # deduplicate by display ticker + signal — guards against transient data duplicates
+    dedup_cols = [c for c in ("alert_ticker", "ticker") if c in out.columns]
+    if "signal" in out.columns:
+        dedup_cols.append("signal")
+    out = out.drop_duplicates(subset=dedup_cols).copy()
+    out = out.head(limit).reset_index(drop=True)
     out["rank"] = range(1, len(out) + 1)
     if "signal" not in out.columns:
         out["signal"] = out.get("strategy", "signal")
@@ -538,6 +545,29 @@ def todays_crossings_signals(
     )
 
 
+def leaders_weakening_signals(
+    latest: pd.DataFrame, session: str, limit: int, benchmark: str = "VWRP"
+) -> StrategySignals:
+    df = _fund_filter(filter_by_session(latest, session))
+    active = scan_leaders_weakening(df, benchmark_ticker=benchmark)
+    if not active.empty:
+        active["score"] = active["weakening_score"]
+        active["signal"] = "Leader weakening"
+        active["summary"] = active.apply(
+            lambda r: (
+                f"6M {float(r['r_6mo']):+.1f}% → 1W {float(r['r_1w']):+.2f}%, "
+                f"below 21D MA by {float(r['ma_21']):+.2f}%, 52W dd {float(r['drawdown_52w']):+.1f}%."
+            ),
+            axis=1,
+        )
+    return StrategySignals(
+        "leaders_weakening",
+        "FinTracker leaders weakening alerts",
+        "Former momentum leaders showing early breakdown signals: strong 6M history but recent 1W weakness and price below 21D MA.",
+        _finalize(active, limit),
+    )
+
+
 def build_all_signals(
     latest: pd.DataFrame,
     raw_two_rows: pd.DataFrame,
@@ -555,7 +585,7 @@ def build_all_signals(
         laggard_signals(latest, session, limit),
         turnaround_signals(latest, prices, session, limit),
         momentum_breakout_signals(latest, prices, session, limit),
-        todays_crossings_signals(raw_two_rows, session, limit),
+        leaders_weakening_signals(latest, session, limit),
     ]
     signals.extend(rotation_signals(latest, session, limit))
     return signals

@@ -1,5 +1,21 @@
 # Changelog
 
+## 2026-05-31 13:45 - Silence First-Run Strategy Alert Flood
+
+- Changed: Strategy alert sender now skips sending email on the very first run for a session when no previous state files exist.
+- Why: First runs previously sent a noisy "all New" consolidated email because every signal was new; saving state silently on first run avoids the flood.
+- How: Added `any_previous` tracking in the strategy loop; if no previous state exists for any strategy and not in `--dry-run`, print a first-run message and return before building the consolidated email.
+- Verified: `PYTHONPATH=. uv run python -m pytest tests/test_strategy_alerts.py tests/test_alert_freshness.py tests/test_consolidation_setup.py -q` (24 passed); Python compile check; dry-run still prints output.
+- Commit: Uncommitted
+
+## 2026-05-31 13:30 - Consolidated Strategy Alert Email
+
+- Changed: Replaced per-strategy alert emails with a single consolidated email per session that ranks instruments by how many strategy signals they trigger.
+- Why: Receiving ~12 separate strategy emails was noisy; a single ranked list makes it easier to see which tickers are most broadly interesting across strategies.
+- How: Added `app/alerts/consolidated.py` with `_build_consolidated()` that groups active signals by ticker and counts distinct signals; rewrote `scripts/send_strategy_alerts.py` to compute per-strategy changes/state as before but emit one consolidated email containing all active signals (gated on any changes unless `--active-only`); updated `tests/test_alert_freshness.py` mock from removed `_send_formatted` to `_send_consolidated`; added regression test for aggregation/sorting logic.
+- Verified: `PYTHONPATH=. uv run python -m pytest tests/test_strategy_alerts.py tests/test_alert_freshness.py tests/test_consolidation_setup.py -q` (24 passed); focused Ruff checks; Python compile checks; `zsh -n scripts/run_strategy_alerts.sh`; dry-run confirmed consolidated body/HTML and charts generate correctly. Full suite still has 5 pre-existing unrelated failures.
+- Commit: Uncommitted
+
 ## 2026-05-30 07:30 - Block Alert Emails On Stale Data
 
 - Changed: Added a freshness guard so breakout and strategy alert emails only send when loaded data has today's date.

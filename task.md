@@ -1,5 +1,23 @@
 # Tasks
 
+## 2026-05-31 13:45 - Silence First-Run Strategy Alert Flood
+
+- Goal: Prevent the first run of strategy alerts from sending a noisy "all New" email when no previous state exists.
+- Scope: `scripts/send_strategy_alerts.py`, tracking updates.
+- Assumptions: First run should save state silently; subsequent runs should behave normally; `--dry-run` should still print output for development.
+- Plan: Track whether any previous state file exists across strategies; if none exist and not in dry-run, save state and exit without sending email.
+- Verify: `PYTHONPATH=. uv run python -m pytest tests/test_strategy_alerts.py tests/test_alert_freshness.py tests/test_consolidation_setup.py -q` (24 passed); Python compile check; dry-run still prints consolidated output.
+- Status: completed locally, uncommitted.
+
+## 2026-05-31 13:30 - Consolidated Strategy Alert Email
+
+- Goal: Replace ~12 separate strategy emails per session with a single consolidated email listing instruments ranked by signal count across strategies.
+- Scope: `app/alerts/consolidated.py`, `scripts/send_strategy_alerts.py`, `tests/test_strategy_alerts.py`, `tests/test_alert_freshness.py`, plus tracking updates.
+- Assumptions: Breakout alerts remain standalone (per handoff decision); per-strategy state tracking stays for change detection; `--active-only` and `--changes-only` CLI flags are preserved but applied to the consolidated email; `max-items` caps the total instrument count in the consolidated email.
+- Plan: Add `_build_consolidated` helper that aggregates active signals across strategies by ticker, sorting by signal count then best score; replace per-strategy email loop in `send_strategy_alerts.py` with a single consolidated send; update freshness test mock from `_send_formatted` to `_send_consolidated`; add regression test for aggregation logic; verify with dry-run and focused tests.
+- Verify: `PYTHONPATH=. uv run python -m pytest tests/test_strategy_alerts.py tests/test_alert_freshness.py tests/test_consolidation_setup.py -q` (24 passed); `PYTHONPATH=. uv run python -m py_compile app/alerts/consolidated.py scripts/send_strategy_alerts.py tests/test_strategy_alerts.py tests/test_alert_freshness.py`; `PYTHONPATH=. uv run ruff check --select E9,F63,F7,F82` on changed files; `zsh -n scripts/run_strategy_alerts.sh`; dry-run `PYTHONPATH=. uv run python scripts/send_strategy_alerts.py --session us --dry-run --allow-stale-data --max-items 3` produces expected consolidated output. Full suite still has 5 pre-existing unrelated failures.
+- Status: completed locally, uncommitted.
+
 ## 2026-05-30 07:30 - Block Alert Emails On Stale Data
 
 - Goal: Prevent live alert emails from being sent unless the alert data date is today, while preserving explicit testing/development escape hatches.

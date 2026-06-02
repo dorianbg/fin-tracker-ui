@@ -43,12 +43,14 @@ def assert_fresh_data(
 ) -> date | None:
     data_date = latest_data_date(df, date_col=date_col)
     expected = today or date.today()
-    if data_date == expected or stale_data_allowed(
-        allow_stale=allow_stale, dry_run=dry_run
-    ):
+    if data_date is None:
+        raise RuntimeError(f"Refusing to send {label}: no {date_col} column in data.")
+    delta = abs((expected - data_date).days)
+    if delta <= 3 or stale_data_allowed(allow_stale=allow_stale, dry_run=dry_run):
         return data_date
     raise RuntimeError(
-        f"Refusing to send {label}: latest {date_col} is {data_date or 'missing'}, "
-        f"expected {expected}. Run the pipeline first, or use --allow-stale-data / "
+        f"Refusing to send {label}: latest {date_col} is {data_date}, "
+        f"expected within 3 days of {expected}. "
+        f"Run the pipeline first, or use --allow-stale-data / "
         f"{ALLOW_STALE_ENV}=1 only for testing/development."
     )

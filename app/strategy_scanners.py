@@ -250,6 +250,60 @@ def scan_z_score_spikes(today: pd.DataFrame, z_threshold: float = 2.0) -> pd.Dat
     return pd.DataFrame(rows).sort_values("Z-Score", ascending=False)
 
 
+def scan_leaders_weakening(
+    df: pd.DataFrame,
+    *,
+    benchmark_ticker: str = "VWRP",
+    min_6m_return: float = 10.0,
+    min_1y_return: float = 5.0,
+    max_1w_return: float = 0.0,
+    max_drawdown: float = -5.0,
+) -> pd.DataFrame:
+    """Find former leaders that are starting to break down.
+
+    Criteria:
+    - Strong 6M performance (was a leader)
+    - Still positive on 1Y but fading
+    - Recent 1W weakness
+    - Price below 21D MA (short-term breakdown)
+    - Not crashed yet (drawdown > max_drawdown)
+    """
+    if df.empty:
+        return df.copy()
+
+    bm = df[df["ticker"] == benchmark_ticker]
+    if bm.empty:
+        return df.iloc[0:0].copy()
+
+    bm_1w = float(bm["r_1w"].iloc[0])
+
+    mask = (
+        (df["r_6mo"] >= min_6m_return)
+        & (df["r_1y"] >= min_1y_return)
+        & (df["r_1w"] <= max_1w_return)
+        & (df["ma_21"] < 0)
+        & (df["drawdown_52w"] >= max_drawdown)
+        & (df["ticker"] != benchmark_ticker)
+    )
+
+    weakening = df[mask].copy()
+    if weakening.empty:
+        return weakening
+
+    # Relative weakness vs benchmark
+    weakening["rs_1w"] = weakening["r_1w"] - bm_1w
+    # Score: stronger past + more recent weakness = higher score
+    weakening["weakening_score"] = (
+        weakening["r_6mo"].clip(lower=0) * 0.3
+        + weakening["r_1y"].clip(lower=0) * 0.2
+        + (-weakening["r_1w"]).clip(lower=0) * 2.0
+        + (-weakening["ma_21"]).clip(lower=0, upper=10) * 0.5
+    )
+    return weakening.sort_values("weakening_score", ascending=False).reset_index(
+        drop=True
+    )
+
+
 def scan_todays_alert_crossings(
     raw: pd.DataFrame, *, z_threshold: float = 2.0
 ) -> pd.DataFrame:

@@ -344,3 +344,45 @@ def test_laggard_alert_reuses_shared_laggard_scanner():
     alert = signals.laggard_signals(latest, "us", 10).active
 
     assert shared["ticker"].tolist() == alert["ticker"].tolist()
+
+
+def test_build_consolidated_ranks_by_signal_count_then_score():
+    from app.alerts.consolidated import _build_consolidated
+
+    s1 = signals.StrategySignals(
+        "s1",
+        "S1",
+        "Comment 1",
+        pd.DataFrame(
+            {
+                "alert_ticker": ["A", "B"],
+                "ticker": ["A", "B"],
+                "description": ["Alpha", "Beta"],
+                "score": [5.0, 4.0],
+                "signal": ["sig1", "sig1"],
+                "summary": ["summary A1", "summary B1"],
+            }
+        ),
+    )
+    s2 = signals.StrategySignals(
+        "s2",
+        "S2",
+        "Comment 2",
+        pd.DataFrame(
+            {
+                "alert_ticker": ["A", "C"],
+                "ticker": ["A", "C"],
+                "description": ["Alpha", "Gamma"],
+                "score": [3.0, 6.0],
+                "signal": ["sig2", "sig2"],
+                "summary": ["summary A2", "summary C2"],
+            }
+        ),
+    )
+    result = _build_consolidated([s1, s2], 10)
+
+    assert result["alert_ticker"].tolist() == ["A", "C", "B"]
+    assert result["signal_count"].tolist() == [2, 1, 1]
+    assert result.iloc[0]["score"] == 5.0
+    assert set(result.iloc[0]["strategy_id"]) == {"s1", "s2"}
+    assert set(result.iloc[0]["strategy_title"]) == {"S1", "S2"}
