@@ -1393,3 +1393,87 @@ DG.PA,Vinci SA,EUR,stock,,Index - Euro Stoxx 50 - Industrials
 UCG.MI,UniCredit,EUR,stock,,Index - Euro Stoxx 50 - Financials
 VOW.DE,Volkswagen Group,EUR,stock,,Index - Euro Stoxx 50 - Consumer Discretionary
 WKL.AS,Wolters Kluwer,EUR,stock,,Index - Euro Stoxx 50 - Industrials
+RWE.DE,RWE,EUR,stock,,Sector - Utilities
+EOAN.DE,E.ON,EUR,stock,,Sector - Utilities
+HEIA.AS,Heineken,EUR,stock,,Sector - Consumer Staples
+ASM.AS,ASM International,EUR,stock,,Sector - Technology
+UBSG.SW,UBS Group,CHF,stock,,Sector - Financials
+ZURN.SW,Zurich Insurance,CHF,stock,,Sector - Financials
+ABBN.SW,ABB,CHF,stock,,Sector - Industrials
+LONN.SW,Lonza Group,CHF,stock,,Sector - Healthcare
+G.MI,Assicurazioni Generali,EUR,stock,,Sector - Financials
+LDO.MI,Leonardo,EUR,stock,,Sector - Defence
+STMPA.PA,STMicroelectronics,EUR,stock,,Sector - Technology
+ERIC-B.ST,Ericsson,SEK,stock,,Sector - Technology
+ATCO-A.ST,Atlas Copco,SEK,stock,,Sector - Industrials
+DSV.CO,DSV,DKK,stock,,Sector - Industrials
+REP.MC,Repsol,EUR,stock,,Sector - Energy
+7203.T,Toyota Motor,JPY,stock,,Sector - Consumer Discretionary
+6758.T,Sony Group,JPY,stock,,Sector - Technology
+8306.T,Mitsubishi UFJ Financial,JPY,stock,,Sector - Financials
+9984.T,SoftBank Group,JPY,stock,,Sector - Communication Services
+6861.T,Keyence,JPY,stock,,Sector - Technology
+6501.T,Hitachi,JPY,stock,,Sector - Industrials
+8035.T,Tokyo Electron,JPY,stock,,Sector - Technology
+4568.T,Daiichi Sankyo,JPY,stock,,Sector - Healthcare
+4063.T,Shin-Etsu Chemical,JPY,stock,,Sector - Materials
+8316.T,Sumitomo Mitsui Financial,JPY,stock,,Sector - Financials
+7267.T,Honda Motor,JPY,stock,,Sector - Consumer Discretionary
+7751.T,Canon,JPY,stock,,Sector - Technology
+4502.T,Takeda Pharmaceutical,JPY,stock,,Sector - Healthcare
+9983.T,Fast Retailing,JPY,stock,,Sector - Consumer Discretionary
+2914.T,Japan Tobacco,JPY,stock,,Sector - Consumer Staples
+005930.KS,Samsung Electronics,KRW,stock,,Sector - Technology
+000660.KS,SK Hynix,KRW,stock,,Sector - Technology
+035420.KS,NAVER,KRW,stock,,Sector - Communication Services
+051910.KS,LG Chem,KRW,stock,,Sector - Materials
+005380.KS,Hyundai Motor,KRW,stock,,Sector - Consumer Discretionary
+068270.KS,Celltrion,KRW,stock,,Sector - Healthcare
+105560.KS,KB Financial Group,KRW,stock,,Sector - Financials
+207940.KS,Samsung Biologics,KRW,stock,,Sector - Healthcare
+373220.KS,LG Energy Solution,KRW,stock,,Sector - Technology
+005490.KS,POSCO Holdings,KRW,stock,,Sector - Materials
+6702.T,Fujitsu,JPY,stock,,Sector - Technology
+6857.T,Advantest,JPY,stock,,Sector - Technology
+6954.T,Fanuc,JPY,stock,,Sector - Industrials
+6971.T,Kyocera,JPY,stock,,Sector - Technology
+6981.T,Murata Manufacturing,JPY,stock,,Sector - Technology
+9432.T,NTT,JPY,stock,,Sector - Communication Services
+9433.T,KDDI,JPY,stock,,Sector - Communication Services
+6301.T,Komatsu,JPY,stock,,Sector - Industrials
+6367.T,Daikin Industries,JPY,stock,,Sector - Industrials
+6594.T,Nidec,JPY,stock,,Sector - Industrials
+7011.T,Mitsubishi Heavy Industries,JPY,stock,,Sector - Industrials
+8002.T,Marubeni,JPY,stock,,Sector - Industrials
+8031.T,Mitsui & Co,JPY,stock,,Sector - Industrials
+7201.T,Nissan Motor,JPY,stock,,Sector - Consumer Discretionary
+7270.T,Subaru,JPY,stock,,Sector - Consumer Discretionary
+4503.T,Astellas Pharma,JPY,stock,,Sector - Healthcare
+4523.T,Eisai,JPY,stock,,Sector - Healthcare
+4901.T,Fujifilm,JPY,stock,,Sector - Technology
+4452.T,Kao,JPY,stock,,Sector - Consumer Staples
+3382.T,Seven & i Holdings,JPY,stock,,Sector - Consumer Staples
+8604.T,Nomura Holdings,JPY,stock,,Sector - Financials
+8801.T,Mitsui Fudosan,JPY,stock,,Sector - Real Estate
+8802.T,Mitsubishi Estate,JPY,stock,,Sector - Real Estate
+5108.T,Bridgestone,JPY,stock,,Sector - Consumer Discretionary
+5401.T,Nippon Steel,JPY,stock,,Sector - Materials
+6178.T,Japan Post Holdings,JPY,stock,,Sector - Financials
+5020.T,ENEOS Holdings,JPY,stock,,Sector - Energy
+4661.T,Oriental Land,JPY,stock,,Sector - Consumer Discretionary
+3092.T,ZOZO,JPY,stock,,Sector - Consumer Discretionary
+009150.KS,Samsung Electro-Mechanics,KRW,stock,,Sector - Technology
+066570.KS,LG Electronics,KRW,stock,,Sector - Technology
+006400.KS,Samsung SDI,KRW,stock,,Sector - Technology
+032830.KS,Samsung Life Insurance,KRW,stock,,Sector - Financials
+017670.KS,SK Telecom,KRW,stock,,Sector - Communication Services
+055550.KS,Shinhan Financial Group,KRW,stock,,Sector - Financials
+086790.KS,Hana Financial Group,KRW,stock,,Sector - Financials
+096770.KS,SK Innovation,KRW,stock,,Sector - Energy
+035720.KS,Kakao,KRW,stock,,Sector - Communication Services
+012330.KS,Hyundai Mobis,KRW,stock,,Sector - Consumer Discretionary
+000270.KS,Kia,KRW,stock,,Sector - Consumer Discretionary
+010950.KS,S-Oil,KRW,stock,,Sector - Energy
+009540.KS,HD Korea Shipbuilding,KRW,stock,,Sector - Industrials
+034730.KS,SK Inc,KRW,stock,,Sector - Industrials
+018260.KS,Samsung SDS,KRW,stock,,Sector - Technology
