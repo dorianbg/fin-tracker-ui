@@ -334,7 +334,6 @@ AZN.L,AstraZeneca,GBP,stock,,Sector - Healthcare
 V,Visa,USD,stock,,Thematic - Fintech
 MA,Mastercard,USD,stock,,Thematic - Fintech
 PYPL,PayPal,USD,stock,,Thematic - Fintech
-SQ,Block,USD,stock,,Thematic - Fintech
 ADYEN.AS,Adyen,EUR,stock,,Thematic - Fintech
 SOFI,SoFi Technologies,USD,stock,,Thematic - Fintech
 TTWO,Take-Two Interactive,USD,stock,,Thematic - Gaming
@@ -1393,6 +1392,47 @@ DG.PA,Vinci SA,EUR,stock,,Index - Euro Stoxx 50 - Industrials
 UCG.MI,UniCredit,EUR,stock,,Index - Euro Stoxx 50 - Financials
 VOW.DE,Volkswagen Group,EUR,stock,,Index - Euro Stoxx 50 - Consumer Discretionary
 WKL.AS,Wolters Kluwer,EUR,stock,,Index - Euro Stoxx 50 - Industrials
+BEI.DE,Beiersdorf,EUR,stock,,Index - DAX - Consumer Staples
+BNR.DE,Brenntag,EUR,stock,,Index - DAX - Industrials
+CBK.DE,Commerzbank,EUR,stock,,Index - DAX - Financials
+CON.DE,Continental,EUR,stock,,Index - DAX - Consumer Discretionary
+DTG.DE,Daimler Truck,EUR,stock,,Index - DAX - Industrials
+FME.DE,Fresenius Medical Care,EUR,stock,,Index - DAX - Health Care
+FRE.DE,Fresenius,EUR,stock,,Index - DAX - Health Care
+HEI.DE,Heidelberg Materials,EUR,stock,,Index - DAX - Materials
+HEN3.DE,Henkel,EUR,stock,,Index - DAX - Consumer Staples
+HNR1.DE,Hannover Rueck,EUR,stock,,Index - DAX - Financials
+MRK.DE,Merck KGaA,EUR,stock,,Index - DAX - Health Care
+MTX.DE,MTU Aero Engines,EUR,stock,,Index - DAX - Industrials
+P911.DE,Porsche AG,EUR,stock,,Index - DAX - Consumer Discretionary
+PAH3.DE,Porsche Holding,EUR,stock,,Index - DAX - Consumer Discretionary
+PUM.DE,Puma,EUR,stock,,Index - DAX - Consumer Discretionary
+QIA.DE,Qiagen,EUR,stock,,Index - DAX - Health Care
+SHL.DE,Siemens Healthineers,EUR,stock,,Index - DAX - Health Care
+SRT3.DE,Sartorius,EUR,stock,,Index - DAX - Health Care
+SY1.DE,Symrise,EUR,stock,,Index - DAX - Materials
+VNA.DE,Vonovia,EUR,stock,,Index - DAX - Real Estate
+ZAL.DE,Zalando,EUR,stock,,Index - DAX - Consumer Discretionary
+AC.PA,Accor,EUR,stock,,Index - CAC 40 - Consumer Discretionary
+ACA.PA,Credit Agricole,EUR,stock,,Index - CAC 40 - Financials
+CAP.PA,Capgemini,EUR,stock,,Index - CAC 40 - Information Technology
+CA.PA,Carrefour,EUR,stock,,Index - CAC 40 - Consumer Staples
+DSY.PA,Dassault Systemes,EUR,stock,,Index - CAC 40 - Information Technology
+EDEN.PA,Edenred,EUR,stock,,Index - CAC 40 - Industrials
+ENGI.PA,Engie,EUR,stock,,Index - CAC 40 - Utilities
+EN.PA,Bouygues,EUR,stock,,Index - CAC 40 - Industrials
+ERF.PA,Eurofins Scientific,EUR,stock,,Index - CAC 40 - Health Care
+GLE.PA,Societe Generale,EUR,stock,,Index - CAC 40 - Financials
+HO.PA,Thales,EUR,stock,,Index - CAC 40 - Industrials
+LR.PA,Legrand,EUR,stock,,Index - CAC 40 - Industrials
+ML.PA,Michelin,EUR,stock,,Index - CAC 40 - Consumer Discretionary
+ORA.PA,Orange,EUR,stock,,Index - CAC 40 - Communication Services
+PUB.PA,Publicis Groupe,EUR,stock,,Index - CAC 40 - Communication Services
+RI.PA,Pernod Ricard,EUR,stock,,Index - CAC 40 - Consumer Staples
+RNO.PA,Renault,EUR,stock,,Index - CAC 40 - Consumer Discretionary
+STLAP.PA,Stellantis,EUR,stock,,Index - CAC 40 - Consumer Discretionary
+TEP.PA,Teleperformance,EUR,stock,,Index - CAC 40 - Industrials
+WLN.PA,Worldline,EUR,stock,,Index - CAC 40 - Financials
 RWE.DE,RWE,EUR,stock,,Sector - Utilities
 EOAN.DE,E.ON,EUR,stock,,Sector - Utilities
 HEIA.AS,Heineken,EUR,stock,,Sector - Consumer Staples
@@ -1401,6 +1441,22 @@ UBSG.SW,UBS Group,CHF,stock,,Sector - Financials
 ZURN.SW,Zurich Insurance,CHF,stock,,Sector - Financials
 ABBN.SW,ABB,CHF,stock,,Sector - Industrials
 LONN.SW,Lonza Group,CHF,stock,,Sector - Healthcare
+ALC.SW,Alcon,CHF,stock,,Index - SMI - Health Care
+BAER.SW,Julius Baer,CHF,stock,,Index - Swiss Large Cap - Financials
+GEBN.SW,Geberit,CHF,stock,,Index - SMI - Industrials
+GIVN.SW,Givaudan,CHF,stock,,Index - SMI - Materials
+HOLN.SW,Holcim,CHF,stock,,Index - SMI - Materials
+KNIN.SW,Kuehne + Nagel,CHF,stock,,Index - SMI - Industrials
+LOGN.SW,Logitech,CHF,stock,,Index - SMI - Information Technology
+PGHN.SW,Partners Group,CHF,stock,,Index - SMI - Financials
+SCMN.SW,Swisscom,CHF,stock,,Index - SMI - Communication Services
+SDZ.SW,Sandoz,CHF,stock,,Index - SMI - Health Care
+SIKA.SW,Sika,CHF,stock,,Index - SMI - Materials
+SLHN.SW,Swiss Life,CHF,stock,,Index - SMI - Financials
+SOON.SW,Sonova,CHF,stock,,Index - SMI - Health Care
+SREN.SW,Swiss Re,CHF,stock,,Index - SMI - Financials
+STMN.SW,Straumann,CHF,stock,,Index - SMI - Health Care
+VACN.SW,VAT Group,CHF,stock,,Index - Swiss Large Cap - Industrials
 G.MI,Assicurazioni Generali,EUR,stock,,Sector - Financials
 LDO.MI,Leonardo,EUR,stock,,Sector - Defence
 STMPA.PA,STMicroelectronics,EUR,stock,,Sector - Technology
@@ -1477,3 +1533,100 @@ REP.MC,Repsol,EUR,stock,,Sector - Energy
 009540.KS,HD Korea Shipbuilding,KRW,stock,,Sector - Industrials
 034730.KS,SK Inc,KRW,stock,,Sector - Industrials
 018260.KS,Samsung SDS,KRW,stock,,Sector - Technology
+8058.T,Mitsubishi Corp,JPY,stock,,Equity - Japan Trading Companies
+8001.T,Itochu Corp,JPY,stock,,Equity - Japan Trading Companies
+8053.T,Sumitomo Corp,JPY,stock,,Equity - Japan Trading Companies
+8411.T,Mizuho Financial Group,JPY,stock,,Equity - Japan Financials
+8766.T,Tokio Marine Holdings,JPY,stock,,Equity - Japan Insurance
+8725.T,MS&AD Insurance Group,JPY,stock,,Equity - Japan Insurance
+8750.T,Dai-ichi Life Holdings,JPY,stock,,Equity - Japan Insurance
+8591.T,ORIX Corp,JPY,stock,,Equity - Japan Financials
+8308.T,Resona Holdings,JPY,stock,,Equity - Japan Banks
+9020.T,East Japan Railway,JPY,stock,,Equity - Japan Transport
+9021.T,West Japan Railway,JPY,stock,,Equity - Japan Transport
+9022.T,Central Japan Railway,JPY,stock,,Equity - Japan Transport
+9201.T,Japan Airlines,JPY,stock,,Equity - Japan Airlines
+9202.T,ANA Holdings,JPY,stock,,Equity - Japan Airlines
+4519.T,Chugai Pharmaceutical,JPY,stock,,Equity - Japan Healthcare
+4578.T,Otsuka Holdings,JPY,stock,,Equity - Japan Healthcare
+2413.T,M3 Inc,JPY,stock,,Equity - Japan Healthcare
+6098.T,Recruit Holdings,JPY,stock,,Equity - Japan Services
+7733.T,Olympus Corp,JPY,stock,,Equity - Japan Healthcare
+7741.T,HOYA Corp,JPY,stock,,Equity - Japan Healthcare
+6762.T,TDK Corp,JPY,stock,,Equity - Japan Electronics
+4689.T,LY Corp,JPY,stock,,Equity - Japan Internet
+4755.T,Rakuten Group,JPY,stock,,Equity - Japan Internet
+3659.T,Nexon,JPY,stock,,Equity - Japan Gaming
+7832.T,Bandai Namco Holdings,JPY,stock,,Equity - Japan Gaming
+9766.T,Konami Group,JPY,stock,,Equity - Japan Gaming
+2502.T,Asahi Group Holdings,JPY,stock,,Equity - Japan Consumer Staples
+2503.T,Kirin Holdings,JPY,stock,,Equity - Japan Consumer Staples
+2802.T,Ajinomoto,JPY,stock,,Equity - Japan Consumer Staples
+8267.T,Aeon,JPY,stock,,Equity - Japan Retail
+7269.T,Suzuki Motor,JPY,stock,,Equity - Japan Autos
+6902.T,Denso Corp,JPY,stock,,Equity - Japan Autos
+1925.T,Daiwa House Industry,JPY,stock,,Equity - Japan Construction
+1928.T,Sekisui House,JPY,stock,,Equity - Japan Construction
+5332.T,TOTO,JPY,stock,,Equity - Japan Industrials
+5802.T,Sumitomo Electric Industries,JPY,stock,,Equity - Japan Industrials
+5713.T,Sumitomo Metal Mining,JPY,stock,,Equity - Japan Materials
+1605.T,INPEX Corp,JPY,stock,,Equity - Japan Energy
+9101.T,Nippon Yusen,JPY,stock,,Equity - Japan Shipping
+9104.T,Mitsui OSK Lines,JPY,stock,,Equity - Japan Shipping
+9107.T,Kawasaki Kisen Kaisha,JPY,stock,,Equity - Japan Shipping
+6503.T,Mitsubishi Electric,JPY,stock,,Equity - Japan Industrials
+6752.T,Panasonic Holdings,JPY,stock,,Equity - Japan Electronics
+6645.T,Omron Corp,JPY,stock,,Equity - Japan Industrials
+7012.T,Kawasaki Heavy Industries,JPY,stock,,Equity - Japan Industrials
+028260.KS,Samsung C&T,KRW,stock,,Equity - Korea Industrials
+033780.KS,KT&G,KRW,stock,,Equity - Korea Consumer Staples
+003550.KS,LG Corp,KRW,stock,,Equity - Korea Conglomerates
+015760.KS,Korea Electric Power,KRW,stock,,Equity - Korea Utilities
+030200.KS,KT Corp,KRW,stock,,Equity - Korea Telecom
+011200.KS,HMM,KRW,stock,,Equity - Korea Shipping
+011170.KS,Lotte Chemical,KRW,stock,,Equity - Korea Materials
+010130.KS,Korea Zinc,KRW,stock,,Equity - Korea Materials
+011070.KS,LG Innotek,KRW,stock,,Equity - Korea Electronics
+086280.KS,Hyundai Glovis,KRW,stock,,Equity - Korea Transport
+036570.KS,NCSoft,KRW,stock,,Equity - Korea Gaming
+251270.KS,Netmarble,KRW,stock,,Equity - Korea Gaming
+352820.KS,HYBE,KRW,stock,,Equity - Korea Entertainment
+259960.KS,Krafton,KRW,stock,,Equity - Korea Gaming
+090430.KS,Amorepacific,KRW,stock,,Equity - Korea Consumer Staples
+024110.KS,Industrial Bank of Korea,KRW,stock,,Equity - Korea Banks
+316140.KS,Woori Financial Group,KRW,stock,,Equity - Korea Banks
+138040.KS,Meritz Financial Group,KRW,stock,,Equity - Korea Financials
+402340.KS,SK Square,KRW,stock,,Equity - Korea Technology
+003670.KS,POSCO Future M,KRW,stock,,Equity - Korea Materials
+329180.KS,HD Hyundai Heavy Industries,KRW,stock,,Equity - Korea Shipbuilding
+267250.KS,HD Hyundai,KRW,stock,,Equity - Korea Industrials
+010140.KS,Samsung Heavy Industries,KRW,stock,,Equity - Korea Shipbuilding
+042660.KS,Hanwha Ocean,KRW,stock,,Equity - Korea Shipbuilding
+047810.KS,Korea Aerospace Industries,KRW,stock,,Equity - Korea Aerospace
+012450.KS,Hanwha Aerospace,KRW,stock,,Equity - Korea Aerospace
+326030.KS,SK Biopharmaceuticals,KRW,stock,,Equity - Korea Healthcare
+302440.KS,SK Bioscience,KRW,stock,,Equity - Korea Healthcare
+128940.KS,Hanmi Pharm,KRW,stock,,Equity - Korea Healthcare
+271560.KS,Orion Corp,KRW,stock,,Equity - Korea Consumer Staples
+097950.KS,CJ CheilJedang,KRW,stock,,Equity - Korea Consumer Staples
+018880.KS,Hanon Systems,KRW,stock,,Equity - Korea Autos
+161390.KS,Hankook Tire & Technology,KRW,stock,,Equity - Korea Autos
+000810.KS,Samsung Fire & Marine Insurance,KRW,stock,,Equity - Korea Insurance
+029780.KS,Samsung Card,KRW,stock,,Equity - Korea Financials
+078930.KS,GS Holdings,KRW,stock,,Equity - Korea Conglomerates
+034020.KS,Doosan Enerbility,KRW,stock,,Equity - Korea Industrials
+000720.KS,Hyundai Engineering & Construction,KRW,stock,,Equity - Korea Construction
+004020.KS,Hyundai Steel,KRW,stock,,Equity - Korea Materials
+000120.KS,CJ Logistics,KRW,stock,,Equity - Korea Transport
+021240.KS,Coway,KRW,stock,,Equity - Korea Consumer Discretionary
+006800.KS,Mirae Asset Securities,KRW,stock,,Equity - Korea Financials
+005830.KS,DB Insurance,KRW,stock,,Equity - Korea Insurance
+086520.KQ,EcoPro,KRW,stock,,Equity - Korea Battery Materials
+247540.KQ,EcoPro BM,KRW,stock,,Equity - Korea Battery Materials
+196170.KQ,Alteogen,KRW,stock,,Equity - Korea Healthcare
+035900.KQ,JYP Entertainment,KRW,stock,,Equity - Korea Entertainment
+041510.KQ,SM Entertainment,KRW,stock,,Equity - Korea Entertainment
+263750.KQ,Pearl Abyss,KRW,stock,,Equity - Korea Gaming
+112040.KQ,Wemade,KRW,stock,,Equity - Korea Gaming
+145020.KQ,Hugel,KRW,stock,,Equity - Korea Healthcare
+095340.KQ,ISC,KRW,stock,,Equity - Korea Semiconductors

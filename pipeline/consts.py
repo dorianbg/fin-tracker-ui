@@ -7,12 +7,8 @@ timezone = "Europe/Paris"
 # returns the repository root path - depends on location of this file in repo
 file_parent_dir = pathlib.Path(__file__).parent.parent.resolve()
 db_path = os.path.join(file_parent_dir, "duckdb.db")
-store_raw_dir = os.path.join(file_parent_dir, "storage", "raw")
 
 settings_init_cmd = "PRAGMA enable_checkpoint_on_shutdown; "
-time_format = "%Y%m%d-%H:%M:%S"
-csv_ext = ".csv"
-pickle_ext = ".pickle"
 
 hist_prices_table_name = "historical_prices"
 hist_prices_cols_to_datatype = {

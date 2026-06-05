@@ -3,8 +3,21 @@ from __future__ import annotations
 import pandas as pd
 
 
-EU_SUFFIXES = (".L",)
-VALID_SESSIONS = ("all", "eu", "us")
+ASIA_SUFFIXES = (".T", ".KS", ".KQ", ".HK")
+EU_SUFFIXES = (
+    ".L",
+    ".PA",
+    ".DE",
+    ".AS",
+    ".SW",
+    ".CO",
+    ".ST",
+    ".MI",
+    ".MC",
+    ".BR",
+    ".HE",
+)
+VALID_SESSIONS = ("all", "asia", "eu", "us")
 
 
 def ticker_for_session(row: pd.Series) -> str:
@@ -16,7 +29,12 @@ def ticker_for_session(row: pd.Series) -> str:
 
 
 def market_session_for_ticker(ticker: str) -> str:
-    return "eu" if str(ticker).endswith(EU_SUFFIXES) else "us"
+    ticker = str(ticker)
+    if ticker.endswith(ASIA_SUFFIXES):
+        return "asia"
+    if ticker.endswith(EU_SUFFIXES):
+        return "eu"
+    return "us"
 
 
 def add_alert_ticker(df: pd.DataFrame) -> pd.DataFrame:
@@ -41,4 +59,4 @@ def filter_by_session(df: pd.DataFrame, session: str) -> pd.DataFrame:
 
 
 def session_label(session: str) -> str:
-    return {"all": "All markets", "eu": "EU/UK", "us": "US"}[session]
+    return {"all": "All markets", "asia": "Asia", "eu": "EU/UK", "us": "US"}[session]

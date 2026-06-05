@@ -3,19 +3,17 @@ import datetime
 import logging
 import time
 import traceback
-from pathlib import Path
 
 import pandas as pd
 import yfinance as yf
 
 from pipeline import consts
 from pipeline.utils import (
-    add_csv_ext,
-    add_pickle_ext,
     JobDef,
     get_duckdb_conn,
     missing_timerange,
     insert_df_to_duckdb,
+    setup_logging,
 )
 
 date_fmt = "%Y-%m-%d"
@@ -155,44 +153,47 @@ def check_for_dividends(df: pd.DataFrame) -> bool:
 
 
 def check_existing_data(conn, ticker_full: str) -> bool:
-    query = (
-        f"select count(*) as cnt "
-        f"from {consts.hist_prices_table_name} "
-        f"where ticker like '{ticker_full}'"
-    )
-    res = conn.execute(query=query).fetchdf()
+    query = f"select count(*) as cnt from {consts.hist_prices_table_name} where ticker_full = ?"
+    res = conn.execute(query, [ticker_full]).fetchdf()
     return res["cnt"][0] > 0
 
 
-def backup_existing_data(conn, ticker_full: str) -> int:
-    import os
-
-    res = conn.execute(
-        f"select * from {consts.hist_prices_table_name} "
-        f"where ticker_full like '%{ticker_full}%'"
-    ).fetchdf()
-    min_date = res["date"].min().strftime(date_fmt)
-    max_date = res["date"].max().strftime(date_fmt)
-    csv_path = add_csv_ext(
-        os.path.join(consts.store_raw_dir, ticker_full, f"{min_date}_{max_date}")
+def full_rewrite_job(job: JobDef) -> JobDef:
+    return JobDef(
+        ticker_full=job.ticker_full,
+        start_date=job.end_date - datetime.timedelta(days=15 * 366),
+        end_date=job.end_date,
     )
-    res.to_csv(csv_path)
-    backup_count = len(pd.read_csv(filepath_or_buffer=csv_path))
-    assert backup_count == len(res)
+
+
+def backup_existing_data(conn, ticker_full: str) -> int:
+    query = f"select count(*) as cnt from {consts.hist_prices_table_name} where ticker_full = ?"
+    res = conn.execute(query, [ticker_full]).fetchdf()
+    backup_count = int(res["cnt"][0])
     conn.execute(
-        f"insert into {consts.dividend_tracker_table_name} values "
-        f"('{ticker_full}', now(), '{csv_path}')"
+        f"insert into {consts.dividend_tracker_table_name} values (?, now(), 'duckdb-only')",
+        [ticker_full],
     )
     return backup_count
 
 
 def delete_existing_data(conn, ticker_full: str) -> bool:
-    del_q = f"delete from {consts.hist_prices_table_name} where ticker_full = '{ticker_full}'"
+    del_q = f"delete from {consts.hist_prices_table_name} where ticker_full = ?"
     cur = conn.cursor()
     cur.execute("BEGIN TRANSACTION;")
-    cur.execute(del_q)
+    cur.execute(del_q, [ticker_full])
     cur.execute("COMMIT;")
     return True
+
+
+def download_full_rewrite(job: JobDef) -> pd.DataFrame:
+    rewrite_job = full_rewrite_job(job)
+    logging.info(f"Reloading full history for {rewrite_job}")
+    return _download_batch(
+        [rewrite_job.ticker_full],
+        rewrite_job.start_date.strftime(date_fmt),
+        rewrite_job.end_date.strftime(date_fmt),
+    ).get(rewrite_job.ticker_full, pd.DataFrame())
 
 
 def execute_job(
@@ -209,30 +210,36 @@ def execute_job(
     ):
         return pd.DataFrame()
 
-    tmp_path = str(
-        Path(consts.store_raw_dir)
-        / job.ticker_full
-        / f"{start_date_str}_{end_date_str}"
-    )
-    Path(tmp_path).parent.mkdir(parents=True, exist_ok=True)
-
     new_data = (
         downloaded_data if downloaded_data is not None else get_transformed_df(job=job)
     )
 
+    needs_rewrite = check_for_dividends(new_data) or args.rewrite_all
+    if needs_rewrite and new_data.empty:
+        logging.warning(f"Skipping rewrite for {job}: replacement download is empty")
+        return pd.DataFrame()
+
     if args.rewrite_all and args.skip_backup:
-        delete_existing_data(conn, ticker_full=job.ticker_full)
-        logging.info(f"Deleted existing data for {job}")
-    elif check_for_dividends(new_data) or args.rewrite_all:
+        if check_existing_data(conn, ticker_full=job.ticker_full):
+            delete_existing_data(conn, ticker_full=job.ticker_full)
+            logging.info(f"Deleted existing data for {job}")
+    elif needs_rewrite:
         if check_existing_data(conn, ticker_full=job.ticker_full):
             logging.info(f"Found dividends for {job}")
+            if not args.rewrite_all:
+                replacement = download_full_rewrite(job)
+                if replacement.empty:
+                    logging.warning(
+                        f"Skipping dividend rewrite for {job}: full-history replacement is empty"
+                    )
+                    return pd.DataFrame()
+                new_data = replacement
             backup_row_count = backup_existing_data(conn, ticker_full=job.ticker_full)
-            logging.info(f"Backed up {backup_row_count} rows for {job}")
+            logging.info(f"Recorded {backup_row_count} existing DuckDB rows for {job}")
             if backup_row_count > 0 and delete_existing_data(
                 conn, ticker_full=job.ticker_full
             ):
                 logging.info(f"Deleted existing data for {job}")
-                return pd.DataFrame()
 
     logging.info(
         f"Downloaded {len(new_data)} rows for {job.ticker_full} ({start_date_str} → {end_date_str})"
@@ -240,10 +247,6 @@ def execute_job(
 
     if not new_data.empty:
         new_data = repair_invalid_ohlc(new_data)
-        csv_path = add_csv_ext(tmp_path)
-        pickle_path = add_pickle_ext(tmp_path)
-        new_data.to_csv(csv_path)
-        new_data.to_pickle(pickle_path)
 
     if downloaded_data is None:
         time.sleep(3)
@@ -259,7 +262,8 @@ def merge_dfs(dfs_to_insert: list[pd.DataFrame]) -> pd.DataFrame | None:
     return merged
 
 
-if __name__ == "__main__":
+def main() -> None:
+    setup_logging()
     parser = argparse.ArgumentParser("fintracker")
     parser.add_argument("--skip_data_fetch", action=argparse.BooleanOptionalAction)
     parser.add_argument("--rewrite_all", action=argparse.BooleanOptionalAction)
@@ -283,6 +287,13 @@ if __name__ == "__main__":
     jobs = [
         JobDef(ticker_full=j[0], start_date=j[1], end_date=j[2]) for j in missing_prices
     ]
+    logging.info(
+        "Pipeline run starting: jobs=%s rewrite_all=%s skip_data_fetch=%s upload_to_postgres=%s",
+        len(jobs),
+        args.rewrite_all,
+        args.skip_data_fetch,
+        args.upload_to_postgres,
+    )
     dfs_to_insert = []
     current_job = None
 
@@ -300,6 +311,8 @@ if __name__ == "__main__":
         logging.error(f"Exception {e} with job {current_job}\n{traceback.format_exc()}")
     finally:
         merged_dfs = merge_dfs(dfs_to_insert)
+        rows_to_insert = 0 if merged_dfs is None else len(merged_dfs)
+        logging.info("Pipeline downloaded rows ready to insert: %s", rows_to_insert)
         insert_df_to_duckdb(
             conn=duckdb_conn,
             dataframe=merged_dfs,
@@ -311,3 +324,12 @@ if __name__ == "__main__":
         if args.upload_to_postgres:
             upload_data_to_postgres(duckdb_conn)
         duckdb_conn.close()
+        logging.info("Pipeline run finished")
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception:
+        logging.exception("Pipeline run failed")
+        raise

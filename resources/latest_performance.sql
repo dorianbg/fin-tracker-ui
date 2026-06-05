@@ -266,7 +266,7 @@ select
     round((r_3y - r_3y_rf)/vol_1y, 2) as r_3y_s,
     round((r_5y - r_5y_rf)/vol_1y, 2) as r_5y_s
 from latest_performance as s3
-JOIN (
+ASOF LEFT JOIN (
 --     risk free rate
     select
         date,
@@ -283,5 +283,5 @@ JOIN (
     from latest_performance
     where ticker = 'CSH2'
 ) s4
-on s3.date = s4.date
+on s3.date >= s4.date
 order by s3.dt desc;

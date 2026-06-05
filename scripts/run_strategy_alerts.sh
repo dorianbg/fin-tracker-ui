@@ -7,7 +7,9 @@ cd "$SCRIPT_DIR/.."
 SESSION="${1:-auto}"
 if [[ "$SESSION" == "auto" ]]; then
   HOUR=$(date +%H)
-  if (( 10#$HOUR < 12 )); then
+  if (( 10#$HOUR < 9 )); then
+    SESSION="asia"
+  elif (( 10#$HOUR < 12 )); then
     SESSION="eu"
   else
     SESSION="us"

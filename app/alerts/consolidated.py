@@ -61,6 +61,8 @@ def _build_consolidated(strategies: list[StrategySignals], limit: int) -> pd.Dat
     grouped = df.groupby(group_col, as_index=False).agg(agg)
     grouped["signal_count"] = grouped["signal"].apply(len)
     grouped = grouped.sort_values(["signal_count", "score"], ascending=[False, False])
-    grouped = grouped.head(limit).reset_index(drop=True)
+    if limit > 0:
+        grouped = grouped.head(limit)
+    grouped = grouped.reset_index(drop=True)
     grouped["rank"] = range(1, len(grouped) + 1)
     return grouped

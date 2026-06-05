@@ -64,6 +64,40 @@ def _period_return(history: pd.DataFrame, days: int) -> float | None:
     return (end / start - 1) * 100
 
 
+def add_sma_overlays(ax, history: pd.DataFrame) -> None:
+    sma_specs = [
+        (21, "#f59e0b", "21 SMA", 1.05),
+        (50, "#7c3aed", "50 SMA", 1.15),
+        (200, "#111827", "200 SMA", 1.25),
+    ]
+    for window, color, label, linewidth in sma_specs:
+        sma_history = history.assign(
+            sma=history["price"]
+            .astype(float)
+            .rolling(window, min_periods=window)
+            .mean()
+        ).dropna(subset=["sma"])
+        if not sma_history.empty:
+            ax.plot(
+                sma_history["date"],
+                sma_history["sma"],
+                color=color,
+                linewidth=linewidth,
+                label=label,
+            )
+
+
+def save_compressed_png(fig, chart_path: Path, dpi: int = 130) -> None:
+    try:
+        fig.savefig(
+            chart_path,
+            dpi=dpi,
+            pil_kwargs={"optimize": False, "compress_level": 6},
+        )
+    except TypeError:
+        fig.savefig(chart_path, dpi=dpi)
+
+
 def exchange_label(ticker_full: str) -> str:
     suffix_map = {
         ".L": "London Stock Exchange",
@@ -73,8 +107,13 @@ def exchange_label(ticker_full: str) -> str:
         ".SW": "SIX Swiss Exchange",
         ".CO": "Nasdaq Copenhagen",
         ".ST": "Nasdaq Stockholm",
+        ".MI": "Borsa Italiana",
+        ".MC": "Bolsa de Madrid",
+        ".BR": "Euronext Brussels",
+        ".HE": "Nasdaq Helsinki",
         ".T": "Tokyo Stock Exchange",
         ".HK": "Hong Kong Exchange",
+        ".KS": "Korea Exchange",
         ".KQ": "KOSDAQ",
         ".V": "TSX Venture",
     }
@@ -197,7 +236,10 @@ def load_price_history_cli() -> pd.DataFrame:
                price_orig AS price, description, fund_type, currency
         FROM total_return ORDER BY ticker, date
     """
-    df = conn.execute(query).df()
+    try:
+        df = conn.execute(query).df()
+    finally:
+        conn.close()
     df["date"] = pd.to_datetime(df["date"], format="%Y-%m-%d")
     return df
 
@@ -205,7 +247,10 @@ def load_price_history_cli() -> pd.DataFrame:
 def load_volatility_map() -> dict[str, float]:
     conn = duckdb.connect(str(DB_FILE), read_only=True)
     query = "SELECT ticker, vol_1y FROM latest_performance WHERE rown = 1 AND vol_1y IS NOT NULL"
-    rows = conn.execute(query).fetchall()
+    try:
+        rows = conn.execute(query).fetchall()
+    finally:
+        conn.close()
     return {ticker: float(vol) for ticker, vol in rows if vol is not None}
 
 
@@ -257,6 +302,8 @@ def chart_breakouts(
                     alpha=0.9,
                 )
             )
+
+        add_sma_overlays(ax, history)
 
         alert = alert_by_ticker.loc[ticker]
         returns = {
@@ -312,7 +359,7 @@ def chart_breakouts(
         fig.tight_layout()
 
         chart_path = output_dir / f"{ticker.replace('/', '_')}_{chart_kind}.png"
-        fig.savefig(chart_path, dpi=130)
+        save_compressed_png(fig, chart_path)
         plt.close(fig)
         chart_paths.append(chart_path)
 
@@ -377,7 +424,7 @@ def main() -> None:
     load_env_file()
     max_extension = float(os.environ.get("BREAKOUT_MAX_EXTENSION_ADR", "1.5"))
     max_ma_extension = float(os.environ.get("BREAKOUT_MAX_MA_EXTENSION_ADR", "8.0"))
-    max_items = int(os.environ.get("BREAKOUT_ALERT_MAX_ITEMS", "0"))
+    max_items = int(os.environ.get("BREAKOUT_ALERT_MAX_ITEMS", "100"))
     chart_years = float(os.environ.get("BREAKOUT_ALERT_CHART_YEARS", "1"))
     prices = filter_by_session(load_price_history_cli(), args.session)
     assert_fresh_data(

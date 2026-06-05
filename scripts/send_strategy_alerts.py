@@ -3,7 +3,6 @@ from __future__ import annotations
 import argparse
 import os
 import tempfile
-import time
 from email.utils import make_msgid
 from pathlib import Path
 
@@ -23,7 +22,13 @@ from app.alerts.state import (
     load_previous,
     save_current,
 )
-from send_breakout_alerts import _period_return, exchange_label, send_email
+from send_breakout_alerts import (
+    _period_return,
+    add_sma_overlays,
+    exchange_label,
+    save_compressed_png,
+    send_email,
+)
 
 
 ENV_FILE = Path(__file__).resolve().parents[1] / ".env"
@@ -54,7 +59,10 @@ def load_price_history() -> pd.DataFrame:
         FROM {prefix}total_return
         ORDER BY ticker, date
     """
-    df = conn.execute(query).df()
+    try:
+        df = conn.execute(query).df()
+    finally:
+        conn.close()
     df["date"] = pd.to_datetime(df["date"], format="%Y-%m-%d")
     return df
 
@@ -67,7 +75,10 @@ def load_performance(max_rown: int) -> pd.DataFrame:
         WHERE rown <= {int(max_rown)}
         ORDER BY description ASC
     """
-    df = conn.execute(query).df()
+    try:
+        df = conn.execute(query).df()
+    finally:
+        conn.close()
     if "date" in df.columns:
         df["date"] = pd.to_datetime(df["date"], format="%Y-%m-%d")
     numeric_cols = df.select_dtypes(include=["number"]).columns
@@ -84,7 +95,8 @@ def attach_ticker_full(perf: pd.DataFrame, prices: pd.DataFrame) -> pd.DataFrame
         or "ticker_full" not in prices.columns
     ):
         return perf
-    latest_meta = prices.sort_values("date").drop_duplicates("ticker", keep="last")
+    latest_idx = prices.groupby("ticker")["date"].idxmax()
+    latest_meta = prices.loc[latest_idx]
     ticker_full = latest_meta.set_index("ticker")["ticker_full"].to_dict()
     out = perf.copy()
     out["ticker_full"] = out["ticker"].map(ticker_full).fillna(out["ticker"])
@@ -287,7 +299,7 @@ def build_consolidated_html(
         cid = content_ids.get(f"{ticker}_signal")
         context_cid = content_ids.get(f"{ticker}_context")
         chart_html = (
-            f'<img src="cid:{cid}" style="max-width:100%;width:700px;height:auto;border:1px solid #ddd;" /><br><img src="cid:{context_cid}" style="max-width:100%;width:700px;height:auto;border:1px solid #ddd;margin-top:4px;" />'
+            f'<img src="cid:{cid}" style="max-width:100%;width:900px;height:auto;border:1px solid #ddd;" /><br><img src="cid:{context_cid}" style="max-width:100%;width:900px;height:auto;border:1px solid #ddd;margin-top:8px;" />'
             if cid and context_cid
             else "<p><em>No chart available.</em></p>"
         )
@@ -356,11 +368,11 @@ def chart_strategy_signals(
         high_px = history["price_high"].fillna(history["price"])
         low_px = history["price_low"].fillna(history["price"])
         close_px = history["price"].astype(float)
-        fig, ax = plt.subplots(figsize=(10, 4))
+        fig, ax = plt.subplots(figsize=(12, 6))
         width = max((x[-1] - x[0]) / max(len(x), 1) * 0.7, 0.2)
         up = close_px >= open_px
         colors = up.map({True: "#1b9e77", False: "#d95f02"})
-        ax.vlines(x, low_px, high_px, color=colors, linewidth=0.5, alpha=0.9)
+        ax.vlines(x, low_px, high_px, color=colors, linewidth=0.6, alpha=0.9)
         for xi, open_i, close_i, color in zip(
             x, open_px, close_px, colors, strict=False
         ):
@@ -373,10 +385,11 @@ def chart_strategy_signals(
                     height,
                     facecolor=color,
                     edgecolor=color,
-                    linewidth=0.3,
+                    linewidth=0.4,
                     alpha=0.9,
                 )
             )
+        add_sma_overlays(ax, history)
         return_lines = []
         for label, days in [
             ("1W", 5),
@@ -398,7 +411,7 @@ def chart_strategy_signals(
                 0.02,
                 box_text,
                 transform=ax.transAxes,
-                fontsize=8,
+                fontsize=10,
                 ha="left",
                 va="bottom",
                 linespacing=1.3,
@@ -406,23 +419,23 @@ def chart_strategy_signals(
                     "facecolor": "#fff7ed",
                     "alpha": 0.94,
                     "edgecolor": "#fb923c",
-                    "boxstyle": "round,pad=0.4",
+                    "boxstyle": "round,pad=0.55",
                 },
             )
         ticker = str(row.get("alert_ticker", row.get("ticker", "")))
         ax.set_title(
             f"{ticker} - {row.get('description', '')} - {chart_years:g}Y {chart_kind}",
-            fontsize=10,
+            fontsize=12,
         )
-        ax.set_ylabel("Price", fontsize=9)
+        ax.set_ylabel("Price", fontsize=10)
         ax.xaxis_date()
         ax.xaxis.set_major_locator(mdates.YearLocator())
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
         ax.grid(True, alpha=0.2)
-        ax.tick_params(axis="both", labelsize=8)
+        ax.tick_params(axis="both", labelsize=9)
         fig.tight_layout()
         chart_path = output_dir / f"{ticker.replace('/', '_')}_{chart_kind}.png"
-        fig.savefig(chart_path, dpi=100)
+        save_compressed_png(fig, chart_path)
         plt.close(fig)
         chart_paths.append(chart_path)
     return chart_paths
@@ -487,6 +500,23 @@ def _send_consolidated(
     session: str,
     dry_run: bool,
 ) -> None:
+    if dry_run:
+        market = session_label(session)
+        total_signals = sum(
+            len(s) if isinstance(s, list) else 1 for s in consolidated.get("signal", [])
+        )
+        subject = (
+            f"FinTracker consolidated alerts ({market}): "
+            f"{len(consolidated)} instruments, {total_signals} signals"
+        )
+        _emit(
+            subject,
+            build_consolidated_body(consolidated, prices),
+            build_consolidated_html(consolidated, prices, {}),
+            dry_run,
+        )
+        return
+
     with tempfile.TemporaryDirectory() as tmp_dir:
         signal_charts = chart_strategy_signals(
             consolidated, prices, Path(tmp_dir), 1, "signal"
@@ -529,7 +559,7 @@ def _send_consolidated(
 def send_strategy_alerts(args: argparse.Namespace) -> None:
     prices = load_price_history()
     latest = attach_ticker_full(load_performance(1), prices)
-    raw_two_rows = attach_ticker_full(load_performance(2), prices)
+    raw_two_rows = latest
     assert_fresh_data(
         latest,
         label=f"strategy alerts ({session_label(args.session)})",
@@ -539,9 +569,8 @@ def send_strategy_alerts(args: argparse.Namespace) -> None:
     selected = set(args.strategy.split(",")) if args.strategy else None
     state_dir = Path(args.state_dir) if args.state_dir else DEFAULT_STATE_DIR
 
-    strategies = _selected(
-        build_all_signals(latest, raw_two_rows, prices, args.session, args.max_items),
-        selected,
+    strategies = build_all_signals(
+        latest, raw_two_rows, prices, args.session, args.max_items, selected
     )
 
     changes_by_strategy: dict[str, pd.DataFrame] = {}
@@ -563,22 +592,16 @@ def send_strategy_alerts(args: argparse.Namespace) -> None:
             if not latest.empty and "date" in latest.columns
             else None
         )
-    if not args.dry_run:
-        save_current(
-            state_dir, strategy.strategy_id, args.session, strategy.active, current_date
-        )
-
-    if not any_previous and not args.dry_run:
-        print(
-            f"First run for {session_label(args.session)} — state saved, no email sent."
-        )
-        return
+        if not args.dry_run:
+            save_current(
+                state_dir,
+                strategy.strategy_id,
+                args.session,
+                strategy.active,
+                current_date,
+            )
 
     if args.changes_only and not any_changes:
-        print(f"No strategy alert changes ({session_label(args.session)}).")
-        return
-
-    if not args.active_only and not any_changes:
         print(f"No strategy alert changes ({session_label(args.session)}).")
         return
 
@@ -586,26 +609,11 @@ def send_strategy_alerts(args: argparse.Namespace) -> None:
         print(f"No active strategy signals ({session_label(args.session)}).")
         return
 
-    # ── Send individual strategy emails ──
-    for strategy in strategies:
-        changes = changes_by_strategy[strategy.strategy_id]
-        market = session_label(args.session)
-
-        if not args.active_only and not changes.empty:
-            title = f"{strategy.title} changes ({market})"
-            commentary = (
-                "New, removed, or rank-shifted signals since the previous run. "
-                + strategy.commentary
-            )
-            _send_individual(title, commentary, changes, prices, args.dry_run)
-
-        if not args.changes_only and not strategy.active.empty and not changes.empty:
-            title = f"{strategy.title} active signals ({market})"
-            _send_individual(
-                title, strategy.commentary, strategy.active, prices, args.dry_run
-            )
-        if not args.dry_run:
-            time.sleep(2)
+    if not any_changes and not args.active_only:
+        print(
+            f"No strategy alert changes ({session_label(args.session)}); "
+            "sending consolidated active alerts."
+        )
 
     # ── Send consolidated email ──
     consolidated = _build_consolidated(strategies, args.max_items)
@@ -648,13 +656,14 @@ def parse_args() -> argparse.Namespace:
         "--session",
         choices=VALID_SESSIONS,
         default="all",
-        help="Market session filter: .L tickers are EU/UK; other tickers are US.",
+        help="Market session filter: European Yahoo suffixes are EU/UK; .T/.KS/.KQ/.HK are Asia; other tickers are US.",
     )
     parser.add_argument("--strategy", help="Comma-separated strategy ids to send.")
     parser.add_argument(
         "--max-items",
         type=int,
-        default=int(os.environ.get("STRATEGY_ALERT_MAX_ITEMS", "20")),
+        default=int(os.environ.get("STRATEGY_ALERT_MAX_ITEMS", "100")),
+        help="Max alert items per consolidated email; 0 means no cap.",
     )
     parser.add_argument(
         "--dry-run",

@@ -121,3 +121,62 @@ def test_strategy_sender_allows_stale_dry_run(monkeypatch):
             allow_stale_data=False,
         )
     )
+
+
+def test_strategy_sender_saves_state_for_each_strategy(monkeypatch, tmp_path):
+    import send_strategy_alerts
+    from app.alerts.signals import StrategySignals
+
+    stale = pd.DataFrame(
+        {
+            "ticker": ["AAA"],
+            "ticker_full": ["AAA"],
+            "date": pd.to_datetime(["2000-01-01"]),
+            "description": ["A"],
+            "fund_type": ["eq"],
+        }
+    )
+    strategies = [
+        StrategySignals("one", "One", "Comment", pd.DataFrame()),
+        StrategySignals("two", "Two", "Comment", pd.DataFrame()),
+    ]
+    saved = []
+
+    monkeypatch.setattr(send_strategy_alerts, "load_price_history", lambda: stale)
+    monkeypatch.setattr(
+        send_strategy_alerts, "load_performance", lambda max_rown: stale
+    )
+    monkeypatch.setattr(
+        send_strategy_alerts, "build_all_signals", lambda *args: strategies
+    )
+    monkeypatch.setattr(send_strategy_alerts, "load_previous", lambda *args: {})
+    monkeypatch.setattr(
+        send_strategy_alerts, "detect_changes", lambda *args: pd.DataFrame()
+    )
+    monkeypatch.setattr(
+        send_strategy_alerts,
+        "save_current",
+        lambda state_dir, strategy_id, session, active, current_date: saved.append(
+            strategy_id
+        ),
+    )
+    monkeypatch.setattr(
+        send_strategy_alerts,
+        "_send_consolidated",
+        lambda *args, **kwargs: pytest.fail("empty strategies should not send email"),
+    )
+
+    send_strategy_alerts.send_strategy_alerts(
+        Namespace(
+            session="us",
+            max_items=10,
+            strategy=None,
+            state_dir=str(tmp_path),
+            active_only=False,
+            changes_only=True,
+            dry_run=False,
+            allow_stale_data=True,
+        )
+    )
+
+    assert saved == ["one", "two"]

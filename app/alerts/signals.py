@@ -16,6 +16,7 @@ from app.views.SectorRotation import (
     normalise_prices,
 )
 from app.strategy_scanners import (
+    scan_elite_relative_strength,
     scan_laggard_awakening,
     scan_leaders_weakening,
     scan_pullbacks,
@@ -40,11 +41,17 @@ def _finalize(df: pd.DataFrame, limit: int) -> pd.DataFrame:
     if "signal" in out.columns:
         dedup_cols.append("signal")
     out = out.drop_duplicates(subset=dedup_cols).copy()
-    out = out.head(limit).reset_index(drop=True)
+    if limit > 0:
+        out = out.head(limit)
+    out = out.reset_index(drop=True)
     out["rank"] = range(1, len(out) + 1)
     if "signal" not in out.columns:
         out["signal"] = out.get("strategy", "signal")
     return out
+
+
+def _bounded_limit(limit: int, default_n: int) -> int:
+    return min(limit, default_n) if limit > 0 else 0
 
 
 def _fund_filter(
@@ -129,48 +136,7 @@ def rotation_signals(
         filter_by_session(latest, session),
         ("eq", "eq-reit", "commod", "bonds", "stock"),
     )
-    if df.empty:
-        base = []
-    else:
-        base = [
-            (
-                "rotation_momentum",
-                "Rotation Momentum",
-                "r_3mo",
-                False,
-                5,
-                "Highest 3M total-return leaders.",
-            ),
-            (
-                "rotation_mean_reversion",
-                "Rotation Mean Reversion",
-                "r_3mo",
-                True,
-                10,
-                "Weakest 3M performers for contrarian mean-reversion watchlists.",
-            ),
-        ]
     results = []
-    for strategy_id, title, col, ascending, default_n, commentary in base:
-        if col not in df.columns:
-            active = pd.DataFrame()
-        else:
-            active = (
-                df.dropna(subset=[col]).sort_values(col, ascending=ascending).copy()
-            )
-            active["score"] = active[col]
-            active["signal"] = title
-            active["summary"] = active.apply(
-                lambda r: f"Ranked by {col}: {float(r[col]):+.2f}%.", axis=1
-            )
-        results.append(
-            StrategySignals(
-                strategy_id,
-                f"FinTracker {title} alerts",
-                commentary,
-                _finalize(active, min(limit, default_n)),
-            )
-        )
     sharpe = df.copy()
     if not sharpe.empty:
         if "r_3mo_s" in sharpe.columns:
@@ -210,7 +176,7 @@ def rotation_signals(
                     strategy_id,
                     f"FinTracker {title} alerts",
                     commentary,
-                    _finalize(active, min(limit, default_n)),
+                    _finalize(active, _bounded_limit(limit, default_n)),
                 )
             )
     return results
@@ -219,6 +185,13 @@ def rotation_signals(
 def sector_rotation_signals(
     prices: pd.DataFrame, session: str, limit: int
 ) -> StrategySignals:
+    if session == "asia":
+        return StrategySignals(
+            "sector_rotation",
+            "FinTracker sector rotation alerts",
+            "Sector rotation alerts are currently configured for US and EU/UK sector ETF universes only.",
+            pd.DataFrame(),
+        )
     universe_name = (
         "Global UCITS Sector ETFs" if session == "eu" else "US Select Sector SPDRs"
     )
@@ -568,24 +541,105 @@ def leaders_weakening_signals(
     )
 
 
+def _relative_strength_benchmark(latest: pd.DataFrame, session: str) -> str:
+    candidates = ("SPY", "CSP1", "VWRP") if session == "us" else ("VWRP", "CSP1", "SPY")
+    tickers = set(latest.get("ticker", pd.Series(dtype=str)).dropna().astype(str))
+    for ticker in candidates:
+        if ticker in tickers:
+            return ticker
+    return "VWRP"
+
+
+def elite_relative_strength_signals(
+    latest: pd.DataFrame, prices: pd.DataFrame, session: str, limit: int
+) -> StrategySignals:
+    scoped_latest = _fund_filter(filter_by_session(latest, session), ("eq", "stock"))
+    scoped_prices = filter_by_session(prices, session)
+    benchmark = _relative_strength_benchmark(latest, session)
+    benchmark_latest = latest[latest["ticker"] == benchmark]
+    benchmark_prices = prices[prices["ticker"] == benchmark]
+    scan_latest = pd.concat([scoped_latest, benchmark_latest], ignore_index=True)
+    scan_prices = pd.concat([scoped_prices, benchmark_prices], ignore_index=True)
+    scan_latest = scan_latest.drop_duplicates(subset=["ticker"], keep="last")
+    price_dedup_cols = [
+        col for col in ("ticker_full", "ticker", "date") if col in scan_prices.columns
+    ]
+    scan_prices = scan_prices.drop_duplicates(subset=price_dedup_cols, keep="last")
+    active = scan_elite_relative_strength(
+        scan_latest,
+        scan_prices,
+        benchmark_ticker=benchmark,
+    )
+    if not active.empty:
+        active["score"] = active["elite_rs_score"]
+
+        def _signal(row: pd.Series) -> str:
+            if row["rs_new_high_before_price"]:
+                return "RS new high before price"
+            if row["resilient_during_index_pullback"]:
+                return "Resilient during index pullback"
+            return "RS line 52W high"
+
+        active["signal"] = active.apply(_signal, axis=1)
+        active["summary"] = active.apply(
+            lambda r: (
+                f"RS {float(r['rs_1y_percentile']):.0f}th percentile vs {benchmark}; "
+                f"1Y relative {float(r['rs_1y']):+.1f}%, 3M relative {float(r['rs_3mo']):+.1f}%, "
+                f"52W drawdown {float(r['drawdown_52w']):+.1f}%."
+            ),
+            axis=1,
+        )
+    return StrategySignals(
+        "elite_relative_strength",
+        "FinTracker elite relative strength alerts",
+        "Top relative-strength stocks and equity ETFs showing RS-line breakouts or resilience while the benchmark is weak.",
+        _finalize(active, limit),
+    )
+
+
 def build_all_signals(
     latest: pd.DataFrame,
     raw_two_rows: pd.DataFrame,
     prices: pd.DataFrame,
     session: str,
     limit: int,
+    selected: set[str] | None = None,
 ) -> list[StrategySignals]:
     # breakout_signals is handled by the standalone send_breakout_alerts.py
     # to avoid duplicate emails from the same scan_breakout_triggers scanner.
-    signals = [
-        consolidation_signals(prices, session, limit),
-        sector_rotation_signals(prices, session, limit),
-        puke_buy_signals(latest, session, limit),
-        pullback_signals(latest, session, limit),
-        laggard_signals(latest, session, limit),
-        turnaround_signals(latest, prices, session, limit),
-        momentum_breakout_signals(latest, prices, session, limit),
-        leaders_weakening_signals(latest, session, limit),
+    builders = [
+        ("consolidation", lambda: consolidation_signals(prices, session, limit)),
+        ("sector_rotation", lambda: sector_rotation_signals(prices, session, limit)),
+        (
+            "elite_relative_strength",
+            lambda: elite_relative_strength_signals(latest, prices, session, limit),
+        ),
+        ("puke_buy", lambda: puke_buy_signals(latest, session, limit)),
+        ("pullback", lambda: pullback_signals(latest, session, limit)),
+        ("laggard_awakening", lambda: laggard_signals(latest, session, limit)),
+        ("turnaround", lambda: turnaround_signals(latest, prices, session, limit)),
+        (
+            "momentum_breakout",
+            lambda: momentum_breakout_signals(latest, prices, session, limit),
+        ),
+        (
+            "leaders_weakening",
+            lambda: leaders_weakening_signals(latest, session, limit),
+        ),
     ]
-    signals.extend(rotation_signals(latest, session, limit))
+    signals = [
+        builder()
+        for strategy_id, builder in builders
+        if selected is None or strategy_id in selected
+    ]
+    rotation_ids = {
+        "rotation_vol_adjusted",
+        "rotation_puke",
+    }
+    if selected is None or selected.intersection(rotation_ids):
+        signals.extend(
+            strategy
+            for strategy in rotation_signals(latest, session, limit)
+            if selected is None or strategy.strategy_id in selected
+        )
     return signals

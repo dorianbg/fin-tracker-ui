@@ -81,7 +81,7 @@ deploy-breakout-alerts:
 	@echo "cd $(MACMINI_PATH)"
 	@echo "uv sync"
 	@echo "cp .env.example .env  # then edit SMTP_PASSWORD"
-	@echo "Ensure existing cron schedules call: scripts/run_strategy_alerts.sh us and scripts/run_strategy_alerts.sh eu"
+	@echo "Ensure existing cron schedules call: scripts/run_strategy_alerts.sh asia, scripts/run_strategy_alerts.sh eu, and scripts/run_strategy_alerts.sh us"
 	@echo "make install-streamlit       # dashboard reads local duckdb.db"
 
 # ── Utilities ──

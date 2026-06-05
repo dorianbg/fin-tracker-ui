@@ -304,6 +304,104 @@ def scan_leaders_weakening(
     )
 
 
+def scan_elite_relative_strength(
+    latest: pd.DataFrame,
+    prices: pd.DataFrame,
+    *,
+    benchmark_ticker: str,
+    min_rs_percentile: float = 90.0,
+) -> pd.DataFrame:
+    if latest.empty or prices.empty:
+        return latest.iloc[0:0].copy()
+    required = {"ticker", "r_1y", "r_3mo", "ma_21", "ma_63", "drawdown_52w"}
+    if not required.issubset(latest.columns):
+        return latest.iloc[0:0].copy()
+
+    bm = latest[latest["ticker"] == benchmark_ticker]
+    bm_prices = prices[prices["ticker"] == benchmark_ticker][["date", "price"]].copy()
+    if bm.empty or bm_prices.empty:
+        return latest.iloc[0:0].copy()
+
+    work = latest[latest["ticker"] != benchmark_ticker].copy()
+    if work.empty:
+        return work
+
+    bm_1y = float(bm["r_1y"].iloc[0])
+    bm_3mo = float(bm["r_3mo"].iloc[0])
+    work["rs_1y"] = work["r_1y"] - bm_1y
+    work["rs_3mo"] = work["r_3mo"] - bm_3mo
+    work["rs_1y_percentile"] = work["rs_1y"].rank(pct=True) * 100
+    work["rs_3mo_percentile"] = work["rs_3mo"].rank(pct=True) * 100
+
+    tickers = work["ticker"].dropna().astype(str).unique().tolist()
+    history = prices[prices["ticker"].astype(str).isin(tickers)][
+        ["ticker", "date", "price"]
+    ].copy()
+    bm_prices = bm_prices.rename(columns={"price": "benchmark_price"})
+    history = history.merge(bm_prices, on="date", how="inner")
+    history = history.dropna(subset=["price", "benchmark_price"]).sort_values(
+        ["ticker", "date"]
+    )
+    history = history.groupby("ticker", group_keys=False).tail(252)
+    history["rs_line"] = history["price"] / history["benchmark_price"].replace(
+        0, np.nan
+    )
+    grouped = history.groupby("ticker")
+    flags = grouped.agg(
+        latest_price=("price", "last"),
+        price_high=("price", "max"),
+        rs_line=("rs_line", "last"),
+        rs_line_high=("rs_line", "max"),
+        history_days=("date", "count"),
+    ).reset_index()
+    flags = flags[flags["history_days"] >= 20].copy()
+    if flags.empty:
+        return work.iloc[0:0].copy()
+
+    flags["rs_line_52w_high"] = flags["rs_line"] >= flags["rs_line_high"] * 0.995
+    flags["price_52w_high"] = flags["latest_price"] >= flags["price_high"] * 0.995
+
+    work = work.merge(flags, on="ticker", how="inner")
+    work["rs_new_high_before_price"] = (
+        work["rs_line_52w_high"] & ~work["price_52w_high"]
+    )
+
+    benchmark_weak = (
+        float(bm["ma_21"].iloc[0]) < 0
+        or float(bm["ma_63"].iloc[0]) < 0
+        or float(bm["drawdown_52w"].iloc[0]) <= -5
+    )
+    work["resilient_during_index_pullback"] = (
+        benchmark_weak
+        & (work["ma_21"] >= 0)
+        & (work["ma_63"] >= 0)
+        & (work["drawdown_52w"] >= -10)
+    )
+
+    work["elite_rs_score"] = (
+        work["rs_1y_percentile"] * 0.4
+        + work["rs_3mo_percentile"] * 0.2
+        + work["rs_new_high_before_price"].astype(int) * 25
+        + work["rs_line_52w_high"].astype(int) * 10
+        + work["resilient_during_index_pullback"].astype(int) * 15
+        + (work["drawdown_52w"] >= -10).astype(int) * 10
+    )
+
+    mask = (
+        (work["rs_1y_percentile"] >= min_rs_percentile)
+        & (work["drawdown_52w"] >= -10)
+        & (work["ma_63"] >= 0)
+        & (
+            work["rs_new_high_before_price"]
+            | work["rs_line_52w_high"]
+            | work["resilient_during_index_pullback"]
+        )
+    )
+    return (
+        work[mask].sort_values("elite_rs_score", ascending=False).reset_index(drop=True)
+    )
+
+
 def scan_todays_alert_crossings(
     raw: pd.DataFrame, *, z_threshold: float = 2.0
 ) -> pd.DataFrame:

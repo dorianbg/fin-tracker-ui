@@ -7,6 +7,7 @@ from app.alerts.session import filter_by_session, market_session_for_ticker
 from app.alerts.signals import (
     breakout_signals,
     consolidation_signals,
+    elite_relative_strength_signals,
     momentum_breakout_signals,
     pullback_signals,
     rotation_signals,
@@ -15,24 +16,35 @@ from app.alerts.signals import (
 )
 from app.alerts.state import detect_changes
 from app.strategy_scanners import (
+    scan_elite_relative_strength,
     scan_laggard_awakening,
     scan_pullbacks,
     scan_todays_alert_crossings,
 )
 
 
-def test_session_filter_sends_lse_before_eu_and_others_before_us():
+def test_session_filter_routes_eu_asia_and_us_suffixes():
     df = pd.DataFrame(
         {
-            "ticker": ["VWRP", "SPY"],
-            "ticker_full": ["VWRP.L", "SPY"],
-            "description": ["World ETF", "S&P ETF"],
+            "ticker": ["VWRP", "OR", "7203", "005930", "SPY"],
+            "ticker_full": ["VWRP.L", "OR.PA", "7203.T", "005930.KS", "SPY"],
+            "description": ["World ETF", "L'Oreal", "Toyota", "Samsung", "S&P ETF"],
         }
     )
 
     assert market_session_for_ticker("VWRP.L") == "eu"
+    assert market_session_for_ticker("OR.PA") == "eu"
+    assert market_session_for_ticker("7203.T") == "asia"
+    assert market_session_for_ticker("005930.KS") == "asia"
     assert market_session_for_ticker("SPY") == "us"
-    assert filter_by_session(df, "eu")["alert_ticker"].tolist() == ["VWRP.L"]
+    assert filter_by_session(df, "asia")["alert_ticker"].tolist() == [
+        "7203.T",
+        "005930.KS",
+    ]
+    assert filter_by_session(df, "eu")["alert_ticker"].tolist() == [
+        "VWRP.L",
+        "OR.PA",
+    ]
     assert filter_by_session(df, "us")["alert_ticker"].tolist() == ["SPY"]
 
 
@@ -79,6 +91,26 @@ def test_pullback_signal_uses_default_best_only_shape():
     assert "early bounce" in result.iloc[0]["summary"]
 
 
+def test_zero_limit_means_uncapped_alerts():
+    latest = pd.DataFrame(
+        {
+            "ticker": ["PULL"],
+            "ticker_full": ["PULL"],
+            "description": ["Pullback"],
+            "fund_type": ["eq"],
+            "ma_21": [-2.0],
+            "ma_63": [3.0],
+            "ma_126": [4.0],
+            "ma_252": [15.0],
+            "r_1d": [0.5],
+            "r_1w": [-1.0],
+            "drawdown_52w": [-8.0],
+        }
+    )
+
+    assert pullback_signals(latest, "us", 0).active["ticker"].tolist() == ["PULL"]
+
+
 def test_pullback_alert_reuses_shared_pullback_scanner_shape():
     latest = pd.DataFrame(
         {
@@ -110,6 +142,23 @@ def _prices(ticker: str, values: Sequence[int | float]) -> pd.DataFrame:
             "ticker_full": ticker,
             "date": pd.date_range("2025-01-01", periods=len(values), freq="D"),
             "price": values,
+        }
+    )
+
+
+def _latest_rs_fixture() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "ticker": ["SPY", "ELITE", "WEAK"],
+            "ticker_full": ["SPY", "ELITE", "WEAK"],
+            "description": ["S&P 500", "Elite", "Weak"],
+            "fund_type": ["eq", "stock", "stock"],
+            "r_1y": [-5.0, 45.0, 2.0],
+            "r_3mo": [-4.0, 18.0, 1.0],
+            "r_1w": [-2.0, 1.0, 0.5],
+            "ma_21": [-2.0, 3.0, 1.0],
+            "ma_63": [-4.0, 8.0, 1.0],
+            "drawdown_52w": [-8.0, -1.0, -2.0],
         }
     )
 
@@ -146,6 +195,44 @@ def test_momentum_breakout_finds_recovery_and_base_setups():
     }
     assert active.set_index("ticker").loc["REC", "local_high_window"] == 60
     assert "20D range" in active.iloc[0]["summary"]
+
+
+def test_elite_relative_strength_detects_rs_new_high_before_price():
+    latest = _latest_rs_fixture()
+    prices = pd.concat(
+        [
+            _prices("SPY", list(range(120, 90, -1)) + [90] * 221 + [80]),
+            _prices("ELITE", [100] * 230 + [125] + [124] * 21),
+            _prices("WEAK", [100] * 252),
+        ],
+        ignore_index=True,
+    )
+
+    active = scan_elite_relative_strength(
+        latest, prices, benchmark_ticker="SPY", min_rs_percentile=90
+    )
+
+    assert active["ticker"].tolist() == ["ELITE"]
+    assert bool(active.iloc[0]["rs_new_high_before_price"])
+    assert bool(active.iloc[0]["resilient_during_index_pullback"])
+
+
+def test_elite_relative_strength_alert_formats_signal():
+    latest = _latest_rs_fixture()
+    prices = pd.concat(
+        [
+            _prices("SPY", list(range(120, 90, -1)) + [90] * 221 + [80]),
+            _prices("ELITE", [100] * 230 + [125] + [124] * 21),
+            _prices("WEAK", [100] * 252),
+        ],
+        ignore_index=True,
+    )
+
+    active = elite_relative_strength_signals(latest, prices, "us", 10).active
+
+    assert active["ticker"].tolist() == ["ELITE"]
+    assert active.iloc[0]["signal"] == "RS new high before price"
+    assert "RS 100th percentile vs SPY" in active.iloc[0]["summary"]
 
 
 def test_turnaround_signal_remains_available_as_focused_recovery_alert():
@@ -223,28 +310,7 @@ def test_scanner_alerts_preserve_lse_full_ticker(monkeypatch):
     assert consolidation["alert_ticker"].tolist() == ["VWRP.L"]
 
 
-def test_rotation_signals_include_stock_fund_type():
-    latest = pd.DataFrame(
-        {
-            "ticker": ["AAA", "BBB", "CCC"],
-            "ticker_full": ["AAA", "BBB", "CCC"],
-            "description": ["A", "B", "C"],
-            "fund_type": ["stock", "stock", "eq"],
-            "r_3mo": [5.0, 20.0, -3.0],
-            "vol_1y": [10.0, 40.0, 20.0],
-        }
-    )
-
-    momentum = [
-        s
-        for s in rotation_signals(latest, "us", 10)
-        if s.strategy_id == "rotation_momentum"
-    ][0]
-
-    assert set(momentum.active["ticker"].tolist()) == {"AAA", "BBB", "CCC"}
-
-
-def test_rotation_low_vol_removed():
+def test_rotation_unused_strategies_removed():
     latest = pd.DataFrame(
         {
             "ticker": ["AAA", "BBB"],
@@ -259,7 +325,59 @@ def test_rotation_low_vol_removed():
     ids = {s.strategy_id for s in rotation_signals(latest, "us", 10)}
 
     assert "rotation_low_vol" not in ids
-    assert "rotation_momentum" in ids
+    assert "rotation_mean_reversion" not in ids
+    assert "rotation_momentum" not in ids
+
+
+def test_sector_rotation_skips_asia_session():
+    prices = pd.DataFrame(
+        {
+            "ticker": ["XLK", "XLK"],
+            "ticker_full": ["XLK", "XLK"],
+            "date": pd.to_datetime(["2026-01-01", "2026-01-02"]),
+            "price": [100.0, 101.0],
+            "description": ["Technology", "Technology"],
+            "fund_type": ["eq", "eq"],
+        }
+    )
+
+    result = signals.sector_rotation_signals(prices, "asia", 10)
+
+    assert result.active.empty
+
+
+def test_elite_relative_strength_deduplicates_benchmark_rows(monkeypatch):
+    captured = {}
+    latest = pd.DataFrame(
+        {
+            "ticker": ["SPY", "AAA"],
+            "ticker_full": ["SPY", "AAA"],
+            "description": ["Benchmark", "A"],
+            "fund_type": ["eq", "stock"],
+        }
+    )
+    prices = pd.DataFrame(
+        {
+            "ticker": ["SPY", "SPY", "AAA", "AAA"],
+            "ticker_full": ["SPY", "SPY", "AAA", "AAA"],
+            "date": pd.to_datetime(["2026-01-01", "2026-01-02"] * 2),
+            "price": [100.0, 101.0, 10.0, 11.0],
+        }
+    )
+
+    def fake_scan(scan_latest, scan_prices, benchmark_ticker):
+        captured["latest"] = scan_latest
+        captured["prices"] = scan_prices
+        captured["benchmark"] = benchmark_ticker
+        return pd.DataFrame()
+
+    monkeypatch.setattr(signals, "scan_elite_relative_strength", fake_scan)
+
+    signals.elite_relative_strength_signals(latest, prices, "us", 10)
+
+    assert captured["benchmark"] == "SPY"
+    assert len(captured["latest"][captured["latest"]["ticker"] == "SPY"]) == 1
+    assert len(captured["prices"][captured["prices"]["ticker"] == "SPY"]) == 2
 
 
 def test_todays_crossings_detects_new_high_and_bullish_ma_cross():

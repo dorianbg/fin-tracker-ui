@@ -4,6 +4,7 @@ import logging.handlers
 import os
 import random
 import string
+import warnings
 from dataclasses import dataclass
 from logging.handlers import TimedRotatingFileHandler
 
@@ -13,14 +14,6 @@ import pandas as pd
 from pipeline import consts
 
 _conns: dict[str, duckdb.DuckDBPyConnection] = {}
-
-
-def add_csv_ext(path: str) -> str:
-    return path if path.endswith(consts.csv_ext) else path + consts.csv_ext
-
-
-def add_pickle_ext(path: str) -> str:
-    return path if path.endswith(consts.pickle_ext) else path + consts.pickle_ext
 
 
 def is_business_day(date) -> bool:
@@ -98,12 +91,20 @@ def missing_timerange(
 
 
 def setup_logging():
-    log_directory = "logs"
+    log_directory = os.path.join(consts.file_parent_dir, "logs")
     os.makedirs(log_directory, exist_ok=True)
     log_file = os.path.join(log_directory, "finance.log")
 
     root_logger = logging.getLogger()
     root_logger.setLevel(logging.INFO)
+    logging.captureWarnings(True)
+    warnings.simplefilter("default")
+    if any(
+        isinstance(handler, TimedRotatingFileHandler)
+        and getattr(handler, "baseFilename", None) == log_file
+        for handler in root_logger.handlers
+    ):
+        return
     log_format = "%(asctime)s|%(levelname)s|%(module)s|%(funcName)s|%(process)s|%(lineno)d|%(message)s"
     formatter = logging.Formatter(log_format)
 
