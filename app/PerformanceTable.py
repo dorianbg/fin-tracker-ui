@@ -36,6 +36,7 @@ import views.SectorRotation as SectorRotation
 import views.PortfolioAllocator as PortfolioAllocator
 import views.RAAMStrategy as RAAMStrategy
 import views.RoboticsStocks as RoboticsStocks
+import views.SectorSnapshot as SectorSnapshot
 
 st.set_page_config(
     page_icon="🏠",
@@ -947,6 +948,7 @@ def render_action_screens(df: pd.DataFrame):
     tab_rs,
     tab_rotation,
     tab_sector_rotation,
+    tab_sector_snapshot,
     tab_regime,
     tab_factors,
     tab_charts,
@@ -965,6 +967,7 @@ def render_action_screens(df: pd.DataFrame):
         "Relative Strength",
         "Rotation",
         "Sector Rotation",
+        "Sector Snapshot",
         "Cross-Asset",
         "Factors",
         "Charts",
@@ -1151,6 +1154,9 @@ with tab_rotation:
 
 with tab_sector_rotation:
     SectorRotation.render()
+with tab_sector_snapshot:
+    SectorSnapshot.render()
+
 
 with tab_regime:
     CrossAssetRegime.render()

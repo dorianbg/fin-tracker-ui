@@ -6,7 +6,7 @@ LOG_FILE    := $(LOG_DIR)/fintracker.log
 # Paths needed for cron (which has minimal PATH)
 export PATH := /opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$(PATH)
 
-.PHONY: pipeline pipeline-rewrite pipeline-postgres export raa-holdings breakout-alerts strategy-alerts install-streamlit deploy-breakout-alerts ui allocator allocator-v1 test cron clean
+.PHONY: pipeline pipeline-rewrite pipeline-postgres export raa-holdings breakout-alerts strategy-alerts sector-snapshot install-streamlit deploy-breakout-alerts ui allocator allocator-v1 test cron clean
 
 # ── Tests ──
 
@@ -38,6 +38,9 @@ breakout-alerts:
 strategy-alerts:
 	PYTHONPATH=$(PYTHONPATH) uv run python scripts/send_strategy_alerts.py --session $${SESSION:-all} $${ARGS:-}
 
+sector-snapshot:
+	PYTHONPATH=$(PYTHONPATH) uv run python scripts/send_sector_snapshot.py $${ARGS:-}
+
 install-streamlit:
 	mkdir -p $(HOME)/Library/LaunchAgents $(LOG_DIR)
 	cp scripts/com.fintracker.streamlit.plist $(HOME)/Library/LaunchAgents/com.fintracker.streamlit.plist
@@ -63,6 +66,7 @@ cron:
 	@mkdir -p $(LOG_DIR)
 	@echo "========== $$(date '+%Y-%m-%d %H:%M:%S') ==========" >> $(LOG_FILE)
 	PYTHONPATH=$(PYTHONPATH) uv run python pipeline/executor.py >> $(LOG_FILE) 2>&1
+	PYTHONPATH=$(PYTHONPATH) uv run python scripts/send_sector_snapshot.py >> $(LOG_FILE) 2>&1
 	cd app && uv run python duckdb_importer.py >> $(LOG_FILE) 2>&1
 	git add app/data >> $(LOG_FILE) 2>&1 || true
 	git diff --cached --quiet || git commit -m "Automated data update on $$(date +'%Y-%m-%d')" >> $(LOG_FILE) 2>&1

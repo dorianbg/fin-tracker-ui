@@ -1630,3 +1630,16 @@ REP.MC,Repsol,EUR,stock,,Sector - Energy
 112040.KQ,Wemade,KRW,stock,,Equity - Korea Gaming
 145020.KQ,Hugel,KRW,stock,,Equity - Korea Healthcare
 095340.KQ,ISC,KRW,stock,,Equity - Korea Semiconductors
+EWU,iShares MSCI United Kingdom ETF,USD,eq,,Equity - UK
+EWC,iShares MSCI Canada ETF,USD,eq,,Equity - Canada
+EWL,iShares MSCI Switzerland ETF,USD,eq,,Equity - Switzerland
+EWP,iShares MSCI Spain ETF,USD,eq,,Equity - Spain
+EWI,iShares MSCI Italy ETF,USD,eq,,Equity - Italy
+EWN,iShares MSCI Netherlands ETF,USD,eq,,Equity - Netherlands
+EWD,iShares MSCI Sweden ETF,USD,eq,,Equity - Sweden
+EWS,iShares MSCI Singapore ETF,USD,eq,,Equity - Singapore
+THD,iShares MSCI Thailand ETF,USD,eq,,Equity - Thailand
+EIDO,iShares MSCI Indonesia ETF,USD,eq,,Equity - Indonesia
+VNM,VanEck Vietnam ETF,USD,eq,,Equity - Vietnam
+KSA,iShares MSCI Saudi Arabia ETF,USD,eq,,Equity - Saudi Arabia
+EZA,iShares MSCI South Africa ETF,USD,eq,,Equity - South Africa
