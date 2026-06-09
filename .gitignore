@@ -123,3 +123,6 @@ pipeline/logs/
 
 # macOS
 .DS_Store
+
+# Agent handoff notes
+.handoffs/

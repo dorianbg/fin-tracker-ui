@@ -5,6 +5,7 @@ from unittest.mock import patch, MagicMock
 from pipeline.executor import (
     _download_batch,
     _normalize_yfinance_df,
+    filter_invalid_price_rows,
     repair_invalid_ohlc,
 )
 
@@ -55,3 +56,17 @@ def test_normalize_yfinance_df_fills_missing_dividend_column():
     assert "dividends" in result.columns
     assert (result["dividends"] == 0.0).all()
     assert "stock_splits" in result.columns
+
+
+def test_filter_invalid_price_rows_drops_yfinance_placeholders():
+    df = pd.DataFrame(
+        {
+            "close": [100.0, np.nan, 0.0],
+            "volume": [100, 200, 300],
+        }
+    )
+
+    result = filter_invalid_price_rows(df)
+
+    assert len(result) == 1
+    assert result["close"].iloc[0] == 100.0

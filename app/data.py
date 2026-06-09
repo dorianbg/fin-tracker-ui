@@ -17,6 +17,7 @@ logging.getLogger("streamlit.runtime.caching.cache_data_api").setLevel(logging.E
 _DEFAULT_DUCKDB_PATH = os.path.join(os.path.dirname(__file__), "..", "duckdb.db")
 duckdb_file: str = os.environ.get("DUCKDB_PATH", _DEFAULT_DUCKDB_PATH)
 _conn: duckdb.DuckDBPyConnection = None
+_latest_perf_tbl = "performance_latest"
 
 # Constants for Sharpe ratio calculation
 risk_free_rate = config.RISK_FREE_RATE
@@ -31,6 +32,14 @@ def init_conn(db_path: str) -> duckdb.DuckDBPyConnection:
     _conn.execute(
         "CREATE VIEW performance AS SELECT * FROM local_db.latest_performance_sharpe"
     )
+    try:
+        _conn.execute(
+            f"CREATE VIEW {_latest_perf_tbl} AS SELECT * FROM local_db.latest_performance_snapshot"
+        )
+    except duckdb.CatalogException:
+        _conn.execute(
+            f"CREATE VIEW {_latest_perf_tbl} AS SELECT * FROM local_db.latest_performance_sharpe"
+        )
     return _conn
 
 
@@ -147,10 +156,13 @@ def create_query(
     where_clause_str = gen_where_clause_prices(
         instruments, fund_types, start_date, end_date, table, get_perf_hist
     )
+    source_table = (
+        _latest_perf_tbl if table == di.perf_tbl and not get_perf_hist else table
+    )
     query = f"""
             select 
                 {",".join(cols)}
-            from {table}
+            from {source_table}
             {where_clause_str} 
             order by "description" asc, "date" asc
         """
@@ -355,10 +367,11 @@ def get_sparkline_data(tickers: tuple, days: int = 90) -> dict:
         SELECT ticker, date, price
         FROM {di.px_tbl}
         WHERE ticker IN ('{tickers_str}')
-        ORDER BY date ASC
+        QUALIFY row_number() OVER (PARTITION BY ticker ORDER BY date DESC) <= {days}
+        ORDER BY ticker ASC, date ASC
     """
     df = get_conn().execute(query).df()
-    if df.empty:
+    if df is None or df.empty:
         return {}
 
     result = {}
@@ -376,6 +389,9 @@ def add_sparkline_column(
     days: int = 90,
 ) -> pd.DataFrame:
     """Enrich a DataFrame with a sparkline column containing normalised price lists."""
+    if df.empty or "ticker" not in df.columns:
+        df[col_name] = pd.Series(dtype=object)
+        return df
     tickers = tuple(df["ticker"].unique())
     sparklines = get_sparkline_data(tickers, days=days)
     # Use [] for missing tickers so pyarrow encodes this as list<float64>, not string

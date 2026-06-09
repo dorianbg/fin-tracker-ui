@@ -49,7 +49,7 @@ px_export_cols = [
     "fund_type",
 ]
 
-perf_src_table_name = "latest_performance_sharpe"
+perf_src_table_name = "latest_performance_snapshot"
 perf_tbl = "performance"
 perf_pq_file = os.path.join(data_dir, f"{perf_tbl}.parquet")
 perf_desc_cols_start = ["date::date as date", "description", "price"]
@@ -156,13 +156,11 @@ def run():
         FROM {perf_src_table_name}
         ORDER BY ticker
     """
-    export_to_parquet_query = (
-        lambda query,
-        output: f"COPY ({query}) TO '{output}' (ENCRYPTION_CONFIG {encrypt_conf});"
+    export_to_parquet_query = lambda query, output: (
+        f"COPY ({query}) TO '{output}' (ENCRYPTION_CONFIG {encrypt_conf});"
     )
-    export_to_parquet_unencrypted_query = (
-        lambda query,
-        output: f"COPY ( SELECT * FROM ({query}) LIMIT 10) TO '{output}' ;"
+    export_to_parquet_unencrypted_query = lambda query, output: (
+        f"COPY ( SELECT * FROM ({query}) LIMIT 10) TO '{output}' ;"
     )
     if os.path.exists(data_dir):
         shutil.rmtree(data_dir)

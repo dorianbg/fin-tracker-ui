@@ -50,6 +50,7 @@ def _normalize_yfinance_df(df: pd.DataFrame, ticker_full: str) -> pd.DataFrame:
         if column not in out.columns:
             out[column] = 0.0
     out = repair_invalid_ohlc(out)
+    out = filter_invalid_price_rows(out)
     return out
 
 
@@ -64,6 +65,13 @@ def repair_invalid_ohlc(df: pd.DataFrame) -> pd.DataFrame:
             invalid = valid_close & (out[column].isna() | (out[column] <= 0))
             out.loc[invalid, column] = out.loc[invalid, "close"]
     return out
+
+
+def filter_invalid_price_rows(df: pd.DataFrame) -> pd.DataFrame:
+    """Drop yfinance placeholder rows that do not contain a usable close price."""
+    if df.empty or "close" not in df.columns:
+        return df
+    return df[df["close"].notna() & (df["close"] > 0)].copy()
 
 
 BATCH_SIZE = 50
@@ -247,6 +255,7 @@ def execute_job(
 
     if not new_data.empty:
         new_data = repair_invalid_ohlc(new_data)
+        new_data = filter_invalid_price_rows(new_data)
 
     if downloaded_data is None:
         time.sleep(3)
@@ -259,6 +268,9 @@ def merge_dfs(dfs_to_insert: list[pd.DataFrame]) -> pd.DataFrame | None:
     merged = pd.concat(dfs_to_insert, ignore_index=True)
     if not merged.empty:
         merged["date"] = pd.to_datetime(merged["date"], utc=True)
+        merged = filter_invalid_price_rows(merged)
+        merged = merged.sort_values("volume", ascending=False, na_position="last")
+        merged = merged.drop_duplicates(["ticker_full", "date"], keep="first")
     return merged
 
 
@@ -320,6 +332,8 @@ def main() -> None:
             col_select=consts.hist_prices_col_select,
             dedup=f"EXCEPT select {consts.hist_prices_col_select} from {consts.hist_prices_table_name}",
         )
+        logging.info("Refreshing latest performance snapshot")
+        duckdb_conn.execute(consts.refresh_performance_snapshot_stmt)
         duckdb_conn.commit()
         if args.upload_to_postgres:
             upload_data_to_postgres(duckdb_conn)

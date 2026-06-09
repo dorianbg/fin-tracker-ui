@@ -1,4 +1,3 @@
-import math
 from datetime import date, timedelta
 
 import altair as alt
@@ -92,18 +91,22 @@ def deduct_datetime_interval(base_datetime, interval):
 def custom_sort_df_cols(columns_sort, custom_weights_normalised, df):
     suffix = "_weighted_rank"
     final_col = "weighted_rank"
-    for column in columns_sort:
-        if column in df.columns:
-            df[column + suffix] = df[column].rank(na_option="keep")
-    for index, row in df.iterrows():
-        weighted_rank = 0
-        for column, weight in zip(columns_sort, custom_weights_normalised):
-            if column in df.columns:
-                rank = row[column + suffix]
-                if not math.isnan(rank):
-                    weighted_rank += rank * weight
-        df.at[index, final_col] = weighted_rank
-    df = df.drop(columns=[col for col in df.columns if col.endswith(suffix)])
+    weights_by_col = dict(zip(columns_sort, custom_weights_normalised))
+    available_cols = [column for column in columns_sort if column in df.columns]
+    ranked_cols = [column + suffix for column in available_cols]
+
+    if not available_cols:
+        df[final_col] = 0
+        return df.sort_values(final_col, inplace=False)
+
+    ranks = df[available_cols].rank(na_option="keep")
+    ranks.columns = ranked_cols
+    df = df.join(ranks)
+    weights = pd.Series(
+        [weights_by_col[column] for column in available_cols], index=ranked_cols
+    )
+    df[final_col] = df[ranked_cols].mul(weights, axis=1).sum(axis=1, skipna=True)
+    df = df.drop(columns=ranked_cols)
     df = df.sort_values(final_col, inplace=False)
     return df
 
@@ -265,12 +268,36 @@ def style_performance_table(df, vol_adjust, show_returns, returns_cols):
     if vol_adjust and not show_returns:
         two_decimal_cols += perf_cols
     else:
-        percent_cols += [p for p in perf_cols if sharpe_col_suffix not in p and p in df.columns]
-        two_decimal_cols += [p for p in perf_cols if sharpe_col_suffix in p and p in df.columns]
+        percent_cols += [
+            p for p in perf_cols if sharpe_col_suffix not in p and p in df.columns
+        ]
+        two_decimal_cols += [
+            p for p in perf_cols if sharpe_col_suffix in p and p in df.columns
+        ]
 
     styled_df = styled_df.format(subset=percent_cols, formatter="{:.2f}%")
     styled_df = styled_df.format(subset=two_decimal_cols, formatter="{:.2f}")
     return styled_df
+
+
+def _normalise_filter_column(df: pd.DataFrame, column: str) -> pd.DataFrame:
+    """Convert one selected filter column only, avoiding full-frame scans."""
+    if is_object_dtype(df[column]):
+        try:
+            df[column] = pd.to_datetime(df[column], format="%Y-%m-%d")
+        except (TypeError, ValueError):
+            date_formats = ["%d-%m-%Y", "%m/%d/%Y", "%Y/%m/%d"]
+            for date_format in date_formats:
+                try:
+                    df[column] = pd.to_datetime(df[column], format=date_format)
+                    break
+                except (TypeError, ValueError):
+                    continue
+
+    if is_datetime64_any_dtype(df[column]):
+        df[column] = df[column].dt.tz_localize(None)
+
+    return df
 
 
 def filter_dataframe(df: pd.DataFrame, modify: bool) -> pd.DataFrame:
@@ -287,35 +314,14 @@ def filter_dataframe(df: pd.DataFrame, modify: bool) -> pd.DataFrame:
     if not modify:
         return df
 
-    df = df.copy()
-
-    # Try to convert datetimes into a standard format (datetime, no timezone)
-    for col in df.columns:
-        if is_object_dtype(df[col]):
-            # First try explicit ISO format
-            try:
-                df[col] = pd.to_datetime(df[col], format="%Y-%m-%d")
-                continue
-            except ValueError:
-                pass
-
-            # Then try common date formats
-            date_formats = ["%d-%m-%Y", "%m/%d/%Y", "%Y/%m/%d"]
-            for date_format in date_formats:
-                try:
-                    df[col] = pd.to_datetime(df[col], format=date_format)
-                    break
-                except ValueError:
-                    continue
-
-        if is_datetime64_any_dtype(df[col]):
-            df[col] = df[col].dt.tz_localize(None)
-
     modification_container = st.container()
 
     with modification_container:
         to_filter_columns = st.multiselect("Filter dataframe on", df.columns)
+        if to_filter_columns:
+            df = df.copy()
         for column in to_filter_columns:
+            df = _normalise_filter_column(df, column)
             left, right = st.columns((1, 20))
             # Treat columns with < 10 unique values as categorical
             if (
@@ -381,19 +387,24 @@ def returns_from_prices(prices, log_returns=False):
     return returns
 
 
-def get_holdings_perf(assets, start_date, end_date):
+@st.cache_data(ttl=300)
+def _get_holdings_perf_cached(assets: tuple[str, ...], start_date, end_date):
     prices = get_data(
         create_query(
             table=di.px_tbl,
             start_date=start_date,
             end_date=end_date,
-            instruments=assets,
+            instruments=list(assets),
         )
     )
     prices["date"] = prices["date"].dt.date
     prices = prices.drop_duplicates(["date", "ticker"])
     prices = prices.pivot(index="date", columns="ticker", values="price")
     return returns_from_prices(prices)
+
+
+def get_holdings_perf(assets, start_date, end_date):
+    return _get_holdings_perf_cached(tuple(sorted(assets)), start_date, end_date)
 
 
 def correlation_matrix(assets):

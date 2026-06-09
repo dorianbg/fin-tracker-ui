@@ -85,3 +85,29 @@ def test_dividend_rewrite_deletes_only_after_full_reload_has_data(monkeypatch):
         conn.execute("select backup_save_path from data_backups").fetchone()[0]
         == "duckdb-only"
     )
+
+
+def test_merge_dfs_drops_invalid_prices_and_duplicate_dates():
+    df = pd.DataFrame(
+        {
+            "ticker": ["TEST", "TEST", "TEST"],
+            "ticker_full": ["TEST", "TEST", "TEST"],
+            "date": [
+                pd.Timestamp("2026-01-09"),
+                pd.Timestamp("2026-01-09"),
+                pd.Timestamp("2026-01-10"),
+            ],
+            "open": [10.0, 10.0, None],
+            "high": [11.0, 11.0, None],
+            "low": [9.0, 9.0, None],
+            "close": [10.5, 10.5, None],
+            "volume": [100, 200, 300],
+            "dividends": [0.0, 0.0, 0.0],
+            "stock_splits": [0.0, 0.0, 0.0],
+        }
+    )
+
+    result = executor.merge_dfs([df])
+
+    assert len(result) == 1
+    assert result["volume"].iloc[0] == 200

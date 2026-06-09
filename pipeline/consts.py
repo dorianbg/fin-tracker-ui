@@ -11,6 +11,7 @@ db_path = os.path.join(file_parent_dir, "duckdb.db")
 settings_init_cmd = "PRAGMA enable_checkpoint_on_shutdown; "
 
 hist_prices_table_name = "historical_prices"
+performance_snapshot_table_name = "latest_performance_snapshot"
 hist_prices_cols_to_datatype = {
     "ticker": "VARCHAR",
     "ticker_full": "VARCHAR",
@@ -60,3 +61,10 @@ from read_csv('{inst_info_file}', delim = ',', header = true, columns = {columns
 
 with open(os.path.join(file_parent_dir, "resources", "latest_performance.sql")) as file:
     consts_perf_view = file.read()
+
+refresh_performance_snapshot_stmt = f"""
+create or replace table {performance_snapshot_table_name} as
+select *
+from latest_performance_sharpe
+where rown = 1;
+"""

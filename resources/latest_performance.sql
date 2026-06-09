@@ -16,7 +16,11 @@ with prices as (
         t.sector
     from historical_prices h
     join ticker_ref t on h.ticker_full = t.ticker_full
-    where h.ticker<>'EURGBP=X' and h.ticker<>'GBP=X' and h.volume > 0
+    where h.ticker<>'EURGBP=X'
+      and h.ticker<>'GBP=X'
+      and h.volume > 0
+      and h.close is not null
+      and h.close > 0
 ), exchange_rates as (
     select date at time zone 'Europe/Paris' as date,
            case when ticker = 'EURGBP=X' then 'EUR'

@@ -939,8 +939,9 @@ def render_action_screens(df: pd.DataFrame):
 
 
 (
-    tab_today,
     tab_perf,
+    tab_actions,
+    tab_today,
     tab_pullback,
     tab_consolidation,
     tab_crossings,
@@ -958,8 +959,9 @@ def render_action_screens(df: pd.DataFrame):
     tab_raam,
 ) = st.tabs(
     [
-        "Today",
         "Performance",
+        "Action Screens",
+        "Today",
         "Pullback",
         "Consolidation",
         "Crossings",
@@ -977,9 +979,6 @@ def render_action_screens(df: pd.DataFrame):
         "RAAM Strategy",
     ]
 )
-
-with tab_today:
-    render_today_tab()
 
 with tab_perf:
     if platform.system() != "Darwin":
@@ -1063,28 +1062,122 @@ with tab_perf:
             custom_weights_normalised = [x / total_w for x in custom_weights]
             columns_sort = di.perf_sharpe_cols if sort_sharpe else di.perf_returns_cols
             df = custom_sort_df_cols(columns_sort, custom_weights_normalised, df)
-        add_sparkline_column(df)
-        add_sparkline_column(df, col_name="Price (1y)", days=365)
-        cols = list(df.columns)
-        if "Price (90d)" in cols:
-            cols.remove("Price (90d)")
-            cols.insert(cols.index("description") + 1, "Price (90d)")
+        sort_options = [
+            c
+            for c in [
+                "description",
+                "ticker",
+                "r_1d",
+                "r_1w",
+                "r_2w",
+                "r_1mo",
+                "r_3mo",
+                "r_6mo",
+                "r_1y",
+                "r_2y",
+                "r_3y",
+                "r_5y",
+                "vol_1mo",
+                "vol_1y",
+                "ma_21",
+                "ma_63",
+                "ma_126",
+                "ma_252",
+                "drawdown_52w",
+                "drawdown_3y",
+            ]
+            if c in df.columns
+        ]
+        table_col1, table_col2, table_col3, table_col4 = st.columns([3, 2, 2, 2])
+        with table_col1:
+            sort_select_options = ["Default"] + sort_options
+            sort_col = st.selectbox(
+                "Global sort before pagination",
+                options=sort_select_options,
+                index=(
+                    sort_select_options.index("r_1d")
+                    if "r_1d" in sort_select_options
+                    else 0
+                ),
+                key="perf_table_sort_col",
+            )
+        with table_col2:
+            sort_ascending = st.toggle(
+                "Ascending",
+                value=False,
+                key="perf_table_sort_ascending",
+            )
+        with table_col3:
+            page_size_label = st.selectbox(
+                "Rows per page",
+                options=[100, 250, 500, "All"],
+                index=1,
+                key="perf_table_page_size",
+            )
+
+        if sort_col != "Default":
+            df = df.sort_values(sort_col, ascending=sort_ascending, na_position="last")
+
+        total_rows = len(df)
+        if page_size_label == "All":
+            display_df = df.copy()
+            page_start = 0
+            page_end = total_rows
+        else:
+            page_size = int(page_size_label)
+            page_count = max(1, (total_rows + page_size - 1) // page_size)
+            with table_col4:
+                page_num = st.number_input(
+                    "Page",
+                    min_value=1,
+                    max_value=page_count,
+                    value=1,
+                    step=1,
+                    key="perf_table_page_num",
+                )
+            page_start = (int(page_num) - 1) * page_size
+            page_end = min(page_start + page_size, total_rows)
+            display_df = df.iloc[page_start:page_end].copy()
+
+        st.caption(
+            f"Showing rows {page_start + 1:,}-{page_end:,} of {total_rows:,}. "
+            "Use the global sort control above; clicking table headers only sorts the visible page."
+        )
+
+        add_sparkline_column(display_df, col_name="Price (1y)", days=252)
+        cols = list(display_df.columns)
         if "Price (1y)" in cols:
             cols.remove("Price (1y)")
-            cols.insert(cols.index("Price (90d)") + 1, "Price (1y)")
-        df = df[cols]
-        styled_df = style_performance_table(
-            df,
-            vol_adjust=vol_adjust,
-            show_returns=show_returns,
-            returns_cols=returns_cols,
+            cols.insert(cols.index("description") + 1, "Price (1y)")
+            display_df = display_df[cols]
+
+        percent_cols = set(
+            di.perf_vol_cols
+            + di.perf_mavg_cols
+            + [c for c in di.perf_returns_cols if c in display_df.columns]
         )
+        numeric_cols = display_df.select_dtypes(include=np.number).columns
         narrow_cols = {
             "description": st.column_config.TextColumn("description", width="medium"),
-            "Price (90d)": st.column_config.LineChartColumn(
-                "Price (90d)", width="small"
+            **(
+                {
+                    "Price (1y)": st.column_config.LineChartColumn(
+                        "Price (1y)",
+                        width="medium",
+                        help="Normalised price path over the last ~252 trading sessions.",
+                    )
+                }
+                if "Price (1y)" in display_df.columns
+                else {}
             ),
-            "Price (1y)": st.column_config.LineChartColumn("Price (1y)", width="small"),
+            **{
+                c: st.column_config.NumberColumn(
+                    label=c,
+                    width="small",
+                    format="%.2f%%" if c in percent_cols else "%.2f",
+                )
+                for c in numeric_cols
+            },
             **{
                 c: st.column_config.NumberColumn(label=c, width="small")
                 for c in (
@@ -1097,8 +1190,14 @@ with tab_perf:
                 if c in df.columns
             },
         }
+        table_data = style_performance_table(
+            display_df,
+            vol_adjust=vol_adjust,
+            show_returns=show_returns,
+            returns_cols=returns_cols,
+        )
         event = st.dataframe(
-            data=styled_df,
+            data=table_data,
             hide_index=True,
             height=table_height,
             on_select="rerun",
@@ -1106,7 +1205,7 @@ with tab_perf:
             column_config=narrow_cols,
         )
         if event and event.selection and event.selection.rows:
-            filtered_df = df.iloc[event.selection.rows]
+            filtered_df = display_df.iloc[event.selection.rows]
             selected_dates = st.date_input(
                 "Select date range for Price Performance",
                 value=[
@@ -1132,7 +1231,24 @@ with tab_perf:
                 )
             correlation_matrix(assets=list(filtered_df["ticker"].unique()))
 
-        render_action_screens(df)
+with tab_actions:
+    action_categories = st.multiselect(
+        "Instrument Category",
+        options=FUND_TYPE_OPTIONS,
+        default=["eq", "stock", "commod"],
+        key="action_screen_categories",
+    )
+    action_df: pd.DataFrame = get_data(
+        query=create_query(
+            table=di.perf_tbl,
+            show_returns=True,
+            fund_types=action_categories,
+        ),
+    )
+    render_action_screens(action_df)
+
+with tab_today:
+    render_today_tab()
 
 with tab_pullback:
     PullbackScanner.render()
@@ -1154,9 +1270,9 @@ with tab_rotation:
 
 with tab_sector_rotation:
     SectorRotation.render()
+
 with tab_sector_snapshot:
     SectorSnapshot.render()
-
 
 with tab_regime:
     CrossAssetRegime.render()

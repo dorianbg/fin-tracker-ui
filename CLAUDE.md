@@ -29,12 +29,6 @@ streamlit run PerformanceTable.py
 
 **Required env var**: None (reads from local `duckdb.db` directly).
 
-## Agent Workflow
-
-For non-trivial code changes, create and work in a separate git worktree before editing. This is required when the current tree is dirty, the task is risky, or concurrent work may be happening. Edit in place only for trivial changes or when the user explicitly asks to use the current branch/worktree.
-
-**Commits:** NEVER commit without asking first. Even if encouraged ("we could commit this"), ask for explicit confirmation before running `git commit`.
-
 ## Data Loading
 
 The app reads directly from `duckdb.db` via `data.get_conn()`. SQL views (`total_return`, `latest_performance`, `latest_performance_sharpe`) are created by the pipeline and must exist in the database.

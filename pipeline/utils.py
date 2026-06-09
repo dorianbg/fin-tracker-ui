@@ -83,6 +83,7 @@ def missing_timerange(
                 date_trunc('day', max("date" at time zone '{consts.timezone}')) as latest_date,
                 ticker_full
             from historical_prices h
+            where "close" is not null and "close" > 0
             group by ticker_full
         ) as h on h.ticker_full = t.ticker_full {remove_join}
     """
